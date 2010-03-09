@@ -1,0 +1,315 @@
+-----------------------------------------------------------------------------
+ProtTest-HPC Readme -	9/Dec/2009
+
+Diego Darriba (ddarriba@udc.es)
+David Posada (dposada@uvigo.es)
+Federico Abascal (fabascal@uvigo.es)
+Rafael Zardoya (rafaz@mncn.csic.es)
+Guillermo L. Taboada (taboada@udc.es)
+Ramón Doallo (doallo@udc.es)
+
+(c) Universidad de Vigo, Vigo, Spain
+(c) Museo Nacional de Ciencias Naturales, Madrid, Spain
+(c) Grupo de Arquitectura de Computadores, UDC, Spain
+
+-----------------------------------------------------------------------------
+
+TOC
+
+0. Quick Start
+1. Introduction
+2. Installation
+3. Structure
+4. How to run
+  4.1. Required conditions
+  4.2. Console execution
+    4.2.1. Sequential execution
+    4.2.2. Multithread execution
+    4.2.3. Cluster execution
+  4.3. Graphical user interface execution
+5. Getting the source code
+6. How to compile
+
+-----------------------------------------------------------------------------
+0. Quick Start
+-----------------------------------------------------------------------------
+
+Console version
+
+$ tar zvxf prottest-hpc.tar.gz
+(Linux/Unix/OS X)
+$ export PROTTEST_HOME=$PWD/prottest-hpc
+(Windows)
+$ set PROTTEST_HOME=$CWD\prottest-hpc-1.0
+$ cd prottest-hpc
+$ java -jar prottest-2.1.jar -i examples/COX2_PF0016/alignment -all-matrices -all-distributions -threads 2
+
+Graphical version
+
+$ tar zvxf XProtTest.tar.gz
+$ cd XProtTest
+$ java -jar XProtTest.jar
+
+-----------------------------------------------------------------------------
+1. Introduction
+-----------------------------------------------------------------------------
+
+ProtTest-HPC is a High Performance Computing implementation of ProtTest, for
+selection of best-fit models of protein evolution. It is currently under
+development so it could have some errors and the documentation is pending.
+
+Please, report bugs and enquiries about ProtTest-HPC to: ddarriba@udc.es,
+dposada@uvigo.es, fedeabascal@yahoo.es.
+
+The main page of the ProtTest project is located at
+http://darwin.uvigo.es/software/prottest.html
+
+-----------------------------------------------------------------------------
+2. Installation
+-----------------------------------------------------------------------------
+
+All required software is included in the distributions. For further information, 
+please refer to the 'How to run' section.
+
+-----------------------------------------------------------------------------
+3. Structure
+-----------------------------------------------------------------------------
+
+Inside the ProtTest-HPC you should find the following structure:
+
+$PROTTEST_HOME/
+  |
+  |
+  |--bin/
+     # auxiliary binaries to calculate models likelihood
+  |--examples/
+     # some test alignments and trees
+  |
+  | filecluster8.conf.template  # machines file template for 8 node cluster
+  | machines			# machines file for cluster execution
+  | prottest.properties		# ProtTest-HPC configuration file (always required)
+  | prottest-2.1.jar		# ProtTest-HPC package
+  | README			# this README file
+  | runProtTestHPC.sh		# basic script for ProtTest-HPC cluster execution
+  
+- The ProtTest-HPC properties (prottest.properties) file must be located in the 
+ProtTest-HPC root directory. It has the execution preferences. Please refer to such
+file to know more about the execution properties.
+
+- The external applications should be located on "bin" directory under the 
+ProtTest-HPC root, where at least the one which matches your computer architecture
+must exist.
+
+-----------------------------------------------------------------------------
+4. How to run
+-----------------------------------------------------------------------------
+
+There are several ways to run ProtTest-HPC according to the resources you want
+to use.
+
+It's preferred to use JRE 1.6 to run ProtTest-HPC, in fact, the graphical user
+interface will only work with JRE 1.6 or newer version.
+
+You can download the newest version at http://java.sun.com/javase/
+
+-----------------------------------------------------------------------------
+	4.1. Required conditions
+-----------------------------------------------------------------------------
+
+In order to run ProtTest there will be some general constraints you have to
+satisfy:
+
+- You should run it from the ProtTest root directory (i.e. the directory where
+you have unpackaged the distribution).
+
+-----------------------------------------------------------------------------
+	4.2. Console execution
+-----------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------
+	4.2.1 Sequential execution
+-----------------------------------------------------------------------------
+
+Under command line you can use several parallel executions of ProtTest, but first
+it is important to understand how to run the sequential execution.
+
+These are the parameters of the sequential execution:
+
+	 -i alignment_filename
+		alignment input file (required)
+	 -t tree_filename
+		tree file      	(optional) [default: NJ tree]
+	 -o output_filename
+		output file    	(optional) [default: standard output]
+	 -sort sot_by_value
+ 		Ordering field	(optional) [default: A]
+	     		A: AIC
+	     		B: BIC
+	     		C: AICc
+	     		D: LnL
+	 -all
+	 	Displays a 7-framework comparison table
+	 -S optimization_strategy
+ 		optimization strategy mode: [default: 0]
+	     		0: Fixed BIONJ JTT
+	     		1: BIONJ Tree
+	     		2: Maximum Likelihood tree
+	     		3: User defined topology
+	 -sample sample_size_mode
+ 		sample size for AICc and BIC corrections [default: 2]
+	     		0: Shannon-entropy Sum
+	     		1: Average (0-1)Shannon-entropy x NxL
+	     		2: Total number of characters (aligment length)
+	     		3: Number of variable characters
+	     		4: Alignment length x num taxa (NxL)
+	     		5: Specified by the user
+	 -size user_size
+	 	specified sample size, only for "-sample 5"
+	 -t1
+	 	display best-model's newick tree [default: false]
+	 -t2
+	 	display best-model's ASCII tree  [default: false]
+	 -tc consensus_threshold
+ 		display consensus tree with the specified threshold
+	 -verbose
+	 	verbose mode [default: false]
+	 -all-matrices
+	 	computes all available matrices
+	 -threads number_or_threads
+ 		number of threads to compute (only if MPJ is not used) [default: 1]
+	 -[model]
+		model (Amino-acid) = JTT LG DCMut MtREV MtMam MtArt Dayhoff WAG RtREV CpREV Blosum62 VT HIVb HIVw
+			(requires at least one substitution matrix)
+	 -I
+	 	include models with a proportion of invariable sites
+	 -G
+	 	include models with rate variation among sites and number of categories
+	 -IG
+	 	include models with both +I and +G properties
+	 -all-distributions
+ 		include models with rate variation among sites, number of categories and both
+	 -ncat number_of_categories
+ 		define number of categories for +G and +I+G models [default: 4]
+	 -F
+	 	include models with empirical frequency estimation
+
+Basic execution example:
+
+	$ cd $PROTTEST_HOME
+	$ java -jar prottest-2.1.jar -i examples/COX2_PF0016/alignment -all-matrices -all-distributions
+
+
+-----------------------------------------------------------------------------
+	4.2.2 Multithread execution
+-----------------------------------------------------------------------------
+
+Just like the sequential execution, but adding the number of threads option. You 
+can use up to the number of cores in your machine and beyond. Following the basic
+execution example, a recommended multithread execution in a quad-core machine will be:
+
+	$ cd $PROTTEST_HOME
+	$ java -jar prottest-2.1.jar -i examples/COX2_PF0016/alignment -all-matrices -all-distributions -threads 4
+
+It is remarkable that the substitution models will not be computed in a specific
+order, so the full output will be shown once all models have been computed. 
+Meanwhile, the main thread will notify each executed model by the standard output.
+
+-----------------------------------------------------------------------------
+	4.2.3 Cluster execution
+-----------------------------------------------------------------------------
+
+1. Besides the multithreading support, it is possible to run ProtTest-HPC in 
+a cluster. This support has been implemented using a Java message-passing 
+(MPJ) library, MPJ Express (http://mpj-express.org/). To execute ProtTest-HPC 
+in a cluster environment you have to:
+
+$ cd $PROTTEST_HOME
+$ export MPJ_HOME=$PROTTEST_HOME/mpj
+$ export PATH=$MPJ_HOME/bin:$PATH
+
+You can also add the last two lines to ~/.bashrc to automatically set this
+variables at console startup.
+
+2. $PROTTEST_HOME/machines file contains the set of compute nodes amongst the
+mpj processes will be executed. By default it points to the localhost machine,
+so you should change it if you want to run parallel exeecution over a cluster
+machine, just writing on each line the compute nodes (e.g. see 
+filecluster8.conf.template).
+
+3. Start the MPJ Express daemons:
+
+$ mpjboot machines
+
+The application "mpjboot" should be in the execution path (it is located at
+$MPJ_HOME/bin). A ssh service must be running in the machines listed in the
+machines file. Moreover, port 10000 should be free. For more details refer to
+the MPJ Express documentation.
+
+4. Run ProtTest-HPC. For the execution the ProtTest-HPC distribution provides a
+bash script: 'runProtTestHPC.sh'
+
+The basic syntax is:
+	./runProtTestHPC.sh $NUMBER_OF_PROCESSORS $APPLICATION_PARAMETERS
+
+$ ./runProtTestHPC.sh 2 -i examples/COX2_PF0016/alignment -all-matrices -all-distributions 4
+
+-----------------------------------------------------------------------------
+	4.3. Graphical user interface execution
+-----------------------------------------------------------------------------
+
+If you are running ProtTest-HPC on your desktop computer, you'd better use the
+graphical user interface, provided by the XProtTest package. It will be
+show results clearer to the user and will be easier to manipulate them too.
+
+The graphical interface can use a sequential or a shared memory execution
+of the application, so it will be the best choice for running ProtTest on
+a local multicore machine.
+
+You should first download the graphical distribution and then run the
+jar file:
+
+$ cd $PROTTEST_HOME
+$ java -jar XProtTest.jar
+
+-----------------------------------------------------------------------------
+5. Getting the source code
+-----------------------------------------------------------------------------
+
+You can grab the source code from a subversion repository. You can use the
+subversion client you prefer. The repository is located at:
+
+svn://africa.des.udc.es/prottest/trunk
+
+The graphic user interface, with prottest package included, is also available
+at:
+
+svn://africa.des.udc.es/XProtTest/trunk
+
+Both projects are still under active development.
+
+For generic instructions, first install the subversion client package provided 
+by your distribution. Then from a terminal, type:
+
+$ cd $HOME
+$ svn co svn://africa.des.udc.es/prottest/trunk prottest-dev
+$ svn co svn://africa.des.udc.es/XProtTest/trunk  xprottest-dev
+
+-----------------------------------------------------------------------------
+6. How to compile
+-----------------------------------------------------------------------------
+
+The ProtTest console version can be compiled and executed with both Java SE 1.5
+and 1.6, but the graphical version requires Java SE 1.6 for compilation and
+execution.
+
+You can download the newest version at http://java.sun.com/javase/
+
+Just if you want to compile the source code, you will see it has an ant build
+file. You should download Apache Ant first in order to make the distribution
+manually, and use the compile (1) or distribution (2) targets:
+
+i.e.
+(1) $ ant compile
+(2) $ ant dist
+
+Its preferred to build the distribution directly using (2).

@@ -1,0 +1,572 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Form version="1.5" maxVersion="1.5" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+  <NonVisualComponents>
+    <Component class="javax.swing.ButtonGroup" name="btnGrpCriterion">
+    </Component>
+    <Component class="javax.swing.ButtonGroup" name="btnGroupSampleSizeMode">
+    </Component>
+    <Menu class="javax.swing.JMenuBar" name="jMenuBar1">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="jMenuBar1" noResource="true"/>
+      </Properties>
+      <SubComponents>
+        <Menu class="javax.swing.JMenu" name="windowMenu">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="menu-window"/>
+            <Property name="name" type="java.lang.String" value="windowMenu" noResource="true"/>
+          </Properties>
+          <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="closeMenuItem">
+              <Properties>
+                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                  <action class="xprottest.analysis.consensus.Consensus" id="Close" methodName="Close"/>
+                </Property>
+                <Property name="text" type="java.lang.String" resourceKey="menu-close"/>
+                <Property name="name" type="java.lang.String" value="closeMenuItem" noResource="true"/>
+              </Properties>
+            </MenuItem>
+          </SubComponents>
+        </Menu>
+        <Menu class="javax.swing.JMenu" name="editMenu">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="editMenu.text"/>
+            <Property name="name" type="java.lang.String" value="editMenu" noResource="true"/>
+          </Properties>
+          <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="editCopyMenuItem">
+              <Properties>
+                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                  <action class="xprottest.analysis.consensus.Consensus" id="editCopy" methodName="editCopy"/>
+                </Property>
+                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
+                  <KeyStroke key="Ctrl+C"/>
+                </Property>
+                <Property name="text" type="java.lang.String" resourceKey="menu-copy"/>
+                <Property name="name" type="java.lang.String" value="editCopyMenuItem" noResource="true"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="selectAllMenuItem">
+              <Properties>
+                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                  <action class="xprottest.analysis.consensus.Consensus" id="editSelectAll" methodName="editSelectAll"/>
+                </Property>
+                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
+                  <KeyStroke key="Ctrl+A"/>
+                </Property>
+                <Property name="text" type="java.lang.String" resourceKey="selectAllMenuItem.text"/>
+                <Property name="name" type="java.lang.String" value="selectAllMenuItem" noResource="true"/>
+              </Properties>
+            </MenuItem>
+          </SubComponents>
+        </Menu>
+      </SubComponents>
+    </Menu>
+  </NonVisualComponents>
+  <Properties>
+    <Property name="title" type="java.lang.String" resourceKey="Form.title"/>
+    <Property name="name" type="java.lang.String" value="Form" noResource="true"/>
+  </Properties>
+  <SyntheticProperties>
+    <SyntheticProperty name="menuBar" type="java.lang.String" value="jMenuBar1"/>
+    <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
+  </SyntheticProperties>
+  <AuxValues>
+    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="2"/>
+    <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
+    <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+  </AuxValues>
+
+  <Layout>
+    <DimensionLayout dim="0">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="1" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Component id="displayScroll" alignment="0" pref="558" max="32767" attributes="0"/>
+                  <Component id="settingsPanel" alignment="0" max="32767" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+    <DimensionLayout dim="1">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="settingsPanel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="displayScroll" pref="362" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+  </Layout>
+  <SubComponents>
+    <Container class="javax.swing.JPanel" name="settingsPanel">
+      <Properties>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.BevelBorderInfo">
+            <BevelBorder/>
+          </Border>
+        </Property>
+        <Property name="name" type="java.lang.String" value="settingsPanel" noResource="true"/>
+      </Properties>
+
+      <Layout>
+        <DimensionLayout dim="0">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" attributes="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="lblCriterion" alignment="0" min="-2" pref="161" max="-2" attributes="0"/>
+                              <Component id="lblTitle" alignment="0" pref="530" max="32767" attributes="0"/>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <EmptySpace min="12" pref="12" max="12" attributes="0"/>
+                                  <Component id="radioAIC" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Component id="radioBIC" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Component id="radioAICC" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Component id="radioDT" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Component id="radioLK" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="lblConsType" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="lblConsensusType" min="-2" pref="28" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="lblPercent" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <Component id="sliderConsType" alignment="0" pref="530" max="32767" attributes="0"/>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="lblMR" min="-2" pref="76" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="129" max="-2" attributes="0"/>
+                                  <Component id="btnBuild" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace pref="155" max="32767" attributes="0"/>
+                                  <Component id="lblStrict" min="-2" pref="40" max="-2" attributes="0"/>
+                              </Group>
+                              <Component id="sliderConfidence" alignment="1" pref="530" max="32767" attributes="0"/>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="lblConfInt" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="lblConfidenceInterval" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                      </Group>
+                      <Group type="102" alignment="1" attributes="0">
+                          <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                              <Group type="102" alignment="1" attributes="0">
+                                  <Component id="sizeModeAlignment3" min="-2" max="-2" attributes="1"/>
+                                  <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="102" alignment="1" attributes="1">
+                                  <Component id="sizeModeNL" max="32767" attributes="1"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="1" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="sizeModeCustom" min="-2" pref="85" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="txtSampleSize" min="-2" pref="53" max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="sizeModeVar" min="-2" pref="123" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="sizeModeShannon" min="-2" pref="93" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="sizeModeShannonNL" min="-2" pref="140" max="-2" attributes="0"/>
+                              </Group>
+                              <Component id="lblSampleSize" alignment="0" pref="418" max="32767" attributes="1"/>
+                          </Group>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="lblSampleSizeMode" min="-2" pref="78" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+        <DimensionLayout dim="1">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="lblTitle" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="lblCriterion" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="radioAIC" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="radioBIC" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="radioAICC" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="radioDT" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="radioLK" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="lblSampleSize" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblSampleSizeMode" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="sizeModeAlignment3" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="sizeModeShannonNL" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="sizeModeShannon" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="sizeModeVar" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="sizeModeNL" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="sizeModeCustom" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtSampleSize" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace pref="6" max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="lblConfInt" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblConfidenceInterval" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="sliderConfidence" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="lblConsType" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblConsensusType" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblPercent" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="sliderConsType" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="lblMR" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblStrict" min="-2" max="-2" attributes="0"/>
+                      <Component id="btnBuild" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+      </Layout>
+      <SubComponents>
+        <Component class="javax.swing.JLabel" name="lblTitle">
+          <Properties>
+            <Property name="background" type="java.awt.Color" resourceKey="lblTitle.background"/>
+            <Property name="font" type="java.awt.Font" resourceKey="lblTitle.font"/>
+            <Property name="horizontalAlignment" type="int" value="0"/>
+            <Property name="text" type="java.lang.String" resourceKey="title.text"/>
+            <Property name="name" type="java.lang.String" value="lblTitle" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="lblCriterion">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="lblCriterion.text"/>
+            <Property name="name" type="java.lang.String" value="lblCriterion" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JRadioButton" name="radioAIC">
+          <Properties>
+            <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+              <action class="xprottest.analysis.consensus.Consensus" id="disableSampleSize" methodName="disableSampleSize"/>
+            </Property>
+            <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+              <ComponentRef name="btnGrpCriterion"/>
+            </Property>
+            <Property name="text" type="java.lang.String" resourceKey="radioAIC.text"/>
+            <Property name="name" type="java.lang.String" value="radioAIC" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JRadioButton" name="radioBIC">
+          <Properties>
+            <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+              <action class="xprottest.analysis.consensus.Consensus" id="enableSampleSize" methodName="enableSampleSize"/>
+            </Property>
+            <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+              <ComponentRef name="btnGrpCriterion"/>
+            </Property>
+            <Property name="text" type="java.lang.String" resourceKey="radioBIC.text"/>
+            <Property name="name" type="java.lang.String" value="radioBIC" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JRadioButton" name="radioAICC">
+          <Properties>
+            <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+              <action class="xprottest.analysis.consensus.Consensus" id="enableSampleSize" methodName="enableSampleSize"/>
+            </Property>
+            <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+              <ComponentRef name="btnGrpCriterion"/>
+            </Property>
+            <Property name="text" type="java.lang.String" resourceKey="radioAICC.text"/>
+            <Property name="name" type="java.lang.String" value="radioAICC" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JRadioButton" name="radioDT">
+          <Properties>
+            <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+              <action class="xprottest.analysis.consensus.Consensus" id="disableSampleSize" methodName="disableSampleSize"/>
+            </Property>
+            <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+              <ComponentRef name="btnGrpCriterion"/>
+            </Property>
+            <Property name="selected" type="boolean" value="true"/>
+            <Property name="text" type="java.lang.String" resourceKey="radioDT.text"/>
+            <Property name="name" type="java.lang.String" value="radioDT" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JRadioButton" name="radioLK">
+          <Properties>
+            <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+              <action class="xprottest.analysis.consensus.Consensus" id="disableSampleSize" methodName="disableSampleSize"/>
+            </Property>
+            <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+              <ComponentRef name="btnGrpCriterion"/>
+            </Property>
+            <Property name="text" type="java.lang.String" resourceKey="radioLK.text"/>
+            <Property name="name" type="java.lang.String" value="radioLK" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JSlider" name="sliderConsType">
+          <Properties>
+            <Property name="minimum" type="int" value="50"/>
+            <Property name="toolTipText" type="java.lang.String" resourceKey="sliderConsType.toolTipText"/>
+            <Property name="name" type="java.lang.String" value="sliderConsType" noResource="true"/>
+          </Properties>
+          <Events>
+            <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="sliderConsTypeStateChanged"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JLabel" name="lblConsType">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="lblConsType.text"/>
+            <Property name="name" type="java.lang.String" value="lblConsType" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JButton" name="btnBuild">
+          <Properties>
+            <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+              <action class="xprottest.analysis.consensus.Consensus" id="buildConsensus" methodName="buildConsensus"/>
+            </Property>
+            <Property name="text" type="java.lang.String" resourceKey="btnBuild.text"/>
+            <Property name="name" type="java.lang.String" value="btnBuild" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="lblMR">
+          <Properties>
+            <Property name="font" type="java.awt.Font" resourceKey="lblMR.font"/>
+            <Property name="foreground" type="java.awt.Color" resourceKey="lblMR.foreground"/>
+            <Property name="text" type="java.lang.String" resourceKey="lblMR.text"/>
+            <Property name="name" type="java.lang.String" value="lblMR" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="lblStrict">
+          <Properties>
+            <Property name="font" type="java.awt.Font" resourceKey="lblStrict.font"/>
+            <Property name="foreground" type="java.awt.Color" resourceKey="lblStrict.foreground"/>
+            <Property name="horizontalAlignment" type="int" value="4"/>
+            <Property name="text" type="java.lang.String" resourceKey="lblStrict.text"/>
+            <Property name="name" type="java.lang.String" value="lblStrict" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="lblConfInt">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="lblConfInt.text"/>
+            <Property name="toolTipText" type="java.lang.String" resourceKey="lblConfInt.toolTipText"/>
+            <Property name="name" type="java.lang.String" value="lblConfInt" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JSlider" name="sliderConfidence">
+          <Properties>
+            <Property name="value" type="int" value="100"/>
+            <Property name="name" type="java.lang.String" value="sliderConfidence" noResource="true"/>
+          </Properties>
+          <Events>
+            <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="sliderConfidenceStateChanged"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JLabel" name="lblConfidenceInterval">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="default-confidence-interval"/>
+            <Property name="name" type="java.lang.String" value="lblConfidenceInterval" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="lblConsensusType">
+          <Properties>
+            <Property name="horizontalAlignment" type="int" value="4"/>
+            <Property name="text" type="java.lang.String" resourceKey="default-consensus-type"/>
+            <Property name="name" type="java.lang.String" value="lblConsensusType" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="lblPercent">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="percent-symbol"/>
+            <Property name="name" type="java.lang.String" value="lblPercent" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JRadioButton" name="sizeModeAlignment3">
+          <Properties>
+            <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+              <action class="xprottest.analysis.consensus.Consensus" id="selectSampleSize" methodName="selectSampleSize"/>
+            </Property>
+            <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+              <ComponentRef name="btnGroupSampleSizeMode"/>
+            </Property>
+            <Property name="selected" type="boolean" value="true"/>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="xprottest/results/resources/ResultsView.properties" key="btn-sizemode-alignment" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+            </Property>
+            <Property name="toolTipText" type="java.lang.String" resourceKey="sizeModeAlignment3.toolTipText"/>
+            <Property name="name" type="java.lang.String" value="sizeModeAlignment3" noResource="true"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="sizeModePressed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JRadioButton" name="sizeModeNL">
+          <Properties>
+            <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+              <action class="xprottest.analysis.consensus.Consensus" id="selectSampleSize" methodName="selectSampleSize"/>
+            </Property>
+            <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+              <ComponentRef name="btnGroupSampleSizeMode"/>
+            </Property>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="xprottest/results/resources/ResultsView.properties" key="btn-sizemode-nxl" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+            </Property>
+            <Property name="toolTipText" type="java.lang.String" resourceKey="sizeModeNL.toolTipText"/>
+            <Property name="name" type="java.lang.String" value="sizeModeNL" noResource="true"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="sizeModePressed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JRadioButton" name="sizeModeCustom">
+          <Properties>
+            <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+              <action class="xprottest.analysis.consensus.Consensus" id="selectSampleSize" methodName="selectSampleSize"/>
+            </Property>
+            <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+              <ComponentRef name="btnGroupSampleSizeMode"/>
+            </Property>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="xprottest/results/resources/ResultsView.properties" key="btn-sizemode-custom" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+            </Property>
+            <Property name="toolTipText" type="java.lang.String" resourceKey="sizeModeCustom.toolTipText"/>
+            <Property name="name" type="java.lang.String" value="sizeModeCustom" noResource="true"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="sizeModePressed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JTextField" name="txtSampleSize">
+          <Properties>
+            <Property name="horizontalAlignment" type="int" value="4"/>
+            <Property name="text" type="java.lang.String" resourceKey="txtSampleSize.text"/>
+            <Property name="enabled" type="boolean" value="false"/>
+            <Property name="name" type="java.lang.String" value="txtSampleSize" noResource="true"/>
+          </Properties>
+          <Events>
+            <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtSampleSizeFocusLost"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JRadioButton" name="sizeModeVar">
+          <Properties>
+            <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+              <action class="xprottest.analysis.consensus.Consensus" id="selectSampleSize" methodName="selectSampleSize"/>
+            </Property>
+            <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+              <ComponentRef name="btnGroupSampleSizeMode"/>
+            </Property>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="xprottest/results/resources/ResultsView.properties" key="btn-sizemode-alignment-var" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+            </Property>
+            <Property name="toolTipText" type="java.lang.String" resourceKey="sizeModeVar.toolTipText"/>
+            <Property name="name" type="java.lang.String" value="sizeModeVar" noResource="true"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="sizeModePressed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JRadioButton" name="sizeModeShannon">
+          <Properties>
+            <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+              <action class="xprottest.analysis.consensus.Consensus" id="selectSampleSize" methodName="selectSampleSize"/>
+            </Property>
+            <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+              <ComponentRef name="btnGroupSampleSizeMode"/>
+            </Property>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="xprottest/results/resources/ResultsView.properties" key="btn-sizemode-shannon" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+            </Property>
+            <Property name="toolTipText" type="java.lang.String" resourceKey="sizeModeShannon.toolTipText"/>
+            <Property name="name" type="java.lang.String" value="sizeModeShannon" noResource="true"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="sizeModePressed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JRadioButton" name="sizeModeShannonNL">
+          <Properties>
+            <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+              <action class="xprottest.analysis.consensus.Consensus" id="selectSampleSize" methodName="selectSampleSize"/>
+            </Property>
+            <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+              <ComponentRef name="btnGroupSampleSizeMode"/>
+            </Property>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="xprottest/results/resources/ResultsView.properties" key="btn-sizemode-shannon-nxl" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+            </Property>
+            <Property name="toolTipText" type="java.lang.String" resourceKey="sizeModeShannonNL.toolTipText"/>
+            <Property name="name" type="java.lang.String" value="sizeModeShannonNL" noResource="true"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="sizeModePressed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JLabel" name="lblSampleSize">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="lblSampleSize.text"/>
+            <Property name="name" type="java.lang.String" value="lblSampleSize" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="lblSampleSizeMode">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="lblSampleSizeMode.text"/>
+            <Property name="name" type="java.lang.String" value="lblSampleSizeMode" noResource="true"/>
+          </Properties>
+        </Component>
+      </SubComponents>
+    </Container>
+    <Container class="javax.swing.JScrollPane" name="displayScroll">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="displayScroll" noResource="true"/>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+      </AuxValues>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+      <SubComponents>
+        <Component class="javax.swing.JTextArea" name="displayArea">
+          <Properties>
+            <Property name="columns" type="int" value="20"/>
+            <Property name="editable" type="boolean" value="false"/>
+            <Property name="rows" type="int" value="5"/>
+            <Property name="name" type="java.lang.String" value="displayArea" noResource="true"/>
+          </Properties>
+        </Component>
+      </SubComponents>
+    </Container>
+  </SubComponents>
+</Form>

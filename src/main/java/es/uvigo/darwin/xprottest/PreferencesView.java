@@ -4,7 +4,7 @@
  * Created on 18 de noviembre de 2009, 12:26
  */
 
-package xprottest;
+package es.uvigo.darwin.xprottest;
 
 import org.jdesktop.application.Action;
 import org.jdesktop.application.Application;
@@ -40,7 +40,7 @@ public class PreferencesView extends javax.swing.JFrame {
         lblStop = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(xprottest.XProtTestApp.class).getContext().getResourceMap(PreferencesView.class);
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(es.uvigo.darwin.xprottest.XProtTestApp.class).getContext().getResourceMap(PreferencesView.class);
         setTitle(resourceMap.getString("Form.title")); // NOI18N
         setAlwaysOnTop(true);
         setBackground(resourceMap.getColor("Form.background")); // NOI18N
@@ -69,7 +69,7 @@ public class PreferencesView extends javax.swing.JFrame {
         cmbErrorBehavior.setSelectedIndex(mainFrame.getErrorBehavior());
         cmbErrorBehavior.setName("cmbErrorBehavior"); // NOI18N
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(xprottest.XProtTestApp.class).getContext().getActionMap(PreferencesView.class, this);
+        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(es.uvigo.darwin.xprottest.XProtTestApp.class).getContext().getActionMap(PreferencesView.class, this);
         btnAccept.setAction(actionMap.get("Accept")); // NOI18N
         btnAccept.setText(resourceMap.getString("button-accept")); // NOI18N
         btnAccept.setName("btnAccept"); // NOI18N

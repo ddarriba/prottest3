@@ -4,5 +4,6 @@ syntax: glob
 dist/
 build/
 nbproject/
+previous-dists/
 *~
 *bk.*

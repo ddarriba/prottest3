@@ -4,7 +4,7 @@
  * Created on 2 de octubre de 2009, 17:55
  */
 
-package xprottest.analysis;
+package es.uvigo.darwin.xprottest.analysis;
 
 import es.uvigo.darwin.prottest.util.ProtTestAlignment;
 import es.uvigo.darwin.prottest.util.printer.ProtTestFormattedOutput;
@@ -52,7 +52,7 @@ public class FrequenciesView extends javax.swing.JFrame {
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(xprottest.XProtTestApp.class).getContext().getResourceMap(FrequenciesView.class);
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(es.uvigo.darwin.xprottest.XProtTestApp.class).getContext().getResourceMap(FrequenciesView.class);
         tableFrequencies.setBackground(resourceMap.getColor("tableFrequencies.background")); // NOI18N
         DefaultTableModel freqTableModel =
         new javax.swing.table.DefaultTableModel() {
@@ -80,7 +80,7 @@ public class FrequenciesView extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tableFrequencies);
 
         lblTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("xprottest/analysis/resources/FrequenciesView"); // NOI18N
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/analysis/resources/FrequenciesView"); // NOI18N
         lblTitle.setText(bundle.getString("msg-title")); // NOI18N
         lblTitle.setName("lblTitle"); // NOI18N
 

@@ -4,7 +4,7 @@
  * Created on 6 de octubre de 2009, 18:04
  */
 
-package xprottest.analysis;
+package es.uvigo.darwin.xprottest.analysis;
 
 import es.uvigo.darwin.prottest.facade.TreeFacade;
 import es.uvigo.darwin.prottest.model.Model;
@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.jdesktop.application.Action;
 import pal.tree.Tree;
-import xprottest.util.TextAreaWriter;
+import es.uvigo.darwin.xprottest.util.TextAreaWriter;
 /**
  *
  * @author  diego
@@ -76,7 +76,7 @@ public class TreeView extends javax.swing.JFrame {
         jMenuItem1 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("xprottest/analysis/resources/TreeView"); // NOI18N
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/analysis/resources/TreeView"); // NOI18N
         setTitle(bundle.getString("title")); // NOI18N
         setName("Form"); // NOI18N
 
@@ -90,15 +90,12 @@ public class TreeView extends javax.swing.JFrame {
 
         optionsPanel.setName("optionsPanel"); // NOI18N
 
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(xprottest.XProtTestApp.class).getContext().getResourceMap(TreeView.class);
-        cmbTreeSelection.setToolTipText(resourceMap.getString("treeSelection.toolTipText")); // NOI18N
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(xprottest.XProtTestApp.class).getContext().getActionMap(TreeView.class, this);
+        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(es.uvigo.darwin.xprottest.XProtTestApp.class).getContext().getActionMap(TreeView.class, this);
         cmbTreeSelection.setAction(actionMap.get("treeFormatSelection")); // NOI18N
         cmbTreeSelection.setName("cmbTreeSelection"); // NOI18N
 
         cmbTreeFormatSelection.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Newick Format", "ASCII Format" }));
         cmbTreeFormatSelection.setSelectedItem("ASCII Format");
-        cmbTreeFormatSelection.setToolTipText(resourceMap.getString("treeFormatSelection.toolTipText")); // NOI18N
         cmbTreeFormatSelection.setAction(actionMap.get("treeFormatSelection")); // NOI18N
         cmbTreeFormatSelection.setName("cmbTreeFormatSelection"); // NOI18N
 
@@ -125,6 +122,7 @@ public class TreeView extends javax.swing.JFrame {
 
         jMenuBar1.setName("jMenuBar1"); // NOI18N
 
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(es.uvigo.darwin.xprottest.XProtTestApp.class).getContext().getResourceMap(TreeView.class);
         windowMenu.setText(resourceMap.getString("windowMenu.text")); // NOI18N
         windowMenu.setName("windowMenu"); // NOI18N
 

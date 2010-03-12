@@ -32,7 +32,7 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="resultsTabbedPane" alignment="0" pref="577" max="32767" attributes="0"/>
+                  <Component id="resultsTabbedPane" alignment="0" pref="670" max="32767" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
@@ -64,17 +64,17 @@
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="sizeModeShannonNL" min="-2" pref="140" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="lblSampleSize" alignment="0" pref="464" max="32767" attributes="1"/>
+                          <Component id="lblSampleSize" alignment="0" pref="557" max="32767" attributes="1"/>
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="lblConfidence" min="-2" pref="32" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="sliderConfidenceInterval" pref="420" max="32767" attributes="0"/>
+                              <Component id="sliderConfidenceInterval" pref="513" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
                   <Component id="lblSampleSizeMode" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="lblNotComplete" alignment="1" pref="577" max="32767" attributes="0"/>
+                  <Component id="lblNotComplete" alignment="1" pref="670" max="32767" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="lblComandLineLabel" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -83,10 +83,10 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="lblSelectedModel" pref="446" max="32767" attributes="0"/>
+                              <Component id="lblSelectedModel" pref="539" max="32767" attributes="0"/>
                               <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="jScrollPane1" alignment="0" pref="475" max="32767" attributes="0"/>
+                          <Component id="jScrollPane1" alignment="0" pref="568" max="32767" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
@@ -174,7 +174,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="aicScrollPanel" alignment="1" pref="548" max="32767" attributes="0"/>
+                          <Component id="aicScrollPanel" alignment="1" pref="641" max="32767" attributes="0"/>
                           <Component id="aicDataPanel" alignment="1" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -245,15 +245,15 @@
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Component id="displayAICoInv" min="-2" max="-2" attributes="0"/>
-                                      <Component id="displayAICoInvAlpha" pref="145" max="32767" attributes="0"/>
-                                      <Component id="displayAICoAlphaInv" pref="145" max="32767" attributes="0"/>
-                                      <Component id="displayAICoAlpha" alignment="0" pref="145" max="32767" attributes="0"/>
+                                      <Component id="displayAICoInvAlpha" pref="229" max="32767" attributes="0"/>
+                                      <Component id="displayAICoAlphaInv" pref="229" max="32767" attributes="0"/>
+                                      <Component id="displayAICoAlpha" alignment="0" pref="229" max="32767" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
                               </Group>
                               <Group type="102" attributes="0">
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="lblAICOverall" pref="282" max="32767" attributes="0"/>
+                                  <Component id="lblAICOverall" pref="366" max="32767" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                               </Group>
                           </Group>
@@ -273,7 +273,7 @@
                                       <Component id="displayAICImpF" alignment="0" max="32767" attributes="1"/>
                                   </Group>
                               </Group>
-                              <Component id="lblAICPI" pref="234" max="32767" attributes="0"/>
+                              <Component id="lblAICPI" pref="243" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
@@ -341,7 +341,7 @@
                 <Component class="javax.swing.JLabel" name="lblAICOverall">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="xprottest/results/resources/ResultsView.properties" key="lbl-overall" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                      <ResourceString bundle="es/uvigo/darwin/xprottest/results/resources/ResultsView.properties" key="lbl-overall" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
                     <Property name="name" type="java.lang.String" value="lblAICOverall" noResource="true"/>
                   </Properties>
@@ -349,7 +349,7 @@
                 <Component class="javax.swing.JLabel" name="lblAICOverallAlpha">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="xprottest/results/resources/ResultsView.properties" key="lbl-overall-alpha" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                      <ResourceString bundle="es/uvigo/darwin/xprottest/results/resources/ResultsView.properties" key="lbl-overall-alpha" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
                     <Property name="name" type="java.lang.String" value="lblAICOverallAlpha" noResource="true"/>
                   </Properties>
@@ -357,7 +357,7 @@
                 <Component class="javax.swing.JLabel" name="lblAICOverallAlphaInv">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="xprottest/results/resources/ResultsView.properties" key="lbl-overall-alpha-inv" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                      <ResourceString bundle="es/uvigo/darwin/xprottest/results/resources/ResultsView.properties" key="lbl-overall-alpha-inv" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
                     <Property name="name" type="java.lang.String" value="lblAICOverallAlphaInv" noResource="true"/>
                   </Properties>
@@ -365,7 +365,7 @@
                 <Component class="javax.swing.JLabel" name="lblAICOverallInvAlpha">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="xprottest/results/resources/ResultsView.properties" key="lbl-overall-inv-alpha" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                      <ResourceString bundle="es/uvigo/darwin/xprottest/results/resources/ResultsView.properties" key="lbl-overall-inv-alpha" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
                     <Property name="name" type="java.lang.String" value="lblAICOverallInvAlpha" noResource="true"/>
                   </Properties>
@@ -373,7 +373,7 @@
                 <Component class="javax.swing.JLabel" name="lblAICOverallInv">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="xprottest/results/resources/ResultsView.properties" key="lbl-overall-inv" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                      <ResourceString bundle="es/uvigo/darwin/xprottest/results/resources/ResultsView.properties" key="lbl-overall-inv" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
                     <Property name="name" type="java.lang.String" value="lblAICOverallInv" noResource="true"/>
                   </Properties>
@@ -478,7 +478,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="bicScrollPanel" alignment="1" pref="548" max="32767" attributes="0"/>
+                          <Component id="bicScrollPanel" alignment="1" pref="641" max="32767" attributes="0"/>
                           <Component id="bicDataPanel" alignment="1" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -549,15 +549,15 @@
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Component id="displayBICoInv" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="displayBICoInvAlpha" alignment="0" pref="145" max="32767" attributes="0"/>
-                                      <Component id="displayBICoAlphaInv" alignment="0" pref="145" max="32767" attributes="0"/>
-                                      <Component id="displayBICoAlpha" alignment="0" pref="145" max="32767" attributes="0"/>
+                                      <Component id="displayBICoInvAlpha" alignment="0" pref="154" max="32767" attributes="0"/>
+                                      <Component id="displayBICoAlphaInv" alignment="0" pref="154" max="32767" attributes="0"/>
+                                      <Component id="displayBICoAlpha" alignment="0" pref="154" max="32767" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="lblBICOverall" pref="282" max="32767" attributes="0"/>
+                                  <Component id="lblBICOverall" pref="366" max="32767" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                               </Group>
                           </Group>
@@ -579,7 +579,7 @@
                               </Group>
                               <Group type="102" alignment="1" attributes="0">
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="lblBICPI" pref="234" max="32767" attributes="0"/>
+                                  <Component id="lblBICPI" pref="243" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
@@ -785,7 +785,7 @@
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="aiccScrollPanel" alignment="0" pref="548" max="32767" attributes="0"/>
+                          <Component id="aiccScrollPanel" alignment="0" pref="641" max="32767" attributes="0"/>
                           <Component id="aiccDataPanel" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -856,15 +856,15 @@
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Component id="displayAICcoInv" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="displayAICcoInvAlpha" alignment="0" pref="145" max="32767" attributes="0"/>
-                                      <Component id="displayAICcoAlphaInv" alignment="0" pref="145" max="32767" attributes="0"/>
-                                      <Component id="displayAICcoAlpha" alignment="0" pref="145" max="32767" attributes="0"/>
+                                      <Component id="displayAICcoInvAlpha" alignment="0" pref="154" max="32767" attributes="0"/>
+                                      <Component id="displayAICcoAlphaInv" alignment="0" pref="154" max="32767" attributes="0"/>
+                                      <Component id="displayAICcoAlpha" alignment="0" pref="154" max="32767" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="lblAICcOverall" pref="282" max="32767" attributes="0"/>
+                                  <Component id="lblAICcOverall" pref="366" max="32767" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                               </Group>
                           </Group>
@@ -884,7 +884,7 @@
                                       <Component id="displayAICcImpF" alignment="0" max="32767" attributes="1"/>
                                   </Group>
                               </Group>
-                              <Component id="lblAICcPI" alignment="0" pref="234" max="32767" attributes="0"/>
+                              <Component id="lblAICcPI" alignment="0" pref="243" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
@@ -1089,7 +1089,7 @@
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="dtScrollPanel" alignment="0" pref="548" max="32767" attributes="0"/>
+                          <Component id="dtScrollPanel" alignment="0" pref="641" max="32767" attributes="0"/>
                           <Component id="dtDataPanel" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -1160,15 +1160,15 @@
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Component id="displayDToInv" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="displayDToInvAlpha" alignment="0" pref="145" max="32767" attributes="0"/>
-                                      <Component id="displayDToAlphaInv" alignment="0" pref="145" max="32767" attributes="0"/>
-                                      <Component id="displayDToAlpha" alignment="0" pref="145" max="32767" attributes="0"/>
+                                      <Component id="displayDToInvAlpha" alignment="0" pref="154" max="32767" attributes="0"/>
+                                      <Component id="displayDToAlphaInv" alignment="0" pref="154" max="32767" attributes="0"/>
+                                      <Component id="displayDToAlpha" alignment="0" pref="154" max="32767" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="lblDTOverall" pref="282" max="32767" attributes="0"/>
+                                  <Component id="lblDTOverall" pref="366" max="32767" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                               </Group>
                           </Group>
@@ -1188,7 +1188,7 @@
                                       <Component id="displayDTImpF" alignment="0" max="32767" attributes="1"/>
                                   </Group>
                               </Group>
-                              <Component id="lblDTPI" alignment="0" pref="234" max="32767" attributes="0"/>
+                              <Component id="lblDTPI" alignment="0" pref="243" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
@@ -1406,7 +1406,7 @@
         </Property>
         <Property name="selected" type="boolean" value="true"/>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="xprottest/results/resources/ResultsView.properties" key="btn-sizemode-alignment" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+          <ResourceString bundle="es/uvigo/darwin/xprottest/results/resources/ResultsView.properties" key="btn-sizemode-alignment" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
         </Property>
         <Property name="name" type="java.lang.String" value="sizeModeAlignment" noResource="true"/>
       </Properties>
@@ -1423,7 +1423,7 @@
           <ComponentRef name="sampleSizeModeButtonGroup"/>
         </Property>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="xprottest/results/resources/ResultsView.properties" key="btn-sizemode-shannon" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+          <ResourceString bundle="es/uvigo/darwin/xprottest/results/resources/ResultsView.properties" key="btn-sizemode-shannon" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
         </Property>
         <Property name="name" type="java.lang.String" value="sizeModeShannon" noResource="true"/>
       </Properties>
@@ -1440,7 +1440,7 @@
           <ComponentRef name="sampleSizeModeButtonGroup"/>
         </Property>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="xprottest/results/resources/ResultsView.properties" key="btn-sizemode-alignment-var" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+          <ResourceString bundle="es/uvigo/darwin/xprottest/results/resources/ResultsView.properties" key="btn-sizemode-alignment-var" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
         </Property>
         <Property name="name" type="java.lang.String" value="sizeModeVar" noResource="true"/>
       </Properties>
@@ -1454,7 +1454,7 @@
           <ComponentRef name="sampleSizeModeButtonGroup"/>
         </Property>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="xprottest/results/resources/ResultsView.properties" key="btn-sizemode-shannon-nxl" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+          <ResourceString bundle="es/uvigo/darwin/xprottest/results/resources/ResultsView.properties" key="btn-sizemode-shannon-nxl" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
         </Property>
         <Property name="name" type="java.lang.String" value="sizeModeShannonNL" noResource="true"/>
       </Properties>
@@ -1468,7 +1468,7 @@
           <ComponentRef name="sampleSizeModeButtonGroup"/>
         </Property>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="xprottest/results/resources/ResultsView.properties" key="btn-sizemode-nxl" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+          <ResourceString bundle="es/uvigo/darwin/xprottest/results/resources/ResultsView.properties" key="btn-sizemode-nxl" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
         </Property>
         <Property name="name" type="java.lang.String" value="sizeModeNL" noResource="true"/>
       </Properties>
@@ -1485,7 +1485,7 @@
           <ComponentRef name="sampleSizeModeButtonGroup"/>
         </Property>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="xprottest/results/resources/ResultsView.properties" key="btn-sizemode-custom" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+          <ResourceString bundle="es/uvigo/darwin/xprottest/results/resources/ResultsView.properties" key="btn-sizemode-custom" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
         </Property>
         <Property name="name" type="java.lang.String" value="sizeModeCustom" noResource="true"/>
       </Properties>
@@ -1564,7 +1564,7 @@
         <Property name="foreground" type="java.awt.Color" resourceKey="lblNotComplete.foreground"/>
         <Property name="horizontalAlignment" type="int" value="0"/>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="xprottest/resources/XProtTestView.properties" key="models-not-complete" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+          <ResourceString bundle="es/uvigo/darwin/xprottest/resources/XProtTestView.properties" key="models-not-complete" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
         </Property>
         <Property name="name" type="java.lang.String" value="lblNotComplete" noResource="true"/>
         <Property name="opaque" type="boolean" value="true"/>

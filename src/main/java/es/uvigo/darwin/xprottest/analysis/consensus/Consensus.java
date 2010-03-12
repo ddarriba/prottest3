@@ -4,7 +4,7 @@
  * Created on 6 de noviembre de 2009, 12:43
  */
 
-package xprottest.analysis.consensus;
+package es.uvigo.darwin.xprottest.analysis.consensus;
 
 import es.uvigo.darwin.prottest.facade.TreeFacade;
 import es.uvigo.darwin.prottest.global.ApplicationGlobals;
@@ -26,8 +26,8 @@ import java.util.ArrayList;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.ResourceMap;
-import xprottest.XProtTestView;
-import xprottest.util.TextAreaWriter;
+import es.uvigo.darwin.xprottest.XProtTestView;
+import es.uvigo.darwin.xprottest.util.TextAreaWriter;
 
 
 /**
@@ -61,7 +61,7 @@ public class Consensus extends javax.swing.JFrame {
         this.models = new SingleModelCollection(models);
         this.displayWriter = new PrintWriter(new TextAreaWriter(displayArea));
         
-        resourceMap = Application.getInstance(xprottest.XProtTestApp.class).getContext().getResourceMap(Consensus.class);
+        resourceMap = Application.getInstance(es.uvigo.darwin.xprottest.XProtTestApp.class).getContext().getResourceMap(Consensus.class);
         
         Font f = new Font(Font.MONOSPACED, Font.PLAIN, 12);
         displayArea.setFont(f);
@@ -114,7 +114,7 @@ public class Consensus extends javax.swing.JFrame {
         editCopyMenuItem = new javax.swing.JMenuItem();
         selectAllMenuItem = new javax.swing.JMenuItem();
 
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(xprottest.XProtTestApp.class).getContext().getResourceMap(Consensus.class);
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(es.uvigo.darwin.xprottest.XProtTestApp.class).getContext().getResourceMap(Consensus.class);
         setTitle(resourceMap.getString("Form.title")); // NOI18N
         setName("Form"); // NOI18N
 
@@ -130,7 +130,7 @@ public class Consensus extends javax.swing.JFrame {
         lblCriterion.setText(resourceMap.getString("lblCriterion.text")); // NOI18N
         lblCriterion.setName("lblCriterion"); // NOI18N
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(xprottest.XProtTestApp.class).getContext().getActionMap(Consensus.class, this);
+        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(es.uvigo.darwin.xprottest.XProtTestApp.class).getContext().getActionMap(Consensus.class, this);
         radioAIC.setAction(actionMap.get("disableSampleSize")); // NOI18N
         btnGrpCriterion.add(radioAIC);
         radioAIC.setText(resourceMap.getString("radioAIC.text")); // NOI18N
@@ -209,7 +209,7 @@ public class Consensus extends javax.swing.JFrame {
         sizeModeAlignment3.setAction(actionMap.get("selectSampleSize")); // NOI18N
         btnGroupSampleSizeMode.add(sizeModeAlignment3);
         sizeModeAlignment3.setSelected(true);
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("xprottest/results/resources/ResultsView"); // NOI18N
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/resources/ResultsView"); // NOI18N
         sizeModeAlignment3.setText(bundle.getString("btn-sizemode-alignment")); // NOI18N
         sizeModeAlignment3.setToolTipText(resourceMap.getString("sizeModeAlignment3.toolTipText")); // NOI18N
         sizeModeAlignment3.setName("sizeModeAlignment3"); // NOI18N
@@ -300,7 +300,7 @@ public class Consensus extends javax.swing.JFrame {
                         .addContainerGap()
                         .addGroup(settingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblCriterion, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 530, Short.MAX_VALUE)
+                            .addComponent(lblTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 628, Short.MAX_VALUE)
                             .addGroup(settingsPanelLayout.createSequentialGroup()
                                 .addGap(12, 12, 12)
                                 .addComponent(radioAIC)
@@ -318,14 +318,14 @@ public class Consensus extends javax.swing.JFrame {
                                 .addComponent(lblConsensusType, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(lblPercent))
-                            .addComponent(sliderConsType, javax.swing.GroupLayout.DEFAULT_SIZE, 530, Short.MAX_VALUE)
+                            .addComponent(sliderConsType, javax.swing.GroupLayout.DEFAULT_SIZE, 628, Short.MAX_VALUE)
                             .addGroup(settingsPanelLayout.createSequentialGroup()
                                 .addComponent(lblMR, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(129, 129, 129)
                                 .addComponent(btnBuild)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 155, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 253, Short.MAX_VALUE)
                                 .addComponent(lblStrict, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(sliderConfidence, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 530, Short.MAX_VALUE)
+                            .addComponent(sliderConfidence, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 628, Short.MAX_VALUE)
                             .addGroup(settingsPanelLayout.createSequentialGroup()
                                 .addComponent(lblConfInt)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -351,7 +351,7 @@ public class Consensus extends javax.swing.JFrame {
                                 .addComponent(sizeModeShannon, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(sizeModeShannonNL, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(lblSampleSize, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 418, Short.MAX_VALUE)))
+                            .addComponent(lblSampleSize, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 516, Short.MAX_VALUE)))
                     .addGroup(settingsPanelLayout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(lblSampleSizeMode, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -453,7 +453,7 @@ public class Consensus extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(displayScroll, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 558, Short.MAX_VALUE)
+                    .addComponent(displayScroll, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 656, Short.MAX_VALUE)
                     .addComponent(settingsPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -484,27 +484,27 @@ public class Consensus extends javax.swing.JFrame {
 
         txtSampleSize.setEnabled(false);
             if (btnName.equals(
-                    java.util.ResourceBundle.getBundle("xprottest/results/resources/ResultsView")
+                    java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/resources/ResultsView")
                     .getString("btn-sizemode-alignment")))
                 sampleSizeMode = ApplicationGlobals.SIZEMODE_ALIGNMENT;
             else if (btnName.equals(
-                    java.util.ResourceBundle.getBundle("xprottest/results/resources/ResultsView")
+                    java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/resources/ResultsView")
                     .getString("btn-sizemode-alignment-var")))
                 sampleSizeMode = ApplicationGlobals.SIZEMODE_ALIGNMENT_VAR;
             else if (btnName.equals(
-                    java.util.ResourceBundle.getBundle("xprottest/results/resources/ResultsView")
+                    java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/resources/ResultsView")
                     .getString("btn-sizemode-shannon")))
                 sampleSizeMode = ApplicationGlobals.SIZEMODE_SHANNON;
             else if (btnName.equals(
-                    java.util.ResourceBundle.getBundle("xprottest/results/resources/ResultsView")
+                    java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/resources/ResultsView")
                     .getString("btn-sizemode-shannon-nxl")))
                 sampleSizeMode = ApplicationGlobals.SIZEMODE_SHANNON_NxL;
             else if (btnName.equals(
-                    java.util.ResourceBundle.getBundle("xprottest/results/resources/ResultsView")
+                    java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/resources/ResultsView")
                     .getString("btn-sizemode-nxl")))
                 sampleSizeMode = ApplicationGlobals.SIZEMODE_NxL;
             else if (btnName.equals(
-                    java.util.ResourceBundle.getBundle("xprottest/results/resources/ResultsView")
+                    java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/resources/ResultsView")
                     .getString("btn-sizemode-custom"))) {
                 sampleSizeMode = ApplicationGlobals.SIZEMODE_USERSIZE;
                 try {
@@ -657,9 +657,6 @@ public class Consensus extends javax.swing.JFrame {
     private javax.swing.JRadioButton radioLK;
     private javax.swing.JMenuItem selectAllMenuItem;
     private javax.swing.JPanel settingsPanel;
-    private javax.swing.JRadioButton sizeModeAlignment;
-    private javax.swing.JRadioButton sizeModeAlignment1;
-    private javax.swing.JRadioButton sizeModeAlignment2;
     private javax.swing.JRadioButton sizeModeAlignment3;
     private javax.swing.JRadioButton sizeModeCustom;
     private javax.swing.JRadioButton sizeModeNL;

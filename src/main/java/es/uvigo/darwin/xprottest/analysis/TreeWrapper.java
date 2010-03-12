@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package xprottest.analysis;
+package es.uvigo.darwin.xprottest.analysis;
 
 import pal.tree.Tree;
 

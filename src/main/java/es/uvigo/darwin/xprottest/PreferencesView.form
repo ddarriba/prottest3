@@ -129,7 +129,7 @@
     <Component class="javax.swing.JButton" name="btnAccept">
       <Properties>
         <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-          <action class="xprottest.PreferencesView" id="Accept" methodName="Accept"/>
+          <action class="es.uvigo.darwin.xprottest.PreferencesView" id="Accept" methodName="Accept"/>
         </Property>
         <Property name="text" type="java.lang.String" resourceKey="button-accept"/>
         <Property name="name" type="java.lang.String" value="btnAccept" noResource="true"/>
@@ -138,7 +138,7 @@
     <Component class="javax.swing.JButton" name="btnCancel">
       <Properties>
         <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-          <action class="xprottest.PreferencesView" id="Cancel" methodName="Cancel"/>
+          <action class="es.uvigo.darwin.xprottest.PreferencesView" id="Cancel" methodName="Cancel"/>
         </Property>
         <Property name="text" type="java.lang.String" resourceKey="button-cancel"/>
         <Property name="name" type="java.lang.String" value="btnCancel" noResource="true"/>

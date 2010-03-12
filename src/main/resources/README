@@ -40,9 +40,9 @@ $ tar zvxf prottest-hpc.tar.gz
 (Linux/Unix/OS X)
 $ export PROTTEST_HOME=$PWD/prottest-hpc
 (Windows)
-$ set PROTTEST_HOME=$CWD\prottest-hpc-1.0
+$ set PROTTEST_HOME=$CWD\prottest-hpc
 $ cd prottest-hpc
-$ java -jar prottest-2.1.jar -i examples/COX2_PF0016/alignment -all-matrices -all-distributions -threads 2
+$ java -jar prottest-hpc.jar -i examples/COX2_PF0016/alignment -all-matrices -all-distributions -threads 2
 
 Graphical version
 
@@ -88,9 +88,10 @@ $PROTTEST_HOME/
   | filecluster8.conf.template  # machines file template for 8 node cluster
   | machines			# machines file for cluster execution
   | prottest.properties		# ProtTest-HPC configuration file (always required)
-  | prottest-2.1.jar		# ProtTest-HPC package
+  | prottest-hpc.jar		# ProtTest-HPC package
   | README			# this README file
   | runProtTestHPC.sh		# basic script for ProtTest-HPC cluster execution
+  | runXProtTestHPC.sh		# basic script for ProtTest-HPC graphical version
   
 - The ProtTest-HPC properties (prottest.properties) file must be located in the 
 ProtTest-HPC root directory. It has the execution preferences. Please refer to such
@@ -196,7 +197,7 @@ These are the parameters of the sequential execution:
 Basic execution example:
 
 	$ cd $PROTTEST_HOME
-	$ java -jar prottest-2.1.jar -i examples/COX2_PF0016/alignment -all-matrices -all-distributions
+	$ java -jar prottest-hpc.jar -i examples/COX2_PF0016/alignment -all-matrices -all-distributions
 
 
 -----------------------------------------------------------------------------
@@ -208,7 +209,7 @@ can use up to the number of cores in your machine and beyond. Following the basi
 execution example, a recommended multithread execution in a quad-core machine will be:
 
 	$ cd $PROTTEST_HOME
-	$ java -jar prottest-2.1.jar -i examples/COX2_PF0016/alignment -all-matrices -all-distributions -threads 4
+	$ java -jar prottest-hpc.jar -i examples/COX2_PF0016/alignment -all-matrices -all-distributions -threads 4
 
 It is remarkable that the substitution models will not be computed in a specific
 order, so the full output will be shown once all models have been computed. 

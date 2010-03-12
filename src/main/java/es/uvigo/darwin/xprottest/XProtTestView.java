@@ -5,13 +5,13 @@
  * 
  */
 
-package xprottest;
+package es.uvigo.darwin.xprottest;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import pal.alignment.AlignmentParseException;
-import xprottest.compute.RunningFrame;
-import xprottest.compute.OptionsView;
+import es.uvigo.darwin.xprottest.compute.RunningFrame;
+import es.uvigo.darwin.xprottest.compute.OptionsView;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.ResourceMap;
 import org.jdesktop.application.SingleFrameApplication;
@@ -28,7 +28,7 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import java.io.File;
 import java.io.PrintWriter;
-import xprottest.util.TextAreaAppender;
+import es.uvigo.darwin.xprottest.util.TextAreaAppender;
 import org.jdesktop.application.Task;
 import org.jdesktop.application.ApplicationContext;
 import org.jdesktop.application.TaskMonitor;
@@ -50,11 +50,11 @@ import java.io.IOException;
 import org.virion.jam.util.BrowserLauncher;
 import pal.alignment.Alignment;
 import pal.tree.Tree;
-import xprottest.analysis.TreeView;
-import xprottest.analysis.FrequenciesView;
-import xprottest.analysis.consensus.Consensus;
-import xprottest.results.ErrorLogView;
-import xprottest.results.ResultsView;
+import es.uvigo.darwin.xprottest.analysis.TreeView;
+import es.uvigo.darwin.xprottest.analysis.FrequenciesView;
+import es.uvigo.darwin.xprottest.analysis.consensus.Consensus;
+import es.uvigo.darwin.xprottest.results.ErrorLogView;
+import es.uvigo.darwin.xprottest.results.ResultsView;
 
 /**
  * The XProtTest main frame offers whole connection between the application
@@ -166,10 +166,10 @@ public class XProtTestView extends FrameView {
     public XProtTestView(SingleFrameApplication app, ProtTestFacade facade) {
         super(app);
 
-        resourceMap = Application.getInstance(xprottest.XProtTestApp.class).getContext()
+        resourceMap = Application.getInstance(es.uvigo.darwin.xprottest.XProtTestApp.class).getContext()
                 .getResourceMap(XProtTestView.class);
         
-        this.errorBehavior = Application.getInstance(xprottest.XProtTestApp.class).getContext()
+        this.errorBehavior = Application.getInstance(es.uvigo.darwin.xprottest.XProtTestApp.class).getContext()
                 .getResourceMap(XProtTestApp.class).getInteger("default-error-behavior");
         
         this.prottestFacade = facade;
@@ -287,7 +287,7 @@ public class XProtTestView extends FrameView {
         progressBar = new javax.swing.JProgressBar();
         lblMoreInfo = new javax.swing.JLabel();
 
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(xprottest.XProtTestApp.class).getContext().getResourceMap(XProtTestView.class);
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(es.uvigo.darwin.xprottest.XProtTestApp.class).getContext().getResourceMap(XProtTestView.class);
         mainPanel.setBackground(resourceMap.getColor("mainPanel.background")); // NOI18N
         mainPanel.setName("mainPanel"); // NOI18N
 
@@ -313,10 +313,10 @@ public class XProtTestView extends FrameView {
 
         menuBar.setName("menuBar"); // NOI18N
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(xprottest.XProtTestApp.class).getContext().getActionMap(XProtTestView.class, this);
+        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(es.uvigo.darwin.xprottest.XProtTestApp.class).getContext().getActionMap(XProtTestView.class, this);
         fileMenu.setAction(actionMap.get("openDataFile")); // NOI18N
         fileMenu.setMnemonic('F');
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("xprottest/resources/XProtTestView"); // NOI18N
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/resources/XProtTestView"); // NOI18N
         fileMenu.setText(bundle.getString("item-file")); // NOI18N
         fileMenu.setName("fileMenu"); // NOI18N
 

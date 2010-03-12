@@ -4,10 +4,10 @@
  * Created on 1 de octubre de 2009, 15:29
  */
 
-package xprottest.compute;
+package es.uvigo.darwin.xprottest.compute;
 
-import xprottest.*;
-import xprottest.util.OptimizationStrategyWrapper;
+import es.uvigo.darwin.xprottest.*;
+import es.uvigo.darwin.xprottest.util.OptimizationStrategyWrapper;
 import es.uvigo.darwin.prottest.facade.util.ProtTestParameterVO;
 import es.uvigo.darwin.prottest.global.AminoAcidApplicationGlobals;
 import es.uvigo.darwin.prottest.global.options.ApplicationOptions;
@@ -56,7 +56,7 @@ public class OptionsView extends javax.swing.JFrame {
     public OptionsView(XProtTestView mainFrame, 
             Alignment alignment, String alignmentFilePath) {
 
-        resource = java.util.ResourceBundle.getBundle("xprottest/compute/resources/OptionsView");
+        resource = java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/compute/resources/OptionsView");
         this.alignment = alignment;
         
         this.mainFrame = mainFrame;
@@ -158,7 +158,7 @@ public class OptionsView extends javax.swing.JFrame {
         lblNumProcessors = new javax.swing.JLabel();
         lblNumProc = new javax.swing.JLabel();
 
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(xprottest.XProtTestApp.class).getContext().getResourceMap(OptionsView.class);
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(es.uvigo.darwin.xprottest.XProtTestApp.class).getContext().getResourceMap(OptionsView.class);
         jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
         jLabel1.setName("jLabel1"); // NOI18N
 
@@ -217,7 +217,7 @@ public class OptionsView extends javax.swing.JFrame {
         distributionsPanel.setName("distributionsPanel"); // NOI18N
 
         lblRateVariation.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("xprottest/compute/resources/OptionsView"); // NOI18N
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/compute/resources/OptionsView"); // NOI18N
         lblRateVariation.setText(bundle.getString(" lbl-rate-variation")); // NOI18N
         lblRateVariation.setName("lblRateVariation"); // NOI18N
 
@@ -250,8 +250,7 @@ public class OptionsView extends javax.swing.JFrame {
 
         txtNCat.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         txtNCat.setText(resourceMap.getString("txtNCat.text")); // NOI18N
-        java.util.ResourceBundle bundle1 = java.util.ResourceBundle.getBundle("xprottest/resources/OptionsView"); // NOI18N
-        txtNCat.setToolTipText(bundle1.getString("txtNCatToolTip")); // NOI18N
+        txtNCat.setToolTipText("null");
         txtNCat.setName("txtNCat"); // NOI18N
 
         cbDistInvGC.setSelected(true);
@@ -317,7 +316,7 @@ public class OptionsView extends javax.swing.JFrame {
             .addGroup(empiricalFPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(cbEmpiricalF)
-                .addContainerGap(218, Short.MAX_VALUE))
+                .addContainerGap(280, Short.MAX_VALUE))
         );
         empiricalFPanelLayout.setVerticalGroup(
             empiricalFPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -334,9 +333,9 @@ public class OptionsView extends javax.swing.JFrame {
             .addGroup(distributionsPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(distributionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblBaseFreq, javax.swing.GroupLayout.DEFAULT_SIZE, 305, Short.MAX_VALUE)
-                    .addComponent(rateVarPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 305, Short.MAX_VALUE)
-                    .addComponent(lblRateVariation, javax.swing.GroupLayout.DEFAULT_SIZE, 305, Short.MAX_VALUE)
+                    .addComponent(lblBaseFreq, javax.swing.GroupLayout.DEFAULT_SIZE, 367, Short.MAX_VALUE)
+                    .addComponent(rateVarPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 367, Short.MAX_VALUE)
+                    .addComponent(lblRateVariation, javax.swing.GroupLayout.DEFAULT_SIZE, 367, Short.MAX_VALUE)
                     .addComponent(empiricalFPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -359,11 +358,12 @@ public class OptionsView extends javax.swing.JFrame {
 
         lblNumModels.setName("lblNumModels"); // NOI18N
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(xprottest.XProtTestApp.class).getContext().getActionMap(OptionsView.class, this);
+        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(es.uvigo.darwin.xprottest.XProtTestApp.class).getContext().getActionMap(OptionsView.class, this);
         sizeModeAlignment.setAction(actionMap.get("computeLikelihood")); // NOI18N
         sizeModeAlignment.setText(resourceMap.getString("sizeModeAlignment.text")); // NOI18N
         sizeModeAlignment.setName("sizeModeAlignment"); // NOI18N
 
+        java.util.ResourceBundle bundle1 = java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/resources/OptionsView"); // NOI18N
         lblStrategyMode.setText(bundle1.getString("lbl-strategy-mode")); // NOI18N
         lblStrategyMode.setName("lblStrategyMode"); // NOI18N
 
@@ -414,7 +414,7 @@ public class OptionsView extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblNumProc)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(sliderProcessors, javax.swing.GroupLayout.DEFAULT_SIZE, 214, Short.MAX_VALUE)
+                .addComponent(sliderProcessors, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -440,19 +440,19 @@ public class OptionsView extends javax.swing.JFrame {
                         .addComponent(subMatPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblUserTree, javax.swing.GroupLayout.DEFAULT_SIZE, 331, Short.MAX_VALUE)
+                            .addComponent(lblUserTree, javax.swing.GroupLayout.DEFAULT_SIZE, 393, Short.MAX_VALUE)
                             .addComponent(distributionsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblNumModelsLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 205, Short.MAX_VALUE)
+                                .addComponent(lblNumModelsLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(lblNumModels, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE))
+                                .addComponent(lblNumModels, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE))
                             .addComponent(lblStrategyMode)
-                            .addComponent(cmbStrategyMode, javax.swing.GroupLayout.Alignment.TRAILING, 0, 331, Short.MAX_VALUE)))
+                            .addComponent(cmbStrategyMode, javax.swing.GroupLayout.Alignment.TRAILING, 0, 393, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(185, 185, 185)
                         .addComponent(sizeModeAlignment)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(msgValidate, javax.swing.GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE)))
+                        .addComponent(msgValidate, javax.swing.GroupLayout.DEFAULT_SIZE, 319, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -581,7 +581,7 @@ public class OptionsView extends javax.swing.JFrame {
     @Action
     public void setStrategyMode() {
         org.jdesktop.application.ResourceMap resourceMap 
-                    = org.jdesktop.application.Application.getInstance(xprottest.XProtTestApp.class)
+                    = org.jdesktop.application.Application.getInstance(es.uvigo.darwin.xprottest.XProtTestApp.class)
                     .getContext().getResourceMap(OptionsView.class);
         File f = null;
         if (((OptimizationStrategyWrapper)cmbStrategyMode.getSelectedItem()).getValue()
@@ -646,7 +646,7 @@ public class OptionsView extends javax.swing.JFrame {
     private void setUserTree(Tree tree) {
         this.userTree = tree;
         org.jdesktop.application.ResourceMap resourceMap 
-                    = org.jdesktop.application.Application.getInstance(xprottest.XProtTestApp.class)
+                    = org.jdesktop.application.Application.getInstance(es.uvigo.darwin.xprottest.XProtTestApp.class)
                     .getContext().getResourceMap(OptionsView.class);
         if (tree == null) {
             lblUserTree.setText(resourceMap.getString("msg-no-user-tree-loaded"));

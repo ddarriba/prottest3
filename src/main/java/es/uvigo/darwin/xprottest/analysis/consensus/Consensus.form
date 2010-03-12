@@ -88,7 +88,7 @@
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
-                  <Component id="displayScroll" alignment="0" pref="558" max="32767" attributes="0"/>
+                  <Component id="displayScroll" alignment="0" pref="656" max="32767" attributes="0"/>
                   <Component id="settingsPanel" alignment="0" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -127,7 +127,7 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="lblCriterion" alignment="0" min="-2" pref="161" max="-2" attributes="0"/>
-                              <Component id="lblTitle" alignment="0" pref="530" max="32767" attributes="0"/>
+                              <Component id="lblTitle" alignment="0" pref="628" max="32767" attributes="0"/>
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace min="12" pref="12" max="12" attributes="0"/>
                                   <Component id="radioAIC" min="-2" max="-2" attributes="0"/>
@@ -147,15 +147,15 @@
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="lblPercent" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <Component id="sliderConsType" alignment="0" pref="530" max="32767" attributes="0"/>
+                              <Component id="sliderConsType" alignment="0" pref="628" max="32767" attributes="0"/>
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="lblMR" min="-2" pref="76" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="129" max="-2" attributes="0"/>
                                   <Component id="btnBuild" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace pref="155" max="32767" attributes="0"/>
+                                  <EmptySpace pref="253" max="32767" attributes="0"/>
                                   <Component id="lblStrict" min="-2" pref="40" max="-2" attributes="0"/>
                               </Group>
-                              <Component id="sliderConfidence" alignment="1" pref="530" max="32767" attributes="0"/>
+                              <Component id="sliderConfidence" alignment="1" pref="628" max="32767" attributes="0"/>
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="lblConfInt" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
@@ -189,7 +189,7 @@
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="sizeModeShannonNL" min="-2" pref="140" max="-2" attributes="0"/>
                               </Group>
-                              <Component id="lblSampleSize" alignment="0" pref="418" max="32767" attributes="1"/>
+                              <Component id="lblSampleSize" alignment="0" pref="516" max="32767" attributes="1"/>
                           </Group>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
@@ -424,7 +424,7 @@
             </Property>
             <Property name="selected" type="boolean" value="true"/>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="xprottest/results/resources/ResultsView.properties" key="btn-sizemode-alignment" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+              <ResourceString bundle="es/uvigo/darwin/xprottest/results/resources/ResultsView.properties" key="btn-sizemode-alignment" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
             </Property>
             <Property name="toolTipText" type="java.lang.String" resourceKey="sizeModeAlignment3.toolTipText"/>
             <Property name="name" type="java.lang.String" value="sizeModeAlignment3" noResource="true"/>
@@ -442,7 +442,7 @@
               <ComponentRef name="btnGroupSampleSizeMode"/>
             </Property>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="xprottest/results/resources/ResultsView.properties" key="btn-sizemode-nxl" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+              <ResourceString bundle="es/uvigo/darwin/xprottest/results/resources/ResultsView.properties" key="btn-sizemode-nxl" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
             </Property>
             <Property name="toolTipText" type="java.lang.String" resourceKey="sizeModeNL.toolTipText"/>
             <Property name="name" type="java.lang.String" value="sizeModeNL" noResource="true"/>
@@ -460,7 +460,7 @@
               <ComponentRef name="btnGroupSampleSizeMode"/>
             </Property>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="xprottest/results/resources/ResultsView.properties" key="btn-sizemode-custom" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+              <ResourceString bundle="es/uvigo/darwin/xprottest/results/resources/ResultsView.properties" key="btn-sizemode-custom" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
             </Property>
             <Property name="toolTipText" type="java.lang.String" resourceKey="sizeModeCustom.toolTipText"/>
             <Property name="name" type="java.lang.String" value="sizeModeCustom" noResource="true"/>
@@ -489,7 +489,7 @@
               <ComponentRef name="btnGroupSampleSizeMode"/>
             </Property>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="xprottest/results/resources/ResultsView.properties" key="btn-sizemode-alignment-var" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+              <ResourceString bundle="es/uvigo/darwin/xprottest/results/resources/ResultsView.properties" key="btn-sizemode-alignment-var" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
             </Property>
             <Property name="toolTipText" type="java.lang.String" resourceKey="sizeModeVar.toolTipText"/>
             <Property name="name" type="java.lang.String" value="sizeModeVar" noResource="true"/>
@@ -507,7 +507,7 @@
               <ComponentRef name="btnGroupSampleSizeMode"/>
             </Property>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="xprottest/results/resources/ResultsView.properties" key="btn-sizemode-shannon" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+              <ResourceString bundle="es/uvigo/darwin/xprottest/results/resources/ResultsView.properties" key="btn-sizemode-shannon" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
             </Property>
             <Property name="toolTipText" type="java.lang.String" resourceKey="sizeModeShannon.toolTipText"/>
             <Property name="name" type="java.lang.String" value="sizeModeShannon" noResource="true"/>
@@ -525,7 +525,7 @@
               <ComponentRef name="btnGroupSampleSizeMode"/>
             </Property>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="xprottest/results/resources/ResultsView.properties" key="btn-sizemode-shannon-nxl" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+              <ResourceString bundle="es/uvigo/darwin/xprottest/results/resources/ResultsView.properties" key="btn-sizemode-shannon-nxl" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
             </Property>
             <Property name="toolTipText" type="java.lang.String" resourceKey="sizeModeShannonNL.toolTipText"/>
             <Property name="name" type="java.lang.String" value="sizeModeShannonNL" noResource="true"/>

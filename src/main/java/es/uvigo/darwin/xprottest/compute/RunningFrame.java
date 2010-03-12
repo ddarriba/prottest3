@@ -4,14 +4,14 @@
  * Created on 1 de octubre de 2009, 19:43
  */
 
-package xprottest.compute;
+package es.uvigo.darwin.xprottest.compute;
 
 import es.uvigo.darwin.prottest.exe.ExternalExecutionManager;
 import es.uvigo.darwin.prottest.global.options.ApplicationOptions;
-import xprottest.*;
+import es.uvigo.darwin.xprottest.*;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.Task;
-import xprottest.util.TextAreaAppender;
+import es.uvigo.darwin.xprottest.util.TextAreaAppender;
 import es.uvigo.darwin.prottest.model.Model;
 import es.uvigo.darwin.prottest.observer.ModelUpdaterObserver;
 import es.uvigo.darwin.prottest.observer.ObservableModelUpdater;
@@ -73,7 +73,7 @@ public class RunningFrame extends javax.swing.JFrame
         computedTextArea = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(xprottest.XProtTestApp.class).getContext().getResourceMap(RunningFrame.class);
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(es.uvigo.darwin.xprottest.XProtTestApp.class).getContext().getResourceMap(RunningFrame.class);
         setTitle(resourceMap.getString("Form.title")); // NOI18N
         setName("Form"); // NOI18N
 
@@ -82,7 +82,7 @@ public class RunningFrame extends javax.swing.JFrame
 
         runningProgress.setName("runningProgress"); // NOI18N
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(xprottest.XProtTestApp.class).getContext().getActionMap(RunningFrame.class, this);
+        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(es.uvigo.darwin.xprottest.XProtTestApp.class).getContext().getActionMap(RunningFrame.class, this);
         cancelButton.setAction(actionMap.get("cancelExecution")); // NOI18N
         cancelButton.setText(resourceMap.getString("cancelButton.text")); // NOI18N
         cancelButton.setName("cancelButton"); // NOI18N

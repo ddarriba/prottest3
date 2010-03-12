@@ -26,7 +26,8 @@
   	</copy>
 
 	<chmod perm="755" dir="${dist.dir}/bin" includes="*"/>
-	<chmod perm="755" dir="${dist.dir}" includes="runXProtTest.sh"/>
+	<chmod perm="755" dir="${dist.dir}" includes="runProtTestHPC.sh"/>
+	<chmod perm="755" dir="${dist.dir}" includes="runXProtTestHPC.sh"/>
                 
         <delete file="${dist.dir}/README.TXT"/>
     </target>

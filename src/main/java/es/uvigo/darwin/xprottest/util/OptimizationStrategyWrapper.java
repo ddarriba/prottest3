@@ -1,4 +1,4 @@
-package xprottest.util;
+package es.uvigo.darwin.xprottest.util;
 
 /**
  * The class OptimizationStrategyWrapper models a ProtTest optimization

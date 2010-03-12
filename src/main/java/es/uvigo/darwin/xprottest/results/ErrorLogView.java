@@ -4,10 +4,10 @@
  * Created on 17 de noviembre de 2009, 17:58
  */
 
-package xprottest.results;
+package es.uvigo.darwin.xprottest.results;
 
 import java.io.PrintWriter;
-import xprottest.util.TextAreaAppender;
+import es.uvigo.darwin.xprottest.util.TextAreaAppender;
 
 /**
  *
@@ -38,7 +38,7 @@ public class ErrorLogView extends javax.swing.JFrame {
         errorScrollPane = new javax.swing.JScrollPane();
         errorTextArea = new javax.swing.JTextArea();
 
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(xprottest.XProtTestApp.class).getContext().getResourceMap(ErrorLogView.class);
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(es.uvigo.darwin.xprottest.XProtTestApp.class).getContext().getResourceMap(ErrorLogView.class);
         setTitle(resourceMap.getString("Form.title")); // NOI18N
         setName("Form"); // NOI18N
 
@@ -64,17 +64,6 @@ public class ErrorLogView extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new ErrorLogView().setVisible(true);
-            }
-        });
-    }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane errorScrollPane;

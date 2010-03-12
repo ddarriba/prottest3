@@ -43,22 +43,22 @@
                       <Component id="subMatPanel" max="32767" attributes="1"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="lblUserTree" pref="331" max="32767" attributes="0"/>
+                          <Component id="lblUserTree" pref="393" max="32767" attributes="0"/>
                           <Component id="distributionsPanel" alignment="0" max="32767" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="lblNumModelsLabel" pref="205" max="32767" attributes="1"/>
+                              <Component id="lblNumModelsLabel" pref="236" max="32767" attributes="1"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="lblNumModels" pref="120" max="32767" attributes="0"/>
+                              <Component id="lblNumModels" pref="151" max="32767" attributes="0"/>
                           </Group>
                           <Component id="lblStrategyMode" alignment="0" min="-2" max="-2" attributes="1"/>
-                          <Component id="cmbStrategyMode" alignment="1" pref="331" max="32767" attributes="0"/>
+                          <Component id="cmbStrategyMode" alignment="1" pref="393" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="185" max="-2" attributes="0"/>
                       <Component id="sizeModeAlignment" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="msgValidate" pref="257" max="32767" attributes="0"/>
+                      <Component id="msgValidate" pref="319" max="32767" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -179,9 +179,9 @@
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="lblBaseFreq" alignment="0" pref="305" max="32767" attributes="1"/>
-                      <Component id="rateVarPanel" alignment="0" pref="305" max="32767" attributes="1"/>
-                      <Component id="lblRateVariation" alignment="0" pref="305" max="32767" attributes="1"/>
+                      <Component id="lblBaseFreq" alignment="0" pref="367" max="32767" attributes="1"/>
+                      <Component id="rateVarPanel" alignment="0" pref="367" max="32767" attributes="1"/>
+                      <Component id="lblRateVariation" alignment="0" pref="367" max="32767" attributes="1"/>
                       <Component id="empiricalFPanel" alignment="0" max="32767" attributes="1"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -209,7 +209,7 @@
           <Properties>
             <Property name="horizontalAlignment" type="int" value="0"/>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="xprottest/compute/resources/OptionsView.properties" key=" lbl-rate-variation" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+              <ResourceString bundle="es/uvigo/darwin/xprottest/compute/resources/OptionsView.properties" key=" lbl-rate-variation" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
             </Property>
             <Property name="name" type="java.lang.String" value="lblRateVariation" noResource="true"/>
           </Properties>
@@ -314,7 +314,7 @@
           <Properties>
             <Property name="horizontalAlignment" type="int" value="0"/>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="xprottest/compute/resources/OptionsView.properties" key="lbl-amino-acid-frequencies" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+              <ResourceString bundle="es/uvigo/darwin/xprottest/compute/resources/OptionsView.properties" key="lbl-amino-acid-frequencies" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
             </Property>
             <Property name="name" type="java.lang.String" value="lblBaseFreq" noResource="true"/>
           </Properties>
@@ -335,7 +335,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="cbEmpiricalF" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="218" max="32767" attributes="0"/>
+                      <EmptySpace pref="280" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -354,7 +354,7 @@
               <Properties>
                 <Property name="selected" type="boolean" value="true"/>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="xprottest/compute/resources/OptionsView.properties" key="cbEmpiricalF.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                  <ResourceString bundle="es/uvigo/darwin/xprottest/compute/resources/OptionsView.properties" key="cbEmpiricalF.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                 </Property>
                 <Property name="toolTipText" type="java.lang.String" resourceKey="cbEmpiricalF.toolTipText"/>
                 <Property name="name" type="java.lang.String" value="cbEmpiricalF" noResource="true"/>
@@ -390,7 +390,7 @@
     <Component class="javax.swing.JLabel" name="lblStrategyMode">
       <Properties>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="xprottest/resources/OptionsView.properties" key="lbl-strategy-mode" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+          <ResourceString bundle="es/uvigo/darwin/xprottest/resources/OptionsView.properties" key="lbl-strategy-mode" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
         </Property>
         <Property name="name" type="java.lang.String" value="lblStrategyMode" noResource="true"/>
       </Properties>
@@ -412,7 +412,7 @@
     <Component class="javax.swing.JLabel" name="lblUserTree">
       <Properties>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="xprottest/compute/resources/OptionsView.properties" key="msg-no-user-tree-loaded" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+          <ResourceString bundle="es/uvigo/darwin/xprottest/compute/resources/OptionsView.properties" key="msg-no-user-tree-loaded" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
         </Property>
         <Property name="name" type="java.lang.String" value="lblUserTree" noResource="true"/>
       </Properties>
@@ -445,7 +445,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="lblNumProc" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="sliderProcessors" pref="214" max="32767" attributes="1"/>
+                  <Component id="sliderProcessors" pref="276" max="32767" attributes="1"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>

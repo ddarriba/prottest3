@@ -4,7 +4,7 @@
  * Created on Oct 2, 2009, 11:31:32 PM
  */
 
-package xprottest.results;
+package es.uvigo.darwin.xprottest.results;
 
 import es.uvigo.darwin.prottest.global.ApplicationGlobals;
 import es.uvigo.darwin.prottest.model.Model;
@@ -21,7 +21,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
-import xprottest.XProtTestView;
+import es.uvigo.darwin.xprottest.XProtTestView;
 
 /**
  * The view of the model selection results. It includes a selection
@@ -196,7 +196,7 @@ public class ResultsView extends javax.swing.JFrame {
         lblConfidence = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(xprottest.XProtTestApp.class).getContext().getResourceMap(ResultsView.class);
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(es.uvigo.darwin.xprottest.XProtTestApp.class).getContext().getResourceMap(ResultsView.class);
         setTitle(resourceMap.getString("Form.title")); // NOI18N
         setName("Form"); // NOI18N
         setResizable(false);
@@ -247,7 +247,7 @@ public class ResultsView extends javax.swing.JFrame {
         aicDataPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         aicDataPanel.setName("aicDataPanel"); // NOI18N
 
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("xprottest/results/resources/ResultsView"); // NOI18N
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/resources/ResultsView"); // NOI18N
         lblAICOverall.setText(bundle.getString("lbl-overall")); // NOI18N
         lblAICOverall.setName("lblAICOverall"); // NOI18N
 
@@ -318,13 +318,13 @@ public class ResultsView extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(aicDataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(displayAICoInv)
-                            .addComponent(displayAICoInvAlpha, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)
-                            .addComponent(displayAICoAlphaInv, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)
-                            .addComponent(displayAICoAlpha, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE))
+                            .addComponent(displayAICoInvAlpha, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
+                            .addComponent(displayAICoAlphaInv, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
+                            .addComponent(displayAICoAlpha, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE))
                         .addGap(40, 40, 40))
                     .addGroup(aicDataPanelLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(lblAICOverall, javax.swing.GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
+                        .addComponent(lblAICOverall, javax.swing.GroupLayout.DEFAULT_SIZE, 366, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addGroup(aicDataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(aicDataPanelLayout.createSequentialGroup()
@@ -339,7 +339,7 @@ public class ResultsView extends javax.swing.JFrame {
                             .addComponent(displayAICImpAlpha, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(displayAICImpAlphaInv, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(displayAICImpF, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addComponent(lblAICPI, javax.swing.GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE))
+                    .addComponent(lblAICPI, javax.swing.GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE))
                 .addContainerGap())
         );
         aicDataPanelLayout.setVerticalGroup(
@@ -393,7 +393,7 @@ public class ResultsView extends javax.swing.JFrame {
             .addGroup(aicPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(aicPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(aicScrollPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 548, Short.MAX_VALUE)
+                    .addComponent(aicScrollPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 641, Short.MAX_VALUE)
                     .addComponent(aicDataPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -451,19 +451,19 @@ public class ResultsView extends javax.swing.JFrame {
         bicDataPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         bicDataPanel.setName("bicDataPanel"); // NOI18N
 
-        lblBICOverall.setText(bundle.getString("lbl-overall")); // NOI18N
+        lblBICOverall.setText("null");
         lblBICOverall.setName("lblBICOverall"); // NOI18N
 
-        lblBICOverallAlpha.setText(bundle.getString("lbl-overall-alpha")); // NOI18N
+        lblBICOverallAlpha.setText("null");
         lblBICOverallAlpha.setName("lblBICOverallAlpha"); // NOI18N
 
-        lblBICOverallAlphaInv.setText(bundle.getString("lbl-overall-alpha-inv")); // NOI18N
+        lblBICOverallAlphaInv.setText("null");
         lblBICOverallAlphaInv.setName("lblBICOverallAlphaInv"); // NOI18N
 
-        lblBICOverallInvAlpha.setText(bundle.getString("lbl-overall-inv-alpha")); // NOI18N
+        lblBICOverallInvAlpha.setText("null");
         lblBICOverallInvAlpha.setName("lblBICOverallInvAlpha"); // NOI18N
 
-        lblBICOverallInv.setText(bundle.getString("lbl-overall-inv")); // NOI18N
+        lblBICOverallInv.setText("null");
         lblBICOverallInv.setName("lblBICOverallInv"); // NOI18N
 
         displayBICoAlpha.setText(resourceMap.getString("displayBICoAlpha.text")); // NOI18N
@@ -521,13 +521,13 @@ public class ResultsView extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(bicDataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(displayBICoInv)
-                            .addComponent(displayBICoInvAlpha, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)
-                            .addComponent(displayBICoAlphaInv, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)
-                            .addComponent(displayBICoAlpha, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE))
+                            .addComponent(displayBICoInvAlpha, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
+                            .addComponent(displayBICoAlphaInv, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
+                            .addComponent(displayBICoAlpha, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE))
                         .addGap(40, 40, 40))
                     .addGroup(bicDataPanelLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(lblBICOverall, javax.swing.GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
+                        .addComponent(lblBICOverall, javax.swing.GroupLayout.DEFAULT_SIZE, 366, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addGroup(bicDataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, bicDataPanelLayout.createSequentialGroup()
@@ -544,7 +544,7 @@ public class ResultsView extends javax.swing.JFrame {
                             .addComponent(displayBICImpF, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(bicDataPanelLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblBICPI, javax.swing.GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)))
+                        .addComponent(lblBICPI, javax.swing.GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         bicDataPanelLayout.setVerticalGroup(
@@ -598,7 +598,7 @@ public class ResultsView extends javax.swing.JFrame {
             .addGroup(bicPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(bicPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(bicScrollPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 548, Short.MAX_VALUE)
+                    .addComponent(bicScrollPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 641, Short.MAX_VALUE)
                     .addComponent(bicDataPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -655,19 +655,19 @@ public class ResultsView extends javax.swing.JFrame {
         aiccDataPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         aiccDataPanel.setName("aiccDataPanel"); // NOI18N
 
-        lblAICcOverall.setText(bundle.getString("lbl-overall")); // NOI18N
+        lblAICcOverall.setText("null");
         lblAICcOverall.setName("lblAICcOverall"); // NOI18N
 
-        lblAICcOverallAlpha.setText(bundle.getString("lbl-overall-alpha")); // NOI18N
+        lblAICcOverallAlpha.setText("null");
         lblAICcOverallAlpha.setName("lblAICcOverallAlpha"); // NOI18N
 
-        lblAICcOverallAlphaInv.setText(bundle.getString("lbl-overall-alpha-inv")); // NOI18N
+        lblAICcOverallAlphaInv.setText("null");
         lblAICcOverallAlphaInv.setName("lblAICcOverallAlphaInv"); // NOI18N
 
-        lblAICcOverallInvAlpha.setText(bundle.getString("lbl-overall-inv-alpha")); // NOI18N
+        lblAICcOverallInvAlpha.setText("null");
         lblAICcOverallInvAlpha.setName("lblAICcOverallInvAlpha"); // NOI18N
 
-        lblAICcOverallInv.setText(bundle.getString("lbl-overall-inv")); // NOI18N
+        lblAICcOverallInv.setText("null");
         lblAICcOverallInv.setName("lblAICcOverallInv"); // NOI18N
 
         displayAICcoAlpha.setText(resourceMap.getString("displayAICcoAlpha.text")); // NOI18N
@@ -725,13 +725,13 @@ public class ResultsView extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(aiccDataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(displayAICcoInv)
-                            .addComponent(displayAICcoInvAlpha, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)
-                            .addComponent(displayAICcoAlphaInv, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)
-                            .addComponent(displayAICcoAlpha, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE))
+                            .addComponent(displayAICcoInvAlpha, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
+                            .addComponent(displayAICcoAlphaInv, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
+                            .addComponent(displayAICcoAlpha, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE))
                         .addGap(40, 40, 40))
                     .addGroup(aiccDataPanelLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(lblAICcOverall, javax.swing.GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
+                        .addComponent(lblAICcOverall, javax.swing.GroupLayout.DEFAULT_SIZE, 366, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addGroup(aiccDataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(aiccDataPanelLayout.createSequentialGroup()
@@ -746,7 +746,7 @@ public class ResultsView extends javax.swing.JFrame {
                             .addComponent(displayAICcImpAlpha, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(displayAICcImpAlphaInv, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(displayAICcImpF, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addComponent(lblAICcPI, javax.swing.GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE))
+                    .addComponent(lblAICcPI, javax.swing.GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE))
                 .addContainerGap())
         );
         aiccDataPanelLayout.setVerticalGroup(
@@ -800,7 +800,7 @@ public class ResultsView extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, aiccPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(aiccPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(aiccScrollPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 548, Short.MAX_VALUE)
+                    .addComponent(aiccScrollPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 641, Short.MAX_VALUE)
                     .addComponent(aiccDataPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -857,19 +857,19 @@ public class ResultsView extends javax.swing.JFrame {
         dtDataPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         dtDataPanel.setName("dtDataPanel"); // NOI18N
 
-        lblDTOverall.setText(bundle.getString("lbl-overall")); // NOI18N
+        lblDTOverall.setText("null");
         lblDTOverall.setName("lblDTOverall"); // NOI18N
 
-        lblDTOverallAlpha.setText(bundle.getString("lbl-overall-alpha")); // NOI18N
+        lblDTOverallAlpha.setText("null");
         lblDTOverallAlpha.setName("lblDTOverallAlpha"); // NOI18N
 
-        lblDTOverallAlphaInv.setText(bundle.getString("lbl-overall-alpha-inv")); // NOI18N
+        lblDTOverallAlphaInv.setText("null");
         lblDTOverallAlphaInv.setName("lblDTOverallAlphaInv"); // NOI18N
 
-        lblDTOverallInvAlpha.setText(bundle.getString("lbl-overall-inv-alpha")); // NOI18N
+        lblDTOverallInvAlpha.setText("null");
         lblDTOverallInvAlpha.setName("lblDTOverallInvAlpha"); // NOI18N
 
-        lblDTOverallInv.setText(bundle.getString("lbl-overall-inv")); // NOI18N
+        lblDTOverallInv.setText("null");
         lblDTOverallInv.setName("lblDTOverallInv"); // NOI18N
 
         displayDToAlpha.setText(resourceMap.getString("displayDToAlpha.text")); // NOI18N
@@ -927,13 +927,13 @@ public class ResultsView extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(dtDataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(displayDToInv)
-                            .addComponent(displayDToInvAlpha, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)
-                            .addComponent(displayDToAlphaInv, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)
-                            .addComponent(displayDToAlpha, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE))
+                            .addComponent(displayDToInvAlpha, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
+                            .addComponent(displayDToAlphaInv, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
+                            .addComponent(displayDToAlpha, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE))
                         .addGap(40, 40, 40))
                     .addGroup(dtDataPanelLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(lblDTOverall, javax.swing.GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
+                        .addComponent(lblDTOverall, javax.swing.GroupLayout.DEFAULT_SIZE, 366, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addGroup(dtDataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(dtDataPanelLayout.createSequentialGroup()
@@ -948,7 +948,7 @@ public class ResultsView extends javax.swing.JFrame {
                             .addComponent(displayDTImpAlpha, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(displayDTImpAlphaInv, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(displayDTImpF, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addComponent(lblDTPI, javax.swing.GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE))
+                    .addComponent(lblDTPI, javax.swing.GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE))
                 .addContainerGap())
         );
         dtDataPanelLayout.setVerticalGroup(
@@ -1002,7 +1002,7 @@ public class ResultsView extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dtPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(dtPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(dtScrollPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 548, Short.MAX_VALUE)
+                    .addComponent(dtScrollPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 641, Short.MAX_VALUE)
                     .addComponent(dtDataPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -1041,7 +1041,7 @@ public class ResultsView extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(xprottest.XProtTestApp.class).getContext().getActionMap(ResultsView.class, this);
+        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(es.uvigo.darwin.xprottest.XProtTestApp.class).getContext().getActionMap(ResultsView.class, this);
         sizeModeAlignment.setAction(actionMap.get("setSampleSize")); // NOI18N
         sampleSizeModeButtonGroup.add(sizeModeAlignment);
         sizeModeAlignment.setSelected(true);
@@ -1143,7 +1143,7 @@ public class ResultsView extends javax.swing.JFrame {
         lblNotComplete.setFont(resourceMap.getFont("lblNotComplete.font")); // NOI18N
         lblNotComplete.setForeground(resourceMap.getColor("lblNotComplete.foreground")); // NOI18N
         lblNotComplete.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        java.util.ResourceBundle bundle1 = java.util.ResourceBundle.getBundle("xprottest/resources/XProtTestView"); // NOI18N
+        java.util.ResourceBundle bundle1 = java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/resources/XProtTestView"); // NOI18N
         lblNotComplete.setText(bundle1.getString("models-not-complete")); // NOI18N
         lblNotComplete.setName("lblNotComplete"); // NOI18N
         lblNotComplete.setOpaque(true);
@@ -1159,7 +1159,7 @@ public class ResultsView extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(resultsTabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 577, Short.MAX_VALUE)
+                    .addComponent(resultsTabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 670, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -1184,14 +1184,14 @@ public class ResultsView extends javax.swing.JFrame {
                                 .addComponent(sizeModeShannon, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(sizeModeShannonNL, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(lblSampleSize, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 464, Short.MAX_VALUE)
+                            .addComponent(lblSampleSize, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 557, Short.MAX_VALUE)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                 .addComponent(lblConfidence, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(sliderConfidenceInterval, javax.swing.GroupLayout.DEFAULT_SIZE, 420, Short.MAX_VALUE)))
+                                .addComponent(sliderConfidenceInterval, javax.swing.GroupLayout.DEFAULT_SIZE, 513, Short.MAX_VALUE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
                     .addComponent(lblSampleSizeMode)
-                    .addComponent(lblNotComplete, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 577, Short.MAX_VALUE)
+                    .addComponent(lblNotComplete, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 670, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblComandLineLabel)
@@ -1199,9 +1199,9 @@ public class ResultsView extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblSelectedModel, javax.swing.GroupLayout.DEFAULT_SIZE, 446, Short.MAX_VALUE)
+                                .addComponent(lblSelectedModel, javax.swing.GroupLayout.DEFAULT_SIZE, 539, Short.MAX_VALUE)
                                 .addGap(29, 29, 29))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 475, Short.MAX_VALUE))))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 568, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -1258,27 +1258,27 @@ public class ResultsView extends javax.swing.JFrame {
         String btnName = evt.getActionCommand();
         if (!btnName.equals(oldSampleSizeModeStr)) {
             if (btnName.equals(
-                    java.util.ResourceBundle.getBundle("xprottest/results/resources/ResultsView")
+                    java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/resources/ResultsView")
                     .getString("btn-sizemode-alignment")))
                 sampleSizeMode = ApplicationGlobals.SIZEMODE_ALIGNMENT;
             else if (btnName.equals(
-                    java.util.ResourceBundle.getBundle("xprottest/results/resources/ResultsView")
+                    java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/resources/ResultsView")
                     .getString("btn-sizemode-alignment-var")))
                 sampleSizeMode = ApplicationGlobals.SIZEMODE_ALIGNMENT_VAR;
             else if (btnName.equals(
-                    java.util.ResourceBundle.getBundle("xprottest/results/resources/ResultsView")
+                    java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/resources/ResultsView")
                     .getString("btn-sizemode-shannon")))
                 sampleSizeMode = ApplicationGlobals.SIZEMODE_SHANNON;
             else if (btnName.equals(
-                    java.util.ResourceBundle.getBundle("xprottest/results/resources/ResultsView")
+                    java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/resources/ResultsView")
                     .getString("btn-sizemode-shannon-nxl")))
                 sampleSizeMode = ApplicationGlobals.SIZEMODE_SHANNON_NxL;
             else if (btnName.equals(
-                    java.util.ResourceBundle.getBundle("xprottest/results/resources/ResultsView")
+                    java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/resources/ResultsView")
                     .getString("btn-sizemode-nxl")))
                 sampleSizeMode = ApplicationGlobals.SIZEMODE_NxL;
             else if (btnName.equals(
-                    java.util.ResourceBundle.getBundle("xprottest/results/resources/ResultsView")
+                    java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/resources/ResultsView")
                     .getString("btn-sizemode-custom"))) {
                 sampleSizeMode = ApplicationGlobals.SIZEMODE_USERSIZE;
                 try {

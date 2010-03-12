@@ -56,11 +56,11 @@
         <Menu class="javax.swing.JMenu" name="fileMenu">
           <Properties>
             <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-              <action class="xprottest.XProtTestView" id="openDataFile" methodName="openDataFile"/>
+              <action class="es.uvigo.darwin.xprottest.XProtTestView" id="openDataFile" methodName="openDataFile"/>
             </Property>
             <Property name="mnemonic" type="int" value="70"/>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="xprottest/resources/XProtTestView.properties" key="item-file" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+              <ResourceString bundle="es/uvigo/darwin/xprottest/resources/XProtTestView.properties" key="item-file" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
             </Property>
             <Property name="name" type="java.lang.String" value="fileMenu" noResource="true"/>
           </Properties>
@@ -76,7 +76,7 @@
                 </Property>
                 <Property name="mnemonic" type="int" value="76"/>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="xprottest/resources/XProtTestView.properties" key="item-load-alignment" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                  <ResourceString bundle="es/uvigo/darwin/xprottest/resources/XProtTestView.properties" key="item-load-alignment" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                 </Property>
                 <Property name="name" type="java.lang.String" value="loadAlignmentMenuItem" noResource="true"/>
               </Properties>
@@ -112,7 +112,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="editCopyMenuItem">
               <Properties>
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                  <action class="xprottest.XProtTestView" id="editCopy" methodName="editCopy"/>
+                  <action class="es.uvigo.darwin.xprottest.XProtTestView" id="editCopy" methodName="editCopy"/>
                 </Property>
                 <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
                   <KeyStroke key="Ctrl+C"/>
@@ -125,7 +125,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="editSelectAllMenuItem">
               <Properties>
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                  <action class="xprottest.XProtTestView" id="editSelectAll" methodName="editSelectAll"/>
+                  <action class="es.uvigo.darwin.xprottest.XProtTestView" id="editSelectAll" methodName="editSelectAll"/>
                 </Property>
                 <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
                   <KeyStroke key="Ctrl+A"/>
@@ -151,7 +151,7 @@
           <Properties>
             <Property name="mnemonic" type="int" value="65"/>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="xprottest/resources/XProtTestView.properties" key="item-analysis" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+              <ResourceString bundle="es/uvigo/darwin/xprottest/resources/XProtTestView.properties" key="item-analysis" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
             </Property>
             <Property name="name" type="java.lang.String" value="analysisMenu" noResource="true"/>
           </Properties>
@@ -163,7 +163,7 @@
                 </Property>
                 <Property name="mnemonic" type="int" value="99"/>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="xprottest/resources/XProtTestView.properties" key="item-compute-likelihood" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                  <ResourceString bundle="es/uvigo/darwin/xprottest/resources/XProtTestView.properties" key="item-compute-likelihood" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                 </Property>
                 <Property name="enabled" type="boolean" value="false"/>
                 <Property name="name" type="java.lang.String" value="computeMenuItem" noResource="true"/>
@@ -175,14 +175,14 @@
             <MenuItem class="javax.swing.JMenuItem" name="showFrequenciesItem">
               <Properties>
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                  <action class="xprottest.XProtTestView" id="showAminoacidFrequencies" methodName="showAminoacidFrequencies"/>
+                  <action class="es.uvigo.darwin.xprottest.XProtTestView" id="showAminoacidFrequencies" methodName="showAminoacidFrequencies"/>
                 </Property>
                 <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
                   <KeyStroke key="Shift+Ctrl+F"/>
                 </Property>
                 <Property name="mnemonic" type="int" value="102"/>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="xprottest/resources/XProtTestView.properties" key="item-show-frequencies" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                  <ResourceString bundle="es/uvigo/darwin/xprottest/resources/XProtTestView.properties" key="item-show-frequencies" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                 </Property>
                 <Property name="enabled" type="boolean" value="false"/>
                 <Property name="name" type="java.lang.String" value="showFrequenciesItem" noResource="true"/>
@@ -191,14 +191,14 @@
             <MenuItem class="javax.swing.JMenuItem" name="showTreeMenuItem">
               <Properties>
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                  <action class="xprottest.XProtTestView" id="showTree" methodName="showTree"/>
+                  <action class="es.uvigo.darwin.xprottest.XProtTestView" id="showTree" methodName="showTree"/>
                 </Property>
                 <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
                   <KeyStroke key="Shift+Ctrl+T"/>
                 </Property>
                 <Property name="mnemonic" type="int" value="116"/>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="xprottest/resources/XProtTestView.properties" key="item-show-tree" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                  <ResourceString bundle="es/uvigo/darwin/xprottest/resources/XProtTestView.properties" key="item-show-tree" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                 </Property>
                 <Property name="enabled" type="boolean" value="false"/>
                 <Property name="name" type="java.lang.String" value="showTreeMenuItem" noResource="true"/>
@@ -207,7 +207,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="averagingMenuItem">
               <Properties>
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                  <action class="xprottest.XProtTestView" id="showConsensus" methodName="showConsensus"/>
+                  <action class="es.uvigo.darwin.xprottest.XProtTestView" id="showConsensus" methodName="showConsensus"/>
                 </Property>
                 <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
                   <KeyStroke key="Shift+Ctrl+C"/>
@@ -223,11 +223,11 @@
         <Menu class="javax.swing.JMenu" name="resultsMenu">
           <Properties>
             <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-              <action class="xprottest.XProtTestView" id="showResultsWindow" methodName="showResultsWindow"/>
+              <action class="es.uvigo.darwin.xprottest.XProtTestView" id="showResultsWindow" methodName="showResultsWindow"/>
             </Property>
             <Property name="mnemonic" type="int" value="82"/>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="xprottest/resources/XProtTestView.properties" key="item-results" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+              <ResourceString bundle="es/uvigo/darwin/xprottest/resources/XProtTestView.properties" key="item-results" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
             </Property>
             <Property name="name" type="java.lang.String" value="resultsMenu" noResource="true"/>
           </Properties>
@@ -235,14 +235,14 @@
             <MenuItem class="javax.swing.JMenuItem" name="resultsMenuItem">
               <Properties>
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                  <action class="xprottest.XProtTestView" id="showResultsWindow" methodName="showResultsWindow"/>
+                  <action class="es.uvigo.darwin.xprottest.XProtTestView" id="showResultsWindow" methodName="showResultsWindow"/>
                 </Property>
                 <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
                   <KeyStroke key="Shift+Ctrl+R"/>
                 </Property>
                 <Property name="mnemonic" type="int" value="114"/>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="xprottest/resources/XProtTestView.properties" key="item-results" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                  <ResourceString bundle="es/uvigo/darwin/xprottest/resources/XProtTestView.properties" key="item-results" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                 </Property>
                 <Property name="enabled" type="boolean" value="false"/>
                 <Property name="name" type="java.lang.String" value="resultsMenuItem" noResource="true"/>
@@ -251,7 +251,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="errorMenuItem">
               <Properties>
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                  <action class="xprottest.XProtTestView" id="showErrorLog" methodName="showErrorLog"/>
+                  <action class="es.uvigo.darwin.xprottest.XProtTestView" id="showErrorLog" methodName="showErrorLog"/>
                 </Property>
                 <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
                   <KeyStroke key="Shift+Ctrl+E"/>
@@ -268,7 +268,7 @@
           <Properties>
             <Property name="mnemonic" type="int" value="72"/>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="xprottest/resources/XProtTestView.properties" key="item-help" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+              <ResourceString bundle="es/uvigo/darwin/xprottest/resources/XProtTestView.properties" key="item-help" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
             </Property>
             <Property name="name" type="java.lang.String" value="helpMenu" noResource="true"/>
           </Properties>
@@ -280,7 +280,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="manualMenuItem">
               <Properties>
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                  <action class="xprottest.XProtTestView" id="showManual" methodName="showManual"/>
+                  <action class="es.uvigo.darwin.xprottest.XProtTestView" id="showManual" methodName="showManual"/>
                 </Property>
                 <Property name="mnemonic" type="int" value="109"/>
                 <Property name="text" type="java.lang.String" resourceKey="menu-manual"/>
@@ -290,10 +290,10 @@
             <MenuItem class="javax.swing.JMenuItem" name="aboutMenuItem">
               <Properties>
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                  <action class="xprottest.XProtTestView" id="showAboutBox" methodName="showAboutBox"/>
+                  <action class="es.uvigo.darwin.xprottest.XProtTestView" id="showAboutBox" methodName="showAboutBox"/>
                 </Property>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="xprottest/resources/XProtTestView.properties" key="item-about-window" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                  <ResourceString bundle="es/uvigo/darwin/xprottest/resources/XProtTestView.properties" key="item-about-window" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                 </Property>
                 <Property name="name" type="java.lang.String" value="aboutMenuItem" noResource="true"/>
               </Properties>
@@ -368,7 +368,7 @@
             <Property name="foreground" type="java.awt.Color" resourceKey="lblDataFileStatus.foreground"/>
             <Property name="horizontalAlignment" type="int" value="4"/>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="xprottest/resources/XProtTestView.properties" key="msg-no-data" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+              <ResourceString bundle="es/uvigo/darwin/xprottest/resources/XProtTestView.properties" key="msg-no-data" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
             </Property>
             <Property name="name" type="java.lang.String" value="lblDataFileStatus" noResource="true"/>
           </Properties>
@@ -377,7 +377,7 @@
           <Properties>
             <Property name="foreground" type="java.awt.Color" resourceKey="lblLikelihoodStatus.foreground"/>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="xprottest/resources/XProtTestView.properties" key="msg-no-lnl-calculated" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+              <ResourceString bundle="es/uvigo/darwin/xprottest/resources/XProtTestView.properties" key="msg-no-lnl-calculated" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
             </Property>
             <Property name="name" type="java.lang.String" value="lblLikelihoodStatus" noResource="true"/>
           </Properties>

@@ -77,7 +77,7 @@
     <Component class="javax.swing.JButton" name="closeButton">
       <Properties>
         <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-          <action class="xprottest.XProtTestAboutBox" id="closeAboutBox" methodName="closeAboutBox"/>
+          <action class="es.uvigo.darwin.xprottest.XProtTestAboutBox" id="closeAboutBox" methodName="closeAboutBox"/>
         </Property>
         <Property name="name" type="java.lang.String" value="closeButton" noResource="true"/>
       </Properties>

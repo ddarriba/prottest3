@@ -88,7 +88,8 @@ public class ProtTestFacadeMPJ extends ProtTestFacadeImpl {
 						options.getAlignment(), options.getTree(), options.ncat);
 			}
 		}
-		String strategyProp = ApplicationGlobals.properties.getProperty("parallel_strategy");
+		String strategyProp = ApplicationGlobals.properties.getProperty("parallel_strategy", "static");
+                
 		if (strategyProp.equals("dynamic"))
 			strategy = new DynamicDistributionStrategy(mpjMe, mpjSize, options, cpManager);
 		else if (strategyProp.equals("dynamic_improved"))

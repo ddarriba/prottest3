@@ -25,6 +25,7 @@ import es.uvigo.darwin.prottest.selection.printer.PrintFramework;
 import es.uvigo.darwin.prottest.util.argumentparser.ProtTestArgumentParser;
 import es.uvigo.darwin.prottest.util.collection.ModelCollection;
 import es.uvigo.darwin.prottest.util.collection.SingleModelCollection;
+import es.uvigo.darwin.prottest.util.exception.AlignmentFormatException;
 import es.uvigo.darwin.prottest.util.exception.ProtTestInternalException;
 import es.uvigo.darwin.prottest.util.factory.ProtTestFactory;
 import es.uvigo.darwin.prottest.util.printer.ProtTestPrinter;
@@ -73,12 +74,14 @@ public class ProtTest implements XMLConstants {
 		
 		// initializing MPJ environment (if available)
 		try {
-			String[] argsApp = MPI.Init(args);
-			MPJ_ME = MPI.COMM_WORLD.Rank();
+                    String[] argsApp = MPI.Init(args);
+                    MPJ_ME = MPI.COMM_WORLD.Rank();
 		    MPJ_SIZE = MPI.COMM_WORLD.Size();
 		    MPJ_RUN = true;
 		    args = argsApp;
 		} catch (Exception e) {
+                        System.out.println("EXCEPTION!!!! " + e.getClass().toString());
+                        e.printStackTrace();
 			MPJ_ME = 0;
 			MPJ_SIZE = 1;
 			MPJ_RUN = false;
@@ -101,12 +104,17 @@ public class ProtTest implements XMLConstants {
 			.getValue(ProtTestArgumentParser.PARAM_NUM_THREADS)
 			);
 		} catch (IllegalArgumentException e) {
-			if (MPJ_ME == 0) {
-				System.err.println(e.getMessage());
-				ApplicationOptions.usage(printer.getErrorWriter());
-			}
-			finalize(1);
-		}
+                    if (MPJ_ME == 0) {
+			System.err.println(e.getMessage());
+                    	ApplicationOptions.usage(printer.getErrorWriter());
+                    }
+                    finalize(1);
+		} catch (AlignmentFormatException e) {
+                    if (MPJ_ME == 0) {
+			System.err.println(e.getMessage());
+                    }
+                    finalize(1);
+                }
 
 		TreeFacade treeFacade = new TreeFacadeImpl();
 		ProtTestFacade facade;

@@ -7,18 +7,15 @@
 	import java.io.Serializable;
 import java.util.Vector;
 
-import pal.alignment.Alignment;
-import pal.tree.Tree;
-
 	public class SerializableApplicationOptions implements Serializable {
 
 		private static final long serialVersionUID = 7758895101915536602L;
 
 		/** The alignment, according to the alignment input file. */
-		protected Alignment	alignment;
+		protected int alignment;
 		
 		/** The tree, according to the tree filename. */
-		protected Tree tree;
+		protected int tree;
 		
 		/** The number of categories. It is only useful if the distribution is gamma */
 		public int numberOfCategories;
@@ -35,11 +32,11 @@ import pal.tree.Tree;
 	    /** Boolean value to consider or not different kind of amino-acid frequencies. */
 	    private boolean plusF; 
 
-	    public Alignment getAlignment() {
+	    public int getAlignment() {
 			return alignment;
 		}
 
-		public Tree getTree() {
+		public int getTree() {
 			return tree;
 		}
 
@@ -64,8 +61,8 @@ import pal.tree.Tree;
 		}
 
 		public SerializableApplicationOptions(ApplicationOptions options) {
-	    	this.alignment = options.getAlignment();
-	    	this.tree = options.getTree();
+	    	this.alignment = options.getAlignment().hashCode();
+	    	this.tree = options.getTree().hashCode();
 	    	this.numberOfCategories = options.ncat;
 	    	this.strategyMode = options.strategyMode;
 	    	this.matrices = options.getMatrices();
@@ -78,7 +75,7 @@ import pal.tree.Tree;
 			final int prime = 31;
 			int result = 1;
 			result = prime * result
-					+ ((alignment == null) ? 0 : alignment.hashCode());
+					+ alignment;
 			result = prime * result
 					+ ((distributions == null) ? 0 : distributions.hashCode());
 			result = prime * result
@@ -86,7 +83,7 @@ import pal.tree.Tree;
 			result = prime * result + numberOfCategories;
 			result = prime * result + (plusF ? 1231 : 1237);
 			result = prime * result + strategyMode;
-			result = prime * result + ((tree == null) ? 0 : tree.hashCode());
+			result = prime * result + tree;
 			return result;
 		}
 
@@ -99,11 +96,8 @@ import pal.tree.Tree;
 			if (getClass() != obj.getClass())
 				return false;
 			SerializableApplicationOptions other = (SerializableApplicationOptions) obj;
-			if (alignment == null) {
-				if (other.alignment != null)
+			if (alignment != other.alignment)
 					return false;
-			} else if (!alignment.toString().equals(other.alignment.toString()))
-				return false;
 			if (distributions == null) {
 				if (other.distributions != null)
 					return false;
@@ -120,10 +114,8 @@ import pal.tree.Tree;
 				return false;
 			if (strategyMode != other.strategyMode)
 				return false;
-			if (tree == null) {
-				if (other.tree != null)
-					return false;
-			} 
+			if (tree != other.tree)
+				return false;
 //			else if (!tree.equals(other.tree))
 //				return false;
 			return true;

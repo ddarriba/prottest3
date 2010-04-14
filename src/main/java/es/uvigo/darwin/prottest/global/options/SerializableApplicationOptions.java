@@ -61,8 +61,8 @@ import java.util.Vector;
 		}
 
 		public SerializableApplicationOptions(ApplicationOptions options) {
-	    	this.alignment = options.getAlignment().hashCode();
-	    	this.tree = options.getTree().hashCode();
+	    	this.alignment = options.getAlignment().toString().hashCode();
+	    	this.tree = options.getTree().toString().hashCode();
 	    	this.numberOfCategories = options.ncat;
 	    	this.strategyMode = options.strategyMode;
 	    	this.matrices = options.getMatrices();

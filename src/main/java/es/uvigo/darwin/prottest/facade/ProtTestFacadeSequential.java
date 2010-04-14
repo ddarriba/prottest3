@@ -53,14 +53,16 @@ public class ProtTestFacadeSequential extends ProtTestFacadeImpl {
 		
 		int numberOfModels = 0;
 
-		ModelCollection arrayListModel = new SingleModelCollection();
+		ModelCollection arrayListModel = new SingleModelCollection(options.getAlignment());
 		
 		//Adding support for checkpointing
 		ProtTestStatus initialStatus = new ProtTestStatus(null, options);
 		cpManager = new CheckPointManager();
 		
 		if (cpManager.loadStatus(initialStatus)) {
-			arrayListModel = new SingleModelCollection(((ProtTestStatus)cpManager.getLastCheckpoint()).getModels());
+			arrayListModel = new SingleModelCollection(
+                                ((ProtTestStatus)cpManager.getLastCheckpoint()).getModels(),
+                                options.getAlignment());
 		} else {
 			Properties modelProperties = new Properties();
 			

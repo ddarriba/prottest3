@@ -2,14 +2,11 @@
 ProtTest-HPC Readme -	9/Dec/2009
 
 Diego Darriba (ddarriba@udc.es)
-David Posada (dposada@uvigo.es)
-Federico Abascal (fabascal@uvigo.es)
-Rafael Zardoya (rafaz@mncn.csic.es)
 Guillermo L. Taboada (taboada@udc.es)
 Ramón Doallo (doallo@udc.es)
+David Posada (dposada@uvigo.es)
 
 (c) Universidad de Vigo, Vigo, Spain
-(c) Museo Nacional de Ciencias Naturales, Madrid, Spain
 (c) Grupo de Arquitectura de Computadores, UDC, Spain
 
 -----------------------------------------------------------------------------
@@ -26,9 +23,8 @@ TOC
     4.2.1. Sequential execution
     4.2.2. Multithread execution
     4.2.3. Cluster execution
+    4.2.4. Cluster hybrid execution
   4.3. Graphical user interface execution
-5. Getting the source code
-6. How to compile
 
 -----------------------------------------------------------------------------
 0. Quick Start
@@ -255,6 +251,14 @@ The basic syntax is:
 $ ./runProtTestHPC.sh 2 -i examples/COX2_PF0016/alignment -all-matrices -all-distributions 4
 
 -----------------------------------------------------------------------------
+	4.2.4 Cluster hybrid execution
+-----------------------------------------------------------------------------
+
+This strategy relies on a thread-based implementation of phyml together with the
+distributed memory of ProtTest-HPC version. Please request us the thread-based 
+phyml source code and further documentation.
+
+-----------------------------------------------------------------------------
 	4.3. Graphical user interface execution
 -----------------------------------------------------------------------------
 
@@ -266,51 +270,5 @@ The graphical interface can use a sequential or a shared memory execution
 of the application, so it will be the best choice for running ProtTest on
 a local multicore machine.
 
-You should first download the graphical distribution and then run the
-jar file:
-
 $ cd $PROTTEST_HOME
-$ java -jar XProtTest.jar
-
------------------------------------------------------------------------------
-5. Getting the source code
------------------------------------------------------------------------------
-
-You can grab the source code from a subversion repository. You can use the
-subversion client you prefer. The repository is located at:
-
-svn://africa.des.udc.es/prottest/trunk
-
-The graphic user interface, with prottest package included, is also available
-at:
-
-svn://africa.des.udc.es/XProtTest/trunk
-
-Both projects are still under active development.
-
-For generic instructions, first install the subversion client package provided 
-by your distribution. Then from a terminal, type:
-
-$ cd $HOME
-$ svn co svn://africa.des.udc.es/prottest/trunk prottest-dev
-$ svn co svn://africa.des.udc.es/XProtTest/trunk  xprottest-dev
-
------------------------------------------------------------------------------
-6. How to compile
------------------------------------------------------------------------------
-
-The ProtTest console version can be compiled and executed with both Java SE 1.5
-and 1.6, but the graphical version requires Java SE 1.6 for compilation and
-execution.
-
-You can download the newest version at http://java.sun.com/javase/
-
-Just if you want to compile the source code, you will see it has an ant build
-file. You should download Apache Ant first in order to make the distribution
-manually, and use the compile (1) or distribution (2) targets:
-
-i.e.
-(1) $ ant compile
-(2) $ ant dist
-
-Its preferred to build the distribution directly using (2).
+$ ./runXProtTestHPC.sh

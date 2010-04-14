@@ -451,19 +451,20 @@ public class ResultsView extends javax.swing.JFrame {
         bicDataPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         bicDataPanel.setName("bicDataPanel"); // NOI18N
 
-        lblBICOverall.setText("null");
+        java.util.ResourceBundle bundle1 = java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/Bundle"); // NOI18N
+        lblBICOverall.setText(bundle1.getString("lbl-overall")); // NOI18N
         lblBICOverall.setName("lblBICOverall"); // NOI18N
 
-        lblBICOverallAlpha.setText("null");
+        lblBICOverallAlpha.setText(bundle1.getString("lbl-overall-alpha")); // NOI18N
         lblBICOverallAlpha.setName("lblBICOverallAlpha"); // NOI18N
 
-        lblBICOverallAlphaInv.setText("null");
+        lblBICOverallAlphaInv.setText(bundle1.getString("lbl-overall-alpha-inv")); // NOI18N
         lblBICOverallAlphaInv.setName("lblBICOverallAlphaInv"); // NOI18N
 
-        lblBICOverallInvAlpha.setText("null");
+        lblBICOverallInvAlpha.setText(bundle1.getString("lbl-overall-inv-alpha")); // NOI18N
         lblBICOverallInvAlpha.setName("lblBICOverallInvAlpha"); // NOI18N
 
-        lblBICOverallInv.setText("null");
+        lblBICOverallInv.setText(bundle1.getString("lbl-overall-inv")); // NOI18N
         lblBICOverallInv.setName("lblBICOverallInv"); // NOI18N
 
         displayBICoAlpha.setText(resourceMap.getString("displayBICoAlpha.text")); // NOI18N
@@ -521,9 +522,9 @@ public class ResultsView extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(bicDataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(displayBICoInv)
-                            .addComponent(displayBICoInvAlpha, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
-                            .addComponent(displayBICoAlphaInv, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
-                            .addComponent(displayBICoAlpha, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE))
+                            .addComponent(displayBICoInvAlpha, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
+                            .addComponent(displayBICoAlphaInv, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
+                            .addComponent(displayBICoAlpha, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE))
                         .addGap(40, 40, 40))
                     .addGroup(bicDataPanelLayout.createSequentialGroup()
                         .addContainerGap()
@@ -655,19 +656,19 @@ public class ResultsView extends javax.swing.JFrame {
         aiccDataPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         aiccDataPanel.setName("aiccDataPanel"); // NOI18N
 
-        lblAICcOverall.setText("null");
+        lblAICcOverall.setText(bundle1.getString("lbl-overall_1")); // NOI18N
         lblAICcOverall.setName("lblAICcOverall"); // NOI18N
 
-        lblAICcOverallAlpha.setText("null");
+        lblAICcOverallAlpha.setText(bundle1.getString("lbl-overall-alpha_1")); // NOI18N
         lblAICcOverallAlpha.setName("lblAICcOverallAlpha"); // NOI18N
 
-        lblAICcOverallAlphaInv.setText("null");
+        lblAICcOverallAlphaInv.setText(bundle1.getString("lbl-overall-alpha-inv_1")); // NOI18N
         lblAICcOverallAlphaInv.setName("lblAICcOverallAlphaInv"); // NOI18N
 
-        lblAICcOverallInvAlpha.setText("null");
+        lblAICcOverallInvAlpha.setText(bundle1.getString("lbl-overall-inv-alpha_1")); // NOI18N
         lblAICcOverallInvAlpha.setName("lblAICcOverallInvAlpha"); // NOI18N
 
-        lblAICcOverallInv.setText("null");
+        lblAICcOverallInv.setText(bundle1.getString("lbl-overall-inv_1")); // NOI18N
         lblAICcOverallInv.setName("lblAICcOverallInv"); // NOI18N
 
         displayAICcoAlpha.setText(resourceMap.getString("displayAICcoAlpha.text")); // NOI18N
@@ -725,9 +726,9 @@ public class ResultsView extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(aiccDataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(displayAICcoInv)
-                            .addComponent(displayAICcoInvAlpha, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
-                            .addComponent(displayAICcoAlphaInv, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
-                            .addComponent(displayAICcoAlpha, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE))
+                            .addComponent(displayAICcoInvAlpha, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
+                            .addComponent(displayAICcoAlphaInv, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
+                            .addComponent(displayAICcoAlpha, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE))
                         .addGap(40, 40, 40))
                     .addGroup(aiccDataPanelLayout.createSequentialGroup()
                         .addContainerGap()
@@ -857,19 +858,19 @@ public class ResultsView extends javax.swing.JFrame {
         dtDataPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         dtDataPanel.setName("dtDataPanel"); // NOI18N
 
-        lblDTOverall.setText("null");
+        lblDTOverall.setText(bundle1.getString("lbl-overall_2")); // NOI18N
         lblDTOverall.setName("lblDTOverall"); // NOI18N
 
-        lblDTOverallAlpha.setText("null");
+        lblDTOverallAlpha.setText(bundle1.getString("lbl-overall-alpha_2")); // NOI18N
         lblDTOverallAlpha.setName("lblDTOverallAlpha"); // NOI18N
 
-        lblDTOverallAlphaInv.setText("null");
+        lblDTOverallAlphaInv.setText(bundle1.getString("lbl-overall-alpha-inv_2")); // NOI18N
         lblDTOverallAlphaInv.setName("lblDTOverallAlphaInv"); // NOI18N
 
-        lblDTOverallInvAlpha.setText("null");
+        lblDTOverallInvAlpha.setText(bundle1.getString("lbl-overall-inv-alpha_2")); // NOI18N
         lblDTOverallInvAlpha.setName("lblDTOverallInvAlpha"); // NOI18N
 
-        lblDTOverallInv.setText("null");
+        lblDTOverallInv.setText(bundle1.getString("lbl-overall-inv_2")); // NOI18N
         lblDTOverallInv.setName("lblDTOverallInv"); // NOI18N
 
         displayDToAlpha.setText(resourceMap.getString("displayDToAlpha.text")); // NOI18N
@@ -927,9 +928,9 @@ public class ResultsView extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(dtDataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(displayDToInv)
-                            .addComponent(displayDToInvAlpha, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
-                            .addComponent(displayDToAlphaInv, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
-                            .addComponent(displayDToAlpha, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE))
+                            .addComponent(displayDToInvAlpha, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
+                            .addComponent(displayDToAlphaInv, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
+                            .addComponent(displayDToAlpha, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE))
                         .addGap(40, 40, 40))
                     .addGroup(dtDataPanelLayout.createSequentialGroup()
                         .addContainerGap()
@@ -1143,8 +1144,8 @@ public class ResultsView extends javax.swing.JFrame {
         lblNotComplete.setFont(resourceMap.getFont("lblNotComplete.font")); // NOI18N
         lblNotComplete.setForeground(resourceMap.getColor("lblNotComplete.foreground")); // NOI18N
         lblNotComplete.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        java.util.ResourceBundle bundle1 = java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/resources/XProtTestView"); // NOI18N
-        lblNotComplete.setText(bundle1.getString("models-not-complete")); // NOI18N
+        java.util.ResourceBundle bundle2 = java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/resources/XProtTestView"); // NOI18N
+        lblNotComplete.setText(bundle2.getString("models-not-complete")); // NOI18N
         lblNotComplete.setName("lblNotComplete"); // NOI18N
         lblNotComplete.setOpaque(true);
 

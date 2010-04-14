@@ -47,7 +47,7 @@ public class ImprovedDynamicDistributionStrategy extends DistributionStrategy {
 		}
 		itemsPerProc = new int[mpjSize];
 		displs = new int[mpjSize];
-		modelSet = new SingleModelCollection();
+		modelSet = new SingleModelCollection(options.getAlignment());
 	}
 		
 	/* (non-Javadoc)

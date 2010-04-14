@@ -102,9 +102,11 @@ public class ProtTestFacadeThread
 		
 		cpManager = new CheckPointManager();
 		if (cpManager.loadStatus(initialStatus)) {
-			arrayListModel = new SingleModelCollection(((ProtTestStatus)cpManager.getLastCheckpoint()).getModels());
+			arrayListModel = new SingleModelCollection(
+                                ((ProtTestStatus)cpManager.getLastCheckpoint()).getModels(),
+                                options.getAlignment());
 		} else {
-			arrayListModel = new SingleModelCollection();
+			arrayListModel = new SingleModelCollection(options.getAlignment());
 			Properties modelProperties = new Properties();
 			if (options.isPlusF())
 				modelProperties.setProperty(Model.PROP_PLUS_F, "true");

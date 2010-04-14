@@ -43,7 +43,8 @@ public class ParallelModelCollection extends ModelCollection {
 	 * @param allModels the whole set of models
 	 * @param groups the number of groups, typically the size of the MPJ communicator
 	 */
-	public ParallelModelCollection(Model[] allModels, int groups, ModelWeightComparator comparator) {
+	public ParallelModelCollection(Model[] allModels, int groups, ModelWeightComparator comparator, Alignment alignment) {
+                super(alignment);
 		ArrayList<Model> models = new ArrayList<Model>(Arrays.asList(allModels));
 		this.comparator = comparator;
 		Collections.sort(models, comparator);
@@ -57,6 +58,7 @@ public class ParallelModelCollection extends ModelCollection {
 	 * @param groups the number of groups, typically the size of the MPJ communicator
 	 */
 	public ParallelModelCollection(ModelCollection allModels, int groups, ModelWeightComparator comparator) {
+                super(allModels.getAlignment());
 		List<Model> models = new ArrayList<Model>(allModels);
 		this.comparator = comparator;
 		Collections.sort(models, comparator);
@@ -89,7 +91,7 @@ public class ParallelModelCollection extends ModelCollection {
 		
 		// initialize
 		for (int i = 0; i < groups; i++)
-			modelCollections.add(new SingleModelCollection());
+			modelCollections.add(new SingleModelCollection(getAlignment()));
 		
 		int maxWeight = 1;
 		int currentGroup = 0;
@@ -139,6 +141,7 @@ public class ParallelModelCollection extends ModelCollection {
 	/* (non-Javadoc)
 	 * @see java.util.List#add(int, java.lang.Object)
 	 */
+        @Override
 	public void add(int index, Model element) {
 		validDistribution = false;
 		super.add(index, element);

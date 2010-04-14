@@ -112,7 +112,7 @@ public abstract class ProtTestFacadeImpl
 			int criterion, int sampleSizeMode, double sampleSize,
 			double confidenceInterval) {
 		
-		ModelCollection modelCollection = new SingleModelCollection(models);
+		ModelCollection modelCollection = new SingleModelCollection(models, alignment);
 		
 		InformationCriterion informationCriterion;
 

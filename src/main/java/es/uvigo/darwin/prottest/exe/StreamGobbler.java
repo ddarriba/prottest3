@@ -42,7 +42,7 @@ public class StreamGobbler extends Thread {
                 log.println(type + ">" + line);
             }
         } catch (IOException ioe) {
-            ioe.printStackTrace();
+            
         }
     }
 }

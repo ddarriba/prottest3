@@ -549,9 +549,9 @@
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Component id="displayBICoInv" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="displayBICoInvAlpha" alignment="0" pref="154" max="32767" attributes="0"/>
-                                      <Component id="displayBICoAlphaInv" alignment="0" pref="154" max="32767" attributes="0"/>
-                                      <Component id="displayBICoAlpha" alignment="0" pref="154" max="32767" attributes="0"/>
+                                      <Component id="displayBICoInvAlpha" alignment="0" pref="229" max="32767" attributes="0"/>
+                                      <Component id="displayBICoAlphaInv" alignment="0" pref="229" max="32767" attributes="0"/>
+                                      <Component id="displayBICoAlpha" alignment="0" pref="229" max="32767" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
                               </Group>
@@ -648,7 +648,7 @@
                 <Component class="javax.swing.JLabel" name="lblBICOverall">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="xprottest/results/resources/ResultsView.properties" key="lbl-overall" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                      <ResourceString bundle="es/uvigo/darwin/xprottest/results/Bundle.properties" key="lbl-overall" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
                     <Property name="name" type="java.lang.String" value="lblBICOverall" noResource="true"/>
                   </Properties>
@@ -656,7 +656,7 @@
                 <Component class="javax.swing.JLabel" name="lblBICOverallAlpha">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="xprottest/results/resources/ResultsView.properties" key="lbl-overall-alpha" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                      <ResourceString bundle="es/uvigo/darwin/xprottest/results/Bundle.properties" key="lbl-overall-alpha" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
                     <Property name="name" type="java.lang.String" value="lblBICOverallAlpha" noResource="true"/>
                   </Properties>
@@ -664,7 +664,7 @@
                 <Component class="javax.swing.JLabel" name="lblBICOverallAlphaInv">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="xprottest/results/resources/ResultsView.properties" key="lbl-overall-alpha-inv" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                      <ResourceString bundle="es/uvigo/darwin/xprottest/results/Bundle.properties" key="lbl-overall-alpha-inv" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
                     <Property name="name" type="java.lang.String" value="lblBICOverallAlphaInv" noResource="true"/>
                   </Properties>
@@ -672,7 +672,7 @@
                 <Component class="javax.swing.JLabel" name="lblBICOverallInvAlpha">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="xprottest/results/resources/ResultsView.properties" key="lbl-overall-inv-alpha" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                      <ResourceString bundle="es/uvigo/darwin/xprottest/results/Bundle.properties" key="lbl-overall-inv-alpha" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
                     <Property name="name" type="java.lang.String" value="lblBICOverallInvAlpha" noResource="true"/>
                   </Properties>
@@ -680,7 +680,7 @@
                 <Component class="javax.swing.JLabel" name="lblBICOverallInv">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="xprottest/results/resources/ResultsView.properties" key="lbl-overall-inv" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                      <ResourceString bundle="es/uvigo/darwin/xprottest/results/Bundle.properties" key="lbl-overall-inv" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
                     <Property name="name" type="java.lang.String" value="lblBICOverallInv" noResource="true"/>
                   </Properties>
@@ -856,9 +856,9 @@
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Component id="displayAICcoInv" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="displayAICcoInvAlpha" alignment="0" pref="154" max="32767" attributes="0"/>
-                                      <Component id="displayAICcoAlphaInv" alignment="0" pref="154" max="32767" attributes="0"/>
-                                      <Component id="displayAICcoAlpha" alignment="0" pref="154" max="32767" attributes="0"/>
+                                      <Component id="displayAICcoInvAlpha" alignment="0" pref="229" max="32767" attributes="0"/>
+                                      <Component id="displayAICcoAlphaInv" alignment="0" pref="229" max="32767" attributes="0"/>
+                                      <Component id="displayAICcoAlpha" alignment="0" pref="229" max="32767" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
                               </Group>
@@ -952,7 +952,7 @@
                 <Component class="javax.swing.JLabel" name="lblAICcOverall">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="xprottest/results/resources/ResultsView.properties" key="lbl-overall" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                      <ResourceString bundle="es/uvigo/darwin/xprottest/results/Bundle.properties" key="lbl-overall_1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
                     <Property name="name" type="java.lang.String" value="lblAICcOverall" noResource="true"/>
                   </Properties>
@@ -960,7 +960,7 @@
                 <Component class="javax.swing.JLabel" name="lblAICcOverallAlpha">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="xprottest/results/resources/ResultsView.properties" key="lbl-overall-alpha" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                      <ResourceString bundle="es/uvigo/darwin/xprottest/results/Bundle.properties" key="lbl-overall-alpha_1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
                     <Property name="name" type="java.lang.String" value="lblAICcOverallAlpha" noResource="true"/>
                   </Properties>
@@ -968,7 +968,7 @@
                 <Component class="javax.swing.JLabel" name="lblAICcOverallAlphaInv">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="xprottest/results/resources/ResultsView.properties" key="lbl-overall-alpha-inv" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                      <ResourceString bundle="es/uvigo/darwin/xprottest/results/Bundle.properties" key="lbl-overall-alpha-inv_1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
                     <Property name="name" type="java.lang.String" value="lblAICcOverallAlphaInv" noResource="true"/>
                   </Properties>
@@ -976,7 +976,7 @@
                 <Component class="javax.swing.JLabel" name="lblAICcOverallInvAlpha">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="xprottest/results/resources/ResultsView.properties" key="lbl-overall-inv-alpha" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                      <ResourceString bundle="es/uvigo/darwin/xprottest/results/Bundle.properties" key="lbl-overall-inv-alpha_1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
                     <Property name="name" type="java.lang.String" value="lblAICcOverallInvAlpha" noResource="true"/>
                   </Properties>
@@ -984,7 +984,7 @@
                 <Component class="javax.swing.JLabel" name="lblAICcOverallInv">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="xprottest/results/resources/ResultsView.properties" key="lbl-overall-inv" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                      <ResourceString bundle="es/uvigo/darwin/xprottest/results/Bundle.properties" key="lbl-overall-inv_1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
                     <Property name="name" type="java.lang.String" value="lblAICcOverallInv" noResource="true"/>
                   </Properties>
@@ -1160,9 +1160,9 @@
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Component id="displayDToInv" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="displayDToInvAlpha" alignment="0" pref="154" max="32767" attributes="0"/>
-                                      <Component id="displayDToAlphaInv" alignment="0" pref="154" max="32767" attributes="0"/>
-                                      <Component id="displayDToAlpha" alignment="0" pref="154" max="32767" attributes="0"/>
+                                      <Component id="displayDToInvAlpha" alignment="0" pref="229" max="32767" attributes="0"/>
+                                      <Component id="displayDToAlphaInv" alignment="0" pref="229" max="32767" attributes="0"/>
+                                      <Component id="displayDToAlpha" alignment="0" pref="229" max="32767" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
                               </Group>
@@ -1256,7 +1256,7 @@
                 <Component class="javax.swing.JLabel" name="lblDTOverall">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="xprottest/results/resources/ResultsView.properties" key="lbl-overall" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                      <ResourceString bundle="es/uvigo/darwin/xprottest/results/Bundle.properties" key="lbl-overall_2" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
                     <Property name="name" type="java.lang.String" value="lblDTOverall" noResource="true"/>
                   </Properties>
@@ -1264,7 +1264,7 @@
                 <Component class="javax.swing.JLabel" name="lblDTOverallAlpha">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="xprottest/results/resources/ResultsView.properties" key="lbl-overall-alpha" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                      <ResourceString bundle="es/uvigo/darwin/xprottest/results/Bundle.properties" key="lbl-overall-alpha_2" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
                     <Property name="name" type="java.lang.String" value="lblDTOverallAlpha" noResource="true"/>
                   </Properties>
@@ -1272,7 +1272,7 @@
                 <Component class="javax.swing.JLabel" name="lblDTOverallAlphaInv">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="xprottest/results/resources/ResultsView.properties" key="lbl-overall-alpha-inv" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                      <ResourceString bundle="es/uvigo/darwin/xprottest/results/Bundle.properties" key="lbl-overall-alpha-inv_2" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
                     <Property name="name" type="java.lang.String" value="lblDTOverallAlphaInv" noResource="true"/>
                   </Properties>
@@ -1280,7 +1280,7 @@
                 <Component class="javax.swing.JLabel" name="lblDTOverallInvAlpha">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="xprottest/results/resources/ResultsView.properties" key="lbl-overall-inv-alpha" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                      <ResourceString bundle="es/uvigo/darwin/xprottest/results/Bundle.properties" key="lbl-overall-inv-alpha_2" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
                     <Property name="name" type="java.lang.String" value="lblDTOverallInvAlpha" noResource="true"/>
                   </Properties>
@@ -1288,7 +1288,7 @@
                 <Component class="javax.swing.JLabel" name="lblDTOverallInv">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="xprottest/results/resources/ResultsView.properties" key="lbl-overall-inv" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                      <ResourceString bundle="es/uvigo/darwin/xprottest/results/Bundle.properties" key="lbl-overall-inv_2" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
                     <Property name="name" type="java.lang.String" value="lblDTOverallInv" noResource="true"/>
                   </Properties>

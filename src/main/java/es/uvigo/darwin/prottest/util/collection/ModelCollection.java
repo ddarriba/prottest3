@@ -40,14 +40,16 @@ public abstract class ModelCollection implements List<Model>, Serializable {
 	/**
 	 * Instantiates a new model collection.
 	 */
-	public ModelCollection() {
+	public ModelCollection(Alignment alignment) {
+                this.alignment = alignment;
 		allModels = new ArrayList<Model>();
 	}
 	
 	/**
 	 * Instantiates a new model collection with the array of models.
 	 */
-	public ModelCollection(Model[] models) {
+	public ModelCollection(Model[] models, Alignment alignment) {
+                this.alignment = alignment;
 		for (Model model : models)
 			checkAlignment(model);
 		allModels = new ArrayList<Model>();
@@ -307,8 +309,8 @@ public abstract class ModelCollection implements List<Model>, Serializable {
 	
 	private void checkAlignment(Model model) {
 		if (this.alignment == null)
-			this.alignment = model.getAlignment();
-		else if (!this.alignment.toString().equals(model.getAlignment().toString())) {
+                    throw new ProtTestInternalException("Internal error: Alignment is not initialized");
+		else if (!model.checkAlignment(this.alignment)) {
 			throw new ProtTestInternalException("Different alignments among model collection");
 		}
 	}

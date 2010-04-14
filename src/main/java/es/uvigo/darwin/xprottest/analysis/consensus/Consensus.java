@@ -28,6 +28,7 @@ import org.jdesktop.application.Application;
 import org.jdesktop.application.ResourceMap;
 import es.uvigo.darwin.xprottest.XProtTestView;
 import es.uvigo.darwin.xprottest.util.TextAreaWriter;
+import pal.alignment.Alignment;
 
 
 /**
@@ -55,10 +56,10 @@ public class Consensus extends javax.swing.JFrame {
     private double sampleSize = 1.0;
     
     /** Creates new form Consensus */
-    public Consensus(TreeFacade facade, Model[] models) {
+    public Consensus(TreeFacade facade, Model[] models, Alignment alignment) {
         initComponents();
         this.facade = facade;
-        this.models = new SingleModelCollection(models);
+        this.models = new SingleModelCollection(models, alignment);
         this.displayWriter = new PrintWriter(new TextAreaWriter(displayArea));
         
         resourceMap = Application.getInstance(es.uvigo.darwin.xprottest.XProtTestApp.class).getContext().getResourceMap(Consensus.class);

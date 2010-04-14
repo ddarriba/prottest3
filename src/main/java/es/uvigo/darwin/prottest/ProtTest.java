@@ -80,11 +80,9 @@ public class ProtTest implements XMLConstants {
 		    MPJ_RUN = true;
 		    args = argsApp;
 		} catch (Exception e) {
-                        System.out.println("EXCEPTION!!!! " + e.getClass().toString());
-                        e.printStackTrace();
-			MPJ_ME = 0;
-			MPJ_SIZE = 1;
-			MPJ_RUN = false;
+                    MPJ_ME = 0;
+                    MPJ_SIZE = 1;
+                    MPJ_RUN = false;
 		}
 
 		args = ProtTestFactory.initialize(args);
@@ -149,7 +147,7 @@ public class ProtTest implements XMLConstants {
 			models = facade.startAnalysis(opts);
 		
 			if(MPJ_ME == 0) {
-				ModelCollection allModelsList = new SingleModelCollection(models);
+				ModelCollection allModelsList = new SingleModelCollection(models, opts.getAlignment());
 				InformationCriterion ic;
 				//let's print results:
 				switch (opts.getSortBy()) {

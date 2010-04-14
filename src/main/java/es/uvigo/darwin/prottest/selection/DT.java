@@ -47,7 +47,9 @@ public class DT extends InformationCriterion
 	 * @see es.uvigo.darwin.prottest.selection.InformationCriterion#getSelectionModels(es.uvigo.darwin.prottest.util.collection.ModelIterator)
 	 */
 	protected List<SelectionModel> getSelectionModels(List<Model> models) {
-		ModelCollection modelCollection = new SingleModelCollection(models.toArray(new Model[0]));
+		ModelCollection modelCollection = new SingleModelCollection(
+                        models.toArray(new Model[0]),
+                        alignment);
 		bic = new BIC(modelCollection, confidenceInterval, sampleSize);
 		distancesCache = TreeEuclideanDistancesCache.getInstance();
 		

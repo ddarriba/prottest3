@@ -1,6 +1,7 @@
 package es.uvigo.darwin.prottest.util.collection;
 
 import es.uvigo.darwin.prottest.model.Model;
+import pal.alignment.Alignment;
 
 /**
  * A single implementation of ModelCollection.
@@ -13,8 +14,8 @@ public class SingleModelCollection extends ModelCollection {
 	/**
 	 * Instantiates a new single model collection.
 	 */
-	public SingleModelCollection() {
-		super();
+	public SingleModelCollection(Alignment alignment) {
+		super(alignment);
 	}
 	
 	/**
@@ -22,8 +23,8 @@ public class SingleModelCollection extends ModelCollection {
 	 * 
 	 * @param models the models
 	 */
-	public SingleModelCollection(Model[] models) {
-		super(models);
+	public SingleModelCollection(Model[] models, Alignment alignment) {
+		super(models, alignment);
 	}
 
 }

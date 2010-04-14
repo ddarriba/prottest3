@@ -41,9 +41,9 @@ public class ProtTestStatus extends ApplicationStatus {
 			if (!(matrices.contains(model.getMatrix())
 					&& distributions.contains(model.getDistribution()))
 					&& (!model.isPlusF() || plusF)
-					&& (model.getAlignment().toString().equals(options.getAlignment().toString())))
+					&& (model.checkAlignment(options.getAlignment())))
 				return false;
-			if (model.getAlignment() != options.getAlignment()) {
+			if (!model.checkAlignment(options.getAlignment())) {
 				// sets up the same alignment instance, once equality have been tested
 				model.setAlignment(options.getAlignment());
 			}

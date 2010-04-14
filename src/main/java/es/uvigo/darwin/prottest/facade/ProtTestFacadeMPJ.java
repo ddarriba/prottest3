@@ -78,9 +78,11 @@ public class ProtTestFacadeMPJ extends ProtTestFacadeImpl {
 			
 			cpManager = new CheckPointManager();
 			if (cpManager.loadStatus(initialStatus)) {
-				arrayListModel = new SingleModelCollection(((ProtTestStatus)cpManager.getLastCheckpoint()).getModels());
+				arrayListModel = new SingleModelCollection(
+                                        ((ProtTestStatus)cpManager.getLastCheckpoint()).getModels(),
+                                        options.getAlignment());
 			} else {
-				arrayListModel = new SingleModelCollection();
+				arrayListModel = new SingleModelCollection(options.getAlignment());
 				Properties modelProperties = new Properties();
 				if (options.isPlusF())
 					modelProperties.setProperty(Model.PROP_PLUS_F, "true");
@@ -129,7 +131,7 @@ public class ProtTestFacadeMPJ extends ProtTestFacadeImpl {
 			MPI.COMM_WORLD.Gather(runtime, 0, 1, MPI.LONG, 
 					runtimes, 0, 1, MPI.LONG, 0);
 			if (mpjMe == 0) {
-				List<Model> sortedModels = new SingleModelCollection(allModels);
+				List<Model> sortedModels = new SingleModelCollection(allModels, options.getAlignment());
 				Collections.sort(sortedModels, new AminoAcidModelNaturalComparator());
 				for (Model model : sortedModels) {
 					out.println("");

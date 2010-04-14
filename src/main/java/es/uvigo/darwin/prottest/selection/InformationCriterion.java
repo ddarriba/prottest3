@@ -15,6 +15,7 @@ import es.uvigo.darwin.prottest.selection.printer.PrintFramework;
 import es.uvigo.darwin.prottest.util.collection.ModelCollection;
 import es.uvigo.darwin.prottest.util.collection.SingleModelCollection;
 import es.uvigo.darwin.prottest.util.factory.ProtTestFactory;
+import pal.alignment.Alignment;
 
 /**
  * Model selection is used to model-averaging and estimate parameter importance
@@ -67,6 +68,9 @@ public abstract class InformationCriterion {
 	/** The sample size. */
 	protected double sampleSize;
 	
+        /** The alignment */
+        protected Alignment alignment;
+                
 	/**
 	 * Gets the overall alpha value.
 	 * 
@@ -157,6 +161,7 @@ public abstract class InformationCriterion {
 	 */
 	public InformationCriterion(ModelCollection models, 
 			double confidenceInterval, double sampleSize) {
+                this.alignment = models.getAlignment();
 		this.sampleSize = sampleSize;
 		int numberOfModels = models.size();
 		this.confidenceInterval = confidenceInterval;
@@ -318,7 +323,7 @@ public abstract class InformationCriterion {
 	 * @return the model collection
 	 */
 	public ModelCollection getModelCollection() {
-		ModelCollection models = new SingleModelCollection();
+		ModelCollection models = new SingleModelCollection(alignment);
 		for (SelectionModel model : selectionModels)
 			models.add(model.getModel());
 		return models;

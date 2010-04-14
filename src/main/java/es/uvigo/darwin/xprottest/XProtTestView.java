@@ -779,7 +779,7 @@ public class XProtTestView extends FrameView {
         TreeFacade treeFacade = new TreeFacadeImpl();
         if (models != null) {
             if (consensusView == null) {
-                consensusView = new Consensus(treeFacade, models);
+                consensusView = new Consensus(treeFacade, models, alignment);
             }
             consensusView.setVisible(true);
         }

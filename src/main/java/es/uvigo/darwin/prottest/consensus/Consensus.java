@@ -1,14 +1,9 @@
 package es.uvigo.darwin.prottest.consensus;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.PushbackReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -29,8 +24,7 @@ import es.uvigo.darwin.prottest.selection.InformationCriterion;
 import es.uvigo.darwin.prottest.selection.model.SelectionModel;
 import es.uvigo.darwin.prottest.tree.TreeUtils;
 import es.uvigo.darwin.prottest.util.exception.ProtTestInternalException;
-import es.uvigo.darwin.prottest.util.exception.TreeFormatException;
-import es.uvigo.darwin.prottest.util.fileio.AlignmentReader;
+
 
 /**
  * Phylogenetic consensus tree builder.
@@ -72,25 +66,25 @@ public class Consensus {
 	 * 
 	 * @return true, if successful
 	 */
-	public boolean addTree(WeightedTree wTree) {
+	private boolean addTree(WeightedTree wTree) {
 		//check integrity
-		if (wTree.tree == null || wTree.weight < 0.0)
+		if (wTree.getTree() == null || wTree.getWeight() < 0.0)
 			throw new ProtTestInternalException();
 		//check compatibility
 		if (trees.size() == 0) {
 			trees.add(wTree);
-			numTaxa = wTree.tree.getIdCount();
-			idGroup = pal.tree.TreeUtils.getLeafIdGroup(wTree.tree);
+			numTaxa = wTree.getTree().getIdCount();
+			idGroup = pal.tree.TreeUtils.getLeafIdGroup(wTree.getTree());
 		}
 		else {
-			if (wTree.tree.getIdCount() != numTaxa) {
+			if (wTree.getTree().getIdCount() != numTaxa) {
 				return false;
 			}
-			Tree pTree = trees.get(FIRST).tree;
+			Tree pTree = trees.get(FIRST).getTree();
 			for (int i = 0; i < numTaxa; i++) {
 				boolean found = false;
 				for (int j = 0; j < numTaxa; j++) {
-					if (wTree.tree.getIdentifier(i).equals(pTree.getIdentifier(j))) {
+                                    if (wTree.getTree().getIdentifier(i).equals(pTree.getIdentifier(j))) {
 						found = true;
 						break;
 					}
@@ -102,7 +96,7 @@ public class Consensus {
 			}
 			trees.add(wTree);
 		}
-		cumWeight += wTree.weight;
+		cumWeight += wTree.getWeight();
 		return true;
 	}
 	
@@ -140,52 +134,14 @@ public class Consensus {
 	 */
 	public Consensus(File treesFile) 
 		throws ProtTestInternalException, IOException {
-		
-		FileReader fr = new FileReader(treesFile);
-		BufferedReader br = new BufferedReader(fr);
-		
-		//PushbackReader in = new PushbackReader(fr);
 
-		AlignmentReader reader = new AlignmentReader();
+            TreeReader treeReader = new SimpleNewickTreeReader(treesFile);
+
+            this.trees = treeReader.getWeightedTreeList();
+            this.cumWeight = treeReader.getCumWeight();
+            this.numTaxa = treeReader.getNumTaxa();
+            this.idGroup = treeReader.getIdGroup();
 		
-		trees = new ArrayList<WeightedTree>();
-		try {
-			while (br.ready()) {
-				String line = br.readLine();
-				if (line == null || line.equals("")) {
-					break;
-				}
-
-				line = line.replace('[', ';');
-				line = line.replace(']', ';');
-				String[] values = line.split(";");
-				String weightStr = values[1];;
-				double weight;
-				weight = Double.parseDouble(weightStr);
-				
-				File tempFile = File.createTempFile("consensus", "tmp");
-				tempFile.deleteOnExit();
-				FileWriter fw = new FileWriter(tempFile);
-				BufferedWriter bw = new BufferedWriter(fw);
-				bw.write(values[0]);
-				bw.append(';');
-				bw.close();
-				fw.close();
-				
-				PushbackReader in = new PushbackReader(new FileReader(tempFile));
-
-				PrintWriter out = new PrintWriter(System.out);
-				Tree tree = reader.readTree(out, in, false);
-				out.flush();
-				this.addTree(new WeightedTree(tree, weight));
-			}
-		} catch (TreeFormatException tfe) {
-			throw new ProtTestInternalException("Bad file format. Cannot parse tree");
-		} catch (NumberFormatException nfe) {
-			throw new ProtTestInternalException("Bad file format. Expecting double value");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	/**
@@ -214,7 +170,7 @@ public class Consensus {
             s = new Support();
             support.put(clade, s);
         }
-        s.add(wTree.weight, TreeUtils.safeNodeHeight(wTree.tree, node), node.getBranchLength());
+        s.add(wTree.getWeight(), TreeUtils.safeNodeHeight(wTree.getTree(), node), node.getBranchLength());
         return clade;
     }
 	
@@ -264,7 +220,7 @@ public class Consensus {
 	 * 
 	 * @return the weighted median of the set
 	 */
-	public static double median(SortedSet<WeightLengthPair> values, double cumWeight) {
+	private static double median(SortedSet<WeightLengthPair> values, double cumWeight) {
 		double median = -1;
 		double halfWeight = cumWeight / 2.0;
 		double cumValue = 0.0;
@@ -296,7 +252,7 @@ public class Consensus {
         Map<FixedBitSet, Support> support = new HashMap<FixedBitSet, Support>();
         int k = 0;
         for (WeightedTree wTree : trees) {
-            rootedSupport(wTree, wTree.tree.getRoot(), support);
+            rootedSupport(wTree, wTree.getTree().getRoot(), support);
 
             ++k;
 
@@ -527,29 +483,6 @@ public class Consensus {
 		}
     }
     
-    /**
-     * The Class WeightedTree.
-     */
-    static class WeightedTree {
-
-        /** The tree. */
-        private Tree tree;
-        
-        /** The weight. */
-        private double weight;
-
-        /**
-         * Instantiates a new weighted tree.
-         * 
-         * @param tree the tree
-         * @param weight the weight
-         */
-        WeightedTree(Tree tree, double weight) {
-        	this.tree = tree;
-        	this.weight = weight;
-        }
-        
-    }
     
     /**
      * The Class UnweightedTree.

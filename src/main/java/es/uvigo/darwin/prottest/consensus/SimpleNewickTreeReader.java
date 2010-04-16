@@ -15,33 +15,21 @@ import java.io.PushbackReader;
 import java.io.PrintWriter;
 
 import pal.tree.Tree;
-import pal.misc.IdGroup;
 
 import java.io.IOException;
 import es.uvigo.darwin.prottest.util.exception.ProtTestInternalException;
 
 import es.uvigo.darwin.prottest.util.exception.TreeFormatException;
 import es.uvigo.darwin.prottest.util.fileio.AlignmentReader;
-import java.util.ArrayList;
 
 /**
  *
  * @author diego
  */
-public class SimpleNewickTreeReader implements TreeReader {
+public class SimpleNewickTreeReader extends TreeReader {
 
     /** The first element. */
     private static final int FIRST = 0;
-
-    private int numTaxa;
-    private IdGroup idGroup;
-    private double cumWeight;
-    private List<WeightedTree> trees = new ArrayList<WeightedTree>();
-
-    public int getNumTaxa(){ return numTaxa; }
-    public IdGroup getIdGroup() { return idGroup; }
-    public double getCumWeight() { return cumWeight; }
-    public List<WeightedTree> getWeightedTreeList() { return trees; }
 
     public SimpleNewickTreeReader(File treeFile)
         throws ProtTestInternalException, IOException {

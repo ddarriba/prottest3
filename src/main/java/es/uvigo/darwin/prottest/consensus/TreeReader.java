@@ -1,19 +1,25 @@
 package es.uvigo.darwin.prottest.consensus;
 
+import java.util.ArrayList;
 import java.util.List;
 import pal.misc.IdGroup;
 
 /**
  *
- * This interface allows reading a set of trees from a file
+ * This class allows reading a set of trees from a file
  *
  * @author diego
  */
-public interface TreeReader {
+public abstract class TreeReader {
 
-    public int getNumTaxa();
-    public IdGroup getIdGroup();
-    public double getCumWeight();
-    public List<WeightedTree> getWeightedTreeList();
+    protected int numTaxa;
+    protected IdGroup idGroup;
+    protected double cumWeight;
+    protected List<WeightedTree> trees = new ArrayList<WeightedTree>();
+
+    public int getNumTaxa(){ return numTaxa; }
+    public IdGroup getIdGroup() { return idGroup; }
+    public double getCumWeight() { return cumWeight; }
+    public List<WeightedTree> getWeightedTreeList() { return trees; }
     
 }

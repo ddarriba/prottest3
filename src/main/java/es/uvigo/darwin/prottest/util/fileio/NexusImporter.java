@@ -41,6 +41,7 @@ import pal.tree.NodeFactory;
  */
 public class NexusImporter {
 
+    public static final String WEIGHT_ATTRIBUTE = "weight";
     public enum NexusBlock {
 
         UNKNOWN,
@@ -298,12 +299,12 @@ public class NexusImporter {
     private List<Tree> readTreesBlock(List<Taxon> taxonList) throws ImportException, IOException {
         List<Tree> trees = new ArrayList<Tree>();
 
-        String[] lastToken = new String[1];
-        translationList = readTranslationList(taxonList, lastToken);
+        String[] localLastToken = new String[1];
+        translationList = readTranslationList(taxonList, localLastToken);
 
         while (true) {
 
-            SimpleTree tree = readNextTree(lastToken);
+            SimpleTree tree = readNextTree(localLastToken);
 
             if (tree == null) {
                 break;
@@ -322,7 +323,7 @@ public class NexusImporter {
     }
 
     private Map<String, Taxon> readTranslationList(List<Taxon> taxonList, String[] lastToken) throws ImportException, IOException {
-        Map<String, Taxon> translationList = new HashMap<String, Taxon>();
+        Map<String, Taxon> localTranslationList = new HashMap<String, Taxon>();
 
         String token = helper.readToken(";");
 
@@ -353,7 +354,7 @@ public class NexusImporter {
                     // ...perhaps it is a numerical taxon reference?
                     throw new ImportException.UnknownTaxonException(token3);
                 }
-                translationList.put(token2, taxon);
+                localTranslationList.put(token2, taxon);
 
             } while (helper.getLastDelimiter() != ';');
 
@@ -361,13 +362,13 @@ public class NexusImporter {
 
         } else if (taxonList != null) {
             for (Taxon taxon : taxonList) {
-                translationList.put(taxon.getName(), taxon);
+                localTranslationList.put(taxon.getName(), taxon);
             }
         }
 
         lastToken[0] = token;
 
-        return translationList;
+        return localTranslationList;
     }
 
     private SimpleTree readNextTree(String[] lastToken) throws ImportException, IOException {
@@ -410,8 +411,8 @@ public class NexusImporter {
                     final String comment = helper.getLastMetaComment();
                     helper.clearLastMetaComment();
 
-                    tree = new SimpleTree();
-                    readInternalNode(tree);
+                    Node internalNode = readInternalNode();
+                    tree = new SimpleTree(internalNode);
                                         
                     int last = helper.getLastDelimiter();
                     if (last == ':') {
@@ -424,12 +425,14 @@ public class NexusImporter {
                         throw new ImportException.BadFormatException("Expecting ';' after tree, '" + treeName + "', TREE command of TREES block");
                     }
 
+                    weight = 1.0;
                     if (comment != null) {
                         // if '[W number]' (MrBayes), set weight attribute
                         // ignore any other comment
                         if (comment.matches("^W\\s+[\\+\\-]?[\\d\\.]+")) {
                             weight = new Double(comment.substring(2));
                         } 
+                        tree.setAttribute(internalNode, WEIGHT_ATTRIBUTE, weight);
                     }
 
                 } catch (EOFException e) {
@@ -459,17 +462,17 @@ public class NexusImporter {
      * accordingly). It then reads the branch length and SimpleNode that will
      * point at the new node or tip.
      */
-    private Node readBranch(SimpleTree tree) throws IOException, ImportException {
+    private Node readBranch() throws IOException, ImportException {
         Node branch;
 
         helper.clearLastMetaComment();
         if (helper.nextCharacter() == '(') {
             // is an internal node
-            branch = readInternalNode(tree);
+            branch = readInternalNode();
 
         } else {
             // is an external node
-            branch = readExternalNode(tree);
+            branch = readExternalNode();
         }
 
         if (helper.getLastDelimiter() == ':') {
@@ -486,14 +489,14 @@ public class NexusImporter {
      * @param tree
      * @return
      */
-    private Node readInternalNode(SimpleTree tree) throws IOException, ImportException {
+    private Node readInternalNode() throws IOException, ImportException {
         List<Node> children = new ArrayList<Node>();
 
         // read the opening '('
         helper.readCharacter();
 
         // read the first child
-        children.add(readBranch(tree));
+        children.add(readBranch());
 
         if (helper.getLastDelimiter() != ',') {
         //throw new ImportException.BadFormatException("Missing ',' in tree");
@@ -505,7 +508,7 @@ public class NexusImporter {
         // read subsequent children
 
         while (helper.getLastDelimiter() == ',') {
-            children.add(readBranch(tree));
+            children.add(readBranch());
         }
 
         //System.out.println("kids="+children.size());
@@ -531,7 +534,7 @@ public class NexusImporter {
     /**
      * Reads an external node in.
      */
-    private Node readExternalNode(SimpleTree tree) throws ImportException, IOException {
+    private Node readExternalNode() throws ImportException, IOException {
         String label = helper.readToken(":(),;");
 
         Taxon taxon;
@@ -652,10 +655,5 @@ public class NexusImporter {
     // private stuff
     private NexusBlock nextBlock = null;
     private String nextBlockName = null;
-    private int taxonCount = 0,  siteCount = 0;
-    private String gapCharacters = "-";
-    private String matchCharacters = ".";
-    private String missingCharacters = "?";
-    private boolean isInterleaved = false;
     protected final ImportHelper helper;
 }

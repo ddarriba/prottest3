@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pal.tree.Tree;
-import pal.tree.TreeUtils;
 import es.uvigo.darwin.prottest.consensus.Consensus;
 import es.uvigo.darwin.prottest.model.Model;
 import es.uvigo.darwin.prottest.selection.InformationCriterion;
+import es.uvigo.darwin.prottest.tree.TreeUtils;
 import es.uvigo.darwin.prottest.util.exception.ProtTestInternalException;
 
 public class TreeFacadeImpl implements TreeFacade {
@@ -16,13 +16,13 @@ public class TreeFacadeImpl implements TreeFacade {
 	public void displayASCIITree(Tree tree,
 			PrintWriter outputWriter) {
 
-		TreeUtils.report(tree, outputWriter);
+		pal.tree.TreeUtils.report(tree, outputWriter);
 	}
 	
 	public void displayNewickTree(Tree tree,
 			PrintWriter outputWriter) {
 		
-		TreeUtils.printNH(tree, outputWriter);
+		TreeUtils.printNH(outputWriter, tree, true, true);
 	}
 
 	public void displayConsensusTree(List<Model> modelList,
@@ -55,16 +55,16 @@ public class TreeFacadeImpl implements TreeFacade {
 		
 		if (threshold < 0.5 || threshold > 1.0)
 			throw new ProtTestInternalException("Invalid threshold value: " + threshold);
-		Consensus consensus = new Consensus(treeColection);
-		Tree cons = consensus.buildTree(threshold);
+		Consensus consensus = new Consensus(treeColection, threshold);
+		Tree cons = consensus.getConsensusTree();
 		return cons;
 	}
 	
 	public Tree createConsensusTree(InformationCriterion ic, double threshold) {
 		if (threshold < 0.5 || threshold > 1.0)
 			throw new ProtTestInternalException("Invalid threshold value: " + threshold);
-		Consensus consensus = new Consensus(ic);
-		Tree cons = consensus.buildTree(threshold);
+		Consensus consensus = new Consensus(ic, threshold);
+		Tree cons = consensus.getConsensusTree();
 		return cons;
 	}
 

@@ -277,4 +277,8 @@ public class Utilities {
         
         return buffer.toString();
     }
+    
+    public static double round(double value, int decimals) {
+        return (Math.round(value * Math.pow(10, decimals)))/Math.pow(10, decimals);
+    }
 }

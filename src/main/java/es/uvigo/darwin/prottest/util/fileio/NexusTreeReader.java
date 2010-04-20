@@ -3,8 +3,9 @@
  * and open the template in the editor.
  */
 
-package es.uvigo.darwin.prottest.consensus;
+package es.uvigo.darwin.prottest.util.fileio;
 
+import es.uvigo.darwin.prottest.consensus.*;
 import es.uvigo.darwin.prottest.util.exception.ImportException;
 import es.uvigo.darwin.prottest.util.fileio.NexusImporter;
 import java.io.File;

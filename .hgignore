@@ -5,5 +5,8 @@ dist/
 build/
 nbproject/
 previous-dists/
+src/main/notDistributable/
+src/test/notDistributable/
 *~
 *bk.*
+*.tar.gz

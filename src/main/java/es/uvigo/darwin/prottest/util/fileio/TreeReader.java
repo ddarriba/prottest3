@@ -1,5 +1,7 @@
-package es.uvigo.darwin.prottest.consensus;
+package es.uvigo.darwin.prottest.util.fileio;
 
+import es.uvigo.darwin.prottest.tree.WeightedTree;
+import es.uvigo.darwin.prottest.consensus.*;
 import java.util.ArrayList;
 import java.util.List;
 import pal.misc.IdGroup;

@@ -1,5 +1,9 @@
 package es.uvigo.darwin.prottest.consensus;
 
+import es.uvigo.darwin.prottest.tree.WeightedTree;
+import es.uvigo.darwin.prottest.util.fileio.SimpleNewickTreeReader;
+import es.uvigo.darwin.prottest.util.fileio.NexusTreeReader;
+import es.uvigo.darwin.prottest.util.fileio.TreeReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -48,15 +52,17 @@ public class Consensus {
     private int numTaxa;
     /** The id group. */
     private IdGroup idGroup;
-
     private Map<FixedBitSet, Support> support = new HashMap<FixedBitSet, Support>();
-    
     private Tree consensusTree;
-    
-    public Map<FixedBitSet, Support> getSupport() { return support; }
-    
-    public Tree getConsensusTree() { return consensusTree; }
-    
+
+    public Map<FixedBitSet, Support> getSupport() {
+        return support;
+    }
+
+    public Tree getConsensusTree() {
+        return consensusTree;
+    }
+
     /**
      * Gets the set of trees included in the consensus.
      * 
@@ -447,8 +453,10 @@ public class Consensus {
         /** Sum of node heights of trees containing the clade. */
         private double sumBranches;
 
-        public double getTreesWeightWithClade() { return treesWeightWithClade; }
-        
+        public double getTreesWeightWithClade() {
+            return treesWeightWithClade;
+        }
+
         /**
          * Instantiates a new support.
          */
@@ -530,12 +538,12 @@ public class Consensus {
             Consensus consensus = new Consensus(f, threshold);
             Tree consensusTree = consensus.getConsensusTree();
             out.println("");
-            
+
             Set<FixedBitSet> keySet = consensus.getSupport().keySet();
             FixedBitSet[] keys = keySet.toArray(new FixedBitSet[0]);
             List<FixedBitSet> splitsInConsensus = new ArrayList<FixedBitSet>();
             List<FixedBitSet> splitsOutFromConsensus = new ArrayList<FixedBitSet>();
-            
+
             Arrays.sort(keys);
             for (FixedBitSet fbs : keys) {
                 if (fbs.cardinality() > 1) {
@@ -551,16 +559,16 @@ public class Consensus {
             System.out.println(" ");
             System.out.println("Splits in consensus tree");
             for (FixedBitSet fbs : splitsInConsensus) {
-                System.out.println("    " + fbs.splitRepresentation() + " ( " + Utilities.round(consensus.getSupport().get(fbs).getTreesWeightWithClade(),3) + " )");
+                System.out.println("    " + fbs.splitRepresentation() + " ( " + Utilities.round(consensus.getSupport().get(fbs).getTreesWeightWithClade(), 3) + " )");
             }
             System.out.println(" ");
             System.out.println("Splits not in consensus tree");
             for (FixedBitSet fbs : splitsOutFromConsensus) {
-                System.out.println("    " + fbs.splitRepresentation() + " ( " + Utilities.round(consensus.getSupport().get(fbs).getTreesWeightWithClade(),3) + " )");
+                System.out.println("    " + fbs.splitRepresentation() + " ( " + Utilities.round(consensus.getSupport().get(fbs).getTreesWeightWithClade(), 3) + " )");
             }
             System.out.println(" ");
             System.out.println("# # # # # # # # # # # # # # # #");
-            
+
             pal.tree.TreeUtils.report(consensusTree, out);
             out.println(" ");
             out.println("# # # # # # # # # # # # # # # #");
@@ -576,16 +584,5 @@ public class Consensus {
         }
         out.flush();
     }
-//    // Main() for median method test
-//    public static void main(String[] args) {
-//    	Support s = new Support();
-//    	double[] weights = {0.5, 0.1, 0.1, 0.2, 0.1};
-//    	double[] lengths = {7, 4, 1, 3, 2};
-//    	for (int i = 0; i<5; i++)
-//    		s.add(weights[i], 0.0, lengths[i]);
-//    	double median = median(s.branchLengths, 1.0);
-//    	
-//    	System.out.println("The median is " + median);
-//    }    
-    
+
 }

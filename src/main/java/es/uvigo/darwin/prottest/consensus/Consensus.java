@@ -55,7 +55,7 @@ public class Consensus {
     private Map<FixedBitSet, Support> support = new HashMap<FixedBitSet, Support>();
     private Tree consensusTree;
 
-    public Map<FixedBitSet, Support> getSupport() {
+    private Map<FixedBitSet, Support> getSupport() {
         return support;
     }
 
@@ -555,19 +555,19 @@ public class Consensus {
                     }
                 }
             }
-            System.out.println("# # # # # # # # # # # # # # # #");
-            System.out.println(" ");
-            System.out.println("Splits in consensus tree");
+            out.println("# # # # # # # # # # # # # # # #");
+            out.println(" ");
+            out.println("Splits in consensus tree");
             for (FixedBitSet fbs : splitsInConsensus) {
-                System.out.println("    " + fbs.splitRepresentation() + " ( " + Utilities.round(consensus.getSupport().get(fbs).getTreesWeightWithClade(), 3) + " )");
+                out.println("    " + fbs.splitRepresentation() + " ( " + Utilities.round(consensus.getSupport().get(fbs).getTreesWeightWithClade(), 3) + " )");
             }
-            System.out.println(" ");
-            System.out.println("Splits not in consensus tree");
+            out.println(" ");
+            out.println("Splits not in consensus tree");
             for (FixedBitSet fbs : splitsOutFromConsensus) {
-                System.out.println("    " + fbs.splitRepresentation() + " ( " + Utilities.round(consensus.getSupport().get(fbs).getTreesWeightWithClade(), 3) + " )");
+                out.println("    " + fbs.splitRepresentation() + " ( " + Utilities.round(consensus.getSupport().get(fbs).getTreesWeightWithClade(), 3) + " )");
             }
-            System.out.println(" ");
-            System.out.println("# # # # # # # # # # # # # # # #");
+            out.println(" ");
+            out.println("# # # # # # # # # # # # # # # #");
 
             pal.tree.TreeUtils.report(consensusTree, out);
             out.println(" ");

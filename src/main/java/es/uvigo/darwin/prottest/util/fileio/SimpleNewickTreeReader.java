@@ -21,7 +21,7 @@ import java.io.IOException;
 import es.uvigo.darwin.prottest.util.exception.ProtTestInternalException;
 
 import es.uvigo.darwin.prottest.util.exception.TreeFormatException;
-import es.uvigo.darwin.prottest.util.fileio.AlignmentReader;
+import es.uvigo.darwin.prottest.tree.WeightedTree;
 
 /**
  *

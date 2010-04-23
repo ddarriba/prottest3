@@ -70,4 +70,85 @@ public class ProtTestFormattedOutput {
 		
 		return result;
 	}
+        
+        /**
+	 * print integer, aligned to a reference number,
+	 * (introducing space at the left side)
+	 *
+	 * @param out output stream
+	 * @param num number to be printed
+	 * @param maxNum reference number
+	 */
+	public static void displayInteger(PrintWriter out, int num, int maxNum)
+	{
+		int lenNum = Integer.toString(num).length();
+		int lenMaxNum = Integer.toString(maxNum).length();
+
+		if (lenNum < lenMaxNum)
+		{
+			multiplePrint(out, ' ', lenMaxNum - lenNum);
+		}
+		out.print(num);
+	}
+        
+        /**
+	 * print whitespace of length of a string displaying a given integer
+	 *
+	 * @param output stream
+	 * @param maxNum number
+	 */
+	public static void displayIntegerWhite(PrintWriter out, int maxNum)
+	{
+		int lenMaxNum = Integer.toString(maxNum).length();
+
+		multiplePrint(out, ' ', lenMaxNum);
+	}
+
+        /**
+	 * print label with a prespecified length
+	 * (label will be shortened or spaces will introduced, if necessary)
+	 *
+	 * @param out output stream
+	 * @param label label to be printed
+	 * @param width desired length
+	 */
+	public static void displayLabel(PrintWriter out, String label, int width)
+	{
+		int len = label.length();
+
+		if (len == width)
+		{
+			// Print as is
+			out.print(label);
+		}
+		else if (len < width)
+		{
+			// fill rest with spaces
+			out.print(label);
+			multiplePrint(out, ' ', width - len);
+		}
+		else
+		{
+			// Print first width characters
+			for (int i = 0; i < width; i++)
+			{
+				out.print(label.charAt(i));
+			}
+		}
+	}
+        
+	/**
+	 * repeatedly print a character
+	 *
+	 * @param out output stream
+	 * @param c   character
+	 * @param num number of repeats
+	 */
+	public static void multiplePrint(PrintWriter out, char c, int num)
+	{
+		for (int i = 0; i < num; i++)
+		{
+			out.print(c);
+		}
+	}
 }

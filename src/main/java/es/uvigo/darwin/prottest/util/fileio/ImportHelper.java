@@ -9,7 +9,6 @@
 package es.uvigo.darwin.prottest.util.fileio;
 
 import es.uvigo.darwin.prottest.util.exception.ImportException;
-import java.io.BufferedWriter;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.LineNumberReader;
@@ -48,7 +47,7 @@ public class ImportHelper {
 
     public ImportHelper(Reader reader, Writer commentWriter) {
         this.reader = new LineNumberReader(reader);
-        this.commentWriter = new BufferedWriter(commentWriter);
+        this.commentWriter = commentWriter;
     }
 
     /**
@@ -102,7 +101,7 @@ public class ImportHelper {
     }
 
     public void setCommentWriter(Writer commentWriter) {
-        this.commentWriter = new BufferedWriter(commentWriter);
+        this.commentWriter = commentWriter;
     }
 
     public int getLineNumber() {
@@ -370,24 +369,29 @@ public class ImportHelper {
 
         char ch;
         int n=1;
-        boolean write = false;
+        boolean write = true;
         StringBuffer meta = null;
 
+        if (lastComment == null) {
+            lastComment = new StringBuffer();
+        }
         if (nextCharacter() == writeComment) {
             read();
-            write = true;
+//            if (commentWriter != null) {
+//                commentWriter.write(writeComment);
+//            }
         } else if (nextCharacter() == metaComment) {
             read();
             meta = new StringBuffer();
+            write = false;
         }
-
         lastMetaComment = null;
 
         if (delimiter == lineComment) {
             String line = readLine();
             if (write && commentWriter != null) {
                 commentWriter.write(line, 0, line.length());
-                commentWriter.newLine();
+                commentWriter.write('\n');//.newLine();
             } else if (meta != null) {
                 meta.append(line);
             }
@@ -407,19 +411,27 @@ public class ImportHelper {
                 }
                 if( inString == null )  {
                     if (ch == startComment) {
+                        lastComment = new StringBuffer();
                         n++;
                         continue;
                     } else if (ch == stopComment) {
                         if (write && commentWriter != null) {
-                            commentWriter.newLine();
+                            if (lastComment.toString().contains("ID")) {
+                                commentWriter.write(lastComment.toString());
+                            } 
+                            lastComment = new StringBuffer();
                         }
+//                        if (write && commentWriter != null) {
+//                            commentWriter.write('\n');//.newLine();
+//                        }
                         n--;
                         continue;
                     }
                 }
 
                 if (write && commentWriter != null) {
-                    commentWriter.write(ch);
+                    lastComment.append(ch);
+//                    commentWriter.write(ch);
                 } else if (meta != null) {
                     meta.append(ch);
                 }
@@ -543,7 +555,7 @@ public class ImportHelper {
     // Private stuff
 
     private LineNumberReader reader;
-    private BufferedWriter commentWriter = null;
+    private Writer commentWriter = null;
 
     private int lastChar = '\0';
     private int lastDelimiter = '\0';
@@ -555,5 +567,6 @@ public class ImportHelper {
     private char writeComment = (char)-1;
     private char metaComment = (char)-1;
 
+    private StringBuffer lastComment;
     private String lastMetaComment = null;
 }

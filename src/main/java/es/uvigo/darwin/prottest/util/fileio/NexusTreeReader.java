@@ -6,6 +6,7 @@
 package es.uvigo.darwin.prottest.util.fileio;
 
 import es.uvigo.darwin.prottest.consensus.*;
+import es.uvigo.darwin.prottest.tree.TreeUtils;
 import es.uvigo.darwin.prottest.tree.WeightedTree;
 import es.uvigo.darwin.prottest.util.exception.ImportException;
 import java.io.File;
@@ -15,7 +16,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import pal.tree.Tree;
-import pal.tree.TreeUtils;
 
 /**
  *
@@ -25,13 +25,18 @@ public class NexusTreeReader extends TreeReader {
 
     private NexusImporter imp;
     
+    public String getNexusId() {
+        return imp.getNexusId();
+    }
+    
     public NexusTreeReader(File treeFile) throws ImportException {
+        
         try {
-            imp = new NexusImporter(new FileReader(treeFile));
-//            imp.startReadingTrees();
+            FileReader fileReader = new FileReader(treeFile);
+            imp = new NexusImporter(fileReader);
             List<Tree> importedTrees = imp.importTrees();
             for (Tree tree : importedTrees) {
-                double weight = (Double) tree.getAttribute(tree.getRoot(), NexusImporter.WEIGHT_ATTRIBUTE);
+                double weight = (Double) tree.getAttribute(tree.getRoot(), TreeUtils.TREE_WEIGHT_ATTRIBUTE);
                 trees.add(new WeightedTree(tree, weight));
                 cumWeight += weight;
                 if (idGroup == null) {
@@ -39,6 +44,7 @@ public class NexusTreeReader extends TreeReader {
                     numTaxa = idGroup.getIdCount();
                 }
             }
+            fileReader.close();
         } catch (IOException ex) {
             Logger.getLogger(NexusTreeReader.class.getName()).log(Level.SEVERE, null, ex);
         }

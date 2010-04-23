@@ -14,6 +14,7 @@ package es.uvigo.darwin.prottest.util.fileio;
  */
 import es.uvigo.darwin.prottest.util.attributable.Attributable;
 import es.uvigo.darwin.prottest.taxa.Taxon;
+import es.uvigo.darwin.prottest.tree.TreeUtils;
 import es.uvigo.darwin.prottest.util.exception.ImportException;
 import pal.tree.SimpleTree;
 import pal.tree.Tree;
@@ -22,6 +23,8 @@ import java.awt.*;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.Reader;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.*;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -41,7 +44,6 @@ import pal.tree.NodeFactory;
  */
 public class NexusImporter {
 
-    public static final String WEIGHT_ATTRIBUTE = "weight";
     public enum NexusBlock {
 
         UNKNOWN,
@@ -52,8 +54,15 @@ public class NexusImporter {
         DISTANCES,
         TREES
     }
+    
     private boolean compactTrees = false;
-
+    private Writer commentWriter;
+    private String nexusId;
+    
+    public String getNexusId() {
+        return nexusId;
+    }
+    
     // NEXUS specific ImportException classes
     public static class MissingBlockException extends ImportException {
 
@@ -91,8 +100,14 @@ public class NexusImporter {
         // ! defines a comment to be written out to a log file
         // & defines a meta comment
         helper.setCommentDelimiters('[', ']', '\0', '!', '&');
+        commentWriter = new StringWriter();
+        helper.setCommentWriter(commentWriter);
     }
 
+//    public long findId() {
+//        
+//    }
+    
     /**
      * This function returns an integer to specify what the
      * next block in the file is. The internal variable nextBlock is also set to this
@@ -228,7 +243,11 @@ public class NexusImporter {
         if (!startReadingTrees()) {
             throw new MissingBlockException("TREES block is missing");
         }
-        return readTreesBlock(treeTaxonList);
+        List<Tree> treesBlock = readTreesBlock(treeTaxonList);
+        helper.closeReader();
+        nexusId = commentWriter.toString();
+        commentWriter.close();
+        return treesBlock;
     }
 
     public boolean startReadingTrees() throws IOException, ImportException {
@@ -298,7 +317,8 @@ public class NexusImporter {
      */
     private List<Tree> readTreesBlock(List<Taxon> taxonList) throws ImportException, IOException {
         List<Tree> trees = new ArrayList<Tree>();
-
+        double cumWeight = 0.0;
+        
         String[] localLastToken = new String[1];
         translationList = readTranslationList(taxonList, localLastToken);
 
@@ -310,11 +330,22 @@ public class NexusImporter {
                 break;
             }
 
+            cumWeight += (Double) tree.getAttribute(tree.getRoot(), TreeUtils.TREE_WEIGHT_ATTRIBUTE);
             trees.add(tree);
+            
         }
 
         if (trees.size() == 0) {
             throw new ImportException.BadFormatException("No trees defined in TREES block");
+        }
+        
+        if (cumWeight > 1.0) {
+            // normalization is required
+            for (Tree tree : trees) {
+                double treeWeight = (Double) tree.getAttribute(tree.getRoot(), TreeUtils.TREE_WEIGHT_ATTRIBUTE);
+                treeWeight /= cumWeight;
+                tree.setAttribute(tree.getRoot(), TreeUtils.TREE_WEIGHT_ATTRIBUTE, treeWeight);
+            }
         }
 
         nextBlock = NexusBlock.UNKNOWN;
@@ -432,8 +463,9 @@ public class NexusImporter {
                         if (comment.matches("^W\\s+[\\+\\-]?[\\d\\.]+")) {
                             weight = new Double(comment.substring(2));
                         } 
-                        tree.setAttribute(internalNode, WEIGHT_ATTRIBUTE, weight);
                     }
+                    tree.setAttribute(internalNode, TreeUtils.TREE_WEIGHT_ATTRIBUTE, weight);
+                    tree.setAttribute(internalNode, TreeUtils.TREE_NAME_ATTRIBUTE, treeName);
 
                 } catch (EOFException e) {
                     // If we reach EOF we may as well return what we have?

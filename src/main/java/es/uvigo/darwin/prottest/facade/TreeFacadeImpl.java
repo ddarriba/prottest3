@@ -19,10 +19,11 @@ public class TreeFacadeImpl implements TreeFacade {
 		pal.tree.TreeUtils.report(tree, outputWriter);
 	}
 	
+        @Deprecated
 	public void displayNewickTree(Tree tree,
 			PrintWriter outputWriter) {
 		
-		TreeUtils.printNH(outputWriter, tree, true, true);
+		TreeUtils.printNH(outputWriter, tree, true, true, true);
 	}
 
 	public void displayConsensusTree(List<Model> modelList,

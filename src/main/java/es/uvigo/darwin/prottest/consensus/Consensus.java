@@ -15,8 +15,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 import pal.misc.IdGroup;
 import pal.tree.Node;
@@ -31,7 +29,9 @@ import es.uvigo.darwin.prottest.util.Utilities;
 import es.uvigo.darwin.prottest.util.exception.ImportException;
 import es.uvigo.darwin.prottest.util.exception.ProtTestInternalException;
 import es.uvigo.darwin.prottest.util.fileio.NexusExporter;
+import java.io.StringWriter;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Set;
 import pal.misc.Identifier;
 
@@ -40,13 +40,17 @@ import pal.misc.Identifier;
  */
 public class Consensus {
 
-    /** The Constant FIRST. */
-    private static final int FIRST = 0;
     /** The Constant SUPPORT_AS_PERCENT. */
     final static public boolean SUPPORT_AS_PERCENT = false;
+    final static public int BRANCH_LENGTHS_AVERAGE = 1;
+    final static public int BRANCH_LENGTHS_MEDIAN = 2;
+            
+    private static final BranchDistances DEFAULT_BRANCH_DISTANCES = BranchDistances.WeightedAverage;
+    /** The Constant FIRST. */
+    private static final int FIRST = 0;
     /** The trees. */
     private List<WeightedTree> trees;
-    /** The cum weight. */
+    /** The cumWeight weight. */
     private double cumWeight = 0.0;
     /** The num taxa. */
     private int numTaxa;
@@ -121,8 +125,20 @@ public class Consensus {
      * Instantiates a new consensus tree builder.
      * 
      * @param ic the information criterion to build the weighted trees
+     * @param supportThreshold the minimum support for a clade
      */
     public Consensus(InformationCriterion ic, double supportThreshold) {
+        this(ic, supportThreshold, 0);
+    }
+    
+    /**
+     * Instantiates a new consensus tree builder.
+     * 
+     * @param ic the information criterion to build the weighted trees
+     * @param supportThreshold the minimum support for a clade
+     * @param branchDistances the method to get the consensus branch lengths
+     */
+    public Consensus(InformationCriterion ic, double supportThreshold, int branchDistances) {
         this.trees = new ArrayList<WeightedTree>();
         for (SelectionModel model : ic.getConfidenceModels()) {
             WeightedTree wTree = new WeightedTree(
@@ -130,29 +146,58 @@ public class Consensus {
                     model.getWeightValue());
             this.addTree(wTree);
         }
-        consensusTree = buildTree(supportThreshold);
+        consensusTree = buildTree(supportThreshold, getBranchDistances(branchDistances));
     }
 
     /**
      * Instantiates a new unweighted consensus builder.
      * 
      * @param trees the trees
+     * @param supportThreshold the minimum support for a clade
      */
     public Consensus(List<Tree> trees, double supportThreshold) {
+        this(trees, supportThreshold, 0);
+    }
+
+    /**
+     * Instantiates a new unweighted consensus builder.
+     * 
+     * @param trees the trees
+     * @param supportThreshold the minimum support for a clade
+     * @param branchDistances the method to get the consensus branch lengths
+     */
+    public Consensus(List<Tree> trees, double supportThreshold, int branchDistances) {
         this.trees = new ArrayList<WeightedTree>();
         for (Tree tree : trees) {
             this.addTree(new UnweightedTree(tree));
         }
-        consensusTree = buildTree(supportThreshold);
+
+        consensusTree = buildTree(supportThreshold, getBranchDistances(branchDistances));
+    }
+    
+    /**
+     * Instantiates a new unweighted consensus builder.
+     * 
+     * @param treesFile the file with the set of trees in Newick format
+     * @param supportThreshold the minimum support for a clade
+     * @throws IOException 
+     */
+    public Consensus(File treesFile, double supportThreshold)
+            throws ProtTestInternalException, IOException {
+
+        this(treesFile, supportThreshold, 0);
+
     }
 
     /**
      * Instantiates a new unweighted consensus builder.
      * 
      * @param treesFile the file with the set of trees in Newick format
+     * @param supportThreshold the minimum support for a clade
+     * @param branchDistances the method to get the consensus branch lengths
      * @throws IOException 
      */
-    public Consensus(File treesFile, double supportThreshold)
+    public Consensus(File treesFile, double supportThreshold, int branchDistances)
             throws ProtTestInternalException, IOException {
 
         TreeReader treeReader;
@@ -168,7 +213,7 @@ public class Consensus {
         this.numTaxa = treeReader.getNumTaxa();
         this.idGroup = treeReader.getIdGroup();
 
-        consensusTree = buildTree(supportThreshold);
+        consensusTree = buildTree(supportThreshold, getBranchDistances(branchDistances));
 
         String fileName = treesFile.getName();
         if (fileName.contains(".")) {
@@ -186,7 +231,7 @@ public class Consensus {
         nw.close();
 
     }
-
+    
     /**
      * Calculates rooted support.
      * 
@@ -263,10 +308,8 @@ public class Consensus {
      * 
      * @return the consensus tree
      */
-    private Tree buildTree(double supportThreshold) {
-
-        BranchDistances branchDistances = BranchDistances.WeightedMedian;//.WeightedAverage;
-
+    private Tree buildTree(double supportThreshold, BranchDistances branchDistances) {
+        
         if (trees.size() == 0) {
             throw new ProtTestInternalException("There are no trees to consense");
         }
@@ -332,17 +375,17 @@ public class Consensus {
             if (cladeSize == numTaxa) {
                 // root
                 cons.getRoot().setNodeHeight(s.sumBranches / trees.size());
-                cons.getRoot().setBranchLength(branchDistances.build(s.branchLengths, s.treesWeightWithClade));
+                cons.getRoot().setBranchLength(branchDistances.build(s.branchLengths));
                 continue;
             }
 
-            if (s.treesWeightWithClade == this.cumWeight && cladeSize == 1) {
+            if (Math.abs(s.treesWeightWithClade - this.cumWeight) < 1e-5 && cladeSize == 1) {
                 // leaf/external node
                 final int nt = clade.nextOnBit(0);
                 //TODO: Comprobar que nt corresponde a idGroup[nt];
                 final Node leaf = cons.getExternalNode(nt);
                 leaf.setNodeHeight(s.sumBranches / trees.size());
-                leaf.setBranchLength(branchDistances.build(s.branchLengths, s.treesWeightWithClade));
+                leaf.setBranchLength(branchDistances.build(s.branchLengths));
             } else {
                 queue.add(se);
             }
@@ -416,7 +459,7 @@ public class Consensus {
 
                     final double height = s.sumBranches / s.nTreesWithClade;
                     detached.setNodeHeight(height);
-                    detached.setBranchLength(branchDistances.build(s.branchLengths, s.treesWeightWithClade));
+                    detached.setBranchLength(branchDistances.build(s.branchLengths));
 
                     cons.setAttribute(detached, TreeUtils.TREE_CLADE_SUPPORT_ATTRIBUTE, SUPPORT_AS_PERCENT ? 100 * psupport : psupport);
 
@@ -454,10 +497,12 @@ public class Consensus {
              * 
              * @return the weighted average of the set
              */
-            public double build(SortedSet<WeightLengthPair> values, double cumWeight) {
-                double avg = 0;
+            public double build(List<WeightLengthPair> values) {
+                double avg = 0.0;
+                double cumWeight = 0.0;
                 for (WeightLengthPair pair : values) {
                     avg += pair.branchLength * pair.weight;
+                    cumWeight += pair.weight;
                 }
                 avg /= cumWeight;
                 return avg;
@@ -473,8 +518,13 @@ public class Consensus {
              * 
              * @return the weighted median of the set
              */
-            public double build(SortedSet<WeightLengthPair> values, double cumWeight) {
+            public double build(List<WeightLengthPair> values) {
+                Collections.sort(values); 
                 double median = -1;
+                double cumWeight = 0.0;
+                for (WeightLengthPair pair : values) {
+                    cumWeight += pair.weight;
+                }
                 double halfWeight = cumWeight / 2.0;
                 double cumValue = 0.0;
                 for (WeightLengthPair pair : values) {
@@ -488,7 +538,7 @@ public class Consensus {
             }
         };
 
-        public abstract double build(SortedSet<WeightLengthPair> values, double cumWeight);
+        public abstract double build(List<WeightLengthPair> values);
     }
 
     /**
@@ -501,7 +551,7 @@ public class Consensus {
         /** The trees weight with clade. */
         private double treesWeightWithClade;
         /** The branch lengths. */
-        private SortedSet<WeightLengthPair> branchLengths;
+        private ArrayList<WeightLengthPair> branchLengths;
         /** Sum of node heights of trees containing the clade. */
         private double sumBranches;
 
@@ -516,7 +566,7 @@ public class Consensus {
             sumBranches = 0.0;
             treesWeightWithClade = 0.0;
             nTreesWithClade = 0;
-            branchLengths = new TreeSet<WeightLengthPair>();
+            branchLengths = new ArrayList<WeightLengthPair>();
         }
 
         /**
@@ -531,6 +581,11 @@ public class Consensus {
             branchLengths.add(new WeightLengthPair(weight, branchLength));
             treesWeightWithClade += weight;
             ++nTreesWithClade;
+
+            double testW = 0.0;
+            for (WeightLengthPair wlp : branchLengths) {
+                testW += wlp.weight;
+            }
         }
     }
 
@@ -543,7 +598,7 @@ public class Consensus {
             this.weight = weight;
             this.branchLength = branchLength;
         }
-
+        
         @Override
         public int compareTo(WeightLengthPair o) {
             if (branchLength < o.branchLength) {
@@ -571,14 +626,15 @@ public class Consensus {
     }
 
     public static void main(String[] args) {
-
+        
         PrintWriter out = new PrintWriter(System.out);
 
-        if (args.length != 2 || args[0].contains("help")) {
-            out.println("This class requires 2 arguments: [Tree set filename] and [Threshold value]");
+        if (args.length < 2 || args[0].contains("help")) {
+            out.println("This class requires at least 2 arguments: Tree set filename, Threshold value"
+                    + " and optionally the branch length calculation method [avg (default), median]");
             out.println("The file format should be:");
-            out.println("    (Newick's tree)[Weight];");
-            out.println("    ...");
+            out.println("    · (Newick's tree)[Weight];");
+            out.println("    · Nexus format tree set");
             out.flush();
             System.exit(-1);
         }
@@ -587,7 +643,17 @@ public class Consensus {
         Double threshold = Double.parseDouble(args[1]);
         File f = new File(filename);
         try {
-            Consensus consensus = new Consensus(f, threshold);
+            Consensus consensus;
+            if (args.length >= 3) {
+                if (args[2].equalsIgnoreCase("median"))
+                    consensus = new Consensus(f, threshold, BRANCH_LENGTHS_MEDIAN);
+                else if (args[2].equalsIgnoreCase("avg"))
+                    consensus = new Consensus(f, threshold, BRANCH_LENGTHS_AVERAGE);
+                else
+                    consensus = new Consensus(f, threshold);
+            } else {
+                consensus = new Consensus(f, threshold);
+            }
             Tree consensusTree = consensus.getConsensusTree();
             out.println("");
 
@@ -623,11 +689,21 @@ public class Consensus {
             out.println(" ");
             out.println("Sets included in the consensus tree");
             out.println(" ");
+            out.print("    ");
+            for (int i = 0; i < consensus.getIdGroup().getIdCount(); i++) {
+                out.print(i+1);
+            }
+            out.println(" ");
             for (FixedBitSet fbs : splitsInConsensus) {
                 out.println("    " + fbs.splitRepresentation() + " ( " + Utilities.round(consensus.getSupport().get(fbs).getTreesWeightWithClade(), 3) + " )");
             }
             out.println(" ");
             out.println("Sets NOT included in consensus tree");
+            out.println(" ");
+            out.print("    ");
+            for (int i = 0; i < consensus.getIdGroup().getIdCount(); i++) {
+                out.print(i+1);
+            }
             out.println(" ");
             for (FixedBitSet fbs : splitsOutFromConsensus) {
                 out.println("    " + fbs.splitRepresentation() + " ( " + Utilities.round(consensus.getSupport().get(fbs).getTreesWeightWithClade(), 3) + " )");
@@ -653,5 +729,21 @@ public class Consensus {
             e1.printStackTrace();
         }
         out.flush();
+    }
+    
+    private BranchDistances getBranchDistances(int value) {
+        BranchDistances bd;
+        switch (value) {
+            case BRANCH_LENGTHS_AVERAGE:
+                bd = BranchDistances.WeightedAverage;
+                break;
+            case BRANCH_LENGTHS_MEDIAN:
+                bd = BranchDistances.WeightedMedian;
+                break;
+            default:
+                // Weighted average
+                bd = DEFAULT_BRANCH_DISTANCES;
+        }               
+        return bd;
     }
 }

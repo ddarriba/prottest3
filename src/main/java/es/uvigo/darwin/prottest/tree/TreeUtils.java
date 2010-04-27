@@ -10,7 +10,6 @@ import pal.io.FormattedOutput;
 import pal.misc.IdGroup;
 import pal.misc.Identifier;
 import pal.misc.SimpleIdGroup;
-import pal.tree.AttributeNode;
 import pal.tree.NodeUtils;
 
 /**

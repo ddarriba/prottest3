@@ -588,9 +588,14 @@ public class Consensus extends javax.swing.JFrame {
                 displayWriter.println("----------------------------------------");
 
                 displayWriter.println("");
-                facade.displayNewickTree(consensus, displayWriter);
+                String newickTree = facade.toNewick(consensus, true, true, true);
+                displayWriter.println(newickTree);
                 displayWriter.println("");
-                facade.displayASCIITree(consensus, displayWriter);
+                displayWriter.println(facade.toASCII(consensus));
+                displayWriter.println(" ");
+                displayWriter.println(facade.toASCII(consensus));
+                displayWriter.println(" ");
+                displayWriter.println(facade.toASCII(consensus));
             } else {
                 displayArea.setForeground(XProtTestView.CRITIC_COLOR);
                 displayWriter.println(resourceMap.getString("msg-no-data"));

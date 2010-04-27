@@ -20,6 +20,8 @@ public abstract class ApplicationGlobals {
 
 	/** The Constant ANALYZER_RAXML. It is used to check the analyzer in the properties file */
 	public static final String ANALYZER_RAXML = "raxml";
+        
+        public static final String PROP_BRANCH_LENGTH_AVERAGING = "branch_length_averaging";
 	
 	// not including gaps (20 amino-acids)
 	/** The Constant NUM_STATES. */

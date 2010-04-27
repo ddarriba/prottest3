@@ -178,12 +178,17 @@ public class TreeView extends javax.swing.JFrame {
 
     private void displayAsciiTree(Tree tree) {
         displayArea.setText("");
-        facade.displayASCIITree(tree, displayWriter);
+        displayWriter.println(facade.toASCII(tree));
+        displayWriter.println(" ");
+        displayWriter.println(facade.branchInfo(tree));
+        displayWriter.println(" ");
+        displayWriter.println(facade.heightInfo(tree));
     }
 
     private void displayNewickTree(Tree tree) {
         displayArea.setText("");
-        facade.displayNewickTree(tree, displayWriter);
+        String newickTree = facade.toNewick(tree, true, true, false);
+        displayWriter.println(newickTree);
     }
 
     

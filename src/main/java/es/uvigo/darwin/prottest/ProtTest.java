@@ -29,6 +29,7 @@ import es.uvigo.darwin.prottest.util.exception.AlignmentFormatException;
 import es.uvigo.darwin.prottest.util.exception.ProtTestInternalException;
 import es.uvigo.darwin.prottest.util.factory.ProtTestFactory;
 import es.uvigo.darwin.prottest.util.printer.ProtTestPrinter;
+import pal.tree.Tree;
 
 /**
  * This is the main class of ProtTest. It calls the methods in the
@@ -185,8 +186,8 @@ public class ProtTest implements XMLConstants {
 							opts.getConsensusThreshold() + ")");
 					printer.getOutputWriter()
 						.println("***********************************************");
-					treeFacade.displayConsensusTree(allModelsList, 
-							opts.getConsensusThreshold(), printer.getOutputWriter());
+                                        Tree consensus = treeFacade.createConsensusTree(ic, opts.getConsensusThreshold());
+                                        printer.getOutputWriter().println(treeFacade.toASCII(consensus));
 				}
 			}
 		} catch (ProtTestInternalException e) {

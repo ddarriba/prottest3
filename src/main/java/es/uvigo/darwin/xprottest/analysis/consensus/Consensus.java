@@ -593,9 +593,9 @@ public class Consensus extends javax.swing.JFrame {
                 displayWriter.println("");
                 displayWriter.println(facade.toASCII(consensus));
                 displayWriter.println(" ");
-                displayWriter.println(facade.toASCII(consensus));
+                displayWriter.println(facade.branchInfo(consensus));
                 displayWriter.println(" ");
-                displayWriter.println(facade.toASCII(consensus));
+                displayWriter.println(facade.heightInfo(consensus));
             } else {
                 displayArea.setForeground(XProtTestView.CRITIC_COLOR);
                 displayWriter.println(resourceMap.getString("msg-no-data"));

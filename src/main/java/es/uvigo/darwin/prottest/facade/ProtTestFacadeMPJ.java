@@ -25,6 +25,7 @@ import es.uvigo.darwin.prottest.util.collection.SingleModelCollection;
 import es.uvigo.darwin.prottest.util.comparator.AminoAcidModelNaturalComparator;
 import es.uvigo.darwin.prottest.util.comparator.ModelDistributionHeuristic;
 import es.uvigo.darwin.prottest.util.printer.ProtTestFormattedOutput;
+import java.io.StringWriter;
 
 /**
  * A parallel implementation of the ProtTest facade.
@@ -100,22 +101,24 @@ public class ProtTestFacadeMPJ extends ProtTestFacadeImpl {
 			strategy = new StaticDistributionStrategy(mpjMe, mpjSize, options);
 		strategy.addObserver(this);
 		
-		PrintWriter out = options.getPrinter().getOutputWriter();
 		PrintWriter err = options.getPrinter().getErrorWriter();
 		Model[] allModels = null;
 		
 		//For each model, for each distribution,... optimize the model and calculate some statistics:
 		if (mpjMe == 0) {
-			out.println("**********************************************************");
+			println("**********************************************************");
 			//this is only for doing output prettier
 			if(options.getSampleSizeMode() == ApplicationGlobals.SIZEMODE_SHANNON || options.getSampleSizeMode() == ApplicationGlobals.SIZEMODE_SHANNON_NxL) {
 				double tmpSampleSize = ProtTestAlignment.calculateShannonSampleSize(options.getAlignment(),options.getSampleSizeMode(),true);
 				err.println("Shannon entropy based sample size: "+ ProtTestFormattedOutput.getDecimalString(tmpSampleSize,2));
 			}
-			out.println("Observed number of invariant sites: " + ProtTestAlignment.calculateInvariableSites(options.getAlignment(), false));
-			ProtTestAlignment.printFrequencies(ProtTestAlignment.getFrequencies(options.getAlignment()), out );
-			out.println("**********************************************************");
-			out.println("");
+			println("Observed number of invariant sites: " + ProtTestAlignment.calculateInvariableSites(options.getAlignment(), false));
+                        StringWriter sw = new StringWriter();
+			ProtTestAlignment.printFrequencies(ProtTestAlignment.getFrequencies(options.getAlignment()), new PrintWriter(sw) );
+                        sw.flush();
+                        println(sw.toString());
+			println("**********************************************************");
+			println("");
 			
 			allModels = strategy.distribute(arrayListModel, new ModelDistributionHeuristic());
 		} else {
@@ -134,27 +137,29 @@ public class ProtTestFacadeMPJ extends ProtTestFacadeImpl {
 				List<Model> sortedModels = new SingleModelCollection(allModels, options.getAlignment());
 				Collections.sort(sortedModels, new AminoAcidModelNaturalComparator());
 				for (Model model : sortedModels) {
-					out.println("");
-					model.printReport(out, options.isDebug());
-					out.println("");
+					println("");
+					model.printReport();
+					println("");
 				}
-				out.println("************************************************************");
-				out.println("Date: " +   (new Date()).toString());
+				println("************************************************************");
+				println("Date: " +   (new Date()).toString());
 				for (int i = 0; i < mpjSize; i++)
-					out.println("Runtime processor "+ i +":  " +   Utilities.arrangeRuntime(runtimes[i]));
-				out.println("Minimum runtime: " + Utilities.arrangeRuntime(Utilities.getMin(runtimes)));
-				out.println("Maximum runtime: " + Utilities.arrangeRuntime(Utilities.getMax(runtimes)));
-				out.println("Average runtime: " + Utilities.arrangeRuntime(Utilities.getAverage(runtimes)));
-				out.println("");			out.println("");
-				out.flush();
+					println("Runtime processor "+ i +":  " +   Utilities.arrangeRuntime(runtimes[i]));
+				println("Minimum runtime: " + Utilities.arrangeRuntime(Utilities.getMin(runtimes)));
+				println("Maximum runtime: " + Utilities.arrangeRuntime(Utilities.getMax(runtimes)));
+				println("Average runtime: " + Utilities.arrangeRuntime(Utilities.getAverage(runtimes)));
+				println("");			
+                                println("");
+				flush();
 			}
 		}
 		else {
-			out.println("************************************************************");
+			println("************************************************************");
 			String runtimeStr = Utilities.calculateRuntime(startTime, endTime);
-			out.println("Date   :  " +   (new Date()).toString());
-			out.println("Runtime:  " +   runtimeStr);
-			out.println("");			out.println("");
+			println("Date   :  " +   (new Date()).toString());
+			println("Runtime:  " +   runtimeStr);
+			println("");			
+                        println("");
 		}
 		
 		return allModels;

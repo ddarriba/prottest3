@@ -1,10 +1,8 @@
 /*
  * XProtTestApp.java
  */
-
 package es.uvigo.darwin.xprottest;
 
-import org.jdesktop.application.Action;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
 import es.uvigo.darwin.prottest.facade.ProtTestFacade;
@@ -19,27 +17,27 @@ public class XProtTestApp extends SingleFrameApplication {
 
     public static final int ERROR_BEHAVIOR_CONTINUE = 0;
     public static final int ERROR_BEHAVIOR_STOP = 1;
-    
     private ProtTestFacade prottestFacade;
-    
+
     /**
      * At startup create and show the main frame of the application.
      */
-    @Override protected void startup() {
+    @Override
+    protected void startup() {
         prottestFacade = new ProtTestFacadeThread(
-                Runtime.getRuntime().availableProcessors()
-                );
+                Runtime.getRuntime().availableProcessors());
 //        prottestFacade = new ProtTestFacadeSequential();
         XProtTestView view = new XProtTestView(this, prottestFacade);
         show(view);
     }
-    
+
     /**
      * This method is to initialize the specified window by injecting resources.
      * Windows shown in our application come fully initialized from the GUI
      * builder, so this additional configuration is not needed.
      */
-    @Override protected void configureWindow(java.awt.Window root) {
+    @Override
+    protected void configureWindow(java.awt.Window root) {
     }
 
     /**
@@ -64,5 +62,4 @@ public class XProtTestApp extends SingleFrameApplication {
         fc.setCurrentDirectory(new File("."));
         return fc;
     }
-
 }

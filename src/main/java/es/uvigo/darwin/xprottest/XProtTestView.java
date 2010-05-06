@@ -42,6 +42,7 @@ import es.uvigo.darwin.prottest.model.Model;
 import es.uvigo.darwin.prottest.util.ProtTestAlignment;
 import es.uvigo.darwin.prottest.util.exception.AlignmentFormatException;
 import es.uvigo.darwin.prottest.util.exception.ProtTestInternalException;
+import es.uvigo.darwin.prottest.util.logging.ProtTestLogger;
 import es.uvigo.darwin.prottest.util.printer.ProtTestFormattedOutput;
 import es.uvigo.darwin.prottest.util.printer.ProtTestPrinter;
 import java.awt.Color;
@@ -179,7 +180,8 @@ public class XProtTestView extends FrameView {
         mainTextArea.setFont(f);
 
         displayWriter = new PrintWriter(new TextAreaAppender(mainTextArea));
-        
+
+        ProtTestLogger.getDefaultLogger().addHandler(displayWriter);
         printer = new ProtTestPrinter(displayWriter, new PrintWriter(System.err));
         
         // status bar initialization - message timeout, idle icon and busy animation, etc

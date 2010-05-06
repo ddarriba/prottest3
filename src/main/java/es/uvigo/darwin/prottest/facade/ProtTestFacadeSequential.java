@@ -17,6 +17,7 @@ import es.uvigo.darwin.prottest.util.collection.ModelCollection;
 import es.uvigo.darwin.prottest.util.collection.SingleModelCollection;
 import es.uvigo.darwin.prottest.util.factory.ProtTestFactory;
 import es.uvigo.darwin.prottest.util.printer.ProtTestFormattedOutput;
+import java.io.StringWriter;
 
 /**
  * A sequential implementation of the ProtTest facade.
@@ -31,21 +32,22 @@ public class ProtTestFacadeSequential extends ProtTestFacadeImpl {
 	private ProtTestFactory factory = ProtTestFactory.getInstance();
 	
 	public Model[] analyze(ApplicationOptions options) {
-		PrintWriter out = options.getPrinter().getOutputWriter();
 		PrintWriter err = options.getPrinter().getErrorWriter();
 		
 		//For each model, for each distribution,... optimize the model and calculate some statistics:
 
-		out.println("**********************************************************");
+		println("**********************************************************");
 		//this is only for doing output prettier
 		if(options.getSampleSizeMode() == ApplicationGlobals.SIZEMODE_SHANNON || options.getSampleSizeMode() == ApplicationGlobals.SIZEMODE_SHANNON_NxL) {
 			double tmpSampleSize = ProtTestAlignment.calculateShannonSampleSize(options.getAlignment(),options.getSampleSizeMode(),true);
 			err.println("Shannon entropy based sample size: "+ ProtTestFormattedOutput.getDecimalString(tmpSampleSize,2));
 		}
-		out.println("Observed number of invariant sites: " + ProtTestAlignment.calculateInvariableSites(options.getAlignment(), false));
-		ProtTestAlignment.printFrequencies(ProtTestAlignment.getFrequencies(options.getAlignment()), out );
-		out.println("**********************************************************");
-		out.println("");
+		println("Observed number of invariant sites: " + ProtTestAlignment.calculateInvariableSites(options.getAlignment(), false));
+                StringWriter sw = new StringWriter();
+		ProtTestAlignment.printFrequencies(ProtTestAlignment.getFrequencies(options.getAlignment()), 
+                        new PrintWriter(sw));
+		println("**********************************************************");
+		println("");
 		
 		//TimeStamp timer = new TimeStamp();
 		Date startDate = new Date();
@@ -74,7 +76,7 @@ public class ProtTestFacadeSequential extends ProtTestFacadeImpl {
 		numberOfModels = arrayListModel.size();
 		modelSet = arrayListModel;
 	
-		out.flush();
+		flush();
 		
 		RunEstimator[] runenv = new RunEstimator[modelSet.size()];
 		
@@ -86,8 +88,8 @@ public class ProtTestFacadeSequential extends ProtTestFacadeImpl {
 			runenv[current].addObserver(this);
 			runenv[current].run();
 			
-			runenv[current].report(out, options.isDebug());
-			out.flush();
+			runenv[current].report();
+			flush();
 			current++;
 
 		}
@@ -96,11 +98,11 @@ public class ProtTestFacadeSequential extends ProtTestFacadeImpl {
 
 		Model[] allModels = new Model[numberOfModels];
 		
-		out.println("************************************************************");
+		println("************************************************************");
 		String runtimeStr = Utilities.calculateRuntime(startTime, endTime);
-		out.println("Date   :  " +   (new Date()).toString());
-		out.println("Runtime:  " +   runtimeStr);
-		out.println("");			out.println("");
+		println("Date   :  " +   (new Date()).toString());
+		println("Runtime:  " +   runtimeStr);
+		println("");			println("");
 		allModels = modelSet.toArray(new Model[0]);
 
 		cpManager.done();

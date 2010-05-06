@@ -31,12 +31,10 @@ public interface RunEstimator extends Runnable {
 	public boolean optimizeModel();
 	
 	/**
-	 * Reports out the result of the optimization: the optimized parameters of the model.
-	 * 
-	 * @param out the output writer where the output report will be written.
-	 * @param verbose prints out also the alignment and the tree.
+	 * Reports out the result of the optimization into the application loggers: 
+         * the optimized parameters of the model.
 	 */
-	public void report(PrintWriter out, boolean verbose);
+	public void report();
 	
 	/* (non-Javadoc)
 	 * @see es.uvigo.darwin.prottest.observer.ObservableModelUpdater#addObserver(es.uvigo.darwin.prottest.observer.ObservableModelUpdater)

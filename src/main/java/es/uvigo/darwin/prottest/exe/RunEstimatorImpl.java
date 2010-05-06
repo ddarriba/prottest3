@@ -103,10 +103,10 @@ public abstract class RunEstimatorImpl
 	/* (non-Javadoc)
 	 * @see es.uvigo.darwin.prottest.exe.RunEstimator#report(java.io.PrintWriter, boolean)
 	 */
-	public void report(PrintWriter out, boolean verbose) {
+	public void report() {
 		
 		if (optimized) {
-			printReport(out, verbose);
+			printReport();
 		} else {
 			throw new ProtTestInternalException("The model is not optimized");
 		}
@@ -126,7 +126,7 @@ public abstract class RunEstimatorImpl
 	 * @param out the output writer to write in
 	 * @param verbose if debug mode is on
 	 */
-	public abstract void printReport(PrintWriter out, boolean verbose);
+	public abstract void printReport();
 	
 	/**
 	 * Deletes temporary files of the execution.

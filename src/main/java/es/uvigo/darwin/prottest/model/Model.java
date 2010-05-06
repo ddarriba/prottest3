@@ -12,62 +12,50 @@ import es.uvigo.darwin.prottest.model.state.ModelLkState;
 import es.uvigo.darwin.prottest.util.exception.ProtTestInternalException;
 import es.uvigo.darwin.prottest.util.printer.ProtTestFormattedOutput;
 
+import static es.uvigo.darwin.prottest.util.logging.ProtTestLogger.*;
+
 // TODO: Auto-generated Javadoc
+import java.io.StringWriter;
+
 /**
  * Substitution model.
  */
-public abstract class Model implements Serializable{
+public abstract class Model implements Serializable {
 
     /** The serialVersionUID. */
     private static final long serialVersionUID = 20090804L;
 
     // distributions
-
     /** Useful constant for uniform distribution. */
-    public static final int DISTRIBUTION_UNIFORM    = 0;
-    
+    public static final int DISTRIBUTION_UNIFORM = 0;
     /** Useful constant for distribution with a proportion of invariable sites. */
     public static final int DISTRIBUTION_INVARIABLE = 1;
-    
     /** Useful constant for gamma distribution. */
-    public static final int DISTRIBUTION_GAMMA      = 2;
-    
+    public static final int DISTRIBUTION_GAMMA = 2;
     /** Useful constant for gamma distribution with a proportion of invariable sites. */
-    public static final int DISTRIBUTION_GAMMA_INV  = 3;
-    
+    public static final int DISTRIBUTION_GAMMA_INV = 3;
     /** Useful constant for consider observed frequencies. */
     public static final String PROP_PLUS_F = "plusF";
-    
     /** The matrix name. */
-    private String 	matrix;
-
+    private String matrix;
     /** The distribution. */
-    private int 	distribution;
-
+    private int distribution;
     /** Consider observed frequencies. */
-    private boolean	plusF;
-
+    private boolean plusF;
     /** The frequencies distribution. */
-    protected int 	frequenciesDistribution;
-
+    protected int frequenciesDistribution;
     /** The alignment hashcode. */
-    private int	alignment;
-
+    private int alignment;
     /** The number of sequences. */
-    private int     numberOfSequences;
-
+    private int numberOfSequences;
     /** The tree. */
-    private Tree		tree;
-
+    private Tree tree;
     /** The number of model parameters. */
 //	private  int numModelParameters;
-
     /** The number of transition categories. */
-    private  int numOfTransCategories;
-
+    private int numOfTransCategories;
     /** The likelihood calculation state. */
     private ModelLkState lkState;
-
     /** The external executor command line. */
     private String[] commandLine;
 
@@ -77,7 +65,7 @@ public abstract class Model implements Serializable{
      * @return the likelihood estimated value
      */
     public double getLk() {
-            return lkState.getLk();
+        return lkState.getLk();
     }
 
     /**
@@ -86,7 +74,7 @@ public abstract class Model implements Serializable{
      * @return true, if is computed
      */
     public boolean isComputed() {
-            return (lkState instanceof ModelFilledLkState);
+        return (lkState instanceof ModelFilledLkState);
     }
 
     /**
@@ -95,7 +83,7 @@ public abstract class Model implements Serializable{
      * @param lk the new likelihood estimated value
      */
     public void setLk(double lk) {
-            lkState = lkState.setLk(lk);
+        lkState = lkState.setLk(lk);
     }
 
     /**
@@ -104,7 +92,7 @@ public abstract class Model implements Serializable{
      * @return the alpha estimated value
      */
     public double getAlpha() {
-            return lkState.getAlpha();
+        return lkState.getAlpha();
     }
 
     /**
@@ -113,7 +101,7 @@ public abstract class Model implements Serializable{
      * @param alpha the new alpha estimated value
      */
     public void setAlpha(double alpha) {
-            lkState = lkState.setAlpha(alpha);
+        lkState = lkState.setAlpha(alpha);
     }
 
     /**
@@ -122,7 +110,7 @@ public abstract class Model implements Serializable{
      * @return the proportion of invariant sites
      */
     public double getInv() {
-            return lkState.getInv();
+        return lkState.getInv();
     }
 
     /**
@@ -131,7 +119,7 @@ public abstract class Model implements Serializable{
      * @param inv the new proportion of invariant sites
      */
     public void setInv(double inv) {
-            lkState = lkState.setInv(inv);
+        lkState = lkState.setInv(inv);
     }
 
     /**
@@ -140,7 +128,7 @@ public abstract class Model implements Serializable{
      * @return the alignment hashcode
      */
     public int getAlignment() {
-            return alignment;
+        return alignment;
     }
 
     /**
@@ -149,10 +137,11 @@ public abstract class Model implements Serializable{
      * @param alignment the new alignment
      */
     public void setAlignment(Alignment alignment) {
-            if (this.alignment != 0 && this.alignment != alignment.toString().hashCode())
-                    throw new ProtTestInternalException("cannot set a different alignment");
-            this.alignment = alignment.toString().hashCode();
-            this.numberOfSequences = alignment.getSequenceCount();
+        if (this.alignment != 0 && this.alignment != alignment.toString().hashCode()) {
+            throw new ProtTestInternalException("cannot set a different alignment");
+        }
+        this.alignment = alignment.toString().hashCode();
+        this.numberOfSequences = alignment.getSequenceCount();
     }
 
     /**
@@ -161,18 +150,20 @@ public abstract class Model implements Serializable{
      * @return alignment equality
      */
     public boolean checkAlignment(Alignment alignment) {
-        if (alignment == null)
+        if (alignment == null) {
             return false;
+        }
         return (this.alignment == alignment.toString().hashCode() &&
                 this.numberOfSequences == alignment.getSequenceCount());
     }
+
     /**
      * Gets the tree.
      * 
      * @return the tree
      */
     public Tree getTree() {
-            return tree;
+        return tree;
     }
 
     /**
@@ -181,7 +172,7 @@ public abstract class Model implements Serializable{
      * @param tree the new tree
      */
     public void setTree(Tree tree) {
-            this.tree = tree;
+        this.tree = tree;
     }
 
     /**
@@ -190,7 +181,7 @@ public abstract class Model implements Serializable{
      * @return the command line
      */
     public String[] getCommandLine() {
-            return commandLine;
+        return commandLine;
     }
 
     /**
@@ -199,7 +190,7 @@ public abstract class Model implements Serializable{
      * @param commandLine the new command line
      */
     public void setCommandLine(String[] commandLine) {
-            this.commandLine = commandLine;
+        this.commandLine = commandLine;
     }
 
     /**
@@ -208,7 +199,7 @@ public abstract class Model implements Serializable{
      * @return the number of transition categories
      */
     public int getNumberOfTransitionCategories() {
-            return numOfTransCategories;
+        return numOfTransCategories;
     }
 
     /**
@@ -223,35 +214,37 @@ public abstract class Model implements Serializable{
      */
     public Model(String matrix, int distribution, boolean plusF, Alignment alignment, Tree tree, int ncat) {
 
-            if (distribution < 0 || distribution > 3)
-                    throw new ProtTestInternalException("Distribution not supported " + distribution);
+        if (distribution < 0 || distribution > 3) {
+            throw new ProtTestInternalException("Distribution not supported " + distribution);
+        }
 
-            if (alignment == null)
-                    throw new ProtTestInternalException("Null alignment");
+        if (alignment == null) {
+            throw new ProtTestInternalException("Null alignment");
+        }
 
-            this.matrix = matrix;
-            this.distribution = distribution;
-            this.plusF = plusF;
-            this.alignment = alignment.toString().hashCode();
-            this.numberOfSequences = alignment.getSequenceCount();
-            this.tree = tree;
-            this.lkState = new ModelEmptyLkState();
+        this.matrix = matrix;
+        this.distribution = distribution;
+        this.plusF = plusF;
+        this.alignment = alignment.toString().hashCode();
+        this.numberOfSequences = alignment.getSequenceCount();
+        this.tree = tree;
+        this.lkState = new ModelEmptyLkState();
 
 //		numBranches = 2*alignment.getSequenceCount() - 3;
-            switch(distribution) {
+        switch (distribution) {
             case DISTRIBUTION_UNIFORM:
-                    numOfTransCategories = 1;
-                    break;
+                numOfTransCategories = 1;
+                break;
             case DISTRIBUTION_INVARIABLE:
-                    numOfTransCategories = 2;
-                    break;
-            case DISTRIBUTION_GAMMA: 
-                    numOfTransCategories = ncat;
-                    break;
+                numOfTransCategories = 2;
+                break;
+            case DISTRIBUTION_GAMMA:
+                numOfTransCategories = ncat;
+                break;
             case DISTRIBUTION_GAMMA_INV:
-                    //TODO: Seguro????????? <= chequear. ¿¿9??
-                    numOfTransCategories = ncat;
-                    break;
+                //TODO: Seguro????????? <= chequear. ¿¿9??
+                numOfTransCategories = ncat;
+                break;
             }
 
     }
@@ -262,22 +255,22 @@ public abstract class Model implements Serializable{
      * @return the distribution parameters according with the distribution
      */
     public int getDistributionParameters() {
-            int value = -1;
-            switch(distribution) {
-                    case DISTRIBUTION_UNIFORM:
-                            value = 0;
-                            break;
-                    case DISTRIBUTION_INVARIABLE:
-                            value = 1;
-                            break;
-                    case DISTRIBUTION_GAMMA: 
-                            value = 1;
-                            break;
-                    case DISTRIBUTION_GAMMA_INV:
-                            value = 2;
-                            break;
+        int value = -1;
+        switch (distribution) {
+            case DISTRIBUTION_UNIFORM:
+                value = 0;
+                break;
+            case DISTRIBUTION_INVARIABLE:
+                value = 1;
+                break;
+            case DISTRIBUTION_GAMMA:
+                value = 1;
+                break;
+            case DISTRIBUTION_GAMMA_INV:
+                value = 2;
+                break;
             }
-            return value;
+        return value;
     }
 
     /**
@@ -293,7 +286,7 @@ public abstract class Model implements Serializable{
      * @return the matrix name
      */
     public String getMatrix() {
-            return matrix;
+        return matrix;
     }
 
     /**
@@ -302,7 +295,7 @@ public abstract class Model implements Serializable{
      * @return the distribution
      */
     public int getDistribution() {
-            return distribution;
+        return distribution;
     }
 
     /**
@@ -311,7 +304,7 @@ public abstract class Model implements Serializable{
      * @return true, if the model considers observed frequencies
      */
     public boolean isPlusF() {
-            return plusF;
+        return plusF;
     }
 
     /* (non-Javadoc)
@@ -319,13 +312,12 @@ public abstract class Model implements Serializable{
      */
     @Override
     public int hashCode() {
-            final int prime = 31;
-            int result = 1;
-            result = prime * result + distribution;
-            result = prime * result
-                            + ((matrix == null) ? 0 : matrix.hashCode());
-            result = prime * result + (isPlusF() ? 1231 : 1237);
-            return result;
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + distribution;
+        result = prime * result + ((matrix == null) ? 0 : matrix.hashCode());
+        result = prime * result + (isPlusF() ? 1231 : 1237);
+        return result;
     }
 
     /* (non-Javadoc)
@@ -333,23 +325,30 @@ public abstract class Model implements Serializable{
      */
     @Override
     public boolean equals(Object obj) {
-            if (this == obj)
-                    return true;
-            if (obj == null)
-                    return false;
-            if (getClass() != obj.getClass())
-                    return false;
-            Model other = (Model) obj;
-            if (distribution != other.distribution)
-                    return false;
-            if (matrix == null) {
-                    if (other.matrix != null)
-                            return false;
-            } else if (!matrix.equals(other.matrix))
-                    return false;
-            if (isPlusF() != other.isPlusF())
-                    return false;
+        if (this == obj) {
             return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        Model other = (Model) obj;
+        if (distribution != other.distribution) {
+            return false;
+        }
+        if (matrix == null) {
+            if (other.matrix != null) {
+                return false;
+            }
+        } else if (!matrix.equals(other.matrix)) {
+            return false;
+        }
+        if (isPlusF() != other.isPlusF()) {
+            return false;
+        }
+        return true;
     }
 
     /* (non-Javadoc)
@@ -357,8 +356,7 @@ public abstract class Model implements Serializable{
      */
     @Override
     public String toString() {
-            return "Model [distribution=" + distribution + ", matrix=" + matrix
-                            + ", plusF=" + isPlusF();
+        return "Model [distribution=" + distribution + ", matrix=" + matrix + ", plusF=" + isPlusF();
 //		+ ", weight=" + weight + "]";
     }
 
@@ -375,7 +373,7 @@ public abstract class Model implements Serializable{
      * @return the number of branches
      */
     public int getNumBranches() {
-            return 2*numberOfSequences - 3;
+        return 2 * numberOfSequences - 3;
     }
 
     /**
@@ -384,9 +382,8 @@ public abstract class Model implements Serializable{
      * @return true, if is gamma
      */
     public boolean isGamma() {
-            return (
-                            distribution == DISTRIBUTION_GAMMA ||
-                            distribution == DISTRIBUTION_GAMMA_INV );
+        return (distribution == DISTRIBUTION_GAMMA ||
+                distribution == DISTRIBUTION_GAMMA_INV);
     }
 
     /**
@@ -395,9 +392,8 @@ public abstract class Model implements Serializable{
      * @return true, if considers a proportion of invariant sites
      */
     public boolean isInv() {
-            return (
-                            distribution == DISTRIBUTION_INVARIABLE ||
-                            distribution == DISTRIBUTION_GAMMA_INV );
+        return (distribution == DISTRIBUTION_INVARIABLE ||
+                distribution == DISTRIBUTION_GAMMA_INV);
     }
 
     /**
@@ -406,32 +402,55 @@ public abstract class Model implements Serializable{
      * @param out the out
      * @param verbose the verbose
      */
-    public void printReport (PrintWriter out, boolean verbose) {
+    public void printReport() {
 
-            out.println("Model................................ : " + getModelName());
-            out.print  ("  Number of parameters............... : " + getNumberOfModelParameters());
-            out.println(" (" + (getNumberOfModelParameters()-getNumBranches()) + " + " + 
-                            getNumBranches() + " branch length estimates)");
+        println("Model................................ : " + getModelName());
+        print("  Number of parameters............... : " + getNumberOfModelParameters());
+        println(" (" + (getNumberOfModelParameters() - getNumBranches()) + " + " +
+                getNumBranches() + " branch length estimates)");
 
-            if (isComputed()) {
-                    if(isGamma()) 
-                            out.println("    gamma shape (" + getNumberOfTransitionCategories() + " rate categories).. = " + getAlpha());
-                    if(isInv())
-                            out.println("    proportion of invariable sites... = " + getInv());
-                    if(isPlusF())
-                            out.println("    aminoacid frequencies............ = observed (see above)"); 
-                    out.print  (" -lnL................................ = " + ProtTestFormattedOutput.getDecimalString((-1*getLk()),2));
-                    out.println("");
-
-                    if(verbose) {
-                            out.println("The tree:");
-                            out.println("---------");
-                            TreeUtils.report (getTree(), out);
-                            out.println("---------");
-                            TreeUtils.printNH(getTree(), out);
-                            out.println("");
-                    }
+        if (isComputed()) {
+            if (isGamma()) {
+                println("    gamma shape (" + getNumberOfTransitionCategories() + " rate categories).. = " + getAlpha());
             }
+            if (isInv()) {
+                println("    proportion of invariable sites... = " + getInv());
+            }
+            if (isPlusF()) {
+                println("    aminoacid frequencies............ = observed (see above)");
+            }
+            print(" -lnL................................ = " + ProtTestFormattedOutput.getDecimalString((-1 * getLk()), 2));
+            println("");
+
+            verboseln("The tree:");
+            verboseln("---------");
+            StringWriter ascciiSw = new StringWriter();
+            TreeUtils.report(getTree(), new PrintWriter(ascciiSw));
+            ascciiSw.flush();
+            verboseln(ascciiSw.toString());
+            StringWriter newickSw = new StringWriter();
+            verboseln("---------");
+            TreeUtils.printNH(getTree(), new PrintWriter(newickSw));
+            newickSw.flush();
+            verboseln(newickSw.toString());
+            verboseln("");
+        }
+        flush(Model.class);
     }
-	
+
+    private void print(String message) {
+        info(message, Model.class);
+    }
+
+    private void println(String message) {
+        infoln(message, Model.class);
+    }
+
+    private void verbose(String message) {
+        fine(message, Model.class);
+    }
+
+    private void verboseln(String message) {
+        fineln(message, Model.class);
+    }
 }

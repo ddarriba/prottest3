@@ -4,6 +4,7 @@ import java.io.PrintWriter;
 
 import es.uvigo.darwin.prottest.global.options.ApplicationOptions;
 import es.uvigo.darwin.prottest.model.Model;
+import es.uvigo.darwin.prottest.util.logging.ProtTestLogger;
 
 /**
  * A generic optimizer for amino-acid models
@@ -27,11 +28,12 @@ public abstract class AminoAcidRunEstimator extends RunEstimatorImpl {
 	/* (non-Javadoc)
 	 * @see es.uvigo.darwin.prottest.exe.RunEstimator#report(java.io.PrintWriter)
 	 */
-	public void printReport (PrintWriter out, boolean verbose) {
-		model.printReport(out, verbose);
+	public void printReport () {
+		model.printReport();
 		if (time != null)
-			out.println("     (" + time + ")");
-		out.println();
+			ProtTestLogger.getDefaultLogger().info("     (" + time + ")\n");
+                ProtTestLogger.getDefaultLogger().info("\n");
+                ProtTestLogger.getDefaultLogger().flush();
 	}
 
 }

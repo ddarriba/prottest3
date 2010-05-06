@@ -15,6 +15,7 @@ import java.util.logging.StreamHandler;
 public class ProtTestLogger {
 
     public static final String DEFAULT_LOGGER_NAME = "default";
+    public static final Level DEFAULT_LEVEL = Level.INFO;
     
     private static HashMap<String, ProtTestLogger> loggers;
     
@@ -31,11 +32,18 @@ public class ProtTestLogger {
     private List<Handler> handlers;
     private Handler stdHandler;
     
-    public static ProtTestLogger getLogger(String loggerName) {
+    public static ProtTestLogger getLogger(String loggerName, boolean force) {
         if (!loggers.containsKey(loggerName)) {
-            loggers.put(loggerName, new ProtTestLogger(loggerName));
+            if (force)
+                loggers.put(loggerName, new ProtTestLogger(loggerName));
+            else
+                return null;
         }
         return loggers.get(loggerName);
+    }
+    
+    public static boolean exists(Class classLogger) {
+        return getLogger(classLogger.getName(), false) != null;
     }
     
     public ProtTestLogger(String loggerName) {
@@ -50,6 +58,11 @@ public class ProtTestLogger {
         this.handlers = new ArrayList<Handler> ();
         stdHandler = new StreamHandler(System.out, new ProtTestLogFormatter());
         stdHandler.setLevel(Level.OFF);
+        handlers.add(stdHandler);
+    }
+    
+    public static ProtTestLogger getDefaultLogger() {
+        return getLogger(DEFAULT_LOGGER_NAME, true);
     }
     
     /**
@@ -75,22 +88,42 @@ public class ProtTestLogger {
         this.handlers.add(handler);
     }
     
+    public void addHandler(Handler[] newHandlers) {
+        for (Handler handler : newHandlers) {
+            if (handler == null) {
+                throw new NullPointerException();
+            }
+            if (!handlers.contains(handler))
+                this.handlers.add(handler);
+        }
+    }
+    
     public void addHandler(OutputStream out) {
+        addHandler(out, DEFAULT_LEVEL);
+    }
+    
+    public void addHandler(OutputStream out, Level level) {
         if (out == null) {
 	    throw new NullPointerException();
 	}
         Handler handler = new StreamHandler(out, 
                 new ProtTestLogFormatter());
+        handler.setLevel(level);
         this.handlers.add(handler);
     }
     
     public void addHandler(Writer out) {
+        addHandler(out, DEFAULT_LEVEL);
+    }
+    
+    public void addHandler(Writer out, Level level) {
         if (out == null) {
 	    throw new NullPointerException();
 	}
         Handler handler = new StreamHandler(
                 new WriterOutputStream(out),
                 new ProtTestLogFormatter());
+        handler.setLevel(level);
         this.handlers.add(handler);
     }
     
@@ -152,6 +185,69 @@ public class ProtTestLogger {
         log(Level.FINEST, text);
     }
     
+    public static void info(String text, Class loggingClass) {
+        log(Level.INFO, text, loggingClass);
+    }
+    
+    public static void warning(String text, Class loggingClass) {
+        log(Level.WARNING, text, loggingClass);
+    }
+    
+    public static void config(String text, Class loggingClass) {
+        log(Level.CONFIG, text, loggingClass);
+    }
+    
+    public static void severe(String text, Class loggingClass) {
+        log(Level.SEVERE, text, loggingClass);
+    }
+    
+    public static void fine(String text, Class loggingClass) {
+        log(Level.FINE, text, loggingClass);
+    }
+    
+    public static void finer(String text, Class loggingClass) {
+        log(Level.FINER, text, loggingClass);
+    }
+    
+    public static void finest(String text, Class loggingClass) {
+        log(Level.FINEST, text, loggingClass);
+    }
+    
+    public static void infoln(String text, Class loggingClass) {
+        log(Level.INFO, text + "\n", loggingClass);
+    }
+    
+    public static void warningln(String text, Class loggingClass) {
+        log(Level.WARNING, text + "\n", loggingClass);
+    }
+    
+    public static void configln(String text, Class loggingClass) {
+        log(Level.CONFIG, text + "\n", loggingClass);
+    }
+    
+    public static void severeln(String text, Class loggingClass) {
+        log(Level.SEVERE, text + "\n", loggingClass);
+    }
+    
+    public static void fineln(String text, Class loggingClass) {
+        log(Level.FINE, text + "\n", loggingClass);
+    }
+    
+    public static void finerln(String text, Class loggingClass) {
+        log(Level.FINER, text + "\n", loggingClass);
+    }
+    
+    public static void finestln(String text, Class loggingClass) {
+        log(Level.FINEST, text + "\n", loggingClass);
+    }
+    
+    public static void log(Level level, String text, Class loggingClass) {
+        // default logging + class logging
+        getDefaultLogger().log(level, text);
+        if (exists(loggingClass))
+            getLogger(loggingClass.getName(), false).log(level, text);
+    }
+    
     public void log(Level level, String text) {
         log(new LogRecord(level, text));
     }
@@ -160,11 +256,22 @@ public class ProtTestLogger {
         
         if (lr.getLevel().intValue() > loggerLevel.intValue() 
                 && loggerLevel.intValue() != Level.OFF.intValue()) {
-            
-            handlers.get(0).publish(lr);
+    
+            for (Handler handler : handlers)
+                handler.publish(lr);
             
         }
 
     }
     
+    public void flush() {
+        for (Handler handler : handlers)
+            handler.flush();
+    }
+    
+    public static void flush(Class loggingClass) {
+        getDefaultLogger().flush();
+        if (exists(loggingClass))
+            getLogger(loggingClass.getName(), false).flush();
+    }
 }

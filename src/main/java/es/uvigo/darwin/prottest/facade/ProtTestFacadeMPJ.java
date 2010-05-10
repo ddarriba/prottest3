@@ -101,7 +101,6 @@ public class ProtTestFacadeMPJ extends ProtTestFacadeImpl {
 			strategy = new StaticDistributionStrategy(mpjMe, mpjSize, options);
 		strategy.addObserver(this);
 		
-		PrintWriter err = options.getPrinter().getErrorWriter();
 		Model[] allModels = null;
 		
 		//For each model, for each distribution,... optimize the model and calculate some statistics:
@@ -110,7 +109,7 @@ public class ProtTestFacadeMPJ extends ProtTestFacadeImpl {
 			//this is only for doing output prettier
 			if(options.getSampleSizeMode() == ApplicationGlobals.SIZEMODE_SHANNON || options.getSampleSizeMode() == ApplicationGlobals.SIZEMODE_SHANNON_NxL) {
 				double tmpSampleSize = ProtTestAlignment.calculateShannonSampleSize(options.getAlignment(),options.getSampleSizeMode(),true);
-				err.println("Shannon entropy based sample size: "+ ProtTestFormattedOutput.getDecimalString(tmpSampleSize,2));
+				errorln("Shannon entropy based sample size: "+ ProtTestFormattedOutput.getDecimalString(tmpSampleSize,2));
 			}
 			println("Observed number of invariant sites: " + ProtTestAlignment.calculateInvariableSites(options.getAlignment(), false));
                         StringWriter sw = new StringWriter();

@@ -543,7 +543,6 @@ public class NexusImporter {
             children.add(readBranch());
         }
 
-        //System.out.println("kids="+children.size());
         // should have had a closing ')'
         if (helper.getLastDelimiter() != ')') {
             throw new ImportException.BadFormatException("Missing closing ')' in tree");

@@ -29,7 +29,6 @@ import es.uvigo.darwin.prottest.util.Utilities;
 import es.uvigo.darwin.prottest.util.exception.ImportException;
 import es.uvigo.darwin.prottest.util.exception.ProtTestInternalException;
 import es.uvigo.darwin.prottest.util.fileio.NexusExporter;
-import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Set;
@@ -57,12 +56,28 @@ public class Consensus {
     /** The id group. */
     private IdGroup idGroup;
     private Map<FixedBitSet, Support> support = new HashMap<FixedBitSet, Support>();
+    private Map<FixedBitSet, Double> cladeSupport;
+    
     private Tree consensusTree;
 
     private Map<FixedBitSet, Support> getSupport() {
         return support;
     }
 
+    public Map<FixedBitSet, Double> getCladeSupport() {
+        
+        if (cladeSupport == null) {
+            cladeSupport = new HashMap<FixedBitSet, Double> (support.size());
+            FixedBitSet[] keys = support.keySet().toArray(new FixedBitSet[0]);
+            Arrays.sort(keys);
+            
+            for (FixedBitSet fbs : keys) {
+                cladeSupport.put(fbs, support.get(fbs).treesWeightWithClade / cumWeight);
+            }
+        }
+        return cladeSupport;
+    }
+    
     public IdGroup getIdGroup() {
         return idGroup;
     }

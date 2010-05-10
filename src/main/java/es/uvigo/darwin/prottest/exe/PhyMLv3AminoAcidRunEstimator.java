@@ -6,7 +6,6 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
 
 import pal.tree.ReadTree;
 import pal.tree.TreeParseException;
@@ -21,8 +20,6 @@ import es.uvigo.darwin.prottest.util.exception.OSNotSupportedException;
 import es.uvigo.darwin.prottest.util.exception.ProtTestInternalException;
 import es.uvigo.darwin.prottest.util.exception.StatsFileFormatException;
 import es.uvigo.darwin.prottest.util.exception.TreeFormatException;
-import es.uvigo.darwin.prottest.util.logging.ProtTestLogger;
-import es.uvigo.darwin.prottest.util.printer.ProtTestPrinter;
 
 /**
  * The Class PhyMLAminoAcidRunEstimator. It optimizes Amino-Acid
@@ -66,8 +63,6 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
         //let's call Phyml with the proper command line
 
         this.workAlignment = TemporaryFileManager.getInstance().getAlignmentFilename(Thread.currentThread());
-
-        PrintWriter err = options.getPrinter().getErrorWriter();
 
         String inv = "0.0";
         if (model.isInv()) {
@@ -188,40 +183,38 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
             //open options.log_file
             FileOutputStream tmp = new FileOutputStream(
                     TemporaryFileManager.getInstance().getLogFilename(Thread.currentThread()));
-            PrintWriter log = new PrintWriter(tmp, true);
-            StreamGobbler errorGobbler = new StreamGobbler(new InputStreamReader(proc.getErrorStream()), "Phyml-Error", true, log, options.getPrinter().getErrorWriter());
-            StreamGobbler outputGobbler = new StreamGobbler(new InputStreamReader(proc.getInputStream()), "Phyml-Output", true, log, options.getPrinter().getErrorWriter());
+
+            StreamGobbler errorGobbler = new StreamGobbler(new InputStreamReader(proc.getErrorStream()), "Phyml-Error", true, RunEstimator.class);
+            StreamGobbler outputGobbler = new StreamGobbler(new InputStreamReader(proc.getInputStream()), "Phyml-Output", true, RunEstimator.class);
             errorGobbler.start();
             outputGobbler.start();
             int exitVal = proc.waitFor();
             ExternalExecutionManager.getInstance().removeProcess(proc);
 
-            if (options.isDebug()) {
-                PrintWriter out = options.getPrinter().getOutputWriter();
-                out.print("Phyml's command-line: ");
-                for (int i = 0; i < str.length; i++) {
-                    out.print(str[i] + " ");
-                }
-                out.println("");
+            verbose("Phyml's command-line: ");
+            for (int i = 0; i < str.length; i++) {
+                verbose(str[i] + " ");
             }
-            if (exitVal != 0) {
-                err.println("Phyml's exit value: " + exitVal + " (there was probably some error)");
-                err.print("Phyml's command-line: ");
-                for (int i = 0; i < str.length; i++) {
-                    err.print(str[i] + " ");
-                }
-                err.println("");
+            verboseln("");
 
-                err.println("Please, take a look at the Phyml's log below:");
+            if (exitVal != 0) {
+                errorln("Phyml's exit value: " + exitVal + " (there was probably some error)");
+                error("Phyml's command-line: ");
+                for (int i = 0; i < str.length; i++) {
+                    error(str[i] + " ");
+                }
+                errorln("");
+
+                errorln("Please, take a look at the Phyml's log below:");
                 String line;
                 try {
                     FileReader input = new FileReader(TemporaryFileManager.getInstance().getLogFilename(Thread.currentThread()));
                     BufferedReader br = new BufferedReader(input);
                     while ((line = br.readLine()) != null) {
-                        err.println(line);
+                        errorln(line);
                     }
                 } catch (IOException e) {
-                    err.println("Unable to read the log file: " + TemporaryFileManager.getInstance().getLogFilename(Thread.currentThread()));
+                    errorln("Unable to read the log file: " + TemporaryFileManager.getInstance().getLogFilename(Thread.currentThread()));
                 }
             }
         } catch (InterruptedException e) {
@@ -230,7 +223,8 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
             throw new ExternalExecutionException("I/O error: " + e.getMessage());
         }
 
-        if (!(readStatsFile(options.getPrinter(), options.isDebug()) && readTreeFile())) {
+
+        if (!(readStatsFile() && readTreeFile())) {
             return false;
         }
 
@@ -242,25 +236,23 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
      * 
      * @return true, if successful
      */
-    private boolean readStatsFile(ProtTestPrinter printer, boolean verbose) {
+    private boolean readStatsFile() {
         String line;
-        PrintWriter out = printer.getOutputWriter();
-        PrintWriter err = printer.getErrorWriter();
+
         try {
             FileReader input = new FileReader(workAlignment + STATS_FILE_SUFFIX);
             BufferedReader br = new BufferedReader(input);
             while ((line = br.readLine()) != null) {
-                if (verbose) {
-                    out.println("[DEBUG] PHYML: " + line);
-                }
+                verboseln("[DEBUG] PHYML: " + line);
+
                 if (line.length() > 0) {
                     if (line.startsWith(". Model of amino acids substitution")) {
                         if (!model.getMatrix().equals(Utilities.lastToken(line))) {
                             String errorMsg = "Matrix names doesn't match";
-                            err.println("PHYML: " + line);
-                            err.println("Last token: " + Utilities.lastToken(line));
-                            err.println("It should be: " + model.getMatrix());
-                            err.println(errorMsg);
+                            errorln("PHYML: " + line);
+                            errorln("Last token: " + Utilities.lastToken(line));
+                            errorln("It should be: " + model.getMatrix());
+                            errorln(errorMsg);
                             throw new StatsFileFormatException(errorMsg);
                         }
                     } else if (line.startsWith(". Log-likelihood")) {
@@ -268,20 +260,20 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
                     } else if (line.startsWith(". Discrete gamma model")) {
                         if (Utilities.lastToken(line).equals("Yes")) {
                             line = br.readLine();
-                            if (verbose) {
-                                System.out.println("[DEBUG] PHYML: " + line);
-                            }
+
+                            verboseln("[DEBUG] PHYML: " + line);
+
                             if (model.getNumberOfTransitionCategories() != Integer.parseInt(Utilities.lastToken(line))) {
                                 String errorMsg = "There was some error in the number of transition categories: " + model.getNumberOfTransitionCategories() + " vs " + Integer.parseInt(Utilities.lastToken(line));
-                                err.println(errorMsg);
+                                errorln(errorMsg);
 
                                 throw new StatsFileFormatException(errorMsg);
                             //prottest.setCurrentModel(-2);
                             }
                             line = br.readLine();
-                            if (verbose) {
-                                out.println("[DEBUG] PHYML: " + line);
-                            }
+
+                            verboseln("[DEBUG] PHYML: " + line);
+
                             model.setAlpha(Double.parseDouble(Utilities.lastToken(line)));
                         }
                     } else if (line.startsWith(". Proportion of invariant:")) {
@@ -358,19 +350,4 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
         }
     }
 
-    private void print(String message) {
-        ProtTestLogger.info(message, this.getClass());
-    }
-
-    private void println(String message) {
-        ProtTestLogger.info(message + "\n", this.getClass());
-    }
-
-    private void fine(String message) {
-        ProtTestLogger.fine(message, this.getClass());
-    }
-
-    private void fineln(String message) {
-        ProtTestLogger.fine(message + "\n", this.getClass());
-    }
 }

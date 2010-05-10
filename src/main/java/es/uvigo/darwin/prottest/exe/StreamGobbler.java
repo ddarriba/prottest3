@@ -8,27 +8,21 @@
 
 package es.uvigo.darwin.prottest.exe;
 
+import es.uvigo.darwin.prottest.util.logging.ProtTestLogger;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
-
-    
-//I took this class from Michael Daconta ( http://www.javaworld.com/javaworld/jw-12-2000/jw-1229-traps.html )
 public class StreamGobbler extends Thread {
     private InputStreamReader isr;
     private String type;
     private boolean printIt;
-    private PrintWriter log;
-    private PrintWriter errorWriter;
+    private Class caller;
     
-    
-    public StreamGobbler(InputStreamReader isr, String type, boolean printIt, PrintWriter log, PrintWriter errorWriter) {
+    public StreamGobbler(InputStreamReader isr, String type, boolean printIt, Class caller) {
         this.isr     	 = isr;
         this.type    	 = type;
         this.printIt 	 = printIt;
-        this.log     	 = log;
-        this.errorWriter = errorWriter;
+        this.caller      = caller;
     }
 
     public void run() {
@@ -38,8 +32,8 @@ public class StreamGobbler extends Thread {
             String line=null;
             while ( (line = br.readLine()) != null) {
                 if(printIt && line.startsWith(". Err"))
-                    errorWriter.println(type + ">" + line);
-                log.println(type + ">" + line);
+                    ProtTestLogger.severeln(type + ">" + line, caller);
+                ProtTestLogger.fineln(type + ">" + line, caller);
             }
         } catch (IOException ioe) {
             

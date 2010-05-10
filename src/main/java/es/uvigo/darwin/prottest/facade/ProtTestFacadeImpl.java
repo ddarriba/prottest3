@@ -201,7 +201,6 @@ public abstract class ProtTestFacadeImpl
     public ApplicationOptions configure(ProtTestParameterVO parameters)
             throws IOException, AlignmentParseException, ProtTestInternalException {
         ApplicationOptions options = new ApplicationOptions();
-        options.setPrinter(parameters.getPrinter());
         options.setAlignFile(parameters.getAlignmentFilePath());
         options.setNumberOfCategories(parameters.ncat);
         for (String matrix : parameters.getMatrices()) {
@@ -224,6 +223,14 @@ public abstract class ProtTestFacadeImpl
         infoln(message, ProtTestFacade.class);
     }
 
+    protected void error(String message) {
+        severe(message, ProtTestFacade.class);
+    }
+
+    protected void errorln(String message) {
+        severeln(message, ProtTestFacade.class);
+    }
+    
     protected void verbose(String message) {
         fine(message, ProtTestFacade.class);
     }

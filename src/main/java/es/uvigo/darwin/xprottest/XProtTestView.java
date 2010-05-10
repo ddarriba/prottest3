@@ -7,8 +7,6 @@
 
 package es.uvigo.darwin.xprottest;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import pal.alignment.AlignmentParseException;
 import es.uvigo.darwin.xprottest.compute.RunningFrame;
 import es.uvigo.darwin.xprottest.compute.OptionsView;
@@ -722,7 +720,6 @@ public class XProtTestView extends FrameView {
             
             try {
                 options.setAlignFile(alignmentFile.getAbsolutePath());
-                options.setPrinter(printer);
                 models = prottestFacade.startAnalysis(options);
             } catch (AlignmentParseException ex) {
                 printer.getErrorWriter().println(ex.getMessage());

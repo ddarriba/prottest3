@@ -53,11 +53,16 @@ public class TreeFacadeImpl implements TreeFacade {
     }
 
     public Tree createConsensusTree(InformationCriterion ic, double threshold) {
+        Consensus consensus = createConsensus(ic, threshold);
+        Tree cons = consensus.getConsensusTree();
+        return cons;
+    }
+    
+    public Consensus createConsensus(InformationCriterion ic, double threshold) {
         if (threshold < 0.5 || threshold > 1.0) {
             throw new ProtTestInternalException("Invalid threshold value: " + threshold);
         }
         Consensus consensus = new Consensus(ic, threshold);
-        Tree cons = consensus.getConsensusTree();
-        return cons;
+        return consensus;
     }
 }

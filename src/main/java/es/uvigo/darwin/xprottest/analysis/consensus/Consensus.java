@@ -3,7 +3,6 @@
  *
  * Created on 6 de noviembre de 2009, 12:43
  */
-
 package es.uvigo.darwin.xprottest.analysis.consensus;
 
 import es.uvigo.darwin.prottest.facade.TreeFacade;
@@ -16,9 +15,12 @@ import es.uvigo.darwin.prottest.selection.DT;
 import es.uvigo.darwin.prottest.selection.InformationCriterion;
 import es.uvigo.darwin.prottest.selection.LNL;
 import es.uvigo.darwin.prottest.selection.model.SelectionModel;
+import es.uvigo.darwin.prottest.util.FixedBitSet;
 import es.uvigo.darwin.prottest.util.ProtTestAlignment;
+import es.uvigo.darwin.prottest.util.Utilities;
 import es.uvigo.darwin.prottest.util.collection.ModelCollection;
 import es.uvigo.darwin.prottest.util.collection.SingleModelCollection;
+import es.uvigo.darwin.prottest.util.exception.ProtTestInternalException;
 import java.awt.Font;
 import pal.tree.Tree;
 import java.io.PrintWriter;
@@ -28,15 +30,17 @@ import org.jdesktop.application.Application;
 import org.jdesktop.application.ResourceMap;
 import es.uvigo.darwin.xprottest.XProtTestView;
 import es.uvigo.darwin.xprottest.util.TextAreaWriter;
+import java.util.List;
+import java.util.Set;
 import pal.alignment.Alignment;
-
+import pal.misc.Identifier;
 
 /**
  *
  * @author  diego
  */
 public class Consensus extends javax.swing.JFrame {
-   
+
     private static final int AIC_SELECTION = 0;
     private static final int BIC_SELECTION = 1;
     private static final int AICC_SELECTION = 2;
@@ -47,28 +51,26 @@ public class Consensus extends javax.swing.JFrame {
         "AIC", "BIC", "AICc", "LK", "DT", "Disabled"
     };
     private ResourceMap resourceMap;
-    
     private TreeFacade facade;
     private ModelCollection models;
     private PrintWriter displayWriter;
-    
     private int sampleSizeMode = ApplicationGlobals.DEFAULT_SAMPLE_SIZE_MODE;
     private double sampleSize = 1.0;
-    
+
     /** Creates new form Consensus */
     public Consensus(TreeFacade facade, Model[] models, Alignment alignment) {
         initComponents();
         this.facade = facade;
         this.models = new SingleModelCollection(models, alignment);
         this.displayWriter = new PrintWriter(new TextAreaWriter(displayArea));
-        
+
         resourceMap = Application.getInstance(es.uvigo.darwin.xprottest.XProtTestApp.class).getContext().getResourceMap(Consensus.class);
-        
+
         Font f = new Font(Font.MONOSPACED, Font.PLAIN, 12);
         displayArea.setFont(f);
         lblSampleSize.setText(String.valueOf(ProtTestAlignment.calculateSampleSize(this.models.getAlignment(), sampleSizeMode, sampleSize)));
     }
-    
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -470,7 +472,6 @@ public class Consensus extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
     private void sliderConfidenceStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sliderConfidenceStateChanged
         lblConfidenceInterval.setText(String.valueOf(Double.valueOf(sliderConfidence.getValue()) / 100));
     }//GEN-LAST:event_sliderConfidenceStateChanged
@@ -484,37 +485,31 @@ public class Consensus extends javax.swing.JFrame {
         String btnName = evt.getActionCommand();
 
         txtSampleSize.setEnabled(false);
-            if (btnName.equals(
-                    java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/resources/ResultsView")
-                    .getString("btn-sizemode-alignment")))
-                sampleSizeMode = ApplicationGlobals.SIZEMODE_ALIGNMENT;
-            else if (btnName.equals(
-                    java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/resources/ResultsView")
-                    .getString("btn-sizemode-alignment-var")))
-                sampleSizeMode = ApplicationGlobals.SIZEMODE_ALIGNMENT_VAR;
-            else if (btnName.equals(
-                    java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/resources/ResultsView")
-                    .getString("btn-sizemode-shannon")))
-                sampleSizeMode = ApplicationGlobals.SIZEMODE_SHANNON;
-            else if (btnName.equals(
-                    java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/resources/ResultsView")
-                    .getString("btn-sizemode-shannon-nxl")))
-                sampleSizeMode = ApplicationGlobals.SIZEMODE_SHANNON_NxL;
-            else if (btnName.equals(
-                    java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/resources/ResultsView")
-                    .getString("btn-sizemode-nxl")))
-                sampleSizeMode = ApplicationGlobals.SIZEMODE_NxL;
-            else if (btnName.equals(
-                    java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/resources/ResultsView")
-                    .getString("btn-sizemode-custom"))) {
-                sampleSizeMode = ApplicationGlobals.SIZEMODE_USERSIZE;
-                try {
-                    sampleSize = Double.parseDouble(txtSampleSize.getText());
-                } catch (NumberFormatException e) {
-                    sampleSize = 0.0;
-                }
-                txtSampleSize.setEnabled(true);
-                txtSampleSize.grabFocus();
+        if (btnName.equals(
+                java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/resources/ResultsView").getString("btn-sizemode-alignment"))) {
+            sampleSizeMode = ApplicationGlobals.SIZEMODE_ALIGNMENT;
+        } else if (btnName.equals(
+                java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/resources/ResultsView").getString("btn-sizemode-alignment-var"))) {
+            sampleSizeMode = ApplicationGlobals.SIZEMODE_ALIGNMENT_VAR;
+        } else if (btnName.equals(
+                java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/resources/ResultsView").getString("btn-sizemode-shannon"))) {
+            sampleSizeMode = ApplicationGlobals.SIZEMODE_SHANNON;
+        } else if (btnName.equals(
+                java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/resources/ResultsView").getString("btn-sizemode-shannon-nxl"))) {
+            sampleSizeMode = ApplicationGlobals.SIZEMODE_SHANNON_NxL;
+        } else if (btnName.equals(
+                java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/resources/ResultsView").getString("btn-sizemode-nxl"))) {
+            sampleSizeMode = ApplicationGlobals.SIZEMODE_NxL;
+        } else if (btnName.equals(
+                java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/resources/ResultsView").getString("btn-sizemode-custom"))) {
+            sampleSizeMode = ApplicationGlobals.SIZEMODE_USERSIZE;
+            try {
+                sampleSize = Double.parseDouble(txtSampleSize.getText());
+            } catch (NumberFormatException e) {
+                sampleSize = 0.0;
+            }
+            txtSampleSize.setEnabled(true);
+            txtSampleSize.grabFocus();
         }
         lblSampleSize.setText(String.valueOf(ProtTestAlignment.calculateSampleSize(models.getAlignment(), sampleSizeMode, sampleSize)));
     }//GEN-LAST:event_sizeModePressed
@@ -544,16 +539,13 @@ public class Consensus extends javax.swing.JFrame {
             if (radioAIC.isSelected()) {
                 ic = new AIC(models, confidenceInterval, sampleSize);
                 selection = AIC_SELECTION;
-            }
-            else if (radioBIC.isSelected()) {
+            } else if (radioBIC.isSelected()) {
                 ic = new BIC(models, confidenceInterval, sampleSize);
                 selection = BIC_SELECTION;
-            }
-            else if (radioAICC.isSelected()) {
+            } else if (radioAICC.isSelected()) {
                 ic = new AICc(models, confidenceInterval, sampleSize);
                 selection = AICC_SELECTION;
-            }
-            else if (radioLK.isSelected()) {
+            } else if (radioLK.isSelected()) {
                 ic = new LNL(models, confidenceInterval, sampleSize);
                 selection = LNL_SELECTION;
             } else if (radioDT.isSelected()) {
@@ -565,15 +557,16 @@ public class Consensus extends javax.swing.JFrame {
             }
 
             if (ic == null || ic.getConfidenceModels().size() > 0) {
-                Tree consensus = null;
-                if (ic != null)
-                    consensus = facade.createConsensusTree(ic, supportThreshold);
-                else {
-                    ArrayList<Tree> trees = new ArrayList<Tree>(models.size());
-                    for (Model model : models) {
-                        trees.add(model.getTree());
-                    }
-                    consensus = facade.createConsensusTree(trees, supportThreshold);
+                es.uvigo.darwin.prottest.consensus.Consensus consensus = null;
+                if (ic != null) {
+                    consensus = facade.createConsensus(ic, supportThreshold);
+                } else {
+                    throw new ProtTestInternalException("Consensus needs an Information Criterion");
+//                    ArrayList<Tree> trees = new ArrayList<Tree>(models.size());
+//                    for (Model model : models) {
+//                        trees.add(model.getTree());
+//                    }
+//                    consensus = facade.createConsensus(trees, supportThreshold);
                 }
                 displayWriter.println("----------------------------------------");
                 displayWriter.println("Selection criterion: . . . . " + SELECTION[selection]);
@@ -582,20 +575,74 @@ public class Consensus extends javax.swing.JFrame {
                 displayWriter.println("Consensus support threshold: " + supportThreshold);
                 displayWriter.println("----------------------------------------");
 
-                displayWriter.println("Computed models:");
-                for (SelectionModel model : ic.getConfidenceModels())
-                    displayWriter.println(model.getModel().getModelName() + " ("+model.getWeightValue()+")");
-                displayWriter.println("----------------------------------------");
+//                displayWriter.println("Computed models:");
+//                for (SelectionModel model : ic.getConfidenceModels()) {
+//                    displayWriter.println(model.getModel().getModelName() + " (" + model.getWeightValue() + ")");
+//                }
+//                displayWriter.println("----------------------------------------");
 
                 displayWriter.println("");
-                String newickTree = facade.toNewick(consensus, true, true, true);
+
+                Set<FixedBitSet> keySet = consensus.getCladeSupport().keySet();
+                List<FixedBitSet> splitsInConsensus = new ArrayList<FixedBitSet>();
+                List<FixedBitSet> splitsOutFromConsensus = new ArrayList<FixedBitSet>();
+
+                for (FixedBitSet fbs : keySet) {
+                    if (fbs.cardinality() > 1) {
+                        double psupport = (1.0 * consensus.getCladeSupport().get(fbs)) / 1.0;
+                        if (psupport < supportThreshold) {
+                            splitsOutFromConsensus.add(fbs);
+                        } else {
+                            splitsInConsensus.add(fbs);
+                        }
+                    }
+                }
+
+                displayWriter.println("# # # # # # # # # # # # # # # #");
+                displayWriter.println(" ");
+                displayWriter.println("Species in order:");
+                displayWriter.println(" ");
+
+                for (int i = 0; i < consensus.getIdGroup().getIdCount(); i++) {
+                    Identifier id = consensus.getIdGroup().getIdentifier(i);
+                    displayWriter.println("    " + (i + 1) + ". " + id.getName());
+                }
+                displayWriter.println(" ");
+                displayWriter.println("# # # # # # # # # # # # # # # #");
+                displayWriter.println(" ");
+                displayWriter.println("Sets included in the consensus tree");
+                displayWriter.println(" ");
+                displayWriter.print("    ");
+                for (int i = 0; i < consensus.getIdGroup().getIdCount(); i++) {
+                    displayWriter.print(i + 1);
+                }
+                displayWriter.println(" ");
+                for (FixedBitSet fbs : splitsInConsensus) {
+                    displayWriter.println("    " + fbs.splitRepresentation() + " ( " + 
+                            Utilities.round(consensus.getCladeSupport().get(fbs), 5) + " )");
+                }
+                displayWriter.println(" ");
+                displayWriter.println("Sets NOT included in consensus tree");
+                displayWriter.println(" ");
+                displayWriter.print("    ");
+                for (int i = 0; i < consensus.getIdGroup().getIdCount(); i++) {
+                    displayWriter.print(i + 1);
+                }
+                displayWriter.println(" ");
+                for (FixedBitSet fbs : splitsOutFromConsensus) {
+                    displayWriter.println("    " + fbs.splitRepresentation() + " ( " + 
+                            Utilities.round(consensus.getCladeSupport().get(fbs), 5) + " )");
+                }
+
+                Tree consensusTree = consensus.getConsensusTree();
+                String newickTree = facade.toNewick(consensusTree, true, true, true);
                 displayWriter.println(newickTree);
                 displayWriter.println("");
-                displayWriter.println(facade.toASCII(consensus));
+                displayWriter.println(facade.toASCII(consensusTree));
                 displayWriter.println(" ");
-                displayWriter.println(facade.branchInfo(consensus));
+                displayWriter.println(facade.branchInfo(consensusTree));
                 displayWriter.println(" ");
-                displayWriter.println(facade.heightInfo(consensus));
+                displayWriter.println(facade.heightInfo(consensusTree));
             } else {
                 displayArea.setForeground(XProtTestView.CRITIC_COLOR);
                 displayWriter.println(resourceMap.getString("msg-no-data"));
@@ -674,5 +721,4 @@ public class Consensus extends javax.swing.JFrame {
     private javax.swing.JTextField txtSampleSize;
     private javax.swing.JMenu windowMenu;
     // End of variables declaration//GEN-END:variables
-
 }

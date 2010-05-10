@@ -20,7 +20,7 @@ public class ProtTestLogFormatter extends Formatter {
         
         StringBuffer text = new StringBuffer();
         
-        if (lr.getLevel() != Level.INFO) {
+        if (lr.getLevel().intValue() < Level.FINE.intValue()) {
             text.append(lr.getLevel().getName() + " : ");
         }
         text.append(lr.getMessage());

@@ -1,6 +1,6 @@
 package es.uvigo.darwin.prottest.facade;
 
-import java.io.PrintWriter;
+import es.uvigo.darwin.prottest.consensus.Consensus;
 import java.util.List;
 
 import pal.tree.Tree;
@@ -53,10 +53,18 @@ public interface TreeFacade {
     public Tree createConsensusTree(List<Tree> treeCollection, double threshold);
 
     /**
-     * Create a weighted consensus tree from a list of trees.
+     * Create a weighted consensus tree from an information criterion.
      * 
      * @param ic the weighted models with the trees to build consensus
      * @param threshold the minimum clade support
      */
     public Tree createConsensusTree(InformationCriterion ic, double threshold);
+    
+    /**
+     * Create a weighted consensus instance from an information criterion.
+     * 
+     * @param ic the weighted models with the trees to build consensus
+     * @param threshold the minimum clade support
+     */
+    public Consensus createConsensus(InformationCriterion ic, double threshold);
 }

@@ -32,7 +32,6 @@ public class ProtTestFacadeSequential extends ProtTestFacadeImpl {
 	private ProtTestFactory factory = ProtTestFactory.getInstance();
 	
 	public Model[] analyze(ApplicationOptions options) {
-		PrintWriter err = options.getPrinter().getErrorWriter();
 		
 		//For each model, for each distribution,... optimize the model and calculate some statistics:
 
@@ -40,12 +39,14 @@ public class ProtTestFacadeSequential extends ProtTestFacadeImpl {
 		//this is only for doing output prettier
 		if(options.getSampleSizeMode() == ApplicationGlobals.SIZEMODE_SHANNON || options.getSampleSizeMode() == ApplicationGlobals.SIZEMODE_SHANNON_NxL) {
 			double tmpSampleSize = ProtTestAlignment.calculateShannonSampleSize(options.getAlignment(),options.getSampleSizeMode(),true);
-			err.println("Shannon entropy based sample size: "+ ProtTestFormattedOutput.getDecimalString(tmpSampleSize,2));
+			println("Shannon entropy based sample size: "+ ProtTestFormattedOutput.getDecimalString(tmpSampleSize,2));
 		}
 		println("Observed number of invariant sites: " + ProtTestAlignment.calculateInvariableSites(options.getAlignment(), false));
                 StringWriter sw = new StringWriter();
 		ProtTestAlignment.printFrequencies(ProtTestAlignment.getFrequencies(options.getAlignment()), 
                         new PrintWriter(sw));
+                sw.flush();
+                println(sw.toString());
 		println("**********************************************************");
 		println("");
 		

@@ -561,7 +561,6 @@ public class OptionsView extends javax.swing.JFrame {
             try {
                 mainFrame.getFacade().setNumberOfThreads(sliderProcessors.getValue());
                 ProtTestParameterVO parameters = new ProtTestParameterVO(
-                        mainFrame.getPrinter(),
                         alignmentFilePath, treeFilePath, matrices, distributions, plusF, ncat,
                         strategyMode);
                 ApplicationOptions options = mainFrame.getFacade().configure(parameters);

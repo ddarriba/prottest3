@@ -72,9 +72,8 @@ public class ExternalExecutor {
             throw new ProtTestInternalException(ex.getMessage());
         }
 
-        PrintWriter log = new PrintWriter(logOutput, true);
-        StreamGobbler errorGobbler = new StreamGobbler(new InputStreamReader(proc.getErrorStream()), "Phyml-Error", true, log, errorWriter);
-        StreamGobbler outputGobbler = new StreamGobbler(new InputStreamReader(proc.getInputStream()), "Phyml-Output", true, log, errorWriter);
+        StreamGobbler errorGobbler = new StreamGobbler(new InputStreamReader(proc.getErrorStream()), "Phyml-Error", true, this.getClass());
+        StreamGobbler outputGobbler = new StreamGobbler(new InputStreamReader(proc.getInputStream()), "Phyml-Output", true, this.getClass());
         errorGobbler.start();
         outputGobbler.start();
         

@@ -88,7 +88,7 @@ public class ProtTest implements XMLConstants {
         // parse arguments
         ApplicationOptions opts = new ApplicationOptions();
         printer = factory.createModelTestPrinter(outputWriter, errorWriter);
-        opts.setPrinter(printer);
+
         int numThreads = 1;
         try {
             // check arguments and get application options
@@ -137,7 +137,7 @@ public class ProtTest implements XMLConstants {
 
         if (MPJ_ME == 0) {
             printer.printHeader();
-            opts.report(printer.getOutputWriter());
+            opts.report();
             printer.getOutputWriter().flush();
         }
 

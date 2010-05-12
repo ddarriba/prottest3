@@ -86,8 +86,6 @@ public class XProtTestView extends FrameView {
     
     private boolean lnlCalculated;
     
-    private ProtTestPrinter printer;
-    
     private PrintWriter displayWriter;
     
     private Model[] models;
@@ -158,10 +156,6 @@ public class XProtTestView extends FrameView {
         return displayWriter;
     }
     
-    public ProtTestPrinter getPrinter() {
-        return printer;
-    }
-    
     public XProtTestView(SingleFrameApplication app, ProtTestFacade facade) {
         super(app);
 
@@ -180,7 +174,6 @@ public class XProtTestView extends FrameView {
         displayWriter = new PrintWriter(new TextAreaAppender(mainTextArea));
 
         ProtTestLogger.getDefaultLogger().addHandler(displayWriter);
-        printer = new ProtTestPrinter(displayWriter, new PrintWriter(System.err));
         
         // status bar initialization - message timeout, idle icon and busy animation, etc
 
@@ -237,7 +230,7 @@ public class XProtTestView extends FrameView {
         });
         lblMoreInfo.setVisible(false);
         
-        printer.printHeader();
+        ProtTestPrinter.printHeader();
     }
 
     @Action
@@ -375,6 +368,7 @@ public class XProtTestView extends FrameView {
         computeMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_L, java.awt.event.InputEvent.CTRL_MASK));
         computeMenuItem.setMnemonic('c');
         computeMenuItem.setText(bundle.getString("item-compute-likelihood")); // NOI18N
+        computeMenuItem.setToolTipText(resourceMap.getString("computeMenuItem.toolTipText")); // NOI18N
         computeMenuItem.setEnabled(false);
         computeMenuItem.setName("computeMenuItem"); // NOI18N
         computeMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -388,6 +382,7 @@ public class XProtTestView extends FrameView {
         showFrequenciesItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
         showFrequenciesItem.setMnemonic('f');
         showFrequenciesItem.setText(bundle.getString("item-show-frequencies")); // NOI18N
+        showFrequenciesItem.setToolTipText(resourceMap.getString("showFrequenciesItem.toolTipText")); // NOI18N
         showFrequenciesItem.setEnabled(false);
         showFrequenciesItem.setName("showFrequenciesItem"); // NOI18N
         analysisMenu.add(showFrequenciesItem);
@@ -396,6 +391,7 @@ public class XProtTestView extends FrameView {
         showTreeMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
         showTreeMenuItem.setMnemonic('t');
         showTreeMenuItem.setText(bundle.getString("item-show-tree")); // NOI18N
+        showTreeMenuItem.setToolTipText(resourceMap.getString("showTreeMenuItem.toolTipText")); // NOI18N
         showTreeMenuItem.setEnabled(false);
         showTreeMenuItem.setName("showTreeMenuItem"); // NOI18N
         analysisMenu.add(showTreeMenuItem);
@@ -404,6 +400,7 @@ public class XProtTestView extends FrameView {
         averagingMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
         averagingMenuItem.setMnemonic('p');
         averagingMenuItem.setText(resourceMap.getString("averagingMenuItem.text")); // NOI18N
+        averagingMenuItem.setToolTipText(resourceMap.getString("averagingMenuItem.toolTipText")); // NOI18N
         averagingMenuItem.setEnabled(false);
         averagingMenuItem.setName("averagingMenuItem"); // NOI18N
         analysisMenu.add(averagingMenuItem);
@@ -599,6 +596,7 @@ public class XProtTestView extends FrameView {
         preferencesMenuItem.setEnabled(false);
         this.numModels = numModels;
         if (errorLogView != null) {
+            ProtTestLogger.getDefaultLogger().removeHandler(errorLogView.getLogHandler());
             errorLogView.setVisible(false);
             errorLogView.dispose();
             errorLogView = null;
@@ -619,7 +617,7 @@ public class XProtTestView extends FrameView {
             consensusView = null;
         }
         errorLogView = new ErrorLogView();
-        printer.setErrorWriter(errorLogView.getErrorWriter());
+        ProtTestLogger.getDefaultLogger().addHandler(errorLogView.getLogHandler());
         RunningFrame runningFrame = new RunningFrame(this, numModels);
         errorMenuItem.setEnabled(false);
         prottestFacade.addObserver(runningFrame);
@@ -722,11 +720,11 @@ public class XProtTestView extends FrameView {
                 options.setAlignFile(alignmentFile.getAbsolutePath());
                 models = prottestFacade.startAnalysis(options);
             } catch (AlignmentParseException ex) {
-                printer.getErrorWriter().println(ex.getMessage());
+                ProtTestLogger.severeln(ex.getMessage(), this.getClass());
             } catch (IOException ex) {
-                printer.getErrorWriter().println(ex.getMessage());
-            } catch (ProtTestInternalException e) {
-                printer.getErrorWriter().println(e.getMessage());
+                ProtTestLogger.severeln(ex.getMessage(), this.getClass());
+            } catch (ProtTestInternalException ex) {
+                ProtTestLogger.severeln(ex.getMessage(), this.getClass());
             }
             
             runningFrame.finishedExecution();
@@ -810,7 +808,7 @@ public class XProtTestView extends FrameView {
         try {
         BrowserLauncher.openURL("http://darwin.uvigo.es/download/prottest_manual.pdf");
         } catch (IOException e) {
-            System.out.println("Cannot open URL : " + e.getMessage());
+            displayWriter.println("Cannot open URL : " + e.getMessage());
         }
     }
 

@@ -6,8 +6,15 @@
 
 package es.uvigo.darwin.xprottest.results;
 
+import es.uvigo.darwin.prottest.util.WriterOutputStream;
+import es.uvigo.darwin.prottest.util.logging.ProtTestLogFormatter;
 import java.io.PrintWriter;
 import es.uvigo.darwin.xprottest.util.TextAreaAppender;
+import java.util.logging.Filter;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+import java.util.logging.StreamHandler;
 
 /**
  *
@@ -16,15 +23,25 @@ import es.uvigo.darwin.xprottest.util.TextAreaAppender;
 public class ErrorLogView extends javax.swing.JFrame {
 
     private PrintWriter errorWriter;
+    private Handler logHandler;
     
-    public PrintWriter getErrorWriter() {
-        return errorWriter;
+    public Handler getLogHandler() {
+        return logHandler;
     }
     
     /** Creates new form ErrorLogView */
     public ErrorLogView() {
         initComponents();
         errorWriter = new PrintWriter(new TextAreaAppender(errorTextArea));
+        logHandler = new StreamHandler(new WriterOutputStream(errorWriter),
+                new ProtTestLogFormatter());
+        logHandler.setFilter(new Filter(){
+
+            public boolean isLoggable(LogRecord lr) {
+                return lr.getLevel().equals(Level.SEVERE);
+            }
+            
+        });
     }
     
     /** This method is called from within the constructor to

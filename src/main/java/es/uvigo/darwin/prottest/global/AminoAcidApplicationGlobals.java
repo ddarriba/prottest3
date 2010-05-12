@@ -24,7 +24,8 @@ public class AminoAcidApplicationGlobals extends ApplicationGlobals {
 		 "Blosum62",
 		 "VT",
 		 "HIVb",
-		 "HIVw" 
+		 "HIVw",
+                 "FLU"
 	};
 	
 	/* (non-Javadoc)

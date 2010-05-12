@@ -1,6 +1,5 @@
 package es.uvigo.darwin.prottest.selection.printer;
 
-import java.io.PrintWriter;
 
 import es.uvigo.darwin.prottest.selection.InformationCriterion;
 import es.uvigo.darwin.prottest.util.printer.ProtTestFormattedOutput;
@@ -24,31 +23,31 @@ public class AminoAcidPrintFramework extends PrintFramework {
 	 * @see es.uvigo.darwin.prottest.selection.printer.PrintFramework#printRelativeImportance(java.io.PrintWriter)
 	 */
 	@Override
-	void printRelativeImportance(PrintWriter out) {
+	void printRelativeImportance() {
 		
-		out.println("***********************************************");
-		out.println("Relative importance of parameters");
-		out.println("***********************************************");
-		out.println("  alpha       (+G):  " + ProtTestFormattedOutput.space(3, ' ') + ProtTestFormattedOutput.getDecimalString(getInformationCriterion().getAlphaImportance(), 2));//calculateAlphaImportance(false), 2));
-		out.println("  p-inv       (+I):  " + ProtTestFormattedOutput.space(3, ' ') + ProtTestFormattedOutput.getDecimalString(getInformationCriterion().getInvImportance(), 2));
-		out.println("  alpha+p-inv (+I+G):" + ProtTestFormattedOutput.space(3, ' ') + ProtTestFormattedOutput.getDecimalString(getInformationCriterion().getAlphaInvImportance(), 2));
-		out.println("  freqs       (+F):  " + ProtTestFormattedOutput.space(3, ' ') + ProtTestFormattedOutput.getDecimalString(getInformationCriterion().getFImportance(), 2));
-		out.println("");
+		println("***********************************************");
+		println("Relative importance of parameters");
+		println("***********************************************");
+		println("  alpha       (+G):  " + ProtTestFormattedOutput.space(3, ' ') + ProtTestFormattedOutput.getDecimalString(getInformationCriterion().getAlphaImportance(), 2));//calculateAlphaImportance(false), 2));
+		println("  p-inv       (+I):  " + ProtTestFormattedOutput.space(3, ' ') + ProtTestFormattedOutput.getDecimalString(getInformationCriterion().getInvImportance(), 2));
+		println("  alpha+p-inv (+I+G):" + ProtTestFormattedOutput.space(3, ' ') + ProtTestFormattedOutput.getDecimalString(getInformationCriterion().getAlphaInvImportance(), 2));
+		println("  freqs       (+F):  " + ProtTestFormattedOutput.space(3, ' ') + ProtTestFormattedOutput.getDecimalString(getInformationCriterion().getFImportance(), 2));
+		println("");
 	}
 
 	/* (non-Javadoc)
 	 * @see es.uvigo.darwin.prottest.selection.printer.PrintFramework#printModelAveragedEstimation(java.io.PrintWriter)
 	 */
 	@Override
-	void printModelAveragedEstimation(PrintWriter out) {
+	void printModelAveragedEstimation() {
 		
-		out.println("***********************************************");
-		out.println("Model-averaged estimate of parameters");
-		out.println("***********************************************");
-		out.println("  alpha (+G):        " + ProtTestFormattedOutput.space(3,  ' ') + ProtTestFormattedOutput.getDecimalString(getInformationCriterion().getOverallAlpha(), 2));
-		out.println("  p-inv (+I):        " + ProtTestFormattedOutput.space(3,  ' ') + ProtTestFormattedOutput.getDecimalString(getInformationCriterion().getOverallInv(), 2));
-		out.println("  alpha (+I+G):      " + ProtTestFormattedOutput.space(3,  ' ') + ProtTestFormattedOutput.getDecimalString(getInformationCriterion().getOverallAlphaInv(), 2));
-		out.println("  p-inv (+I+G):      " + ProtTestFormattedOutput.space(3,  ' ') + ProtTestFormattedOutput.getDecimalString(getInformationCriterion().getOverallInvAlpha(), 2));
+		println("***********************************************");
+		println("Model-averaged estimate of parameters");
+		println("***********************************************");
+		println("  alpha (+G):        " + ProtTestFormattedOutput.space(3,  ' ') + ProtTestFormattedOutput.getDecimalString(getInformationCriterion().getOverallAlpha(), 2));
+		println("  p-inv (+I):        " + ProtTestFormattedOutput.space(3,  ' ') + ProtTestFormattedOutput.getDecimalString(getInformationCriterion().getOverallInv(), 2));
+		println("  alpha (+I+G):      " + ProtTestFormattedOutput.space(3,  ' ') + ProtTestFormattedOutput.getDecimalString(getInformationCriterion().getOverallAlphaInv(), 2));
+		println("  p-inv (+I+G):      " + ProtTestFormattedOutput.space(3,  ' ') + ProtTestFormattedOutput.getDecimalString(getInformationCriterion().getOverallInvAlpha(), 2));
 	}
 
 }

@@ -1,6 +1,5 @@
 package es.uvigo.darwin.prottest.exe;
 
-import java.io.PrintWriter;
 
 import es.uvigo.darwin.prottest.model.Model;
 import es.uvigo.darwin.prottest.observer.ModelUpdaterObserver;

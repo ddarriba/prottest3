@@ -372,25 +372,5 @@ public abstract class InformationCriterion {
 	 * @return the criterion name
 	 */
 	public abstract String getCriterionName();
-	
-	/**
-	 * Prints the models sorted by the concrete criterion.
-	 * 
-	 * @param out the out
-	 */
-	public final void printModelsSorted(PrintWriter out) {
-		PrintFramework printFramework = ProtTestFactory.getInstance().createPrintFramework(this);
-		printFramework.printModelsSorted(out);
-	}
-	
-	/**
-	 * Prints a seven-framework comparison.
-	 * 
-	 * @param out the out
-	 */
-	public void printFrameworksComparison(PrintWriter out) {
-		PrintFramework printFramework = ProtTestFactory.getInstance().createPrintFramework(this);
-		printFramework.printFrameworksComparison(out);
-	}
 
 }

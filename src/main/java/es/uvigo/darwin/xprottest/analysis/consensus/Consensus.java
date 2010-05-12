@@ -14,7 +14,6 @@ import es.uvigo.darwin.prottest.selection.BIC;
 import es.uvigo.darwin.prottest.selection.DT;
 import es.uvigo.darwin.prottest.selection.InformationCriterion;
 import es.uvigo.darwin.prottest.selection.LNL;
-import es.uvigo.darwin.prottest.selection.model.SelectionModel;
 import es.uvigo.darwin.prottest.util.FixedBitSet;
 import es.uvigo.darwin.prottest.util.ProtTestAlignment;
 import es.uvigo.darwin.prottest.util.Utilities;

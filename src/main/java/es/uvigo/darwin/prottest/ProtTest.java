@@ -1,6 +1,5 @@
 package es.uvigo.darwin.prottest;
 
-import java.io.PrintWriter;
 
 import mpi.MPI;
 import pal.util.XMLConstants;
@@ -20,7 +19,6 @@ import es.uvigo.darwin.prottest.selection.AICc;
 import es.uvigo.darwin.prottest.selection.BIC;
 import es.uvigo.darwin.prottest.selection.InformationCriterion;
 import es.uvigo.darwin.prottest.selection.LNL;
-import es.uvigo.darwin.prottest.selection.printer.AminoAcidPrintFramework;
 import es.uvigo.darwin.prottest.selection.printer.PrintFramework;
 import es.uvigo.darwin.prottest.util.argumentparser.ProtTestArgumentParser;
 import es.uvigo.darwin.prottest.util.collection.ModelCollection;
@@ -49,14 +47,10 @@ public class ProtTest implements XMLConstants {
     public static int MPJ_SIZE;
     /** The MPJ running state. */
     public static boolean MPJ_RUN;
-    /** The output writer. */
-    private static PrintWriter outputWriter;
-    /** The error writer. */
-    private static PrintWriter errorWriter;
     /** The ProtTest factory. */
     private static ProtTestFactory factory;
     /** The application printer. */
-    private static ProtTestPrinter printer;
+//    private static ProtTestPrinter printer;
 
     /**
      * The main method. It initializes the MPJ runtime environment, parses 
@@ -67,6 +61,9 @@ public class ProtTest implements XMLConstants {
      */
     public static void main(String[] args) {
 
+        ProtTestLogger logger = ProtTestLogger.getDefaultLogger();
+        logger.setStdHandlerLevel(Level.INFO);
+        
         // initializing MPJ environment (if available)
         try {
             String[] argsApp = MPI.Init(args);
@@ -82,12 +79,9 @@ public class ProtTest implements XMLConstants {
 
         args = ProtTestFactory.initialize(args);
         factory = ProtTestFactory.getInstance();
-        outputWriter = new PrintWriter(System.out);
-        errorWriter = new PrintWriter(System.err);
 
         // parse arguments
         ApplicationOptions opts = new ApplicationOptions();
-        printer = factory.createModelTestPrinter(outputWriter, errorWriter);
 
         int numThreads = 1;
         try {
@@ -97,7 +91,7 @@ public class ProtTest implements XMLConstants {
         } catch (IllegalArgumentException e) {
             if (MPJ_ME == 0) {
                 System.err.println(e.getMessage());
-                ApplicationOptions.usage(printer.getErrorWriter());
+                ApplicationOptions.usage();
             }
             finalize(1);
         } catch (AlignmentFormatException e) {
@@ -106,11 +100,6 @@ public class ProtTest implements XMLConstants {
             }
             finalize(1);
         }
-
-        Level level = Level.INFO;
-        if (opts.isDebug())
-            level = Level.ALL;
-        ProtTestLogger.getDefaultLogger().setStdHandlerLevel(level);
         
         TreeFacade treeFacade = new TreeFacadeImpl();
         ProtTestFacade facade;
@@ -135,10 +124,12 @@ public class ProtTest implements XMLConstants {
             });
         }
 
+        if (opts.isDebug())
+            logger.setStdHandlerLevel(Level.ALL);
+        
         if (MPJ_ME == 0) {
-            printer.printHeader();
+            ProtTestPrinter.printHeader();
             opts.report();
-            printer.getOutputWriter().flush();
         }
 
         Model[] models;
@@ -166,32 +157,35 @@ public class ProtTest implements XMLConstants {
                         throw new ProtTestInternalException(
                                 "Unrecognized information criterion");
                 }
-                ic.printModelsSorted(printer.getOutputWriter());
+                
+                facade.printModelsSorted(ic);
 
-                PrintFramework pf = new AminoAcidPrintFramework(ic);
+                if (opts.isAll()) {
+                    PrintFramework.printFrameworksComparison(ic.getModelCollection());
+                }
+                
                 if (opts.isDisplayASCIITree()) {
-                    pf.displayASCIITree(printer.getOutputWriter());
+                    logger.infoln(treeFacade.toASCII(ic.getBestModel().getTree()));
                 }
                 if (opts.isDisplayNewickTree()) {
-                    pf.displayNewickTree(printer.getOutputWriter());
+                    logger.infoln(treeFacade.toNewick(ic.getBestModel().getTree(), true, true, false));
                 }
                 if (opts.isDisplayConsensusTree()) {
-                    printer.getOutputWriter().println("");
-                    printer.getOutputWriter().println("");
-                    printer.getOutputWriter().println("***********************************************");
-                    printer.getOutputWriter().println("           Consensus tree (" +
+                    logger.infoln("");
+                    logger.infoln("");
+                    logger.infoln("***********************************************");
+                    logger.infoln("           Consensus tree (" +
                             opts.getConsensusThreshold() + ")");
-                    printer.getOutputWriter().println("***********************************************");
+                    logger.infoln("***********************************************");
                     Tree consensus = treeFacade.createConsensusTree(ic, opts.getConsensusThreshold());
-                    printer.getOutputWriter().println(treeFacade.toASCII(consensus));
+                    logger.infoln(treeFacade.toASCII(consensus));
                 }
             }
         } catch (ProtTestInternalException e) {
-            printer.getErrorWriter().println(e.getMessage());
+            logger.severeln(e.getMessage());
             finalize(-1);
         }
 
-        outputWriter.flush();
         finalize(0);
 
         if (MPJ_RUN) {
@@ -210,12 +204,9 @@ public class ProtTest implements XMLConstants {
 //		ApplicationOptions.deleteTemporaryFiles();
 
         if (status != 0) {
-            printer.getErrorWriter().flush();
             if (MPJ_RUN) {
                 MPI.COMM_WORLD.Abort(status);
             }
-        } else {
-            printer.getOutputWriter().flush();
         }
 
         if (MPJ_RUN) {

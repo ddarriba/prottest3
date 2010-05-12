@@ -185,6 +185,41 @@ public class ProtTestLogger {
         log(Level.FINEST, text);
     }
     
+    public void infoln(String text) {
+        log(Level.INFO, text + "\n");
+        flush();
+    }
+    
+    public void warningln(String text) {
+        log(Level.WARNING, text + "\n");
+        flush();
+    }
+    
+    public void configln(String text) {
+        log(Level.CONFIG, text + "\n");
+        flush();
+    }
+    
+    public void severeln(String text) {
+        log(Level.SEVERE, text + "\n");
+        flush();
+    }
+    
+    public void fineln(String text) {
+        log(Level.FINE, text + "\n");
+        flush();
+    }
+    
+    public void finerln(String text) {
+        log(Level.FINER, text + "\n");
+        flush();
+    }
+    
+    public void finestln(String text) {
+        log(Level.FINEST, text + "\n");
+        flush();
+    }
+    
     public static void info(String text, Class loggingClass) {
         log(Level.INFO, text, loggingClass);
     }
@@ -215,30 +250,37 @@ public class ProtTestLogger {
     
     public static void infoln(String text, Class loggingClass) {
         log(Level.INFO, text + "\n", loggingClass);
+        flush(loggingClass);
     }
     
     public static void warningln(String text, Class loggingClass) {
         log(Level.WARNING, text + "\n", loggingClass);
+        flush(loggingClass);
     }
     
     public static void configln(String text, Class loggingClass) {
         log(Level.CONFIG, text + "\n", loggingClass);
+        flush(loggingClass);
     }
     
     public static void severeln(String text, Class loggingClass) {
         log(Level.SEVERE, text + "\n", loggingClass);
+        flush(loggingClass);
     }
     
     public static void fineln(String text, Class loggingClass) {
         log(Level.FINE, text + "\n", loggingClass);
+        flush(loggingClass);
     }
     
     public static void finerln(String text, Class loggingClass) {
         log(Level.FINER, text + "\n", loggingClass);
+        flush(loggingClass);
     }
     
     public static void finestln(String text, Class loggingClass) {
         log(Level.FINEST, text + "\n", loggingClass);
+        flush(loggingClass);
     }
     
     public static void log(Level level, String text, Class loggingClass) {

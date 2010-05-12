@@ -23,9 +23,11 @@ import es.uvigo.darwin.prottest.util.argumentparser.ProtTestArgumentParser;
 import es.uvigo.darwin.prottest.util.exception.ProtTestInternalException;
 import es.uvigo.darwin.prottest.util.exception.TreeFormatException;
 import es.uvigo.darwin.prottest.util.fileio.AlignmentReader;
+import es.uvigo.darwin.prottest.util.logging.ProtTestLogger;
 import es.uvigo.darwin.prottest.util.printer.ProtTestFormattedOutput;
 
 import java.io.StringWriter;
+import java.util.logging.Level;
 import static es.uvigo.darwin.prottest.util.logging.ProtTestLogger.*;
 
 /**
@@ -550,6 +552,7 @@ public class ApplicationOptions extends java.lang.Object {
             //open the PrintWriter with file
             try {
                 FileOutputStream fo = new FileOutputStream(arguments.getValue(ProtTestArgumentParser.PARAM_OUTPUT_FILE));
+                ProtTestLogger.getDefaultLogger().addHandler(fo,Level.INFO);
             } catch (FileNotFoundException fnfe) {
                 throw new ProtTestInternalException(fnfe.getMessage());
             }
@@ -663,101 +666,99 @@ public class ApplicationOptions extends java.lang.Object {
      * 
      * @param err the error output to write the usage information in
      */
-    public static void usage(PrintWriter err) {
-        err.println("-------------------------------------------------------------------------------------------------");
-        err.println("Basic usage: ");
-        err.println(" - Sequential version: ");
-        err.println("		java -jar prottest-2.1.jar -i alignm_file [OPTIONS]					");
-        err.println(" - Parallel version: ");
-        err.println("		mpjrun.sh -wdir $PWD/ -np [NUM_PROCS] -jar ModelTest-2.1.jar -i alignm_file [OPTIONS]");
-        err.println("OPTIONS:                                           								");
-        err.println(" -i alignment_filename																");
-        err.println("			alignment input file (required)                  							");
-        err.println(" -t tree_filename																	");
-        err.println("			tree file      	(optional) [default: NJ tree]								");
-        err.println(" -o output_filename 																	");
-        err.println("			output file    	(optional) [default: standard output]								");
-        err.println(" -sort sot_by_value 																	");
-        err.println(" 		Ordering field	(optional) [default: " + ApplicationGlobals.DEFAULT_SORT_BY + "]");
-        err.println("             		A: AIC															");
-        err.println("             		B: BIC															");
-        err.println("             		C: AICc															");
-        err.println("             		D: LnL															");
-        err.println(" -all																				");
-        err.println(" 		Displays a 7-framework comparison table										");
-        err.println(" -S optimization_strategy															");
-        err.println(" 		optimization strategy mode: [default: " + ApplicationGlobals.DEFAULT_STRATEGY_MODE + "]");
+    public static void usage() {
+        println("-------------------------------------------------------------------------------------------------");
+        println("Basic usage: ");
+        println(" - Sequential version: ");
+        println("		java -jar prottest-2.1.jar -i alignm_file [OPTIONS]					");
+        println(" - Parallel version: ");
+        println("		mpjrun.sh -wdir $PWD/ -np [NUM_PROCS] -jar ModelTest-2.1.jar -i alignm_file [OPTIONS]");
+        println("OPTIONS:                                           								");
+        println(" -i alignment_filename																");
+        println("			alignment input file (required)                  							");
+        println(" -t tree_filename																	");
+        println("			tree file      	(optional) [default: NJ tree]								");
+        println(" -o output_filename 																	");
+        println("			output file    	(optional) [default: standard output]								");
+        println(" -sort sot_by_value 																	");
+        println(" 		Ordering field	(optional) [default: " + ApplicationGlobals.DEFAULT_SORT_BY + "]");
+        println("             		A: AIC															");
+        println("             		B: BIC															");
+        println("             		C: AICc															");
+        println("             		D: LnL															");
+        println(" -all																				");
+        println(" 		Displays a 7-framework comparison table										");
+        println(" -S optimization_strategy															");
+        println(" 		optimization strategy mode: [default: " + ApplicationGlobals.DEFAULT_STRATEGY_MODE + "]");
         for (int i = 0; i < ApplicationGlobals.STRATEGIES.length; i++) {
-            err.println("             		" + i + ": " + ApplicationGlobals.STRATEGIES[i]);
+            println("             		" + i + ": " + ApplicationGlobals.STRATEGIES[i]);
         }
-        err.println(" -sample sample_size_mode															");
-        err.println(" 		sample size for AICc and BIC corrections [default: " + ApplicationGlobals.DEFAULT_SAMPLE_SIZE_MODE + "]");
+        println(" -sample sample_size_mode															");
+        println(" 		sample size for AICc and BIC corrections [default: " + ApplicationGlobals.DEFAULT_SAMPLE_SIZE_MODE + "]");
         for (int i = 0; i < ApplicationGlobals.SIZE_MODES.length; i++) {
-            err.println("             		" + i + ": " + ApplicationGlobals.SIZE_MODES[i]);
+            println("             		" + i + ": " + ApplicationGlobals.SIZE_MODES[i]);
         }
-        err.println(" -size user_size  		");
-        err.println(" 		specified sample size, only for \"-sample " + ApplicationGlobals.SIZEMODE_USERSIZE + "\"");
-        err.println(" -t1      				");
-        err.println(" 		display best-model's newick tree [default: " + ApplicationGlobals.DEFAULT_DISPLAY_NEWICK_TREE + "]");
-        err.println(" -t2      				");
-        err.println(" 		display best-model's ASCII tree  [default: " + ApplicationGlobals.DEFAULT_DISPLAY_ASCII_TREE + "]");
-        err.println(" -tc consensus_threshold ");
-        err.println(" 		display consensus tree with the specified threshold");
-        err.println(" -verbose 				");
-        err.println(" 		verbose mode [default: " + ApplicationGlobals.DEFAULT_DEBUG + "]");
-        err.println(" -all-matrices			");
-        err.println(" 		computes all available matrices");
-        err.println(" -threads number_or_threads			");
-        err.println(" 		number of threads to compute (only if MPJ is not used) [default: " +
+        println(" -size user_size  		");
+        println(" 		specified sample size, only for \"-sample " + ApplicationGlobals.SIZEMODE_USERSIZE + "\"");
+        println(" -t1      				");
+        println(" 		display best-model's newick tree [default: " + ApplicationGlobals.DEFAULT_DISPLAY_NEWICK_TREE + "]");
+        println(" -t2      				");
+        println(" 		display best-model's ASCII tree  [default: " + ApplicationGlobals.DEFAULT_DISPLAY_ASCII_TREE + "]");
+        println(" -tc consensus_threshold ");
+        println(" 		display consensus tree with the specified threshold");
+        println(" -verbose 				");
+        println(" 		verbose mode [default: " + ApplicationGlobals.DEFAULT_DEBUG + "]");
+        println(" -all-matrices			");
+        println(" 		computes all available matrices");
+        println(" -threads number_or_threads			");
+        println(" 		number of threads to compute (only if MPJ is not used) [default: " +
                 ApplicationGlobals.DEFAULT_THREADS + "]");
-        err.println(" -[model]");
-        err.print("			model (Amino-acid) = ");
+        println(" -[model]");
+        print("			model (Amino-acid) = ");
         for (String matrix : Arrays.asList(AminoAcidApplicationGlobals.ALL_MATRICES)) {
-            err.print(matrix + " ");
+            print(matrix + " ");
         }
-        err.println("");
-        err.println("							(requires at least one substitution matrix)");
-        err.println(" -I	");
-        err.println(" 		include models with a proportion of invariable sites");
-        err.println(" -G	");
-        err.println(" 		include models with rate variation among sites and number of categories");
-        err.println(" -IG	");
-        err.println(" 		include models with both +I and +G properties");
-        err.println(" -all-distributions");
-        err.println(" 		include models with rate variation among sites, number of categories and both");
-        err.println(" -ncat number_of_categories");
-        err.println(" 		define number of categories for +G and +I+G models [default: " + ApplicationGlobals.DEFAULT_NCAT + "]");
-        err.println(" -F	");
-        err.println(" 		include models with empirical frequency estimation ");
-        err.println("-------------------------------------------------------------------------------------------------");
-        err.println("Example: ");
-        err.println("- Sequential version:		");
-        err.println("    java -jar ModelTest-2.1.jar -i alignm_file -t tree_file -S 0 -sample 1 -all-matrices -all-distributions -F > output		");
-        err.println("- Parallel version:		");
-        err.println("    mpjrun.sh -wdir $PWD/ -np 2 -jar ModelTest-2.1.jar -i alignm_file -t tree_file -S 0 -sample 1 -all-matrices -all-distributions -F");
+        println("");
+        println("							(requires at least one substitution matrix)");
+        println(" -I	");
+        println(" 		include models with a proportion of invariable sites");
+        println(" -G	");
+        println(" 		include models with rate variation among sites and number of categories");
+        println(" -IG	");
+        println(" 		include models with both +I and +G properties");
+        println(" -all-distributions");
+        println(" 		include models with rate variation among sites, number of categories and both");
+        println(" -ncat number_of_categories");
+        println(" 		define number of categories for +G and +I+G models [default: " + ApplicationGlobals.DEFAULT_NCAT + "]");
+        println(" -F	");
+        println(" 		include models with empirical frequency estimation ");
+        println("-------------------------------------------------------------------------------------------------");
+        println("Example: ");
+        println("- Sequential version:		");
+        println("    java -jar ModelTest-2.1.jar -i alignm_file -t tree_file -S 0 -sample 1 -all-matrices -all-distributions -F > output		");
+        println("- Parallel version:		");
+        println("    mpjrun.sh -wdir $PWD/ -np 2 -jar ModelTest-2.1.jar -i alignm_file -t tree_file -S 0 -sample 1 -all-matrices -all-distributions -F");
     }
 
     /**
      * Describe the framework used to sort the results.
      * 
-     * @param out the output writer
-     * @param sampleSize the sample size
      */
-    public void describeFramework(PrintWriter out, double sampleSize) {
-        out.println("");
-        out.println("************************************************************");
+    public void describeFramework() {
+        println("");
+        println("************************************************************");
         if (sortBy == 'A') {
-            out.println("Akaike Information Chriterion (AIC) framework");
+            println("Akaike Information Chriterion (AIC) framework");
         } else if (sortBy == 'C') {
-            out.println("Second-order AIC (AICc) framework");
+            println("Second-order AIC (AICc) framework");
         } else if (sortBy == 'B') {
-            out.println("Bayesian Information Chriterion (BIC) framework");
+            println("Bayesian Information Chriterion (BIC) framework");
         } else if (sortBy == 'D') {
-            out.println("Maximum Likelihood (-lnL) framework");
+            println("Maximum Likelihood (-lnL) framework");
         }
         if (sortBy != 'A' && sortBy != 'D') {
-            out.println("Sample size:  " + ApplicationGlobals.SIZE_MODES[sampleSizeMode]);
-            out.println("           =  " + ProtTestFormattedOutput.getDecimalString(sampleSize, 2));
+            println("Sample size:  " + ApplicationGlobals.SIZE_MODES[sampleSizeMode]);
+            println("           =  " + ProtTestFormattedOutput.getDecimalString(sampleSize, 2));
         }
     }
 
@@ -822,19 +823,19 @@ public class ApplicationOptions extends java.lang.Object {
         println("");
     }
 
-    private void print(String message) {
+    private static void print(String message) {
         info(message, ApplicationOptions.class);
     }
 
-    private void println(String message) {
+    private static void println(String message) {
         infoln(message, ApplicationOptions.class);
     }
 
-    private void verbose(String message) {
+    private static void verbose(String message) {
         fine(message, ApplicationOptions.class);
     }
 
-    private void verboseln(String message) {
+    private static void verboseln(String message) {
         fineln(message, ApplicationOptions.class);
     }
 }

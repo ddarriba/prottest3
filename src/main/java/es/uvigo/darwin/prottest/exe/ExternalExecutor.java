@@ -8,15 +8,11 @@ package es.uvigo.darwin.prottest.exe;
 import es.uvigo.darwin.prottest.exe.util.TemporaryFileManager;
 import es.uvigo.darwin.prottest.util.exception.ExternalExecutionException;
 import es.uvigo.darwin.prottest.util.exception.ProtTestInternalException;
-import es.uvigo.darwin.prottest.util.printer.ProtTestPrinter;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -34,14 +30,12 @@ public class ExternalExecutor {
     private String command;
     private Process proc = null;
     private OutputStream logOutput;
-    private PrintWriter errorWriter;
     
     private int internal_state = STATE_NULL;
     
-    public ExternalExecutor(String command, int outLogFormat, PrintWriter errorWriter) {
+    public ExternalExecutor(String command, int outLogFormat) {
         try {
             this.command = command;
-            this.errorWriter = errorWriter;
 
             switch (outLogFormat) {
                 case OUTPUT_STANDARD:

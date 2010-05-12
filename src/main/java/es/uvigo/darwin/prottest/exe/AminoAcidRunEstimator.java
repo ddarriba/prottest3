@@ -1,6 +1,5 @@
 package es.uvigo.darwin.prottest.exe;
 
-import java.io.PrintWriter;
 
 import es.uvigo.darwin.prottest.global.options.ApplicationOptions;
 import es.uvigo.darwin.prottest.model.Model;
@@ -26,7 +25,7 @@ public abstract class AminoAcidRunEstimator extends RunEstimatorImpl {
 	}
 
 	/* (non-Javadoc)
-	 * @see es.uvigo.darwin.prottest.exe.RunEstimator#report(java.io.PrintWriter)
+	 * @see es.uvigo.darwin.prottest.exe.RunEstimator#report()
 	 */
 	public void printReport () {
 		model.printReport();

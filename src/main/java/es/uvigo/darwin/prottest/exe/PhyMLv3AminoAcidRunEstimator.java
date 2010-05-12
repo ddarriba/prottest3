@@ -2,7 +2,6 @@ package es.uvigo.darwin.prottest.exe;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -35,7 +34,10 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
     private static final String STATS_FILE_SUFFIX = "_phyml_stats.txt";
     /** Suffix for temporary tree files. */
     private static final String TREE_FILE_SUFFIX = "_phyml_tree.txt";
+    /** Alignment filename. */
     private String workAlignment;
+    /** Custom model substitution matrix file**/
+    private File modelFile;
 
     /**
      * Instantiates a new optimizer for amino-acid models
@@ -50,6 +52,8 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
 
         try {
             this.model = (AminoAcidModel) model;
+            // check if there is any matrix file
+            modelFile = new File("models" + File.separator + model.getMatrix());
         } catch (ClassCastException cce) {
             throw new ProtTestInternalException("Wrong model type");
         }
@@ -112,23 +116,11 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
                 //         -c 0/4/8 (num rate categories) -u user_tree_file (opcional)
                 //         -o tlr/lr (dependiendo de si optimizamos la topología o no)
                 //         -m WAG (default) | JTT | MtREV | Dayhoff | DCMut | RtREV | CpREV | VT | Blosum62 | MtMam | MtArt | HIVw |  HIVb | custom
-                //     También hay que modificar el parsing de los ficheros de resultados de phyml.
-                //        El likelihood ya no viene en un fichero _phyml_lk.txt, sino en el fichero _phyml_stats.txt
-                //        El fichero _phyml_stat.txt ahora se llama _phyml_stats.txt
-                //        Respecto al contenido del fichero _phyml_stats.txt, es muy parecido. Comparar los ejemplos:
-                //             secuencias_ortho_YLR053C.phy_phyml_stats.txt (NUEVO)
-                //             2secuencias_ortho_YLR053C.phy_phyml_stat.txt (ANTIGUO)
-
-                // command arg.
                 java.io.File currentDir = new java.io.File("");
                 str[0] = currentDir.getAbsolutePath() + "/bin/" + getPhymlVersion();
                 str[1] = "";
                 str[2] = "";
                 str[3] = "";
-//				str[0]  = "OMP_NUM_THREADS=4"; 
-//				str[3]  = "";
-//				str[2]  = "";
-//				str[1]  = currentDir.getAbsolutePath() +"/bin/"+getPhymlVersion();
                 // input alignment
                 str[4] = "-i";
                 str[5] = workAlignment;
@@ -139,7 +131,11 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
 //				} else
 //					str[6] = str[7] = "";
                 str[8] = "-m"; //the model
-                str[9] = model.getMatrix();
+                if (modelFile.exists()) {
+                    str[9] = "custom";
+                } else {
+                    str[9] = model.getMatrix();
+                }
                 // proportion of invariable sites
                 str[10] = "-v";
                 str[11] = inv;
@@ -172,6 +168,7 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
 
                 model.setCommandLine(str);
                 proc = runtime.exec(str);
+                proc.getOutputStream().write(modelFile.getPath().getBytes());
                 ExternalExecutionManager.getInstance().addProcess(proc);
 
             } else {
@@ -180,9 +177,6 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
                 throw e;
             }
             proc.getOutputStream().close();
-            //open options.log_file
-            FileOutputStream tmp = new FileOutputStream(
-                    TemporaryFileManager.getInstance().getLogFilename(Thread.currentThread()));
 
             StreamGobbler errorGobbler = new StreamGobbler(new InputStreamReader(proc.getErrorStream()), "Phyml-Error", true, RunEstimator.class);
             StreamGobbler outputGobbler = new StreamGobbler(new InputStreamReader(proc.getInputStream()), "Phyml-Output", true, RunEstimator.class);
@@ -247,7 +241,9 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
 
                 if (line.length() > 0) {
                     if (line.startsWith(". Model of amino acids substitution")) {
-                        if (!model.getMatrix().equals(Utilities.lastToken(line))) {
+                        String matrixName = Utilities.lastToken(line);
+                        if (!(model.getMatrix().equals(matrixName) || (modelFile.exists() &&
+                                matrixName.equals("file")))) {
                             String errorMsg = "Matrix names doesn't match";
                             errorln("PHYML: " + line);
                             errorln("Last token: " + Utilities.lastToken(line));
@@ -349,5 +345,4 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
             return null;
         }
     }
-
 }

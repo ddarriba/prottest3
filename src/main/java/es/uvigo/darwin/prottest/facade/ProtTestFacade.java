@@ -50,8 +50,7 @@ public interface ProtTestFacade extends ModelUpdaterObserver {
 	 * @param informationCriterion the information criterion to sort the models
 	 * @param outputWriter the output writer where the output will be written
 	 */
-	public void printModelsSorted(InformationCriterion informationCriterion,
-			PrintWriter outputWriter);
+	public void printModelsSorted(InformationCriterion informationCriterion);
 	
 	public SelectionChunk computeInformationCriterion(Alignment alignment, Model[] models, 
 			int criterion, int sampleSizeMode, double sampleSize,

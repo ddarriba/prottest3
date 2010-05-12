@@ -65,12 +65,11 @@ public abstract class ProtTestFacadeImpl
     /* (non-Javadoc)
      * @see es.uvigo.darwin.prottest.facade.ProtTestFacade#printModelsSorted(es.uvigo.darwin.prottest.selection.InformationCriterion, java.io.PrintWriter)
      */
-    public void printModelsSorted(InformationCriterion informationCriterion,
-            PrintWriter outputWriter) {
+    public void printModelsSorted(InformationCriterion informationCriterion) {
 
         PrintFramework printFramework = new AminoAcidPrintFramework(informationCriterion);
 
-        printFramework.printModelsSorted(outputWriter);
+        printFramework.printModelsSorted();
 
     }
 

@@ -32,6 +32,7 @@ public abstract class RunEstimatorImpl
     protected String time;
     /** The number of rate categories. */
     protected int numberOfCategories;
+    /** The independent process. */
     protected Process proc = null;
 
     /* (non-Javadoc)
@@ -98,7 +99,7 @@ public abstract class RunEstimatorImpl
     }
 
     /* (non-Javadoc)
-     * @see es.uvigo.darwin.prottest.exe.RunEstimator#report(java.io.PrintWriter, boolean)
+     * @see es.uvigo.darwin.prottest.exe.RunEstimator#report()
      */
     public void report() {
 

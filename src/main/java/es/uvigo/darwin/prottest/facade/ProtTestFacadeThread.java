@@ -57,6 +57,7 @@ public class ProtTestFacadeThread
     /* (non-Javadoc)
      * @see es.uvigo.darwin.prottest.facade.ProtTestFacade#getNumberOfThreads()
      */
+    @Override
     public int getNumberOfThreads() {
         return poolSize;
     }
@@ -64,6 +65,7 @@ public class ProtTestFacadeThread
     /* (non-Javadoc)
      * @see es.uvigo.darwin.prottest.facade.ProtTestFacade#setNumberOfThreads(int)
      */
+    @Override
     public void setNumberOfThreads(int numThreads) {
 //		options.setNumberOfThreads(numThreads);
         this.poolSize = numThreads;
@@ -207,9 +209,11 @@ public class ProtTestFacadeThread
     @Override
     public synchronized void update(ObservableModelUpdater o, Model model, ApplicationOptions options) {
 
-        if (cpManager != null) {
-            ProtTestStatus newStatus = new ProtTestStatus(modelSet.toArray(new Model[0]), options);
-            cpManager.setStatus(newStatus);
+        if (model.isComputed() && options != null) {
+            if (cpManager != null) {
+                ProtTestStatus newStatus = new ProtTestStatus(modelSet.toArray(new Model[0]), options);
+                cpManager.setStatus(newStatus);
+            }
         }
 
         super.update(o, model, options);

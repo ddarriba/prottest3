@@ -23,101 +23,102 @@ import java.io.StringWriter;
  * A sequential implementation of the ProtTest facade.
  */
 public class ProtTestFacadeSequential extends ProtTestFacadeImpl {
-	
-	private CheckPointManager cpManager;
-	
-	private ModelCollection modelSet;
-	
-	/** The ProtTest factory to instantiate some application objects. */
-	private ProtTestFactory factory = ProtTestFactory.getInstance();
-	
-	public Model[] analyze(ApplicationOptions options) {
-		
-		//For each model, for each distribution,... optimize the model and calculate some statistics:
 
-		println("**********************************************************");
-		//this is only for doing output prettier
-		if(options.getSampleSizeMode() == ApplicationGlobals.SIZEMODE_SHANNON || options.getSampleSizeMode() == ApplicationGlobals.SIZEMODE_SHANNON_NxL) {
-			double tmpSampleSize = ProtTestAlignment.calculateShannonSampleSize(options.getAlignment(),options.getSampleSizeMode(),true);
-			println("Shannon entropy based sample size: "+ ProtTestFormattedOutput.getDecimalString(tmpSampleSize,2));
-		}
-		println("Observed number of invariant sites: " + ProtTestAlignment.calculateInvariableSites(options.getAlignment(), false));
-                StringWriter sw = new StringWriter();
-		ProtTestAlignment.printFrequencies(ProtTestAlignment.getFrequencies(options.getAlignment()), 
-                        new PrintWriter(sw));
-                sw.flush();
-                println(sw.toString());
-		println("**********************************************************");
-		println("");
-		
-		//TimeStamp timer = new TimeStamp();
-		Date startDate = new Date();
-		long startTime = startDate.getTime();
-		
-		int numberOfModels = 0;
+    private CheckPointManager cpManager;
+    private ModelCollection modelSet;
+    /** The ProtTest factory to instantiate some application objects. */
+    private ProtTestFactory factory = ProtTestFactory.getInstance();
 
-		ModelCollection arrayListModel = new SingleModelCollection(options.getAlignment());
-		
-		//Adding support for checkpointing
-		ProtTestStatus initialStatus = new ProtTestStatus(null, options);
-		cpManager = new CheckPointManager();
-		
-		if (cpManager.loadStatus(initialStatus)) {
-			arrayListModel = new SingleModelCollection(
-                                ((ProtTestStatus)cpManager.getLastCheckpoint()).getModels(),
-                                options.getAlignment());
-		} else {
-			Properties modelProperties = new Properties();
-			
-			if (options.isPlusF())
-				modelProperties.setProperty(Model.PROP_PLUS_F, "true");
-			arrayListModel.addModelCartesian(options.getMatrices(), options.getDistributions(), modelProperties,
-					options.getAlignment(), options.getTree(), options.ncat);
-		}
-		numberOfModels = arrayListModel.size();
-		modelSet = arrayListModel;
-	
-		flush();
-		
-		RunEstimator[] runenv = new RunEstimator[modelSet.size()];
-		
-		int current = 0;
-		for (Model model : modelSet) {
+    public Model[] analyze(ApplicationOptions options) {
 
-			runenv[current] 
-		       = factory.createRunEstimator(options, model);
-			runenv[current].addObserver(this);
-			runenv[current].run();
-			
-			runenv[current].report();
-			flush();
-			current++;
+        //For each model, for each distribution,... optimize the model and calculate some statistics:
 
-		}
+        println("**********************************************************");
+        //this is only for doing output prettier
+        if (options.getSampleSizeMode() == ApplicationGlobals.SIZEMODE_SHANNON || options.getSampleSizeMode() == ApplicationGlobals.SIZEMODE_SHANNON_NxL) {
+            double tmpSampleSize = ProtTestAlignment.calculateShannonSampleSize(options.getAlignment(), options.getSampleSizeMode(), true);
+            println("Shannon entropy based sample size: " + ProtTestFormattedOutput.getDecimalString(tmpSampleSize, 2));
+        }
+        println("Observed number of invariant sites: " + ProtTestAlignment.calculateInvariableSites(options.getAlignment(), false));
+        StringWriter sw = new StringWriter();
+        ProtTestAlignment.printFrequencies(ProtTestAlignment.getFrequencies(options.getAlignment()),
+                new PrintWriter(sw));
+        sw.flush();
+        println(sw.toString());
+        println("**********************************************************");
+        println("");
 
-		long endTime = System.currentTimeMillis();
+        //TimeStamp timer = new TimeStamp();
+        Date startDate = new Date();
+        long startTime = startDate.getTime();
 
-		Model[] allModels = new Model[numberOfModels];
-		
-		println("************************************************************");
-		String runtimeStr = Utilities.calculateRuntime(startTime, endTime);
-		println("Date   :  " +   (new Date()).toString());
-		println("Runtime:  " +   runtimeStr);
-		println("");			println("");
-		allModels = modelSet.toArray(new Model[0]);
+        int numberOfModels = 0;
 
-		cpManager.done();
-		return allModels;
-	}
+        ModelCollection arrayListModel = new SingleModelCollection(options.getAlignment());
 
-	@Override
-	public void update(ObservableModelUpdater o, Model model, ApplicationOptions options) {
-		
-		if (cpManager != null) {
-			ProtTestStatus newStatus = new ProtTestStatus(modelSet.toArray(new Model[0]), options);
-			cpManager.setStatus(newStatus);
-		}
-			
-		super.update(o, model, options);
-	}
+        //Adding support for checkpointing
+        ProtTestStatus initialStatus = new ProtTestStatus(null, options);
+        cpManager = new CheckPointManager();
+
+        if (cpManager.loadStatus(initialStatus)) {
+            arrayListModel = new SingleModelCollection(
+                    ((ProtTestStatus) cpManager.getLastCheckpoint()).getModels(),
+                    options.getAlignment());
+        } else {
+            Properties modelProperties = new Properties();
+
+            if (options.isPlusF()) {
+                modelProperties.setProperty(Model.PROP_PLUS_F, "true");
+            }
+            arrayListModel.addModelCartesian(options.getMatrices(), options.getDistributions(), modelProperties,
+                    options.getAlignment(), options.getTree(), options.ncat);
+        }
+        numberOfModels = arrayListModel.size();
+        modelSet = arrayListModel;
+
+        flush();
+
+        RunEstimator[] runenv = new RunEstimator[modelSet.size()];
+
+        int current = 0;
+        for (Model model : modelSet) {
+
+            runenv[current] = factory.createRunEstimator(options, model);
+            runenv[current].addObserver(this);
+            runenv[current].run();
+
+            runenv[current].report();
+            flush();
+            current++;
+
+        }
+
+        long endTime = System.currentTimeMillis();
+
+        Model[] allModels = new Model[numberOfModels];
+
+        println("************************************************************");
+        String runtimeStr = Utilities.calculateRuntime(startTime, endTime);
+        println("Date   :  " + (new Date()).toString());
+        println("Runtime:  " + runtimeStr);
+        println("");
+        println("");
+        allModels = modelSet.toArray(new Model[0]);
+
+        cpManager.done();
+        return allModels;
+    }
+
+    @Override
+    public void update(ObservableModelUpdater o, Model model, ApplicationOptions options) {
+
+        if (model.isComputed() && options != null) {
+            if (cpManager != null) {
+                ProtTestStatus newStatus = new ProtTestStatus(modelSet.toArray(new Model[0]), options);
+                cpManager.setStatus(newStatus);
+            }
+        }
+
+        super.update(o, model, options);
+    }
 }

@@ -3,7 +3,6 @@
  *
  * Created on 1 de octubre de 2009, 19:43
  */
-
 package es.uvigo.darwin.xprottest.compute;
 
 import es.uvigo.darwin.prottest.exe.ExternalExecutionManager;
@@ -21,40 +20,39 @@ import java.io.PrintWriter;
  *
  * @author  diego
  */
-public class RunningFrame extends javax.swing.JFrame 
-    implements ModelUpdaterObserver {
-    
+public class RunningFrame extends javax.swing.JFrame
+        implements ModelUpdaterObserver {
+
     private XProtTestView mainFrame;
     private Task task;
     private int computedModels;
     private int numModels;
     private PrintWriter displayWriter;
-    
     // var used to discard concurrent messages during
     // proccess cancel
     private boolean running;
-    
+
     /** Creates new form RunningFrame */
     public RunningFrame(XProtTestView mainFrame, int numModels) {
         initComponents();
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        
+
         this.mainFrame = mainFrame;
         this.numModels = numModels;
         this.displayWriter = new PrintWriter(new TextAreaAppender(computedTextArea));
         this.running = true;
-        
+
         lblNumModels.setText(String.valueOf(numModels));
         lblExecutedModels.setText(String.valueOf(computedModels));
         runningProgress.setMaximum(numModels);
         runningProgress.setMinimum(0);
         runningProgress.setValue(computedModels);
     }
-    
+
     public void setTask(Task task) {
         this.task = task;
     }
-    
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -147,18 +145,17 @@ public class RunningFrame extends javax.swing.JFrame
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    
     @Action
     public void cancelExecution() {
         ExternalExecutionManager.getInstance().killProcesses();
         task.cancel(true);
         unload();
     }
-    
+
     public void finishedExecution() {
         unload();
     }
-    
+
     private void unload() {
         mainFrame.unloadRunningView(this);
     }
@@ -172,32 +169,33 @@ public class RunningFrame extends javax.swing.JFrame
     private javax.swing.JLabel lblSeparator;
     private javax.swing.JProgressBar runningProgress;
     // End of variables declaration//GEN-END:variables
-
     public void update(ObservableModelUpdater o, Model model, ApplicationOptions options) {
         if (running) {
-            computedModels++;
-            runningProgress.setValue(computedModels);
-            lblExecutedModels.setText(String.valueOf(computedModels));
-            if (model.isComputed())
-                displayWriter.println("Computed " + model.getModelName() 
-                        + "(" + model.getLk() + ")");
-            else {
-                // Follow error behavior
-                if (mainFrame.getErrorBehavior() == XProtTestApp.ERROR_BEHAVIOR_CONTINUE)
-                    displayWriter.println("There were errors computing " + model.getModelName() 
-                            + " !!! ");
-                else if (mainFrame.getErrorBehavior() == XProtTestApp.ERROR_BEHAVIOR_STOP) {
-                    running = false;
-                    mainFrame.computationInterrupted();
-                    cancelExecution();
-                }
-                else {
-                    running = false;
-                    cancelExecution();
-                    throw new RuntimeException("Unsupported error behavior : " + mainFrame.getErrorBehavior());
+            if (!(model.isComputed() && options != null)) {
+                displayWriter.println("Computing " + model.getModelName() + "...");
+            } else {
+                computedModels++;
+                runningProgress.setValue(computedModels);
+                lblExecutedModels.setText(String.valueOf(computedModels));
+                if (model.isComputed()) {
+                    displayWriter.println("Computed " + model.getModelName() + "(" + model.getLk() + ")");
+                } else {
+                    if (options != null) {
+                        // Follow error behavior
+                        if (mainFrame.getErrorBehavior() == XProtTestApp.ERROR_BEHAVIOR_CONTINUE) {
+                            displayWriter.println("There were errors computing " + model.getModelName() + " !!! ");
+                        } else if (mainFrame.getErrorBehavior() == XProtTestApp.ERROR_BEHAVIOR_STOP) {
+                            running = false;
+                            mainFrame.computationInterrupted();
+                            cancelExecution();
+                        } else {
+                            running = false;
+                            cancelExecution();
+                            throw new RuntimeException("Unsupported error behavior : " + mainFrame.getErrorBehavior());
+                        }
+                    }
                 }
             }
         }
     }
-    
 }

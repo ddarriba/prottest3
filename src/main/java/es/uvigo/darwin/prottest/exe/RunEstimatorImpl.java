@@ -82,12 +82,16 @@ public abstract class RunEstimatorImpl
     public boolean optimizeModel()
             throws OSNotSupportedException {
 
+        // notify task computation
+        notifyObservers(getModel(),null);
+        
         boolean result = true;
         try {
             if (!optimized) {
                 result = runEstimator();
             }
         } finally {
+            // notify results
             notifyObservers(getModel(), options);
             deleteTemporaryFiles();
         }

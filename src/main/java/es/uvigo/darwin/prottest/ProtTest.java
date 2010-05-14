@@ -116,9 +116,11 @@ public class ProtTest implements XMLConstants {
 
                 @Override
                 public void update(ObservableModelUpdater o, Model model, ApplicationOptions options) {
-
-                    System.out.println("Computed: " + model.getModelName() + " (" + model.getLk() + ")");
-                    System.out.println("");
+                    if (model.isComputed() && options != null) {
+                        System.out.println("Computed: " + model.getModelName() + " (" + model.getLk() + ")");
+                    } else {
+                        System.out.println("Computing " + model.getModelName() + "...");
+                    }
 
                 }
             });

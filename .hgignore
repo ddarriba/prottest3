@@ -7,6 +7,9 @@ nbproject/
 previous-dists/
 src/main/notDistributable/
 src/test/notDistributable/
+prottest-hpc-3.0-beta/
+prottest-hpc-consensus/
+tarDist.sh
 *~
 *bk.*
 *.tar.gz

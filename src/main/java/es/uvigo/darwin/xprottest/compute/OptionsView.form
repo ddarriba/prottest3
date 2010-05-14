@@ -35,48 +35,49 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" attributes="0">
+          <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jPanel1" alignment="1" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Component id="jPanel1" alignment="0" max="32767" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
-                      <Component id="subMatPanel" max="32767" attributes="1"/>
+                      <Component id="subMatPanel" min="-2" max="-2" attributes="1"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="lblUserTree" pref="393" max="32767" attributes="0"/>
-                          <Component id="distributionsPanel" alignment="0" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="lblUserTree" alignment="0" pref="316" max="32767" attributes="1"/>
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="lblNumModelsLabel" pref="236" max="32767" attributes="1"/>
+                              <Component id="lblNumModelsLabel" pref="241" max="32767" attributes="1"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="lblNumModels" pref="151" max="32767" attributes="0"/>
+                              <Component id="lblNumModels" min="-2" pref="69" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="lblStrategyMode" alignment="0" min="-2" max="-2" attributes="1"/>
-                          <Component id="cmbStrategyMode" alignment="1" pref="393" max="32767" attributes="0"/>
+                          <Component id="cmbStrategyMode" alignment="0" pref="316" max="32767" attributes="1"/>
+                          <Component id="distributionsPanel" alignment="0" max="32767" attributes="1"/>
+                          <Component id="lblStrategyMode" alignment="0" pref="316" max="32767" attributes="1"/>
+                          <Group type="102" alignment="1" attributes="0">
+                              <Component id="btnCompute" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="btnSetDefault" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="btnCancel" min="-2" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
                   </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="185" max="-2" attributes="0"/>
-                      <Component id="sizeModeAlignment" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="msgValidate" pref="319" max="32767" attributes="0"/>
-                  </Group>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
+          <Group type="102" attributes="0">
               <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Group type="102" alignment="0" attributes="1">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="subMatPanel" min="-2" max="-2" attributes="1"/>
+                  <Group type="102" attributes="0">
                       <Component id="distributionsPanel" min="-2" max="-2" attributes="1"/>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="lblNumModelsLabel" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblNumModelsLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="lblNumModels" min="-2" pref="13" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -84,14 +85,14 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="cmbStrategyMode" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="lblUserTree" max="32767" attributes="0"/>
+                      <Component id="lblUserTree" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="btnCancel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnSetDefault" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnCompute" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
-                  <Component id="subMatPanel" alignment="0" min="-2" max="-2" attributes="1"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="sizeModeAlignment" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="msgValidate" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="32767" attributes="0"/>
           </Group>
@@ -102,8 +103,12 @@
     <Container class="javax.swing.JPanel" name="subMatPanel">
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-          <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
-            <LineBorder/>
+          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+            <TitledBorder title="Substitution model matrices">
+              <Property name="titleX" resourceKey="subMatPanel.border.title"/>
+              <Connection PropertyName="font" code="XProtTestApp.FONT_PANEL_TITLE" type="code"/>
+              <Property name="color" resourceKey="subMatPanel.border.titleColor"/>
+            </TitledBorder>
           </Border>
         </Property>
         <Property name="name" type="java.lang.String" value="subMatPanel" noResource="true"/>
@@ -112,13 +117,10 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="1" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="1" attributes="0">
-                      <Component id="subMatricesPanel" alignment="0" max="32767" attributes="0"/>
-                      <Component id="lblSubMatrices" alignment="0" pref="170" max="32767" attributes="0"/>
-                  </Group>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="subMatricesPanel" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -126,10 +128,8 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="lblSubMatrices" min="-2" max="-2" attributes="0"/>
+                  <Component id="subMatricesPanel" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="subMatricesPanel" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -144,30 +144,27 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="170" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="172" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="203" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="234" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
         </Container>
-        <Component class="javax.swing.JLabel" name="lblSubMatrices">
-          <Properties>
-            <Property name="horizontalAlignment" type="int" value="0"/>
-            <Property name="text" type="java.lang.String" resourceKey="lblSubMatrices.text"/>
-            <Property name="name" type="java.lang.String" value="lblSubMatrices" noResource="true"/>
-          </Properties>
-        </Component>
       </SubComponents>
     </Container>
     <Container class="javax.swing.JPanel" name="distributionsPanel">
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-          <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
-            <LineBorder/>
+          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+            <TitledBorder title="Distributions">
+              <Property name="titleX" resourceKey="distributionsPanel.border.title"/>
+              <Connection PropertyName="font" code="XProtTestApp.FONT_LABEL" type="code"/>
+              <Property name="color" resourceKey="distributionsPanel.border.titleColor"/>
+            </TitledBorder>
           </Border>
         </Property>
         <Property name="name" type="java.lang.String" value="distributionsPanel" noResource="true"/>
@@ -179,10 +176,8 @@
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="lblBaseFreq" alignment="0" pref="367" max="32767" attributes="1"/>
-                      <Component id="rateVarPanel" alignment="0" pref="367" max="32767" attributes="1"/>
-                      <Component id="lblRateVariation" alignment="0" pref="367" max="32767" attributes="1"/>
-                      <Component id="empiricalFPanel" alignment="0" max="32767" attributes="1"/>
+                      <Component id="rateVarPanel" max="32767" attributes="1"/>
+                      <Component id="empiricalFPanel" alignment="1" max="32767" attributes="1"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -192,11 +187,7 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="lblRateVariation" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="rateVarPanel" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="lblBaseFreq" min="-2" max="-2" attributes="0"/>
+                  <Component id="rateVarPanel" min="-2" pref="65" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="empiricalFPanel" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
@@ -205,20 +196,15 @@
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JLabel" name="lblRateVariation">
-          <Properties>
-            <Property name="horizontalAlignment" type="int" value="0"/>
-            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="es/uvigo/darwin/xprottest/compute/resources/OptionsView.properties" key=" lbl-rate-variation" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-            </Property>
-            <Property name="name" type="java.lang.String" value="lblRateVariation" noResource="true"/>
-          </Properties>
-        </Component>
         <Container class="javax.swing.JPanel" name="rateVarPanel">
           <Properties>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-              <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
-                <LineBorder/>
+              <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+                <TitledBorder title="Rate variation">
+                  <Property name="titleX" resourceKey="rateVarPanel.border.title"/>
+                  <Connection PropertyName="font" code="XProtTestApp.FONT_PANEL_TITLE" type="code"/>
+                  <Property name="color" resourceKey="rateVarPanel.border.titleColor"/>
+                </TitledBorder>
               </Border>
             </Property>
             <Property name="name" type="java.lang.String" value="rateVarPanel" noResource="true"/>
@@ -240,11 +226,17 @@
                       <Component id="txtNCat" min="-2" pref="35" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace pref="70" max="32767" attributes="0"/>
+                      <Component id="msgValidate" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
+                      <Component id="msgValidate" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="cbDistInvariant" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -261,6 +253,11 @@
           <SubComponents>
             <Component class="javax.swing.JLabel" name="lblNCat">
               <Properties>
+                <Property name="font" type="java.awt.Font" noResource="true" editor="org.netbeans.modules.form.editors2.FontEditor">
+                  <FontInfo relative="true">
+                    <Font component="lblNCat" property="font" relativeSize="true" size="0"/>
+                  </FontInfo>
+                </Property>
                 <Property name="horizontalAlignment" type="int" value="4"/>
                 <Property name="text" type="java.lang.String" resourceKey="lblNCat.text"/>
                 <Property name="name" type="java.lang.String" value="lblNCat" noResource="true"/>
@@ -268,6 +265,11 @@
             </Component>
             <Component class="javax.swing.JCheckBox" name="cbDistGroupCat">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
+                  <FontInfo relative="true">
+                    <Font component="cbDistGroupCat" property="font" relativeSize="true" size="0"/>
+                  </FontInfo>
+                </Property>
                 <Property name="selected" type="boolean" value="true"/>
                 <Property name="text" type="java.lang.String" resourceKey="cbDistGroupCat.text"/>
                 <Property name="toolTipText" type="java.lang.String" resourceKey="cbDistGroupCat.toolTipText"/>
@@ -279,6 +281,11 @@
             </Component>
             <Component class="javax.swing.JCheckBox" name="cbDistInvariant">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
+                  <FontInfo relative="true">
+                    <Font component="cbDistInvariant" property="font" relativeSize="true" size="0"/>
+                  </FontInfo>
+                </Property>
                 <Property name="selected" type="boolean" value="true"/>
                 <Property name="text" type="java.lang.String" resourceKey="cbDistInvariant.text"/>
                 <Property name="toolTipText" type="java.lang.String" resourceKey="cbDistInvariant.toolTipText"/>
@@ -300,6 +307,11 @@
             </Component>
             <Component class="javax.swing.JCheckBox" name="cbDistInvGC">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
+                  <FontInfo relative="true">
+                    <Font component="cbDistInvGC" property="font" relativeSize="true" size="0"/>
+                  </FontInfo>
+                </Property>
                 <Property name="selected" type="boolean" value="true"/>
                 <Property name="text" type="java.lang.String" resourceKey="cbDistInvGC.text"/>
                 <Property name="name" type="java.lang.String" value="cbDistInvGC" noResource="true"/>
@@ -308,22 +320,29 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onChangeOptions"/>
               </Events>
             </Component>
+            <Component class="javax.swing.JLabel" name="msgValidate">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="XProtTestApp.FONT_OPTION_LABEL" type="code"/>
+                </Property>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="XProtTestView.CRITIC_COLOR" type="code"/>
+                </Property>
+                <Property name="text" type="java.lang.String" resourceKey="msgValidate.text"/>
+                <Property name="name" type="java.lang.String" value="msgValidate" noResource="true"/>
+              </Properties>
+            </Component>
           </SubComponents>
         </Container>
-        <Component class="javax.swing.JLabel" name="lblBaseFreq">
-          <Properties>
-            <Property name="horizontalAlignment" type="int" value="0"/>
-            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="es/uvigo/darwin/xprottest/compute/resources/OptionsView.properties" key="lbl-amino-acid-frequencies" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-            </Property>
-            <Property name="name" type="java.lang.String" value="lblBaseFreq" noResource="true"/>
-          </Properties>
-        </Component>
         <Container class="javax.swing.JPanel" name="empiricalFPanel">
           <Properties>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-              <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
-                <LineBorder/>
+              <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+                <TitledBorder title="Amino-acid frequencies">
+                  <Property name="titleX" resourceKey="empiricalFPanel.border.title"/>
+                  <Connection PropertyName="font" code="XProtTestApp.FONT_PANEL_TITLE" type="code"/>
+                  <Property name="color" resourceKey="empiricalFPanel.border.titleColor"/>
+                </TitledBorder>
               </Border>
             </Property>
             <Property name="name" type="java.lang.String" value="empiricalFPanel" noResource="true"/>
@@ -335,7 +354,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="cbEmpiricalF" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="280" max="32767" attributes="0"/>
+                      <EmptySpace pref="187" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -352,6 +371,11 @@
           <SubComponents>
             <Component class="javax.swing.JCheckBox" name="cbEmpiricalF">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
+                  <FontInfo relative="true">
+                    <Font component="cbEmpiricalF" property="font" relativeSize="true" size="0"/>
+                  </FontInfo>
+                </Property>
                 <Property name="selected" type="boolean" value="true"/>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                   <ResourceString bundle="es/uvigo/darwin/xprottest/compute/resources/OptionsView.properties" key="cbEmpiricalF.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
@@ -369,26 +393,39 @@
     </Container>
     <Component class="javax.swing.JLabel" name="lblNumModelsLabel">
       <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="XProtTestApp.FONT_OPTION_LABEL" type="code"/>
+        </Property>
+        <Property name="foreground" type="java.awt.Color" resourceKey="lblNumModelsLabel.foreground"/>
         <Property name="text" type="java.lang.String" resourceKey="lblNumModelsLabel.text"/>
         <Property name="name" type="java.lang.String" value="lblNumModelsLabel" noResource="true"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="lblNumModels">
       <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="XProtTestApp.FONT_OPTION_LABEL" type="code"/>
+        </Property>
+        <Property name="foreground" type="java.awt.Color" resourceKey="lblNumModelsLabel.foreground"/>
         <Property name="name" type="java.lang.String" value="lblNumModels" noResource="true"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="sizeModeAlignment">
+    <Component class="javax.swing.JButton" name="btnCompute">
       <Properties>
         <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
           <action class="xprottest.XProtTestApp" id="computeLikelihood" methodName="computeLikelihood"/>
         </Property>
-        <Property name="text" type="java.lang.String" resourceKey="sizeModeAlignment.text"/>
-        <Property name="name" type="java.lang.String" value="sizeModeAlignment" noResource="true"/>
+        <Property name="text" type="java.lang.String" resourceKey="btnCompute.text"/>
+        <Property name="name" type="java.lang.String" value="btnCompute" noResource="true"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="lblStrategyMode">
       <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
+          <FontInfo relative="true">
+            <Font component="lblStrategyMode" property="font" relativeSize="true" size="0"/>
+          </FontInfo>
+        </Property>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
           <ResourceString bundle="es/uvigo/darwin/xprottest/resources/OptionsView.properties" key="lbl-strategy-mode" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
         </Property>
@@ -411,26 +448,25 @@
     </Component>
     <Component class="javax.swing.JLabel" name="lblUserTree">
       <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="XProtTestApp.FONT_OPTION_LABEL" type="code"/>
+        </Property>
+        <Property name="foreground" type="java.awt.Color" resourceKey="lblUserTree.foreground"/>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
           <ResourceString bundle="es/uvigo/darwin/xprottest/compute/resources/OptionsView.properties" key="msg-no-user-tree-loaded" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
         </Property>
         <Property name="name" type="java.lang.String" value="lblUserTree" noResource="true"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="msgValidate">
-      <Properties>
-        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="XProtTestView.CRITIC_COLOR" type="code"/>
-        </Property>
-        <Property name="text" type="java.lang.String" resourceKey="msgValidate.text"/>
-        <Property name="name" type="java.lang.String" value="msgValidate" noResource="true"/>
-      </Properties>
-    </Component>
     <Container class="javax.swing.JPanel" name="jPanel1">
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-          <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
-            <LineBorder/>
+          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+            <TitledBorder title="Number of processors to compute">
+              <Property name="titleX" resourceKey="jPanel1.border.title"/>
+              <Connection PropertyName="font" code="XProtTestApp.FONT_PANEL_TITLE" type="code"/>
+              <Property name="color" resourceKey="jPanel1.border.titleColor"/>
+            </TitledBorder>
           </Border>
         </Property>
         <Property name="name" type="java.lang.String" value="jPanel1" noResource="true"/>
@@ -441,11 +477,9 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="lblNumProcessors" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
                   <Component id="lblNumProc" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="sliderProcessors" pref="276" max="32767" attributes="1"/>
+                  <Component id="sliderProcessors" pref="410" max="32767" attributes="1"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -453,14 +487,12 @@
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="sliderProcessors" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Group type="103" alignment="0" groupAlignment="3" attributes="0">
-                          <Component id="lblNumProcessors" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="lblNumProc" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
+                      <Component id="sliderProcessors" alignment="0" pref="47" max="32767" attributes="1"/>
+                      <Component id="lblNumProc" alignment="0" min="-2" max="-2" attributes="1"/>
                   </Group>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -469,6 +501,7 @@
         <Component class="javax.swing.JSlider" name="sliderProcessors">
           <Properties>
             <Property name="minimum" type="int" value="1" postCode="sliderProcessors.setMaximum(&#xa;                Runtime.getRuntime().availableProcessors()&#xa;                );&#xa;        sliderProcessors.setValue(&#xa;                mainFrame.getFacade().getNumberOfThreads()&#xa;                );"/>
+            <Property name="paintLabels" type="boolean" value="true"/>
             <Property name="paintTicks" type="boolean" value="true"/>
             <Property name="snapToTicks" type="boolean" value="true"/>
             <Property name="toolTipText" type="java.lang.String" resourceKey="sliderProcessors.toolTipText"/>
@@ -478,22 +511,41 @@
             <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="sliderProcessorsStateChanged"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JLabel" name="lblNumProcessors">
-          <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="lblNumProcessors.text"/>
-            <Property name="name" type="java.lang.String" value="lblNumProcessors" noResource="true"/>
-          </Properties>
-        </Component>
         <Component class="javax.swing.JLabel" name="lblNumProc">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
+              <FontInfo relative="true">
+                <Font component="lblNumProc" property="font" relativeSize="true" size="0"/>
+              </FontInfo>
+            </Property>
             <Property name="horizontalAlignment" type="int" value="2"/>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="String.valueOf(sliderProcessors.getValue())" type="code"/>
+              <Connection code="&quot;[&quot; + String.valueOf(sliderProcessors.getValue()) + &quot;]&quot;" type="code"/>
             </Property>
             <Property name="name" type="java.lang.String" value="lblNumProc" noResource="true"/>
           </Properties>
         </Component>
       </SubComponents>
     </Container>
+    <Component class="javax.swing.JButton" name="btnSetDefault">
+      <Properties>
+        <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+          <action class="es.uvigo.darwin.xprottest.compute.OptionsView" id="restoreDefault" methodName="restoreDefault"/>
+        </Property>
+        <Property name="text" type="java.lang.String" resourceKey="btnSetDefault.text"/>
+        <Property name="toolTipText" type="java.lang.String" resourceKey="btnSetDefault.toolTipText"/>
+        <Property name="name" type="java.lang.String" value="btnSetDefault" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnCancel">
+      <Properties>
+        <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+          <action class="es.uvigo.darwin.xprottest.compute.OptionsView" id="close" methodName="close"/>
+        </Property>
+        <Property name="text" type="java.lang.String" resourceKey="btnCancel.text"/>
+        <Property name="toolTipText" type="java.lang.String" resourceKey="btnCancel.toolTipText"/>
+        <Property name="name" type="java.lang.String" value="btnCancel" noResource="true"/>
+      </Properties>
+    </Component>
   </SubComponents>
 </Form>

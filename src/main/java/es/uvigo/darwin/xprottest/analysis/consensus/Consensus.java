@@ -20,6 +20,7 @@ import es.uvigo.darwin.prottest.util.Utilities;
 import es.uvigo.darwin.prottest.util.collection.ModelCollection;
 import es.uvigo.darwin.prottest.util.collection.SingleModelCollection;
 import es.uvigo.darwin.prottest.util.exception.ProtTestInternalException;
+import es.uvigo.darwin.prottest.util.logging.ProtTestLogger;
 import java.awt.Font;
 import pal.tree.Tree;
 import java.io.PrintWriter;
@@ -31,9 +32,12 @@ import es.uvigo.darwin.xprottest.XProtTestView;
 import es.uvigo.darwin.xprottest.util.TextAreaWriter;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Handler;
+import java.util.logging.Level;
 import pal.alignment.Alignment;
 import pal.misc.Identifier;
 
+import static es.uvigo.darwin.prottest.util.logging.ProtTestLogger.*;
 /**
  *
  * @author  diego
@@ -52,6 +56,7 @@ public class Consensus extends javax.swing.JFrame {
     private ResourceMap resourceMap;
     private TreeFacade facade;
     private ModelCollection models;
+    private Handler logHandler;
     private PrintWriter displayWriter;
     private int sampleSizeMode = ApplicationGlobals.DEFAULT_SAMPLE_SIZE_MODE;
     private double sampleSize = 1.0;
@@ -62,7 +67,8 @@ public class Consensus extends javax.swing.JFrame {
         this.facade = facade;
         this.models = new SingleModelCollection(models, alignment);
         this.displayWriter = new PrintWriter(new TextAreaWriter(displayArea));
-
+        this.logHandler = getDefaultLogger().addHandler(displayWriter, Level.OFF);
+        
         resourceMap = Application.getInstance(es.uvigo.darwin.xprottest.XProtTestApp.class).getContext().getResourceMap(Consensus.class);
 
         Font f = new Font(Font.MONOSPACED, Font.PLAIN, 12);
@@ -555,6 +561,8 @@ public class Consensus extends javax.swing.JFrame {
                 selection = DISABLED_SELECTION;
             }
 
+            logHandler.setLevel(Level.INFO);
+            
             if (ic == null || ic.getConfidenceModels().size() > 0) {
                 es.uvigo.darwin.prottest.consensus.Consensus consensus = null;
                 if (ic != null) {
@@ -567,12 +575,12 @@ public class Consensus extends javax.swing.JFrame {
 //                    }
 //                    consensus = facade.createConsensus(trees, supportThreshold);
                 }
-                displayWriter.println("----------------------------------------");
-                displayWriter.println("Selection criterion: . . . . " + SELECTION[selection]);
-                displayWriter.println("Confidence interval: . . . . " + confidenceInterval);
-                displayWriter.println("Sample size: . . . . . . . . " + sampleSize);
-                displayWriter.println("Consensus support threshold: " + supportThreshold);
-                displayWriter.println("----------------------------------------");
+                println("----------------------------------------");
+                println("Selection criterion: . . . . " + SELECTION[selection]);
+                println("Confidence interval: . . . . " + confidenceInterval);
+                println("Sample size: . . . . . . . . " + sampleSize);
+                println("Consensus support threshold: " + supportThreshold);
+                println("----------------------------------------");
 
 //                displayWriter.println("Computed models:");
 //                for (SelectionModel model : ic.getConfidenceModels()) {
@@ -580,7 +588,7 @@ public class Consensus extends javax.swing.JFrame {
 //                }
 //                displayWriter.println("----------------------------------------");
 
-                displayWriter.println("");
+                println("");
 
                 Set<FixedBitSet> keySet = consensus.getCladeSupport().keySet();
                 List<FixedBitSet> splitsInConsensus = new ArrayList<FixedBitSet>();
@@ -597,59 +605,60 @@ public class Consensus extends javax.swing.JFrame {
                     }
                 }
 
-                displayWriter.println("# # # # # # # # # # # # # # # #");
-                displayWriter.println(" ");
-                displayWriter.println("Species in order:");
-                displayWriter.println(" ");
+                println("# # # # # # # # # # # # # # # #");
+                println(" ");
+                println("Species in order:");
+                println(" ");
 
                 for (int i = 0; i < consensus.getIdGroup().getIdCount(); i++) {
                     Identifier id = consensus.getIdGroup().getIdentifier(i);
-                    displayWriter.println("    " + (i + 1) + ". " + id.getName());
+                    println("    " + (i + 1) + ". " + id.getName());
                 }
-                displayWriter.println(" ");
-                displayWriter.println("# # # # # # # # # # # # # # # #");
-                displayWriter.println(" ");
-                displayWriter.println("Sets included in the consensus tree");
-                displayWriter.println(" ");
-                displayWriter.print("    ");
+                println(" ");
+                println("# # # # # # # # # # # # # # # #");
+                println(" ");
+                println("Sets included in the consensus tree");
+                println(" ");
+                print("    ");
                 for (int i = 0; i < consensus.getIdGroup().getIdCount(); i++) {
-                    displayWriter.print(i + 1);
+                    print(String.valueOf(i + 1));
                 }
-                displayWriter.println(" ");
+                println(" ");
                 for (FixedBitSet fbs : splitsInConsensus) {
-                    displayWriter.println("    " + fbs.splitRepresentation() + " ( " + 
+                    println("    " + fbs.splitRepresentation() + " ( " + 
                             Utilities.round(consensus.getCladeSupport().get(fbs), 5) + " )");
                 }
-                displayWriter.println(" ");
-                displayWriter.println("Sets NOT included in consensus tree");
-                displayWriter.println(" ");
-                displayWriter.print("    ");
+                println(" ");
+                println("Sets NOT included in consensus tree");
+                println(" ");
+                print("    ");
                 for (int i = 0; i < consensus.getIdGroup().getIdCount(); i++) {
-                    displayWriter.print(i + 1);
+                    print(String.valueOf(i + 1));
                 }
-                displayWriter.println(" ");
+                println(" ");
                 for (FixedBitSet fbs : splitsOutFromConsensus) {
-                    displayWriter.println("    " + fbs.splitRepresentation() + " ( " + 
+                    println("    " + fbs.splitRepresentation() + " ( " + 
                             Utilities.round(consensus.getCladeSupport().get(fbs), 5) + " )");
                 }
 
                 Tree consensusTree = consensus.getConsensusTree();
                 String newickTree = facade.toNewick(consensusTree, true, true, true);
-                displayWriter.println(newickTree);
-                displayWriter.println("");
-                displayWriter.println(facade.toASCII(consensusTree));
-                displayWriter.println(" ");
-                displayWriter.println(facade.branchInfo(consensusTree));
-                displayWriter.println(" ");
-                displayWriter.println(facade.heightInfo(consensusTree));
+                println(newickTree);
+                println("");
+                println(facade.toASCII(consensusTree));
+                println(" ");
+                println(facade.branchInfo(consensusTree));
+                println(" ");
+                println(facade.heightInfo(consensusTree));
             } else {
                 displayArea.setForeground(XProtTestView.CRITIC_COLOR);
-                displayWriter.println(resourceMap.getString("msg-no-data"));
+                println(resourceMap.getString("msg-no-data"));
             }
         } catch (NumberFormatException e) {
             displayArea.setForeground(XProtTestView.CRITIC_COLOR);
-            displayWriter.println(resourceMap.getString("msg-sample-size-error"));
+            println(resourceMap.getString("msg-sample-size-error"));
         }
+        logHandler.setLevel(Level.OFF);
     }
 
     @Action
@@ -664,6 +673,7 @@ public class Consensus extends javax.swing.JFrame {
 
     @Action
     public void close() {
+        getDefaultLogger().removeHandler(logHandler);
         this.setVisible(false);
     }
 
@@ -681,6 +691,14 @@ public class Consensus extends javax.swing.JFrame {
     public void selectSampleSize() {
     }
 
+    private void print(String message) {
+        info(message, this.getClass());
+    }
+
+    private void println(String message) {
+        infoln(message, this.getClass());
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuild;
     private javax.swing.ButtonGroup btnGroupSampleSizeMode;

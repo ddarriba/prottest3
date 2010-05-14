@@ -98,11 +98,11 @@ public class ProtTestLogger {
         }
     }
     
-    public void addHandler(OutputStream out) {
-        addHandler(out, DEFAULT_LEVEL);
+    public Handler addHandler(OutputStream out) {
+        return addHandler(out, DEFAULT_LEVEL);
     }
     
-    public void addHandler(OutputStream out, Level level) {
+    public Handler addHandler(OutputStream out, Level level) {
         if (out == null) {
 	    throw new NullPointerException();
 	}
@@ -110,13 +110,14 @@ public class ProtTestLogger {
                 new ProtTestLogFormatter());
         handler.setLevel(level);
         this.handlers.add(handler);
+        return handler;
     }
     
-    public void addHandler(Writer out) {
-        addHandler(out, DEFAULT_LEVEL);
+    public Handler addHandler(Writer out) {
+        return addHandler(out, DEFAULT_LEVEL);
     }
     
-    public void addHandler(Writer out, Level level) {
+    public Handler addHandler(Writer out, Level level) {
         if (out == null) {
 	    throw new NullPointerException();
 	}
@@ -125,6 +126,7 @@ public class ProtTestLogger {
                 new ProtTestLogFormatter());
         handler.setLevel(level);
         this.handlers.add(handler);
+        return handler;
     }
     
     public boolean removeHandler(Handler handler) {

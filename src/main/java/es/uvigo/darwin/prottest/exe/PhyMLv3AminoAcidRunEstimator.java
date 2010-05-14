@@ -185,11 +185,11 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
             int exitVal = proc.waitFor();
             ExternalExecutionManager.getInstance().removeProcess(proc);
 
-            verbose("Phyml's command-line: ");
+            pfine("Phyml's command-line: ");
             for (int i = 0; i < str.length; i++) {
-                verbose(str[i] + " ");
+                pfine(str[i] + " ");
             }
-            verboseln("");
+            pfineln("");
 
             if (exitVal != 0) {
                 errorln("Phyml's exit value: " + exitVal + " (there was probably some error)");
@@ -237,7 +237,7 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
             FileReader input = new FileReader(workAlignment + STATS_FILE_SUFFIX);
             BufferedReader br = new BufferedReader(input);
             while ((line = br.readLine()) != null) {
-                verboseln("[DEBUG] PHYML: " + line);
+                pfinerln("[DEBUG] PHYML: " + line);
 
                 if (line.length() > 0) {
                     if (line.startsWith(". Model of amino acids substitution")) {
@@ -257,7 +257,7 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
                         if (Utilities.lastToken(line).equals("Yes")) {
                             line = br.readLine();
 
-                            verboseln("[DEBUG] PHYML: " + line);
+                            pfinerln("[DEBUG] PHYML: " + line);
 
                             if (model.getNumberOfTransitionCategories() != Integer.parseInt(Utilities.lastToken(line))) {
                                 String errorMsg = "There was some error in the number of transition categories: " + model.getNumberOfTransitionCategories() + " vs " + Integer.parseInt(Utilities.lastToken(line));
@@ -268,7 +268,7 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
                             }
                             line = br.readLine();
 
-                            verboseln("[DEBUG] PHYML: " + line);
+                            pfinerln("[DEBUG] PHYML: " + line);
 
                             model.setAlpha(Double.parseDouble(Utilities.lastToken(line)));
                         }

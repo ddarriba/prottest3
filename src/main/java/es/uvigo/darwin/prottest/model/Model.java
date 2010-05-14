@@ -447,10 +447,10 @@ public abstract class Model implements Serializable {
     }
 
     private void verbose(String message) {
-        fine(message, Model.class);
+        finer(message, Model.class);
     }
 
     private void verboseln(String message) {
-        fineln(message, Model.class);
+        finerln(message, Model.class);
     }
 }

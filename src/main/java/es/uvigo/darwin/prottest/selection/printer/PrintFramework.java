@@ -62,8 +62,12 @@ public abstract class PrintFramework {
         columns[3] = informationCriterion.getCriterionName() + "w";
         columns[4] = "-lnL";
 
+        println("");
         println(ProtTestFormattedOutput.space(lineLength, '*'));
         println("Best model according to " + informationCriterion.getCriterionName() + ": " + bestModel.getModelName());
+        println("Sample Size:         " + informationCriterion.getSampleSize());
+        double confPercent = informationCriterion.getConfidenceInterval() * 100;
+        println("Confidence Interval: " + confPercent);
         println(ProtTestFormattedOutput.space(lineLength, '*'));
         for (int i = 0; i < numberOfFields; i++) {
             print(columns[i]);

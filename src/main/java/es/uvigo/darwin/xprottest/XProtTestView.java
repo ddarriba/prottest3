@@ -4,7 +4,6 @@
  * Created on Oct 2, 2009 10:15:16 PM
  * 
  */
-
 package es.uvigo.darwin.xprottest;
 
 import pal.alignment.AlignmentParseException;
@@ -40,6 +39,7 @@ import es.uvigo.darwin.prottest.model.Model;
 import es.uvigo.darwin.prottest.util.ProtTestAlignment;
 import es.uvigo.darwin.prottest.util.exception.AlignmentFormatException;
 import es.uvigo.darwin.prottest.util.exception.ProtTestInternalException;
+import es.uvigo.darwin.prottest.util.factory.ProtTestFactory;
 import es.uvigo.darwin.prottest.util.logging.ProtTestLogger;
 import es.uvigo.darwin.prottest.util.printer.ProtTestFormattedOutput;
 import es.uvigo.darwin.prottest.util.printer.ProtTestPrinter;
@@ -55,6 +55,8 @@ import es.uvigo.darwin.xprottest.results.ErrorLogView;
 import es.uvigo.darwin.xprottest.results.ResultsView;
 import java.awt.BorderLayout;
 import java.awt.Insets;
+import java.util.logging.Handler;
+import java.util.logging.Level;
 
 /**
  * The XProtTest main frame offers whole connection between the application
@@ -67,54 +69,45 @@ public class XProtTestView extends FrameView {
     /* Application colors */
     public static final Color NORMAL_COLOR = Color.BLACK;
     public static final Color CRITIC_COLOR = new Color(153, 0, 0);
-    public static final Color DONE_COLOR = new Color(102,102,153);
-    
+    public static final Color DONE_COLOR = new Color(102, 102, 153);
     /* Settings */
     private int errorBehavior;
-    
     /* General variables */
     private ResourceMap resourceMap;
-    
     private Alignment alignment;
-    
     private Tree tree;
-    
     private ProtTestFacade prottestFacade;
-    
     private boolean alignmentLoaded;
-    
     private File alignmentFile;
-    
     private boolean lnlCalculated;
-    
     private PrintWriter displayWriter;
-    
     private Model[] models;
-    
+    private Handler mainHandler;
     /* WINDOWS */
     private ResultsView resultsView;
     private TreeView treeView;
     private Consensus consensusView;
     private FrequenciesView frequenciesView;
     private ErrorLogView errorLogView;
-    
+
     public int getErrorBehavior() {
         return errorBehavior;
     }
-    
+
     protected void setErrorBehavior(int errorBehavior) {
         this.errorBehavior = errorBehavior;
     }
-    
+
     public ProtTestFacade getFacade() {
         return prottestFacade;
     }
-    
+
     private void setAlignmentFile(File alignmentFile) {
+        enableHandler();
         int numDecimals = 5;
         alignmentLoaded = (alignmentFile != null);
         if (alignmentLoaded) {
-            lblDataFileStatus.setText(resourceMap.getString("msg-data-loaded") +" "+ alignmentFile.getName());
+            lblDataFileStatus.setText(resourceMap.getString("msg-data-loaded") + " " + alignmentFile.getName());
             lblDataFileStatus.setForeground(DONE_COLOR);
             this.alignmentFile = alignmentFile;
             showFrequenciesItem.setEnabled(true);
@@ -122,11 +115,10 @@ public class XProtTestView extends FrameView {
             displayWriter.println("");
             displayWriter.println(resourceMap.getString("aa-frequencies"));
             displayWriter.println(
-            ProtTestFormattedOutput.space(resourceMap.getString("aa-frequencies").length(), '-')
-                    );
-            
+                    ProtTestFormattedOutput.space(resourceMap.getString("aa-frequencies").length(), '-'));
+
             for (int i = 0; i < frequencies.length; i++) {
-                displayWriter.println(ProtTestAlignment.charOfIndex(i) + " - " + 
+                displayWriter.println(ProtTestAlignment.charOfIndex(i) + " - " +
                         ProtTestFormattedOutput.getDecimalString(frequencies[i], numDecimals));
             }
         } else {
@@ -151,33 +143,40 @@ public class XProtTestView extends FrameView {
             consensusView.dispose();
             consensusView = null;
         }
+        disableHandler();
     }
-    
+
     public PrintWriter getDisplayWriter() {
         return displayWriter;
     }
-    
+
     public XProtTestView(SingleFrameApplication app, ProtTestFacade facade) {
         super(app);
 
-        resourceMap = Application.getInstance(es.uvigo.darwin.xprottest.XProtTestApp.class).getContext()
-                .getResourceMap(XProtTestView.class);
-        
-        this.errorBehavior = Application.getInstance(es.uvigo.darwin.xprottest.XProtTestApp.class).getContext()
-                .getResourceMap(XProtTestApp.class).getInteger("default-error-behavior");
-        
+        resourceMap = Application.getInstance(es.uvigo.darwin.xprottest.XProtTestApp.class).getContext().getResourceMap(XProtTestView.class);
+
+        this.errorBehavior = Application.getInstance(es.uvigo.darwin.xprottest.XProtTestApp.class).getContext().getResourceMap(XProtTestApp.class).getInteger("default-error-behavior");
+
         this.prottestFacade = facade;
-        
+
         initComponents();
 
         displayWriter = new PrintWriter(new TextAreaAppender(mainTextArea));
 
-        ProtTestLogger.getDefaultLogger().addHandler(displayWriter);
-        
+        mainHandler = ProtTestLogger.getDefaultLogger().addHandler(displayWriter);
+        try {
+            Handler logHandler = ProtTestFactory.getInstance().createLogHandler();
+            if (logHandler != null) {
+                ProtTestLogger.getDefaultLogger().addHandler(logHandler);
+            }
+        } catch (IOException ex) {
+            ProtTestLogger.getDefaultLogger().severeln(ex.getMessage());
+        }
         // status bar initialization - message timeout, idle icon and busy animation, etc
 
         int messageTimeout = resourceMap.getInteger("StatusBar.messageTimeout");
         messageTimer = new Timer(messageTimeout, new ActionListener() {
+
             public void actionPerformed(ActionEvent e) {
                 lblLikelihoodStatus.setText("");
             }
@@ -188,6 +187,7 @@ public class XProtTestView extends FrameView {
             busyIcons[i] = resourceMap.getIcon("StatusBar.busyIcons[" + i + "]");
         }
         busyIconTimer = new Timer(busyAnimationRate, new ActionListener() {
+
             public void actionPerformed(ActionEvent e) {
                 busyIconIndex = (busyIconIndex + 1) % busyIcons.length;
                 lblDataFileStatus.setIcon(busyIcons[busyIconIndex]);
@@ -198,6 +198,7 @@ public class XProtTestView extends FrameView {
 
         TaskMonitor taskMonitor = new TaskMonitor(getApplication().getContext());
         taskMonitor.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+
             public void propertyChange(java.beans.PropertyChangeEvent evt) {
                 String propertyName = evt.getPropertyName();
                 if ("started".equals(propertyName)) {
@@ -210,19 +211,27 @@ public class XProtTestView extends FrameView {
                     busyIconTimer.stop();
                     lblDataFileStatus.setIcon(idleIcon);
                 } else if ("message".equals(propertyName)) {
-                    String text = (String)(evt.getNewValue());
+                    String text = (String) (evt.getNewValue());
                     lblLikelihoodStatus.setText((text == null) ? "" : text);
                     messageTimer.restart();
                 } else if ("progress".equals(propertyName)) {
-                    int value = (Integer)(evt.getNewValue());
+                    int value = (Integer) (evt.getNewValue());
                 }
             }
         });
         lblMoreInfo.setVisible(false);
-        
+
         ProtTestPrinter.printHeader();
+        disableHandler();
     }
 
+    private void disableHandler() {
+        mainHandler.setLevel(Level.OFF);
+    }
+    
+    private void enableHandler() {
+        mainHandler.setLevel(Level.INFO);
+    }
     @Action
     public void showAboutBox() {
         if (aboutBox == null) {
@@ -269,32 +278,32 @@ public class XProtTestView extends FrameView {
 
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(es.uvigo.darwin.xprottest.XProtTestApp.class).getContext().getResourceMap(XProtTestView.class);
 
-	mainPanel.setSize(new java.awt.Dimension(500, 560));
-	mainPanel.setBorder(new javax.swing.plaf.BorderUIResource.EmptyBorderUIResource(new java.awt.Insets(20, 20, 20, 20)));
-	mainPanel.setLocation(new java.awt.Point(10, -10));
-	mainPanel.setVisible(true);
-	mainPanel.setAutoscrolls(true);
-	mainPanel.setLayout(new BorderLayout());
-	mainPanel.setBackground(null);
+        mainPanel.setSize(new java.awt.Dimension(500, 560));
+        mainPanel.setBorder(new javax.swing.plaf.BorderUIResource.EmptyBorderUIResource(new java.awt.Insets(20, 20, 20, 20)));
+        mainPanel.setLocation(new java.awt.Point(10, -10));
+        mainPanel.setVisible(true);
+        mainPanel.setAutoscrolls(true);
+        mainPanel.setLayout(new BorderLayout());
+        mainPanel.setBackground(null);
 
         //mainPanel.setBackground(resourceMap.getColor("mainPanel.background")); // NOI18N
         mainPanel.setName("mainPanel"); // NOI18N
         //mainPanel.setPreferredSize(new java.awt.Dimension(500, 600));
 
-	mainScrollPane.setSize(new java.awt.Dimension(590, 600));
-	mainScrollPane.setLocation(new java.awt.Point(20, 20));
-	mainScrollPane.setVisible(true);
-	mainScrollPane.setAutoscrolls(true);
+        mainScrollPane.setSize(new java.awt.Dimension(590, 600));
+        mainScrollPane.setLocation(new java.awt.Point(20, 20));
+        mainScrollPane.setVisible(true);
+        mainScrollPane.setAutoscrolls(true);
 
         mainScrollPane.setName("mainScrollPane"); // NOI18N
         //mainScrollPane.setPreferredSize(new java.awt.Dimension(460, 500));
 
-	mainTextArea.setMargin(new Insets(5,5,5,5));
-	mainTextArea.setBackground(Color.white);
-	mainTextArea.setEditable(false);
-	mainTextArea.setSize(new java.awt.Dimension(15,10));
-	mainTextArea.setAutoscrolls(true);
-	mainTextArea.setVisible(true);
+        mainTextArea.setMargin(new Insets(5, 5, 5, 5));
+        mainTextArea.setBackground(Color.white);
+        mainTextArea.setEditable(false);
+        mainTextArea.setSize(new java.awt.Dimension(15, 10));
+        mainTextArea.setAutoscrolls(true);
+        mainTextArea.setVisible(true);
 
         //mainTextArea.setColumns(15);
         //mainTextArea.setEditable(false);
@@ -303,24 +312,24 @@ public class XProtTestView extends FrameView {
         mainTextArea.setName("mainTextArea"); // NOI18N
         //mainScrollPane.setViewportView(mainTextArea);
 
-	statusPanel.setPreferredSize(new java.awt.Dimension(592, 30));
-	statusPanel.setBorder(new javax.swing.plaf.BorderUIResource.EtchedBorderUIResource(1, new java.awt.Color(182, 182, 182), new java.awt.Color(89, 89, 89)));
-	statusPanel.setLocation(new java.awt.Point(20, 630));
-	statusPanel.setVisible(true);
-	statusPanel.setLayout(new BorderLayout());
-	statusPanel.setForeground(java.awt.Color.blue);
-	statusPanel.setBackground(new java.awt.Color(220, 220, 220));
-	//statusPanel.setFont(new java.awt.Font("Dialog", 0, 9));
+        statusPanel.setPreferredSize(new java.awt.Dimension(592, 30));
+        statusPanel.setBorder(new javax.swing.plaf.BorderUIResource.EtchedBorderUIResource(1, new java.awt.Color(182, 182, 182), new java.awt.Color(89, 89, 89)));
+        statusPanel.setLocation(new java.awt.Point(20, 630));
+        statusPanel.setVisible(true);
+        statusPanel.setLayout(new BorderLayout());
+        statusPanel.setForeground(java.awt.Color.blue);
+        statusPanel.setBackground(new java.awt.Color(220, 220, 220));
+        //statusPanel.setFont(new java.awt.Font("Dialog", 0, 9));
 
         //statusPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         statusPanel.setName("statusPanel"); // NOI18N
         //statusPanel.setPreferredSize(new java.awt.Dimension(100, 200));
 
-	lblDataFileStatus.setSize(new java.awt.Dimension(150, 40));
-	lblDataFileStatus.setVisible(true);
-	lblDataFileStatus.setForeground(CRITIC_COLOR);
-	lblDataFileStatus.setHorizontalAlignment(javax.swing.JLabel.RIGHT);
-	lblDataFileStatus.setFont(XProtTestApp.FONT_LABEL);
+        lblDataFileStatus.setSize(new java.awt.Dimension(150, 40));
+        lblDataFileStatus.setVisible(true);
+        lblDataFileStatus.setForeground(CRITIC_COLOR);
+        lblDataFileStatus.setHorizontalAlignment(javax.swing.JLabel.RIGHT);
+        lblDataFileStatus.setFont(XProtTestApp.FONT_LABEL);
 
         //lblDataFileStatus.setForeground(resourceMap.getColor("lblDataFileStatus.foreground")); // NOI18N
         //lblDataFileStatus.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -328,77 +337,75 @@ public class XProtTestView extends FrameView {
         lblDataFileStatus.setText(bundle.getString("msg-no-data")); // NOI18N
         lblDataFileStatus.setName("lblDataFileStatus"); // NOI18N
 
-	lblLikelihoodStatus.setSize(new java.awt.Dimension(270, 40));
-	lblLikelihoodStatus.setVisible(true);
-	lblLikelihoodStatus.setForeground(CRITIC_COLOR);
-	lblLikelihoodStatus.setFont(XProtTestApp.FONT_LABEL);
+        lblLikelihoodStatus.setSize(new java.awt.Dimension(270, 40));
+        lblLikelihoodStatus.setVisible(true);
+        lblLikelihoodStatus.setForeground(CRITIC_COLOR);
+        lblLikelihoodStatus.setFont(XProtTestApp.FONT_LABEL);
 
         //lblLikelihoodStatus.setForeground(resourceMap.getColor("lblLikelihoodStatus.foreground")); // NOI18N
         lblLikelihoodStatus.setText(bundle.getString("msg-no-lnl-calculated")); // NOI18N
         lblLikelihoodStatus.setName("lblLikelihoodStatus"); // NOI18N
 
-	mainPanel.add(mainScrollPane,BorderLayout.CENTER);
-	mainPanel.add(statusPanel,BorderLayout.PAGE_END);
-	mainScrollPane.getViewport().add(mainTextArea);
-	statusPanel.add(lblLikelihoodStatus,BorderLayout.LINE_START);
-	statusPanel.add(lblDataFileStatus,BorderLayout.LINE_END);
+        mainPanel.add(mainScrollPane, BorderLayout.CENTER);
+        mainPanel.add(statusPanel, BorderLayout.PAGE_END);
+        mainScrollPane.getViewport().add(mainTextArea);
+        statusPanel.add(lblLikelihoodStatus, BorderLayout.LINE_START);
+        statusPanel.add(lblDataFileStatus, BorderLayout.LINE_END);
 
-/*
+        /*
         javax.swing.GroupLayout statusPanelLayout = new javax.swing.GroupLayout(statusPanel);
         statusPanel.setLayout(statusPanelLayout);
         statusPanelLayout.setHorizontalGroup(
-            statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(statusPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblLikelihoodStatus)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblDataFileStatus, javax.swing.GroupLayout.DEFAULT_SIZE, 332, Short.MAX_VALUE)
-                .addContainerGap())
+        statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(statusPanelLayout.createSequentialGroup()
+        .addContainerGap()
+        .addComponent(lblLikelihoodStatus)
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addComponent(lblDataFileStatus, javax.swing.GroupLayout.DEFAULT_SIZE, 332, Short.MAX_VALUE)
+        .addContainerGap())
         );
         statusPanelLayout.setVerticalGroup(
-            statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(statusPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblLikelihoodStatus)
-                    .addComponent(lblDataFileStatus))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(statusPanelLayout.createSequentialGroup()
+        .addContainerGap()
+        .addGroup(statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+        .addComponent(lblLikelihoodStatus)
+        .addComponent(lblDataFileStatus))
+        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-
         lblMoreInfo.setForeground(resourceMap.getColor("lblMoreInfo.foreground")); // NOI18N
         lblMoreInfo.setText(resourceMap.getString("lblMoreInfo.text")); // NOI18N
         lblMoreInfo.setName("lblMoreInfo"); // NOI18N
-
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
         mainPanelLayout.setHorizontalGroup(
-            mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(mainPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(mainPanelLayout.createSequentialGroup()
-                        .addGap(12, 12, 12)
-                        .addComponent(lblMoreInfo, javax.swing.GroupLayout.DEFAULT_SIZE, 527, Short.MAX_VALUE)
-                        .addContainerGap())
-                    .addGroup(mainPanelLayout.createSequentialGroup()
-                        .addComponent(mainScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 539, Short.MAX_VALUE)
-                        .addContainerGap())
-                    .addGroup(mainPanelLayout.createSequentialGroup()
-                        .addComponent(statusPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 539, Short.MAX_VALUE)
-                        .addContainerGap())))
+        mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(mainPanelLayout.createSequentialGroup()
+        .addContainerGap()
+        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(mainPanelLayout.createSequentialGroup()
+        .addGap(12, 12, 12)
+        .addComponent(lblMoreInfo, javax.swing.GroupLayout.DEFAULT_SIZE, 527, Short.MAX_VALUE)
+        .addContainerGap())
+        .addGroup(mainPanelLayout.createSequentialGroup()
+        .addComponent(mainScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 539, Short.MAX_VALUE)
+        .addContainerGap())
+        .addGroup(mainPanelLayout.createSequentialGroup()
+        .addComponent(statusPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 539, Short.MAX_VALUE)
+        .addContainerGap())))
         );
         mainPanelLayout.setVerticalGroup(
-            mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(mainScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 470, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(statusPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblMoreInfo)
-                .addContainerGap())
+        mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
+        .addContainerGap()
+        .addComponent(mainScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 470, Short.MAX_VALUE)
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+        .addComponent(statusPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addComponent(lblMoreInfo)
+        .addContainerGap())
         );
-*/
+         */
         menuBar.setName("menuBar"); // NOI18N
 
         javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(es.uvigo.darwin.xprottest.XProtTestApp.class).getContext().getActionMap(XProtTestView.class, this);
@@ -412,6 +419,7 @@ public class XProtTestView extends FrameView {
         loadAlignmentMenuItem.setText(bundle.getString("item-load-alignment")); // NOI18N
         loadAlignmentMenuItem.setName("loadAlignmentMenuItem"); // NOI18N
         loadAlignmentMenuItem.addActionListener(new java.awt.event.ActionListener() {
+
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 openDataFile(evt);
             }
@@ -447,6 +455,7 @@ public class XProtTestView extends FrameView {
         preferencesMenuItem.setText(resourceMap.getString("menu-preferences")); // NOI18N
         preferencesMenuItem.setName("preferencesMenuItem"); // NOI18N
         preferencesMenuItem.addActionListener(new java.awt.event.ActionListener() {
+
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 loadPreferencesView(evt);
             }
@@ -466,6 +475,7 @@ public class XProtTestView extends FrameView {
         computeMenuItem.setEnabled(false);
         computeMenuItem.setName("computeMenuItem"); // NOI18N
         computeMenuItem.addActionListener(new java.awt.event.ActionListener() {
+
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 loadOptionsView(evt);
             }
@@ -545,24 +555,24 @@ public class XProtTestView extends FrameView {
         setMenuBar(menuBar);
 //        setStatusBar(statusPanel);
 
-	this.getFrame().setLayout(new BorderLayout());
+        this.getFrame().setLayout(new BorderLayout());
 //	this.getFrame().getContentPane().add(mainPanel);
 
-	this.getFrame().setLocation(new java.awt.Point(281, 80));
-	this.getFrame().getContentPane().setLayout(new BorderLayout());
-	this.getFrame().setTitle("ProtTest-HPC 3.0");
-	this.getFrame().setSize(new java.awt.Dimension(630, 695));
-	this.getFrame().setResizable(true);
+        this.getFrame().setLocation(new java.awt.Point(281, 80));
+        this.getFrame().getContentPane().setLayout(new BorderLayout());
+        this.getFrame().setTitle("ProtTest-HPC 3.0");
+        this.getFrame().setSize(new java.awt.Dimension(630, 695));
+        this.getFrame().setResizable(true);
         this.getFrame().setContentPane(mainPanel);
     }
 
     private void openDataFile(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openDataFile
         FileDialog fc = new FileDialog(this.getFrame(), "Load DNA alignment", FileDialog.LOAD);
-	fc.setDirectory(System.getProperty("user.dir"));
-	fc.setVisible(true);
-		
-	String dataFileName = fc.getFile();
-                
+        fc.setDirectory(System.getProperty("user.dir"));
+        fc.setVisible(true);
+
+        String dataFileName = fc.getFile();
+
 //        JFileChooser fc = XProtTestApp.createFileChooser(getResourceMap().getString(
 //            "loadAlignment.dialogTitle"));
 //        int option = fc.showOpenDialog(getFrame());
@@ -571,7 +581,7 @@ public class XProtTestView extends FrameView {
         if (dataFileName != null) {
             try {
                 File f = new File(fc.getDirectory() + dataFileName);//fc.getSelectedFile();
-                if (alignmentFile==null || !f.getAbsolutePath().equals(alignmentFile.getAbsolutePath())) {
+                if (alignmentFile == null || !f.getAbsolutePath().equals(alignmentFile.getAbsolutePath())) {
                     lblLikelihoodStatus.setText(resourceMap.getString("msg-no-lnl-calculated"));
                     lblLikelihoodStatus.setForeground(CRITIC_COLOR);
                     lnlCalculated = false;
@@ -586,7 +596,7 @@ public class XProtTestView extends FrameView {
     }//GEN-LAST:event_openDataFile
 
     private void loadOptionsView(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadOptionsView
-        OptionsView op = new OptionsView(this, 
+        OptionsView op = new OptionsView(this,
                 alignment, alignmentFile.getAbsolutePath());
         op.setVisible(true);
         this.getFrame().setEnabled(false);
@@ -599,10 +609,11 @@ public class XProtTestView extends FrameView {
     }//GEN-LAST:event_loadPreferencesView
 
     public void unloadOptionsView(boolean running) {
-        if (!running)
+        if (!running) {
             this.getFrame().setEnabled(true);
+        }
     }
-    
+
     public void unloadPreferencesView() {
         this.getFrame().setEnabled(true);
     }
@@ -613,7 +624,6 @@ public class XProtTestView extends FrameView {
 //        fc.setCurrentDirectory(new File("."));
 //        return fc;
 //    }
-
     @Action
     public void showAminoacidFrequencies() {
         if (alignment != null) {
@@ -623,9 +633,8 @@ public class XProtTestView extends FrameView {
             frequenciesView.setVisible(true);
         }
     }
-
     private boolean correctDone;
-    
+
     @Action
     public void showResultsWindow() {
         if (models != null) {
@@ -635,11 +644,13 @@ public class XProtTestView extends FrameView {
             resultsView.setVisible(true);
         }
     }
-    
     private int numModels;
     private boolean taskRunning = false;
+
     public void computeLikelihood(int numModels, ApplicationOptions options) {
 
+        enableHandler();
+        
         preferencesMenuItem.setEnabled(false);
         this.numModels = numModels;
         if (errorLogView != null) {
@@ -669,7 +680,7 @@ public class XProtTestView extends FrameView {
         errorMenuItem.setEnabled(false);
         prottestFacade.addObserver(runningFrame);
         lblMoreInfo.setVisible(false);
-        
+
         Task task = new ComputeLikelihoodTask(getApplication(), runningFrame, this, options);
         // get the application's context...
         ApplicationContext appC = Application.getInstance().getContext();
@@ -680,13 +691,13 @@ public class XProtTestView extends FrameView {
         // i.e. making the animated progressbar and busy icon visible
         tS.execute(task);
         taskRunning = true;
-        
+
         this.getFrame().setEnabled(false);
         runningFrame.setVisible(true);
     }
 
     protected void computationDone(boolean done, Model[] models) {
-        
+
         preferencesMenuItem.setEnabled(true);
         if (done) {
             correctDone = (models.length == this.numModels);
@@ -718,32 +729,35 @@ public class XProtTestView extends FrameView {
         resultsMenuItem.setEnabled(done);
         showTreeMenuItem.setEnabled(done);
         averagingMenuItem.setEnabled(done);
-        
+
         this.models = models;
-        
+
+        disableHandler();
     }
-    
+
     public void computationInterrupted() {
         lblLikelihoodStatus.setText(resourceMap.getString("msg-lnl-error"));
         lblLikelihoodStatus.setForeground(CRITIC_COLOR);
         displayWriter.println(resourceMap.getString("msg-see-error-log"));
         errorMenuItem.setEnabled(true);
         lblMoreInfo.setVisible(true);
+        disableHandler();
     }
-    
+
     public void unloadRunningView(RunningFrame rf) {
         this.getFrame().setEnabled(true);
         rf.setVisible(false);
+        disableHandler();
     }
-    
+
     private class ComputeLikelihoodTask extends Task<Object, Void> {
-        
+
         private RunningFrame runningFrame;
         private XProtTestView mainFrame;
         private Model[] models;
         private ApplicationOptions options;
-        
-        ComputeLikelihoodTask(Application app, 
+
+        ComputeLikelihoodTask(Application app,
                 RunningFrame runningFrame,
                 XProtTestView mainFrame,
                 ApplicationOptions options) {
@@ -756,13 +770,14 @@ public class XProtTestView extends FrameView {
             this.mainFrame = mainFrame;
             runningFrame.setTask(this);
         }
-                
-        @Override protected Object doInBackground() {
+
+        @Override
+        protected Object doInBackground() {
             // Your Task's code here.  This method runs
             // on a background thread, so don't reference
             // the Swing GUI from here.
 //            ProtTestPrinter printer = new ProtTestPrinter(getDisplayWriter(), new PrintWriter(System.err));
-            
+
             try {
                 options.setAlignFile(alignmentFile.getAbsolutePath());
                 models = prottestFacade.startAnalysis(options);
@@ -773,17 +788,18 @@ public class XProtTestView extends FrameView {
             } catch (ProtTestInternalException ex) {
                 ProtTestLogger.severeln(ex.getMessage(), this.getClass());
             }
-            
+
             runningFrame.finishedExecution();
 
             return null;  // return your result
         }
-        
-        @Override protected void succeeded(Object result) {
+
+        @Override
+        protected void succeeded(Object result) {
             // Runs on the EDT.  Update the GUI based on
             // the result computed by doInBackground().
             boolean done = models != null && models.length > 0;
-            if (done)
+            if (done) {
                 try {
                     for (Model model : models) {
                         // throws ProtTestInternalException when Lk is not set
@@ -792,20 +808,21 @@ public class XProtTestView extends FrameView {
                 } catch (ProtTestInternalException e) {
                     done = false;
                 }
-                    
+            }
+
             mainFrame.computationDone(done, models);
         }
-        
-        @Override protected void cancelled() {
+
+        @Override
+        protected void cancelled() {
             mainFrame.computationDone(false, null);
         }
-        
-        @Override protected void interrupted(InterruptedException ex) {
-             mainFrame.computationInterrupted();
+
+        @Override
+        protected void interrupted(InterruptedException ex) {
+            mainFrame.computationInterrupted();
         }
-       
     }
-    
 
     @Action
     public void showTree() {
@@ -853,7 +870,7 @@ public class XProtTestView extends FrameView {
     @Action
     public void showManual() {
         try {
-        BrowserLauncher.openURL("http://darwin.uvigo.es/download/prottest_manual.pdf");
+            BrowserLauncher.openURL("http://darwin.uvigo.es/download/prottest_manual.pdf");
         } catch (IOException e) {
             displayWriter.println("Cannot open URL : " + e.getMessage());
         }
@@ -883,13 +900,10 @@ public class XProtTestView extends FrameView {
     private javax.swing.JMenuItem showTreeMenuItem;
     private javax.swing.JPanel statusPanel;
     // End of variables declaration//GEN-END:variables
-
     private final Timer messageTimer;
     private final Timer busyIconTimer;
     private final Icon idleIcon;
     private final Icon[] busyIcons = new Icon[15];
     private int busyIconIndex = 0;
-
     private JDialog aboutBox;
-
 }

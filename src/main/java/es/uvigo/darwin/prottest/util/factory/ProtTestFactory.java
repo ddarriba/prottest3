@@ -1,5 +1,6 @@
 package es.uvigo.darwin.prottest.util.factory;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -21,6 +22,12 @@ import es.uvigo.darwin.prottest.selection.printer.PrintFramework;
 import es.uvigo.darwin.prottest.util.argumentparser.AminoAcidArgumentParser;
 import es.uvigo.darwin.prottest.util.argumentparser.ProtTestArgumentParser;
 import es.uvigo.darwin.prottest.util.exception.ProtTestInternalException;
+import es.uvigo.darwin.prottest.util.logging.ProtTestLogFormatter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.StreamHandler;
 
 /**
  * A factory for creating ProtTest objects.
@@ -209,6 +216,37 @@ public class ProtTestFactory {
             throw new ProtTestInternalException("Analyzer not supported by RunEstimator");
         }
         return runEstimator;
+    }
+
+    public Handler createLogHandler() throws IOException {
+        //   Log level is configurable:
+        //   'info'    Only general information messages are logged (default)
+        //   'fine'    General debug information is also logged
+        //   'finer'   More complex debug information is logged
+        //   'finest'  All activity is tracked
+
+        String[] supportedLevels = {"INFO", "FINE", "FINER", "FINEST"};
+
+        String logDirName = ApplicationGlobals.properties.getProperty("log_dir");
+        String level = ApplicationGlobals.properties.getProperty("log_level", "info").toUpperCase();
+        boolean supported = false;
+        for (String testLevel : supportedLevels) {
+            supported |= testLevel.equals(level);
+        }
+
+        Handler logHandler = null;
+        if (logDirName != null && supported) {
+            File logDir = new File(logDirName);
+            if (!logDir.exists()) {
+                logDir.mkdirs();
+            }
+            File logFile = File.createTempFile(
+                    "prottest-hpc_", ".log", logDir);
+            FileOutputStream fos = new FileOutputStream(logFile);
+            logHandler = new StreamHandler(fos, new ProtTestLogFormatter());
+            logHandler.setLevel(Level.parse(level));
+        }
+        return logHandler;
     }
 
     /**

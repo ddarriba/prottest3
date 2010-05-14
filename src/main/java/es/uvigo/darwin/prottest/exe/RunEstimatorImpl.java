@@ -126,7 +126,7 @@ public abstract class RunEstimatorImpl
      * Prints a report of the execution.
      * 
      * @param out the output writer to write in
-     * @param verbose if debug mode is on
+     * @param pfine if debug mode is on
      */
     public abstract void printReport();
 
@@ -163,11 +163,19 @@ public abstract class RunEstimatorImpl
         severeln(message, RunEstimator.class);
     }
     
-    protected void verbose(String message) {
+    protected void pfine(String message) {
         fine(message, RunEstimator.class);
     }
 
-    protected void verboseln(String message) {
+    protected void pfineln(String message) {
         fineln(message, RunEstimator.class);
+    }
+    
+    protected void pfiner(String message) {
+        finer(message, RunEstimator.class);
+    }
+
+    protected void pfinerln(String message) {
+        finerln(message, RunEstimator.class);
     }
 }

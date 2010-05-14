@@ -1480,6 +1480,11 @@ public class ResultsView extends javax.swing.JFrame {
                     SelectionChunk.DT, sampleSizeMode, sampleSize, confidenceInterval);
         }
 
+        mainFrame.getFacade().printModelsSorted(chunkAIC.getInformationCriterion());
+        mainFrame.getFacade().printModelsSorted(chunkBIC.getInformationCriterion());
+        mainFrame.getFacade().printModelsSorted(chunkAICC.getInformationCriterion());
+        mainFrame.getFacade().printModelsSorted(chunkDT.getInformationCriterion());
+        
         Collection<SelectionModel> aicIt = chunkAIC.getConfidenceModels();
         Collection<SelectionModel> bicIt = chunkBIC.getConfidenceModels();
         Collection<SelectionModel> aiccIt = chunkAICC.getConfidenceModels();

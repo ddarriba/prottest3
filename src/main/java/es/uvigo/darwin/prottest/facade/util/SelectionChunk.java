@@ -36,6 +36,10 @@ public class SelectionChunk {
     public static final int SIZEMODE_USERSIZE      = ApplicationGlobals.SIZEMODE_USERSIZE;
 	
 	private InformationCriterion informationCriterion;
+        
+        public InformationCriterion getInformationCriterion() {
+            return informationCriterion;
+        }
 
 	public SelectionChunk(InformationCriterion informationCriterion) {
 		this.informationCriterion = informationCriterion;

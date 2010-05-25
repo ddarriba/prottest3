@@ -34,6 +34,8 @@ public abstract class RunEstimatorImpl
     protected int numberOfCategories;
     /** The independent process. */
     protected Process proc = null;
+    /** The number of threads for parallel execution **/
+    protected int numberOfThreads = 1;
 
     /* (non-Javadoc)
      * @see es.uvigo.darwin.prottest.exe.RunEstimator#getModel()
@@ -69,13 +71,25 @@ public abstract class RunEstimatorImpl
      * 
      * @param options the application options instance
      * @param model the amino-acid model to optimize
+     * @param numberOfThreads the number of threads to use in the optimization
      */
     public RunEstimatorImpl(ApplicationOptions options, Model model) {
+        this(options, model, 1);
+    }
+
+    /**
+     * Instantiates a new generic optimizer.
+     * 
+     * @param options the application options instance
+     * @param model the amino-acid model to optimize
+     */
+    public RunEstimatorImpl(ApplicationOptions options, Model model, int numberOfThreads) {
         this.options = options;
         this.model = model;
         this.optimized = model.isComputed();
+        this.numberOfThreads = numberOfThreads;
     }
-
+    
     /* (non-Javadoc)
      * @see es.uvigo.darwin.prottest.exe.RunEstimator#optimizeModel(es.uvigo.darwin.prottest.global.options.ApplicationOptions)
      */

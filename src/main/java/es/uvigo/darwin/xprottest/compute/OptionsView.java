@@ -11,6 +11,7 @@ import es.uvigo.darwin.xprottest.util.OptimizationStrategyWrapper;
 import es.uvigo.darwin.prottest.facade.util.ProtTestParameterVO;
 import es.uvigo.darwin.prottest.global.AminoAcidApplicationGlobals;
 import es.uvigo.darwin.prottest.global.options.ApplicationOptions;
+import es.uvigo.darwin.prottest.util.exception.AlignmentParseException;
 import es.uvigo.darwin.prottest.util.exception.ProtTestInternalException;
 import es.uvigo.darwin.prottest.util.exception.TreeFormatException;
 import java.awt.Color;
@@ -23,7 +24,6 @@ import java.util.ResourceBundle;
 import javax.swing.GroupLayout;
 import javax.swing.JCheckBox;
 import org.jdesktop.application.Action;
-import pal.alignment.AlignmentParseException;
 import pal.tree.Tree;
 import pal.alignment.Alignment;
 import pal.misc.Identifier;
@@ -562,7 +562,7 @@ public class OptionsView extends javax.swing.JFrame {
             try {
                 mainFrame.getFacade().setNumberOfThreads(sliderProcessors.getValue());
                 ProtTestParameterVO parameters = new ProtTestParameterVO(
-                        alignmentFilePath, treeFilePath, matrices, distributions, plusF, ncat,
+                        alignmentFilePath, alignment, treeFilePath, matrices, distributions, plusF, ncat,
                         strategyMode);
                 ApplicationOptions options = mainFrame.getFacade().configure(parameters);
                 mainFrame.computeLikelihood(calculateNumberOfModels(), options);

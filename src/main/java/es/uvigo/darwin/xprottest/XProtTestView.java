@@ -6,7 +6,7 @@
  */
 package es.uvigo.darwin.xprottest;
 
-import pal.alignment.AlignmentParseException;
+import java.io.FileNotFoundException;
 import es.uvigo.darwin.xprottest.compute.RunningFrame;
 import es.uvigo.darwin.xprottest.compute.OptionsView;
 import org.jdesktop.application.Action;
@@ -37,7 +37,7 @@ import es.uvigo.darwin.prottest.facade.TreeFacade;
 import es.uvigo.darwin.prottest.facade.TreeFacadeImpl;
 import es.uvigo.darwin.prottest.model.Model;
 import es.uvigo.darwin.prottest.util.ProtTestAlignment;
-import es.uvigo.darwin.prottest.util.exception.AlignmentFormatException;
+import es.uvigo.darwin.prottest.util.exception.AlignmentParseException;
 import es.uvigo.darwin.prottest.util.exception.ProtTestInternalException;
 import es.uvigo.darwin.prottest.util.factory.ProtTestFactory;
 import es.uvigo.darwin.prottest.util.logging.ProtTestLogger;
@@ -579,6 +579,7 @@ public class XProtTestView extends FrameView {
 //
 //        if (JFileChooser.APPROVE_OPTION == option) {
         if (dataFileName != null) {
+            enableHandler();
             try {
                 File f = new File(fc.getDirectory() + dataFileName);//fc.getSelectedFile();
                 if (alignmentFile == null || !f.getAbsolutePath().equals(alignmentFile.getAbsolutePath())) {
@@ -586,12 +587,19 @@ public class XProtTestView extends FrameView {
                     lblLikelihoodStatus.setForeground(CRITIC_COLOR);
                     lnlCalculated = false;
                 }
-                alignment = prottestFacade.readAlignment(getDisplayWriter(), f.getAbsolutePath(), true);
+                alignment = prottestFacade.readAlignment(f.getAbsolutePath(), true);
                 setAlignmentFile(f);
-            } catch (AlignmentFormatException ex) {
+            } catch (AlignmentParseException ex) {
+                displayWriter.println(ex.getMessage());
+                setAlignmentFile(null);
+            } catch (FileNotFoundException ex) {
+                displayWriter.println(ex.getMessage());
+                setAlignmentFile(null);
+            } catch (IOException ex) {
                 displayWriter.println(ex.getMessage());
                 setAlignmentFile(null);
             }
+            disableHandler();
         }
     }//GEN-LAST:event_openDataFile
 
@@ -779,7 +787,7 @@ public class XProtTestView extends FrameView {
 //            ProtTestPrinter printer = new ProtTestPrinter(getDisplayWriter(), new PrintWriter(System.err));
 
             try {
-                options.setAlignFile(alignmentFile.getAbsolutePath());
+                options.setAlignment(alignmentFile.getAbsolutePath());
                 models = prottestFacade.startAnalysis(options);
             } catch (AlignmentParseException ex) {
                 ProtTestLogger.severeln(ex.getMessage(), this.getClass());

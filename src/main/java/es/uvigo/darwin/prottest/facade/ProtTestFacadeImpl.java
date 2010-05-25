@@ -1,11 +1,14 @@
 package es.uvigo.darwin.prottest.facade;
 
+import converter.Converter;
+import converter.DefaultFactory;
+import converter.Factory;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Properties;
 
 import pal.alignment.Alignment;
-import pal.alignment.AlignmentParseException;
 import pal.tree.Tree;
 import es.uvigo.darwin.prottest.exe.RunEstimator;
 import es.uvigo.darwin.prottest.exe.util.TemporaryFileManager;
@@ -26,13 +29,22 @@ import es.uvigo.darwin.prottest.selection.printer.PrintFramework;
 import es.uvigo.darwin.prottest.util.ProtTestAlignment;
 import es.uvigo.darwin.prottest.util.collection.ModelCollection;
 import es.uvigo.darwin.prottest.util.collection.SingleModelCollection;
-import es.uvigo.darwin.prottest.util.exception.AlignmentFormatException;
+import es.uvigo.darwin.prottest.util.exception.AlignmentParseException;
 import es.uvigo.darwin.prottest.util.exception.ProtTestInternalException;
 import es.uvigo.darwin.prottest.util.exception.TreeFormatException;
 import es.uvigo.darwin.prottest.util.factory.ProtTestFactory;
 import es.uvigo.darwin.prottest.util.fileio.AlignmentReader;
 
 import es.uvigo.darwin.prottest.util.logging.ProtTestLogger;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.PushbackReader;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import parser.ParseException;
 import static es.uvigo.darwin.prottest.util.logging.ProtTestLogger.*;
 
 // TODO: Auto-generated Javadoc
@@ -76,11 +88,83 @@ public abstract class ProtTestFacadeImpl
     /* (non-Javadoc)
      * @see es.uvigo.darwin.prottest.facade.ProtTestFacade#readAlignment(java.io.PrintWriter, java.lang.String, boolean)
      */
-    public Alignment readAlignment(PrintWriter out, String filename, boolean debug)
-            throws AlignmentFormatException {
-        AlignmentReader reader = new AlignmentReader();
+    public Alignment readAlignment(String filename, boolean debug)
+            throws AlignmentParseException, FileNotFoundException, IOException {
 
-        return reader.readAlignment(out, filename, debug);
+        Alignment alignment;
+        StringBuffer text = new StringBuffer();
+
+        BufferedReader br = new BufferedReader(new FileReader(filename));
+        String s;
+        while ((s = br.readLine()) != null) {
+            text.append(s + "\r\n");
+        }
+        br.close();
+
+
+        //Get options
+        String in = text.toString();
+        String inO = "";
+        String inP = "";
+        String inF = "";
+        boolean autodetect = true;
+        boolean collapse = false;
+        boolean gaps = false;
+        boolean missing = false;
+        int limit = 0;
+        String out = "";
+        String outO = "Linux";
+        String os = System.getProperty("os.name");
+        if (os.startsWith("Mac")) {
+            outO = "MacOS";
+        } else if (os.startsWith("Linux")) {
+            outO = "Linux";
+        } else if (os.startsWith("Win")) {
+            outO = "Windows";
+        }
+        String outP = "ProtTest";
+        String outF = "PHYLIP";
+        boolean lower = false;
+        boolean numbers = false;
+        boolean sequential = true;
+        boolean match = false;
+
+        //Get converter and convert MSA
+        Factory factory = new DefaultFactory();
+        Converter converter;
+
+        //Inicializar logger
+        Logger logger = Logger.getLogger("alter" + System.currentTimeMillis());
+        logger.setUseParentHandlers(false);
+        logger.setLevel(Level.ALL);
+        for (Handler handler : ProtTestLogger.getDefaultLogger().getHandlers()) {
+            logger.addHandler(handler);
+        }
+
+        try {
+            converter = factory.getConverter(inO, inP, inF, autodetect,
+                    collapse, gaps, missing, limit,
+                    outO, outP, outF, lower, numbers, sequential, match, logger.getName());
+            out = converter.convert(in);
+        } catch (UnsupportedOperationException ex) {
+            throw new AlignmentParseException("There's some error in your data: " + ex.getMessage());
+        } catch (ParseException ex) {
+            throw new AlignmentParseException("There's some error in your data: " + ex.getMessage());
+        }
+
+        StringWriter sw = new StringWriter();
+
+        AlignmentReader reader = new AlignmentReader();
+        PushbackReader pr = new PushbackReader(new StringReader(out));
+        alignment = reader.readAlignment(new PrintWriter(sw), pr, debug);
+        sw.flush();
+        println(sw.toString());
+
+        if (alignment == null) {
+            throw new AlignmentParseException("There's some error in your data, exiting...");
+        }
+
+        return alignment;
     }
 
     /* (non-Javadoc)
@@ -200,7 +284,12 @@ public abstract class ProtTestFacadeImpl
     public ApplicationOptions configure(ProtTestParameterVO parameters)
             throws IOException, AlignmentParseException, ProtTestInternalException {
         ApplicationOptions options = new ApplicationOptions();
-        options.setAlignFile(parameters.getAlignmentFilePath());
+        if (parameters.getAlignment() != null) {
+            options.setAlignment(parameters.getAlignment());
+            options.setAlignmentFilename(parameters.getAlignmentFilePath());
+        } else {
+            options.setAlignment(parameters.getAlignmentFilePath());
+        }
         options.setNumberOfCategories(parameters.ncat);
         for (String matrix : parameters.getMatrices()) {
             options.addMatrix(matrix);
@@ -229,7 +318,7 @@ public abstract class ProtTestFacadeImpl
     protected void errorln(String message) {
         severeln(message, ProtTestFacade.class);
     }
-    
+
     protected void verbose(String message) {
         fine(message, ProtTestFacade.class);
     }
@@ -237,7 +326,7 @@ public abstract class ProtTestFacadeImpl
     protected void verboseln(String message) {
         fineln(message, ProtTestFacade.class);
     }
-    
+
     protected void flush() {
         ProtTestLogger.flush(ProtTestFacade.class);
     }

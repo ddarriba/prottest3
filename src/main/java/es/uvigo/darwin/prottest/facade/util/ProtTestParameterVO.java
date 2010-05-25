@@ -1,9 +1,11 @@
 package es.uvigo.darwin.prottest.facade.util;
 
 import java.util.Collection;
+import pal.alignment.Alignment;
 
 public class ProtTestParameterVO {
 
+    private Alignment alignment;
     private String alignmentFilePath;
     private String treeFilePath;
     /** The matrices of the models to optimize. */
@@ -20,6 +22,10 @@ public class ProtTestParameterVO {
         return alignmentFilePath;
     }
 
+    public Alignment getAlignment() {
+        return alignment;
+    }
+    
     public String getTreeFilePath() {
         return treeFilePath;
     }
@@ -44,10 +50,11 @@ public class ProtTestParameterVO {
         return strategyMode;
     }
 
-    public ProtTestParameterVO(String alignmentFilePath, String treeFilePath,
+    public ProtTestParameterVO(String alignmentFilePath, Alignment alignment, String treeFilePath,
             Collection<String> matrices, Collection<String> distributions, boolean plusF,
             int ncat, int strategyMode) {
         this.alignmentFilePath = alignmentFilePath;
+        this.alignment = alignment;
         this.treeFilePath = treeFilePath;
         this.matrices = matrices;
         this.distributions = distributions;

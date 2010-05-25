@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import pal.alignment.Alignment;
-import pal.alignment.AlignmentParseException;
 import pal.tree.Tree;
 import es.uvigo.darwin.prottest.facade.util.ProtTestParameterVO;
 import es.uvigo.darwin.prottest.facade.util.SelectionChunk;
@@ -16,9 +15,10 @@ import es.uvigo.darwin.prottest.model.Model;
 import es.uvigo.darwin.prottest.observer.ModelUpdaterObserver;
 import es.uvigo.darwin.prottest.observer.ObservableModelUpdater;
 import es.uvigo.darwin.prottest.selection.InformationCriterion;
-import es.uvigo.darwin.prottest.util.exception.AlignmentFormatException;
+import es.uvigo.darwin.prottest.util.exception.AlignmentParseException;
 import es.uvigo.darwin.prottest.util.exception.ProtTestInternalException;
 import es.uvigo.darwin.prottest.util.exception.TreeFormatException;
+import java.io.FileNotFoundException;
 
 /**
  * The facade to provide ProtTest functionality to external objects.
@@ -65,7 +65,6 @@ public interface ProtTestFacade extends ModelUpdaterObserver {
 	/**
 	 * Read alignment.
 	 * 
-	 * @param out the out
 	 * @param filename the filename
 	 * @param debug the debug
 	 * 
@@ -74,8 +73,8 @@ public interface ProtTestFacade extends ModelUpdaterObserver {
 	 * @throws AlignmentParseException the alignment parse exception
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
-	public Alignment readAlignment (PrintWriter out, String filename, boolean debug) 
-		throws 	AlignmentFormatException;
+	public Alignment readAlignment (String filename, boolean debug) 
+		throws 	AlignmentParseException, FileNotFoundException, IOException;
 	
 	/**
 	 * Read alignment.

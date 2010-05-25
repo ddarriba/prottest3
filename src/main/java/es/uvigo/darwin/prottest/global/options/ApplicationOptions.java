@@ -13,13 +13,13 @@ import java.util.Hashtable;
 import java.util.Vector;
 
 import pal.alignment.Alignment;
-import pal.alignment.AlignmentParseException;
 import pal.tree.Tree;
 import es.uvigo.darwin.prottest.global.AminoAcidApplicationGlobals;
 import es.uvigo.darwin.prottest.global.ApplicationGlobals;
 import es.uvigo.darwin.prottest.model.Model;
 import es.uvigo.darwin.prottest.util.ProtTestAlignment;
 import es.uvigo.darwin.prottest.util.argumentparser.ProtTestArgumentParser;
+import es.uvigo.darwin.prottest.util.exception.AlignmentParseException;
 import es.uvigo.darwin.prottest.util.exception.ProtTestInternalException;
 import es.uvigo.darwin.prottest.util.exception.TreeFormatException;
 import es.uvigo.darwin.prottest.util.fileio.AlignmentReader;
@@ -80,15 +80,6 @@ public class ApplicationOptions extends java.lang.Object {
     public boolean writeLog = true;
     /** Criterion to sort the models. */
     private char sortBy = ApplicationGlobals.DEFAULT_SORT_BY;
-
-    /**
-     * Gets the alignment filename.
-     * 
-     * @return the alignment filename
-     */
-    public String getAlignFile() {
-        return align_file;
-    }
 
     /**
      * Sets the number of categories.
@@ -162,8 +153,17 @@ public class ApplicationOptions extends java.lang.Object {
         return sortBy;
     }
 
+     /**
+     * Sets the alignment filename without checking
+     * 
+     * @param alignFile the alignment filename
+     */
+    public void setAlignmentFilename(String alignFile) {
+        this.align_file = alignFile;
+    }
+    
     /**
-     * Sets the alignment filename.
+     * Sets the alignment file
      * 
      * @param alignFile the alignment filename
      * 
@@ -172,21 +172,13 @@ public class ApplicationOptions extends java.lang.Object {
      * @throws AlignmentParseException Signals that the alignment filename is not correct.
      * @throws IOException Signals that an I/O exception has occurred.
      */
-    public boolean setAlignFile(String alignFile)
+    public boolean setAlignment(String alignFile)
             throws AlignmentParseException,
             IOException {
 
         align_file = alignFile;
 
-        AlignmentReader reader = new AlignmentReader();
-        StringWriter sw = new StringWriter();
-        alignment = reader.readAlignment(new PrintWriter(sw), alignFile, debug);
-        sw.flush();
-        println(sw.toString());
-
-        if (alignment == null) {
-            throw new AlignmentParseException("There's some error in your data, exiting...");
-        }
+        
 
         return alignFile != null;
     }
@@ -536,7 +528,7 @@ public class ApplicationOptions extends java.lang.Object {
 
         if (arguments.exists(ProtTestArgumentParser.PARAM_ALIGNMENT_FILE)) {
             try {
-                setAlignFile(arguments.getValue(ProtTestArgumentParser.PARAM_ALIGNMENT_FILE));
+                setAlignment(arguments.getValue(ProtTestArgumentParser.PARAM_ALIGNMENT_FILE));
             } catch (AlignmentParseException e) {
                 throw new IllegalArgumentException(e.getMessage());
             } catch (IOException e) {
@@ -552,7 +544,7 @@ public class ApplicationOptions extends java.lang.Object {
             //open the PrintWriter with file
             try {
                 FileOutputStream fo = new FileOutputStream(arguments.getValue(ProtTestArgumentParser.PARAM_OUTPUT_FILE));
-                ProtTestLogger.getDefaultLogger().addHandler(fo,Level.INFO);
+                ProtTestLogger.getDefaultLogger().addHandler(fo, Level.INFO);
             } catch (FileNotFoundException fnfe) {
                 throw new ProtTestInternalException(fnfe.getMessage());
             }

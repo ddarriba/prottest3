@@ -44,7 +44,7 @@ is divided into following sections:
     </target>
     <target depends="-pre-init,-init-private,-init-user" name="-init-project">
         <property file="nbproject/configs/${config}.properties"/>
-        <property file="project.properties"/>
+        <property file="nbproject/project.properties"/>
     </target>
     <target depends="-pre-init,-init-private,-init-user,-init-project,-init-macrodef-property" name="-do-init">
         <available file="${manifest.file}" property="manifest.available"/>

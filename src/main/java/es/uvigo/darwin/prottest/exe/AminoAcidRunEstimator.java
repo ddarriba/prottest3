@@ -23,6 +23,17 @@ public abstract class AminoAcidRunEstimator extends RunEstimatorImpl {
 	public AminoAcidRunEstimator(ApplicationOptions options, Model model) {
 		super(options, model);
 	}
+        
+        /**
+	 * Instantiates a new generic optimizer for amino-acid models.
+	 * 
+	 * @param options the application options instance
+	 * @param model the amino-acid model to optimize
+         * @param numberOfThreads the number of threads to use in the optimization
+	 */
+	public AminoAcidRunEstimator(ApplicationOptions options, Model model, int numberOfThreads) {
+		super(options, model, numberOfThreads);
+	}
 
 	/* (non-Javadoc)
 	 * @see es.uvigo.darwin.prottest.exe.RunEstimator#report()

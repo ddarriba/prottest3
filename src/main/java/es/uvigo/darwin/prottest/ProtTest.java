@@ -23,7 +23,7 @@ import es.uvigo.darwin.prottest.selection.printer.PrintFramework;
 import es.uvigo.darwin.prottest.util.argumentparser.ProtTestArgumentParser;
 import es.uvigo.darwin.prottest.util.collection.ModelCollection;
 import es.uvigo.darwin.prottest.util.collection.SingleModelCollection;
-import es.uvigo.darwin.prottest.util.exception.AlignmentFormatException;
+import es.uvigo.darwin.prottest.util.exception.AlignmentParseException;
 import es.uvigo.darwin.prottest.util.exception.ProtTestInternalException;
 import es.uvigo.darwin.prottest.util.factory.ProtTestFactory;
 import es.uvigo.darwin.prottest.util.logging.ProtTestLogger;
@@ -92,11 +92,6 @@ public class ProtTest implements XMLConstants {
             if (MPJ_ME == 0) {
                 System.err.println(e.getMessage());
                 ApplicationOptions.usage();
-            }
-            finalize(1);
-        } catch (AlignmentFormatException e) {
-            if (MPJ_ME == 0) {
-                System.err.println(e.getMessage());
             }
             finalize(1);
         }

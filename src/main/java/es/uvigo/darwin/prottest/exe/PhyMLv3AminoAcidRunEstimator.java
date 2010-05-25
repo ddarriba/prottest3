@@ -47,7 +47,19 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
      * @param model the amino-acid model to optimize
      */
     public PhyMLv3AminoAcidRunEstimator(ApplicationOptions options, Model model) {
-        super(options, model);
+        this(options, model, 1);
+    }
+
+    /**
+     * Instantiates a new optimizer for amino-acid models
+     * using PhyML.
+     * 
+     * @param options the application options instance
+     * @param model the amino-acid model to optimize
+     * @param numberOfThreads the number of threads to use in the optimization
+     */
+    public PhyMLv3AminoAcidRunEstimator(ApplicationOptions options, Model model, int numberOfThreads) {
+        super(options, model, numberOfThreads);
         this.numberOfCategories = options.ncat;
 
         try {
@@ -58,7 +70,7 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
             throw new ProtTestInternalException("Wrong model type");
         }
     }
-
+    
     /* (non-Javadoc)
      * @see es.uvigo.darwin.prottest.exe.RunEstimator#optimizeModel(es.uvigo.darwin.prottest.global.options.ApplicationOptions)
      */
@@ -110,62 +122,73 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
         try {
             Runtime runtime = Runtime.getRuntime();
 
-            String str[] = new String[24];
+            String str[] = new String[26];
+            for(int i = 0; i < str.length; i++)
+                str[i] = "";
+            
             if (getPhymlVersion() != null) {
+                
                 //     phyml -i seq_file_name -d aa ¿-q? -f d/e (d para -F y e para +F) -v 0/e (para -I o +I) -a e (para estimar alpha)
                 //         -c 0/4/8 (num rate categories) -u user_tree_file (opcional)
                 //         -o tlr/lr (dependiendo de si optimizamos la topología o no)
                 //         -m WAG (default) | JTT | MtREV | Dayhoff | DCMut | RtREV | CpREV | VT | Blosum62 | MtMam | MtArt | HIVw |  HIVb | custom
                 java.io.File currentDir = new java.io.File("");
                 str[0] = currentDir.getAbsolutePath() + "/bin/" + getPhymlVersion();
-                str[1] = "";
-                str[2] = "";
-                str[3] = "";
+                
                 // input alignment
                 str[4] = "-i";
                 str[5] = workAlignment;
-                //number of rate categories
-//				if (model.isGamma()) {
+                
+                // number of rate categories
                 str[6] = "-c";
                 str[7] = rateCathegories;
-//				} else
-//					str[6] = str[7] = "";
-                str[8] = "-m"; //the model
+
+                // the model
+                str[8] = "-m";
                 if (modelFile.exists()) {
                     str[9] = "custom";
                 } else {
                     str[9] = model.getMatrix();
                 }
+                
                 // proportion of invariable sites
                 str[10] = "-v";
                 str[11] = inv;
+                
                 // value of the gamma shape parameter (if gamma distribution)
                 if (!alpha.equals("")) {
                     str[12] = "-a";
                     str[13] = alpha;
-                } else {
-                    str[12] = str[13] = "";
                 }
+                
                 // topology optimization
                 str[14] = "-o";
                 str[15] = topo;
+                
                 // amino-acid frequencies
                 str[16] = "-f";
                 str[17] = F;
+                
                 // starting tree file
                 if (!tr.equals("BIONJ")) {
                     str[18] = "-u";
                     str[19] = tr;
-                } else {
-                    str[18] = str[19] = "";
                 }
+                
                 // data type
                 str[20] = "-d";
                 str[21] = "aa";
+                
                 // bootstrapping
                 str[22] = "-b";
                 str[23] = "0";
 
+                if (ApplicationGlobals.properties.getProperty("phyml_thread_scheduling", "false")
+                        .equalsIgnoreCase("true")) {
+                        str[23] = "--num_threads";
+                        str[24] = String.valueOf(numberOfThreads);
+                }
+                
                 model.setCommandLine(str);
                 proc = runtime.exec(str);
                 proc.getOutputStream().write(modelFile.getPath().getBytes());

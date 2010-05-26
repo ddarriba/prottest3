@@ -1,8 +1,5 @@
 package es.uvigo.darwin.prottest.facade;
 
-import converter.Converter;
-import converter.DefaultFactory;
-import converter.Factory;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -36,15 +33,7 @@ import es.uvigo.darwin.prottest.util.factory.ProtTestFactory;
 import es.uvigo.darwin.prottest.util.fileio.AlignmentReader;
 
 import es.uvigo.darwin.prottest.util.logging.ProtTestLogger;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.PushbackReader;
-import java.io.StringReader;
 import java.io.StringWriter;
-import java.util.logging.Handler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import parser.ParseException;
 import static es.uvigo.darwin.prottest.util.logging.ProtTestLogger.*;
 
 // TODO: Auto-generated Javadoc
@@ -91,79 +80,12 @@ public abstract class ProtTestFacadeImpl
     public Alignment readAlignment(String filename, boolean debug)
             throws AlignmentParseException, FileNotFoundException, IOException {
 
-        Alignment alignment;
-        StringBuffer text = new StringBuffer();
-
-        BufferedReader br = new BufferedReader(new FileReader(filename));
-        String s;
-        while ((s = br.readLine()) != null) {
-            text.append(s + "\r\n");
-        }
-        br.close();
-
-
-        //Get options
-        String in = text.toString();
-        String inO = "";
-        String inP = "";
-        String inF = "";
-        boolean autodetect = true;
-        boolean collapse = false;
-        boolean gaps = false;
-        boolean missing = false;
-        int limit = 0;
-        String out = "";
-        String outO = "Linux";
-        String os = System.getProperty("os.name");
-        if (os.startsWith("Mac")) {
-            outO = "MacOS";
-        } else if (os.startsWith("Linux")) {
-            outO = "Linux";
-        } else if (os.startsWith("Win")) {
-            outO = "Windows";
-        }
-        String outP = "ProtTest";
-        String outF = "PHYLIP";
-        boolean lower = false;
-        boolean numbers = false;
-        boolean sequential = true;
-        boolean match = false;
-
-        //Get converter and convert MSA
-        Factory factory = new DefaultFactory();
-        Converter converter;
-
-        //Inicializar logger
-        Logger logger = Logger.getLogger("alter" + System.currentTimeMillis());
-        logger.setUseParentHandlers(false);
-        logger.setLevel(Level.ALL);
-        for (Handler handler : ProtTestLogger.getDefaultLogger().getHandlers()) {
-            logger.addHandler(handler);
-        }
-
-        try {
-            converter = factory.getConverter(inO, inP, inF, autodetect,
-                    collapse, gaps, missing, limit,
-                    outO, outP, outF, lower, numbers, sequential, match, logger.getName());
-            out = converter.convert(in);
-        } catch (UnsupportedOperationException ex) {
-            throw new AlignmentParseException("There's some error in your data: " + ex.getMessage());
-        } catch (ParseException ex) {
-            throw new AlignmentParseException("There's some error in your data: " + ex.getMessage());
-        }
-
         StringWriter sw = new StringWriter();
-
-        AlignmentReader reader = new AlignmentReader();
-        PushbackReader pr = new PushbackReader(new StringReader(out));
-        alignment = reader.readAlignment(new PrintWriter(sw), pr, debug);
+        Alignment alignment = AlignmentReader.readAlignment(new PrintWriter(sw), filename, debug);
+        
         sw.flush();
-        println(sw.toString());
-
-        if (alignment == null) {
-            throw new AlignmentParseException("There's some error in your data, exiting...");
-        }
-
+        ProtTestLogger.getDefaultLogger().infoln(sw.toString());
+        
         return alignment;
     }
 
@@ -172,9 +94,9 @@ public abstract class ProtTestFacadeImpl
      */
     public Tree readTree(PrintWriter out, String filename, boolean debug)
             throws TreeFormatException {
-        AlignmentReader reader = new AlignmentReader();
 
-        return reader.readTree(out, filename, debug);
+        return AlignmentReader.readTree(out, filename, debug);
+    
     }
 
     /* (non-Javadoc)

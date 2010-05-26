@@ -87,7 +87,7 @@ public class ProtTest implements XMLConstants {
         try {
             // check arguments and get application options
             numThreads = Integer.parseInt(
-                    factory.createModelTestArgumentParser(args, opts).getValue(ProtTestArgumentParser.PARAM_NUM_THREADS));
+                    factory.createProtTestArgumentParser(args, opts).getValue(ProtTestArgumentParser.PARAM_NUM_THREADS));
         } catch (IllegalArgumentException e) {
             if (MPJ_ME == 0) {
                 System.err.println(e.getMessage());

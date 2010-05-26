@@ -118,7 +118,7 @@ public class ProtTestFactory {
      * 
      * @return the prot test argument parser
      */
-    public ProtTestArgumentParser createModelTestArgumentParser(String[] args, ApplicationOptions options) {
+    public ProtTestArgumentParser createProtTestArgumentParser(String[] args, ApplicationOptions options) {
         ProtTestArgumentParser mtap = null;
         switch (sort) {
             case PROTEIC:

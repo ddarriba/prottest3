@@ -176,9 +176,12 @@ public class ApplicationOptions extends java.lang.Object {
             throws AlignmentParseException,
             IOException {
 
-        align_file = alignFile;
-
+        this.align_file = alignFile;
         
+        StringWriter sw = new StringWriter();
+        setAlignment(AlignmentReader.readAlignment(new PrintWriter(sw), alignFile, debug));
+        sw.flush();
+        println(sw.toString());
 
         return alignFile != null;
     }
@@ -276,9 +279,8 @@ public class ApplicationOptions extends java.lang.Object {
         if (treeFile != null) {
             this.tree_file = treeFile;
 
-            AlignmentReader reader = new AlignmentReader();
             StringWriter sw = new StringWriter();
-            setTree(reader.readTree(new PrintWriter(sw), treeFile, debug));
+            setTree(AlignmentReader.readTree(new PrintWriter(sw), treeFile, debug));
             sw.flush();
             println(sw.toString());
         }
@@ -620,29 +622,10 @@ public class ApplicationOptions extends java.lang.Object {
         }
     }
 
-//    /**
-//     * Gets the single instance of ApplicationOptions.
-//     * 
-//     * @return single instance of ApplicationOptions
-//     */
-//    public static ApplicationOptions getInstance() {
-//    	if (instance == null) {
-//    		String type = ApplicationGlobals.properties.getProperty("analyzer");
-//    		try {
-//    			if (type.equals(ApplicationGlobals.ANALYZER_PHYML))
-//    				instance =  new ApplicationOptions();
-//    			else if (type.equals(ApplicationGlobals.ANALYZER_RAXML))
-//    				instance =  new ApplicationOptions();
-//    		} catch (Exception e) {
-//    			throw new ProtTestInternalException("Cannot instantiate Application Options");
-//			}
-//    	}
-//    	return instance;
-//    }
     /**
      * Inits the vectors.
      */
-    public void initVectors() {
+    private void initVectors() {
 //        for(int i=0; i<ApplicationGlobals.ALL_MATRICES.length; i++) {
 //            matrixes.addElement(ApplicationGlobals.ALL_MATRICES[i]);
 //        }

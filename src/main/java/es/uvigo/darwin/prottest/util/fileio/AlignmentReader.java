@@ -1,5 +1,8 @@
 package es.uvigo.darwin.prottest.util.fileio;
 
+import converter.Converter;
+import converter.DefaultFactory;
+import converter.Factory;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.PushbackReader;
@@ -8,9 +11,14 @@ import java.util.Vector;
 import es.uvigo.darwin.prottest.util.exception.AlignmentParseException;
 import es.uvigo.darwin.prottest.util.exception.TreeFormatException;
 
-import java.io.File;
+import es.uvigo.darwin.prottest.util.logging.ProtTestLogger;
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.StringReader;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import pal.alignment.Alignment;
 import pal.alignment.ReadAlignment;
 import pal.tree.ReadTree;
@@ -18,6 +26,7 @@ import pal.tree.Tree;
 import pal.tree.TreeParseException;
 
 // TODO: Auto-generated Javadoc
+import parser.ParseException;
 /**
  * The Class AlignmentReader.
  */
@@ -42,11 +51,78 @@ public class AlignmentReader {
      * @throws AlignmentParseException the alignment parse exception
      * @throws IOException Signals that an I/O exception has occurred.
      */
-    public Alignment readAlignment(PrintWriter out, String filename, boolean debug)
-            throws AlignmentParseException, FileNotFoundException {
+    public static Alignment readAlignment(PrintWriter output, String filename, boolean debug)
+            throws AlignmentParseException, FileNotFoundException, IOException {
 
-        PushbackReader pr = new PushbackReader(new FileReader(new File(filename)));
-        return readAlignment(out, pr, debug);
+        Alignment alignment;
+        StringBuffer text = new StringBuffer();
+
+        BufferedReader br = new BufferedReader(new FileReader(filename));
+        String s;
+        while ((s = br.readLine()) != null) {
+            text.append(s + "\r\n");
+        }
+        br.close();
+
+
+        //Get options
+        String in = text.toString();
+        String inO = "";
+        String inP = "";
+        String inF = "";
+        boolean autodetect = true;
+        boolean collapse = false;
+        boolean gaps = false;
+        boolean missing = false;
+        int limit = 0;
+        String out = "";
+        String outO = "Linux";
+        String os = System.getProperty("os.name");
+        if (os.startsWith("Mac")) {
+            outO = "MacOS";
+        } else if (os.startsWith("Linux")) {
+            outO = "Linux";
+        } else if (os.startsWith("Win")) {
+            outO = "Windows";
+        }
+        String outP = "ProtTest";
+        String outF = "PHYLIP";
+        boolean lower = false;
+        boolean numbers = false;
+        boolean sequential = true;
+        boolean match = false;
+
+        //Get converter and convert MSA
+        Factory factory = new DefaultFactory();
+        Converter converter;
+
+        //Inicializar logger
+        Logger logger = Logger.getLogger("alter" + System.currentTimeMillis());
+        logger.setUseParentHandlers(false);
+        logger.setLevel(Level.ALL);
+        for (Handler handler : ProtTestLogger.getDefaultLogger().getHandlers()) {
+            logger.addHandler(handler);
+        }
+
+        try {
+            converter = factory.getConverter(inO, inP, inF, autodetect,
+                    collapse, gaps, missing, limit,
+                    outO, outP, outF, lower, numbers, sequential, match, logger.getName());
+            out = converter.convert(in);
+        } catch (UnsupportedOperationException ex) {
+            throw new AlignmentParseException("There's some error in your data: " + ex.getMessage());
+        } catch (ParseException ex) {
+            throw new AlignmentParseException("There's some error in your data: " + ex.getMessage());
+        }
+
+        PushbackReader pr = new PushbackReader(new StringReader(out));
+        alignment = readAlignment(output, pr, debug);
+
+        if (alignment == null) {
+            throw new AlignmentParseException("There's some error in your data, exiting...");
+        }
+
+        return alignment;
     }
 
     /**
@@ -61,7 +137,7 @@ public class AlignmentReader {
      * @throws AlignmentParseException the alignment parse exception
      * @throws IOException Signals that an I/O exception has occurred.
      */
-    public Alignment readAlignment(PrintWriter out, PushbackReader pr, boolean debug)
+    public static Alignment readAlignment(PrintWriter out, PushbackReader pr, boolean debug)
             throws AlignmentParseException {
 
         if (debug) {
@@ -130,7 +206,7 @@ public class AlignmentReader {
      * 
      * @throws TreeFormatException the tree format exception
      */
-    public Tree readTree(PrintWriter out, String filename, boolean debug)
+    public static Tree readTree(PrintWriter out, String filename, boolean debug)
             throws TreeFormatException {
         //FOR PHYML:
         //if tree is not in newick format, reformat and save to a new file:
@@ -164,7 +240,7 @@ public class AlignmentReader {
      * 
      * @throws TreeFormatException the tree format exception
      */
-    public Tree readTree(PrintWriter out, PushbackReader in, boolean debug)
+    public static Tree readTree(PrintWriter out, PushbackReader in, boolean debug)
             throws TreeFormatException {
         //FOR PHYML:
         //if tree is not in newick format, reformat and save to a new file:

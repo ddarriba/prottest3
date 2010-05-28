@@ -6,7 +6,7 @@
 package es.uvigo.darwin.prottest.exe;
 
 import es.uvigo.darwin.prottest.exe.util.TemporaryFileManager;
-import es.uvigo.darwin.prottest.util.exception.ExternalExecutionException;
+import es.uvigo.darwin.prottest.util.exception.ModelOptimizationException.ExternalExecutionException;
 import es.uvigo.darwin.prottest.util.exception.ProtTestInternalException;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -33,7 +33,8 @@ public class ExternalExecutor {
     
     private int internal_state = STATE_NULL;
     
-    public ExternalExecutor(String command, int outLogFormat) {
+    public ExternalExecutor(String command, int outLogFormat) 
+            throws ExternalExecutionException {
         try {
             this.command = command;
 
@@ -51,7 +52,7 @@ public class ExternalExecutor {
         }
     }
     
-    public void run() throws ProtTestInternalException{
+    public void run() throws ExternalExecutionException {
 
         if (!checkState(STATE_INITIALIZED) || checkState(STATE_EXECUTED)) {
             throw new ProtTestInternalException("Invalid executor internal state");

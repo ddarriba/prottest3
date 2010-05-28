@@ -14,10 +14,11 @@ import es.uvigo.darwin.prottest.global.options.ApplicationOptions;
 import es.uvigo.darwin.prottest.model.AminoAcidModel;
 import es.uvigo.darwin.prottest.model.Model;
 import es.uvigo.darwin.prottest.util.Utilities;
-import es.uvigo.darwin.prottest.util.exception.ExternalExecutionException;
-import es.uvigo.darwin.prottest.util.exception.OSNotSupportedException;
+import es.uvigo.darwin.prottest.util.exception.ModelOptimizationException;
+import es.uvigo.darwin.prottest.util.exception.ModelOptimizationException.OSNotSupportedException;
+import es.uvigo.darwin.prottest.util.exception.ModelOptimizationException.PhyMLExecutionException;
+import es.uvigo.darwin.prottest.util.exception.ModelOptimizationException.StatsFileFormatException;
 import es.uvigo.darwin.prottest.util.exception.ProtTestInternalException;
-import es.uvigo.darwin.prottest.util.exception.StatsFileFormatException;
 import es.uvigo.darwin.prottest.util.exception.TreeFormatException;
 
 /**
@@ -70,12 +71,12 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
             throw new ProtTestInternalException("Wrong model type");
         }
     }
-    
+
     /* (non-Javadoc)
      * @see es.uvigo.darwin.prottest.exe.RunEstimator#optimizeModel(es.uvigo.darwin.prottest.global.options.ApplicationOptions)
      */
     public boolean runEstimator()
-            throws OSNotSupportedException {
+            throws ModelOptimizationException {
         //let's call Phyml with the proper command line
 
         this.workAlignment = TemporaryFileManager.getInstance().getAlignmentFilename(Thread.currentThread());
@@ -123,22 +124,23 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
             Runtime runtime = Runtime.getRuntime();
 
             String str[] = new String[26];
-            for(int i = 0; i < str.length; i++)
+            for (int i = 0; i < str.length; i++) {
                 str[i] = "";
-            
+            }
+
             if (getPhymlVersion() != null) {
-                
+
                 //     phyml -i seq_file_name -d aa ¿-q? -f d/e (d para -F y e para +F) -v 0/e (para -I o +I) -a e (para estimar alpha)
                 //         -c 0/4/8 (num rate categories) -u user_tree_file (opcional)
                 //         -o tlr/lr (dependiendo de si optimizamos la topología o no)
                 //         -m WAG (default) | JTT | MtREV | Dayhoff | DCMut | RtREV | CpREV | VT | Blosum62 | MtMam | MtArt | HIVw |  HIVb | custom
                 java.io.File currentDir = new java.io.File("");
                 str[0] = currentDir.getAbsolutePath() + "/bin/" + getPhymlVersion();
-                
+
                 // input alignment
                 str[4] = "-i";
                 str[5] = workAlignment;
-                
+
                 // number of rate categories
                 str[6] = "-c";
                 str[7] = rateCathegories;
@@ -150,45 +152,44 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
                 } else {
                     str[9] = model.getMatrix();
                 }
-                
+
                 // proportion of invariable sites
                 str[10] = "-v";
                 str[11] = inv;
-                
+
                 // value of the gamma shape parameter (if gamma distribution)
                 if (!alpha.equals("")) {
                     str[12] = "-a";
                     str[13] = alpha;
                 }
-                
+
                 // topology optimization
                 str[14] = "-o";
                 str[15] = topo;
-                
+
                 // amino-acid frequencies
                 str[16] = "-f";
                 str[17] = F;
-                
+
                 // starting tree file
                 if (!tr.equals("BIONJ")) {
                     str[18] = "-u";
                     str[19] = tr;
                 }
-                
+
                 // data type
                 str[20] = "-d";
                 str[21] = "aa";
-                
+
                 // bootstrapping
                 str[22] = "-b";
                 str[23] = "0";
 
-                if (ApplicationGlobals.properties.getProperty("phyml_thread_scheduling", "false")
-                        .equalsIgnoreCase("true")) {
-                        str[23] = "--num_threads";
-                        str[24] = String.valueOf(numberOfThreads);
+                if (ApplicationGlobals.properties.getProperty("phyml_thread_scheduling", "false").equalsIgnoreCase("true")) {
+                    str[23] = "--num_threads";
+                    str[24] = String.valueOf(numberOfThreads);
                 }
-                
+
                 model.setCommandLine(str);
                 proc = runtime.exec(str);
                 proc.getOutputStream().write(modelFile.getPath().getBytes());
@@ -196,7 +197,7 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
 
             } else {
                 OSNotSupportedException e =
-                        new OSNotSupportedException();
+                        new OSNotSupportedException("PhyML");
                 throw e;
             }
             proc.getOutputStream().close();
@@ -235,9 +236,9 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
                 }
             }
         } catch (InterruptedException e) {
-            throw new ExternalExecutionException("Interrupted execution: " + e.getMessage());
+            throw new PhyMLExecutionException("Interrupted execution: " + e.getMessage());
         } catch (IOException e) {
-            throw new ExternalExecutionException("I/O error: " + e.getMessage());
+            throw new PhyMLExecutionException("I/O error: " + e.getMessage());
         }
 
 
@@ -253,7 +254,9 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
      * 
      * @return true, if successful
      */
-    private boolean readStatsFile() {
+    private boolean readStatsFile()
+            throws ModelOptimizationException {
+
         String line;
 
         try {
@@ -272,7 +275,7 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
                             errorln("Last token: " + Utilities.lastToken(line));
                             errorln("It should be: " + model.getMatrix());
                             errorln(errorMsg);
-                            throw new StatsFileFormatException(errorMsg);
+                            throw new StatsFileFormatException("PhyML", errorMsg);
                         }
                     } else if (line.startsWith(". Log-likelihood")) {
                         model.setLk(Double.parseDouble(Utilities.lastToken(line)));
@@ -286,7 +289,7 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
                                 String errorMsg = "There was some error in the number of transition categories: " + model.getNumberOfTransitionCategories() + " vs " + Integer.parseInt(Utilities.lastToken(line));
                                 errorln(errorMsg);
 
-                                throw new StatsFileFormatException(errorMsg);
+                                throw new StatsFileFormatException("PhyML", errorMsg);
                             //prottest.setCurrentModel(-2);
                             }
                             line = br.readLine();
@@ -303,7 +306,7 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
                 }
             }
         } catch (IOException e) {
-            throw new StatsFileFormatException(e.getMessage());
+            throw new StatsFileFormatException("PhyML", e.getMessage());
         }
         return true;
     }

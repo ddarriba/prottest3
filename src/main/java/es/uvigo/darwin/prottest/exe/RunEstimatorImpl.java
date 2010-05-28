@@ -4,7 +4,7 @@ package es.uvigo.darwin.prottest.exe;
 import es.uvigo.darwin.prottest.global.options.ApplicationOptions;
 import es.uvigo.darwin.prottest.model.Model;
 import es.uvigo.darwin.prottest.observer.ObservableModelUpdater;
-import es.uvigo.darwin.prottest.util.exception.OSNotSupportedException;
+import es.uvigo.darwin.prottest.util.exception.ModelOptimizationException;
 import es.uvigo.darwin.prottest.util.exception.ProtTestInternalException;
 
 import static es.uvigo.darwin.prottest.util.logging.ProtTestLogger.*;
@@ -93,8 +93,7 @@ public abstract class RunEstimatorImpl
     /* (non-Javadoc)
      * @see es.uvigo.darwin.prottest.exe.RunEstimator#optimizeModel(es.uvigo.darwin.prottest.global.options.ApplicationOptions)
      */
-    public boolean optimizeModel()
-            throws OSNotSupportedException {
+    public boolean optimizeModel() {
 
         // notify task computation
         notifyObservers(getModel(),null);
@@ -104,6 +103,10 @@ public abstract class RunEstimatorImpl
             if (!optimized) {
                 result = runEstimator();
             }
+        } catch (ModelOptimizationException ex) {
+            
+            severeln(ex.getMessage(), RunEstimator.class);
+            
         } finally {
             // notify results
             notifyObservers(getModel(), options);
@@ -134,7 +137,8 @@ public abstract class RunEstimatorImpl
      * 
      * @return true, if successful
      */
-    public abstract boolean runEstimator();
+    public abstract boolean runEstimator()
+            throws ModelOptimizationException;
 
     /**
      * Prints a report of the execution.

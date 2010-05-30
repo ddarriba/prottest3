@@ -27,4 +27,13 @@ public class SingleModelCollection extends ModelCollection {
 		super(models, alignment);
 	}
 
+        /**
+	 * Instantiates a new single model collection.
+	 *
+	 * @param models the models
+	 */
+	public SingleModelCollection(ModelCollection models) {
+		super(models);
+	}
+
 }

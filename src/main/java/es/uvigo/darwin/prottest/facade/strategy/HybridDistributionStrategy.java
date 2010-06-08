@@ -1,13 +1,13 @@
 package es.uvigo.darwin.prottest.facade.strategy;
 
-import java.util.ArrayList;
-import java.util.List;
+import es.uvigo.darwin.prottest.exe.ParallelModelEstimator;
 
 import mpi.MPI;
 import mpi.Request;
 import es.uvigo.darwin.prottest.exe.RunEstimator;
 import es.uvigo.darwin.prottest.global.options.ApplicationOptions;
 import es.uvigo.darwin.prottest.model.Model;
+import es.uvigo.darwin.prottest.observer.ObservableModelUpdater;
 import es.uvigo.darwin.prottest.util.checkpoint.CheckPointManager;
 import es.uvigo.darwin.prottest.util.collection.ModelCollection;
 import es.uvigo.darwin.prottest.util.collection.SingleModelCollection;
@@ -23,12 +23,16 @@ public class HybridDistributionStrategy extends DistributionStrategy {
     private static final int TAG_SEND_REQUEST = 1;
     /** The Constant TAG_SEND_MODEL. */
     private static final int TAG_SEND_MODEL = 2;
-    /** The root model request. */
-    int rootModelFreePEs;
+    private int maxPEs;
+    /** The number of available PEs. */
+    int availablePEs;
     /** The root model request. */
     boolean rootModelRequest;
     /** The root model. */
     Model rootModel;
+    private ParallelModelEstimator pme;
+    private Model[] computedModels;
+    private MultipleDistributor distributor;
 
     /**
      * Instantiates a new improved dynamic distribution strategy.
@@ -39,31 +43,45 @@ public class HybridDistributionStrategy extends DistributionStrategy {
      * @param cpManager the checkpoint manager, it can be null if checkpointing is not supported
      */
     public HybridDistributionStrategy(int mpjMe, int mpjSize, ApplicationOptions options, CheckPointManager cpManager) {
+        this(mpjMe, mpjSize, options, cpManager, Runtime.getRuntime().availableProcessors());
+    }
+
+    /**
+     * Instantiates a new improved dynamic distribution strategy.
+     *
+     * @param mpjMe the rank of the current process in MPJ
+     * @param mpjSize the size of the MPJ communicator
+     * @param options the application options
+     * @param cpManager the checkpoint manager, it can be null if checkpointing is not supported
+     */
+    public HybridDistributionStrategy(int mpjMe, int mpjSize, ApplicationOptions options, CheckPointManager cpManager, int numberOfThreads) {
         super(mpjMe, mpjSize, options, cpManager);
         if (mpjSize == 1) {
-            throw new ProtTestInternalException("Dynamic Distribution Strategy"
-                    + " requires at least 2 processors");
+            throw new ProtTestInternalException("Dynamic Distribution Strategy" + " requires at least 2 processors");
         }
         itemsPerProc = new int[mpjSize];
         displs = new int[mpjSize];
         modelSet = new SingleModelCollection(options.getAlignment());
+        maxPEs = numberOfThreads;
+        availablePEs = maxPEs;
+        pme = new ParallelModelEstimator(maxPEs, options.getAlignment());
+        pme.addObserver(this);
     }
-
+    
     /* (non-Javadoc)
      * @see es.uvigo.darwin.prottest.facade.strategy.DistributionStrategy#distribute(es.uvigo.darwin.prottest.util.collection.ModelCollection)
      */
     public Model[] distribute(ModelCollection arrayListModel, ModelWeightComparator comparator) {
 
-        MultipleDistributor distributor = new MultipleDistributor(this, arrayListModel, comparator, mpjMe, mpjSize);
+        distributor = new MultipleDistributor(this, arrayListModel, comparator, mpjMe, mpjSize);
         Thread distributorThread = new Thread(distributor);
         distributorThread.start();
         numberOfModels = arrayListModel.size();
         request();
-        itemsPerProc = distributor.getItemsPerProc();
-        displs = distributor.getDispls();
 
         computationDone();
-        return arrayListModel.toArray(new Model[0]);
+
+        return computedModels;
     }
 
     /* (non-Javadoc)
@@ -73,15 +91,15 @@ public class HybridDistributionStrategy extends DistributionStrategy {
 
         startTime = System.currentTimeMillis();
 
-        List<RunEstimator> runenvList = new ArrayList<RunEstimator>();
+//        List<RunEstimator> runenvList = new ArrayList<RunEstimator>();
 
-        Model[] lastComputedModel = new Model[1];
         while (true) {
             // send request to root
             Model[] modelToReceive = null;
             Model model = null;
             if (mpjMe > 0) {
-                Request modelRequest = MPI.COMM_WORLD.Isend(lastComputedModel, 0, 1, MPI.OBJECT, 0, TAG_SEND_REQUEST);
+                int[] sendMessage = {availablePEs};
+                Request modelRequest = MPI.COMM_WORLD.Isend(sendMessage, 0, 1, MPI.INT, 0, TAG_SEND_REQUEST);
                 // prepare reception
                 modelToReceive = new Model[1];
                 // wait for request
@@ -105,24 +123,86 @@ public class HybridDistributionStrategy extends DistributionStrategy {
                 }
                 model = rootModel;
             }
+
             if (model == null) {
                 break;
             } else {
+                System.out.println("--- [" + mpjMe +"] "+ availablePEs + " PEs --> " 
+                        + model.getModelName() + "(" + MultipleDistributor.getPEs(model, maxPEs) + ")");
+                availablePEs -= MultipleDistributor.getPEs(model, maxPEs);
                 // compute
                 modelSet.add(model);
                 RunEstimator runenv =
-                        factory.createRunEstimator(options, model);
-                runenv.addObserver(this);
+                        factory.createRunEstimator(options, model, MultipleDistributor.getPEs(model, maxPEs));
+//                runenv.addObserver(this);
+                pme.execute(runenv);
 
-                if (!runenv.optimizeModel()) {
-                    throw new ProtTestInternalException("Optimization error");
+                while (availablePEs <= 0) {
+                    try {
+                        Thread.sleep(200);
+                    } catch (InterruptedException e) {
+                        throw new ProtTestInternalException("Thread interrupted");
+                    }
                 }
-
-                runenvList.add(runenv);
-                lastComputedModel[0] = runenv.getModel();
+//                if (!runenv.optimizeModel()) {
+//                    throw new ProtTestInternalException("Optimization error");
+//                }
+//
+//                runenvList.add(runenv);
+//                lastComputedModel[0] = runenv.getModel();
             }
         }
 
         endTime = System.currentTimeMillis();
+
+        while (pme.hasMoreTasks()) {
+                    try {
+                        Thread.sleep(200);
+                    } catch (InterruptedException e) {
+                        throw new ProtTestInternalException("Thread interrupted");
+                    }
+                }
+        
+        if (mpjMe > 0) {
+            gather();
+        } else {
+            computedModels = gather();
+        }
+    }
+
+    /* (non-Javadoc)
+     * @see es.uvigo.darwin.prottest.facade.ProtTestFacade#update(es.uvigo.darwin.prottest.observer.Observable, java.lang.Object)
+     */
+    @Override
+    public void update(ObservableModelUpdater o, Model model, ApplicationOptions options) {
+        if (options != null && model.isComputed()) {
+            availablePEs += MultipleDistributor.getPEs(model, maxPEs);
+        }
+        super.update(o, model, options);
+    }
+
+    /**
+     * Gathers the models of all processors into the root one. This method should
+     * be called by every processor after computing likelihood value of whole model set.
+     * 
+     * This method will return an empty array of models for every non-root processor
+     * 
+     * @return the array of gathered models 
+     */
+    private Model[] gather() {
+
+        Model[] allModels = new Model[numberOfModels];
+        if (distributor != null) {
+            itemsPerProc = distributor.getItemsPerProc();
+            displs = distributor.getDispls();
+        }
+
+        // gathering optimized models
+        MPI.COMM_WORLD.Gatherv(modelSet.toArray(new Model[0]), 0, modelSet.size(), MPI.OBJECT,
+                allModels, 0, itemsPerProc, displs, MPI.OBJECT, 0);
+//		else
+//			allModels = modelSet.toArray(new Model[0]);
+
+        return allModels;
     }
 }

@@ -1,5 +1,6 @@
 package es.uvigo.darwin.prottest.facade;
 
+import es.uvigo.darwin.prottest.exe.util.TemporaryFileManager;
 import java.io.PrintWriter;
 import java.util.Collections;
 import java.util.Date;
@@ -11,6 +12,7 @@ import pal.tree.Tree;
 import mpi.MPI;
 import es.uvigo.darwin.prottest.facade.strategy.DistributionStrategy;
 import es.uvigo.darwin.prottest.facade.strategy.DynamicDistributionStrategy;
+import es.uvigo.darwin.prottest.facade.strategy.HybridDistributionStrategy;
 import es.uvigo.darwin.prottest.facade.strategy.ImprovedDynamicDistributionStrategy;
 import es.uvigo.darwin.prottest.facade.strategy.StaticDistributionStrategy;
 import es.uvigo.darwin.prottest.global.ApplicationGlobals;
@@ -42,8 +44,27 @@ public class ProtTestFacadeMPJ extends ProtTestFacadeImpl {
     private int mpjMe;
     /** The MPJ size of the communicator. It is only useful if MPJ is running. */
     private int mpjSize;
+    /** The thread pool size. */
+    private int poolSize = 1;
     private CheckPointManager cpManager;
 
+    /* (non-Javadoc)
+     * @see es.uvigo.darwin.prottest.facade.ProtTestFacade#getNumberOfThreads()
+     */
+    @Override
+    public int getNumberOfThreads() {
+        return poolSize;
+    }
+
+    /* (non-Javadoc)
+     * @see es.uvigo.darwin.prottest.facade.ProtTestFacade#setNumberOfThreads(int)
+     */
+    @Override
+    public void setNumberOfThreads(int numThreads) {
+//		options.setNumberOfThreads(numThreads);
+        this.poolSize = numThreads;
+    }
+    
     /**
      * Instantiates a new parallel ProtTest facade.
      * 
@@ -95,6 +116,18 @@ public class ProtTestFacadeMPJ extends ProtTestFacadeImpl {
             strategy = new DynamicDistributionStrategy(mpjMe, mpjSize, options, cpManager);
         } else if (strategyProp.equals("dynamic_improved")) {
             strategy = new ImprovedDynamicDistributionStrategy(mpjMe, mpjSize, options, cpManager);
+        } else if (strategyProp.equals("hybrid")) {
+            int numberOfThreads;
+            try {
+                numberOfThreads = Integer.parseInt(ApplicationGlobals.properties.getProperty("number_of_threads", 
+                    String.valueOf(Runtime.getRuntime().availableProcessors())));
+            } catch (NumberFormatException ex) {
+                numberOfThreads = Runtime.getRuntime().availableProcessors();
+            }
+            setNumberOfThreads(numberOfThreads);
+            strategy = new HybridDistributionStrategy(mpjMe, mpjSize, options, cpManager, getNumberOfThreads());
+            TemporaryFileManager.synchronize(options.getAlignment(), options.getTree(),
+                getNumberOfThreads());
         } else {
             strategy = new StaticDistributionStrategy(mpjMe, mpjSize, options);
         }

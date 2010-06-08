@@ -194,12 +194,24 @@ public class ProtTestFactory {
      * @return the run estimator
      */
     public RunEstimator createRunEstimator(ApplicationOptions options, Model model) {
+        return createRunEstimator(options, model, 1);
+    }
+
+    /**
+     * Creates a new ProtTest object.
+     * 
+     * @param options the options
+     * @param model the model
+     * 
+     * @return the run estimator
+     */
+    public RunEstimator createRunEstimator(ApplicationOptions options, Model model, int numberOfThreads) {
         RunEstimator runEstimator = null;
         String analyzer = ApplicationGlobals.properties.getProperty("analyzer");
         if (analyzer.equals(ApplicationGlobals.ANALYZER_PHYML)) {
             switch (sort) {
                 case PROTEIC:
-                    runEstimator = new PhyMLv3AminoAcidRunEstimator(options, model);
+                    runEstimator = new PhyMLv3AminoAcidRunEstimator(options, model, numberOfThreads);
                     break;
                 case NUCLEIC:
                     throw new ProtTestInternalException("Unsupported operation");
@@ -217,7 +229,7 @@ public class ProtTestFactory {
         }
         return runEstimator;
     }
-
+    
     public Handler createLogHandler() throws IOException {
         //   Log level is configurable:
         //   'info'    Only general information messages are logged (default)

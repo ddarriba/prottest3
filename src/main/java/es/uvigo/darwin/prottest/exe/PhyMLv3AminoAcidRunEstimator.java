@@ -186,8 +186,8 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
                 str[23] = "0";
 
                 if (ApplicationGlobals.properties.getProperty("phyml_thread_scheduling", "false").equalsIgnoreCase("true")) {
-                    str[23] = "--num_threads";
-                    str[24] = String.valueOf(numberOfThreads);
+                    str[24] = "--num_threads";
+                    str[25] = String.valueOf(numberOfThreads);
                 }
 
                 model.setCommandLine(str);

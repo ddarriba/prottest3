@@ -110,7 +110,10 @@ public int[] getItemsPerProc() { return itemsPerProc; }
 	private void distribute() {
 
 		itemsPerProc = new int[mpjSize];
+                Status requestStatus = null;
 		displs = new int[mpjSize];
+                int[] freePEs = new int[1];
+                boolean sended = true;
 		
 		while (!modelsToSend.isEmpty()) {
 			// check root processor
@@ -120,35 +123,40 @@ public int[] getItemsPerProc() { return itemsPerProc; }
 			// coupling between this class and ImprovedDynamicDistributionStrategy,
 			// having to define two public attributes: rootModelRequest and rootModel.
 			//
-                        if (caller.rootModelRequest && caller.rootModelFreePEs > 0) {
+                        if (caller.rootModelRequest && caller.availablePEs > 0) {
 //				if (caller.rootModel != null) {
 //					caller.setCheckpoint(modelSet);
 //				}
-				caller.rootModel = getNextModel(caller.rootModelFreePEs);
-				caller.rootModelFreePEs -= getPEs(caller.rootModel);
+				caller.rootModel = getNextModel(caller.availablePEs);
                                 caller.rootModelRequest = false;
 				itemsPerProc[mpjMe]++;
 			} else {
-				Integer[] freePEs = new Integer[1];
 				// getModel request
-				Request modelRequest = MPI.COMM_WORLD.Irecv(freePEs, 0, 1, MPI.INT, MPI.ANY_SOURCE, TAG_SEND_REQUEST);
-				// prepare model
-				Model[] modelToSend = new Model[1];
-				modelToSend[0] = getNextModel(freePEs[0]);
-				// wait for request
-				Status requestStatus = modelRequest.Wait();
-//				if (computedModel[0] != null) {
-//					// set checkpoint
-//					int index = modelSet.indexOf(computedModel[0]);
-//					modelSet.set(index, computedModel[0]);
-//					caller.setCheckpoint(modelSet);
-//				}
-				// send model
-				Request modelSend = MPI.COMM_WORLD.Isend(modelToSend, 0, 1, MPI.OBJECT, requestStatus.source, TAG_SEND_MODEL);
-				// update structures
-				itemsPerProc[requestStatus.source]++;
-				// wait for send
-				modelSend.Wait();
+                                if (sended) {
+                                    Request modelRequest = MPI.COMM_WORLD.Irecv(freePEs, 0, 1, MPI.INT, MPI.ANY_SOURCE, TAG_SEND_REQUEST);
+                                    // wait for request
+                                    requestStatus = modelRequest.Wait();
+                                    sended = false;
+                                }
+                                // prepare model
+                                Model[] modelToSend = new Model[1];
+                                modelToSend[0] = getNextModel(freePEs[0]);
+                                
+                                if (modelToSend[0] != null) {
+    //				if (computedModel[0] != null) {
+    //					// set checkpoint
+    //					int index = modelSet.indexOf(computedModel[0]);
+    //					modelSet.set(index, computedModel[0]);
+    //					caller.setCheckpoint(modelSet);
+    //				}
+                                    // send model
+                                    Request modelSend = MPI.COMM_WORLD.Isend(modelToSend, 0, 1, MPI.OBJECT, requestStatus.source, TAG_SEND_MODEL);
+                                    // update structures
+                                    itemsPerProc[requestStatus.source]++;
+                                    // wait for send
+                                    modelSend.Wait();
+                                    sended = true;
+                                } 
 			}
 		}
 		displs[0] = 0;
@@ -157,18 +165,11 @@ public int[] getItemsPerProc() { return itemsPerProc; }
 
 		// finalize
 		for (int i = 1; i < mpjSize; i++) {
-			Model[] computedModel = new Model[1];
 			// getModel request
-			Request modelRequest = MPI.COMM_WORLD.Irecv(computedModel, 0, 1, MPI.OBJECT, MPI.ANY_SOURCE, TAG_SEND_REQUEST);
+			Request modelRequest = MPI.COMM_WORLD.Irecv(freePEs, 0, 1, MPI.INT, MPI.ANY_SOURCE, TAG_SEND_REQUEST);
 			Model[] modelToSend = { null };
 			// wait for request
-			Status requestStatus = modelRequest.Wait();
-			if (computedModel[0] != null) {
-				// set checkpoint
-				int index = modelSet.indexOf(computedModel[0]);
-				modelSet.set(index, computedModel[0]);
-				caller.setCheckpoint(modelSet);
-			}
+			requestStatus = modelRequest.Wait();
 			// send null model
 			Request modelSend = MPI.COMM_WORLD.Isend(modelToSend, 0, 1, MPI.OBJECT, requestStatus.source, TAG_SEND_MODEL);
 
@@ -189,7 +190,7 @@ public int[] getItemsPerProc() { return itemsPerProc; }
         private Model getNextModel(int numPEs) {
             Model nextModel = null;
             for (Model model : modelsToSend) {
-                if (getPEs(model) <= numPEs) {
+                if (getPEs(model, maxAvailableThreads) <= numPEs) {
                     nextModel = model;
                     break;
                 }
@@ -198,7 +199,7 @@ public int[] getItemsPerProc() { return itemsPerProc; }
             return nextModel;
         }
 
-        private int getPEs(Model model) {
+        public static int getPEs(Model model, int maxAvailableThreads) {
             int numberOfThreads;
             if (model.isGamma())
                 numberOfThreads = 4;
@@ -208,4 +209,5 @@ public int[] getItemsPerProc() { return itemsPerProc; }
                 numberOfThreads = 1;
             return Math.min(maxAvailableThreads, numberOfThreads);
         }
+
 }

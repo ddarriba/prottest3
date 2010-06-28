@@ -21,8 +21,10 @@ public class HybridDistributionStrategy extends DistributionStrategy {
 
     /** The Constant TAG_SEND_REQUEST. */
     private static final int TAG_SEND_REQUEST = 1;
+    /** MPJ Tag for sending a new model. */
+    private static final int TAG_EXIST_MORE_MODELS = 2;
     /** The Constant TAG_SEND_MODEL. */
-    private static final int TAG_SEND_MODEL = 2;
+    private static final int TAG_SEND_MODEL = 3;
     private int maxPEs;
     /** The number of available PEs. */
     int availablePEs;
@@ -67,7 +69,7 @@ public class HybridDistributionStrategy extends DistributionStrategy {
         pme = new ParallelModelEstimator(maxPEs, options.getAlignment());
         pme.addObserver(this);
     }
-    
+
     /* (non-Javadoc)
      * @see es.uvigo.darwin.prottest.facade.strategy.DistributionStrategy#distribute(es.uvigo.darwin.prottest.util.collection.ModelCollection)
      */
@@ -102,12 +104,21 @@ public class HybridDistributionStrategy extends DistributionStrategy {
                 Request modelRequest = MPI.COMM_WORLD.Isend(sendMessage, 0, 1, MPI.INT, 0, TAG_SEND_REQUEST);
                 // prepare reception
                 modelToReceive = new Model[1];
+                boolean[] notification = new boolean[1];
                 // wait for request
                 modelRequest.Wait();
-                // receive model
-                Request modelReceive = MPI.COMM_WORLD.Irecv(modelToReceive, 0, 1, MPI.OBJECT, 0, TAG_SEND_MODEL);
-                modelReceive.Wait();
-                model = modelToReceive[0];
+
+                Request notifyRecv = MPI.COMM_WORLD.Irecv(notification, 0, 1, MPI.BOOLEAN, 0, TAG_EXIST_MORE_MODELS);
+                notifyRecv.Wait();
+
+                if (notification[0]) {
+                    // receive model
+                    Request modelReceive = MPI.COMM_WORLD.Irecv(modelToReceive, 0, 1, MPI.OBJECT, 0, TAG_SEND_MODEL);
+                    modelReceive.Wait();
+                    model = modelToReceive[0];
+                } else {
+                    break;
+                }
             } else {
                 // This strategy is an easy way to avoid the problem of thread-safety
                 // in MPJ-Express. It works correctly, but it also causes to introduce
@@ -122,13 +133,12 @@ public class HybridDistributionStrategy extends DistributionStrategy {
                     }
                 }
                 model = rootModel;
+                if (model == null) {
+                    break;
+                }
             }
 
-            if (model == null) {
-                break;
-            } else {
-                System.out.println("--- [" + mpjMe +"] "+ availablePEs + " PEs --> " 
-                        + model.getModelName() + "(" + MultipleDistributor.getPEs(model, maxPEs) + ")");
+            if (model != null) {
                 availablePEs -= MultipleDistributor.getPEs(model, maxPEs);
                 // compute
                 modelSet.add(model);
@@ -144,30 +154,28 @@ public class HybridDistributionStrategy extends DistributionStrategy {
                         throw new ProtTestInternalException("Thread interrupted");
                     }
                 }
-//                if (!runenv.optimizeModel()) {
-//                    throw new ProtTestInternalException("Optimization error");
-//                }
-//
-//                runenvList.add(runenv);
-//                lastComputedModel[0] = runenv.getModel();
             }
         }
+
+        System.out.println("-----------------------------------BREAK!!!!! [" + mpjMe + "]");
 
         endTime = System.currentTimeMillis();
 
         while (pme.hasMoreTasks()) {
-                    try {
-                        Thread.sleep(200);
-                    } catch (InterruptedException e) {
-                        throw new ProtTestInternalException("Thread interrupted");
-                    }
-                }
-        
+            try {
+                Thread.sleep(400);
+            } catch (InterruptedException e) {
+                throw new ProtTestInternalException("Thread interrupted");
+            }
+        }
+
         if (mpjMe > 0) {
             gather();
         } else {
             computedModels = gather();
         }
+
+        System.out.println("-----------------------------------DONE!!!!! [" + mpjMe + "]");
     }
 
     /* (non-Javadoc)

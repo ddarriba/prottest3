@@ -7,7 +7,6 @@
 package es.uvigo.darwin.xprottest;
 
 import org.jdesktop.application.Action;
-import org.jdesktop.application.Application;
 /**
  *
  * @author  diego

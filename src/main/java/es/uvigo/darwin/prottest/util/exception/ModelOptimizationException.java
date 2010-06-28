@@ -79,6 +79,31 @@ public class ModelOptimizationException extends ProtTestCheckedException {
         }
     }
 
+    public static class ModelNotFoundException extends ExternalExecutionException {
+
+        /** The Constant serialVersionUID. */
+        private static final long serialVersionUID = 20090728L;
+
+        /**
+         * Instantiates a new stats file format exception.
+         * 
+         * @param application the external model optimizer
+         */
+        public ModelNotFoundException(String model) {
+            super("cannot find " + model + " matrix description");
+        }
+
+        /**
+         * Instantiates a new stats file format exception.
+         * 
+         * @param application the external model optimizer
+         * @param description the description
+         */
+        public ModelNotFoundException(String model, String description) {
+            super("cannot find " + model + " matrix description: " + description);
+        }
+    }
+    
     public static class PhyMLExecutionException extends ExternalExecutionException {
 
         private static final String applicationName = "PhyML";

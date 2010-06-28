@@ -171,7 +171,7 @@ public class RunningFrame extends javax.swing.JFrame
     // End of variables declaration//GEN-END:variables
     public void update(ObservableModelUpdater o, Model model, ApplicationOptions options) {
         if (running) {
-            if (!(model.isComputed() && options != null)) {
+            if (options == null) {
                 displayWriter.println("Computing " + model.getModelName() + "...");
             } else {
                 computedModels++;
@@ -180,10 +180,10 @@ public class RunningFrame extends javax.swing.JFrame
                 if (model.isComputed()) {
                     displayWriter.println("Computed " + model.getModelName() + "(" + model.getLk() + ")");
                 } else {
-                    if (options != null) {
+//                    if (options != null) {
                         // Follow error behavior
                         if (mainFrame.getErrorBehavior() == XProtTestApp.ERROR_BEHAVIOR_CONTINUE) {
-                            displayWriter.println("There were errors computing " + model.getModelName() + " !!! ");
+                            displayWriter.println("There were errors computing " + model.getModelName());
                         } else if (mainFrame.getErrorBehavior() == XProtTestApp.ERROR_BEHAVIOR_STOP) {
                             running = false;
                             mainFrame.computationInterrupted();
@@ -193,7 +193,7 @@ public class RunningFrame extends javax.swing.JFrame
                             cancelExecution();
                             throw new RuntimeException("Unsupported error behavior : " + mainFrame.getErrorBehavior());
                         }
-                    }
+//                    }
                 }
             }
         }

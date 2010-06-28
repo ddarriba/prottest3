@@ -18,8 +18,10 @@ import es.uvigo.darwin.prottest.util.exception.ModelOptimizationException;
 import es.uvigo.darwin.prottest.util.exception.ModelOptimizationException.OSNotSupportedException;
 import es.uvigo.darwin.prottest.util.exception.ModelOptimizationException.PhyMLExecutionException;
 import es.uvigo.darwin.prottest.util.exception.ModelOptimizationException.StatsFileFormatException;
+import es.uvigo.darwin.prottest.util.exception.ModelOptimizationException.ModelNotFoundException;
 import es.uvigo.darwin.prottest.util.exception.ProtTestInternalException;
 import es.uvigo.darwin.prottest.util.exception.TreeFormatException;
+import java.util.Arrays;
 
 /**
  * The Class PhyMLAminoAcidRunEstimator. It optimizes Amino-Acid
@@ -31,6 +33,23 @@ import es.uvigo.darwin.prottest.util.exception.TreeFormatException;
  */
 public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
 
+    /** The PhyML implemented matrices. */
+    public static String[] IMPLEMENTED_MATRICES = {
+        "JTT",
+        "LG",
+        "DCMut",
+        "MtREV",
+        "MtMam",
+        "MtArt",
+        "Dayhoff",
+        "WAG",
+        "RtREV",
+        "CpREV",
+        "Blosum62",
+        "VT",
+        "HIVb",
+        "HIVw"
+    };
     /** Suffix for temporary statistic files. */
     private static final String STATS_FILE_SUFFIX = "_phyml_stats.txt";
     /** Suffix for temporary tree files. */
@@ -67,6 +86,7 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
             this.model = (AminoAcidModel) model;
             // check if there is any matrix file
             modelFile = new File("models" + File.separator + model.getMatrix());
+
         } catch (ClassCastException cce) {
             throw new ProtTestInternalException("Wrong model type");
         }
@@ -147,7 +167,11 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
 
                 // the model
                 str[8] = "-m";
-                if (modelFile.exists()) {
+                if (!Arrays.asList(IMPLEMENTED_MATRICES).contains(model.getMatrix())) {
+                    // check matrix file
+                    if (!modelFile.exists()) {
+                        throw new ModelNotFoundException(model.getMatrix());
+                    }
                     str[9] = "custom";
                 } else {
                     str[9] = model.getMatrix();
@@ -275,7 +299,7 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
                             errorln("Last token: " + Utilities.lastToken(line));
                             errorln("It should be: " + model.getMatrix());
                             errorln(errorMsg);
-                            throw new StatsFileFormatException("PhyML", errorMsg);
+                            throw new ModelNotFoundException(model.getMatrix());
                         }
                     } else if (line.startsWith(". Log-likelihood")) {
                         model.setLk(Double.parseDouble(Utilities.lastToken(line)));
@@ -286,7 +310,7 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
                             pfinerln("[DEBUG] PHYML: " + line);
 
                             if (model.getNumberOfTransitionCategories() != Integer.parseInt(Utilities.lastToken(line))) {
-                                String errorMsg = "There was some error in the number of transition categories: " + model.getNumberOfTransitionCategories() + " vs " + Integer.parseInt(Utilities.lastToken(line));
+                                String errorMsg = "There were errors in the number of transition categories: " + model.getNumberOfTransitionCategories() + " vs " + Integer.parseInt(Utilities.lastToken(line));
                                 errorln(errorMsg);
 
                                 throw new StatsFileFormatException("PhyML", errorMsg);

@@ -731,6 +731,8 @@ public class XProtTestView extends FrameView {
         } else {
             lblLikelihoodStatus.setText(resourceMap.getString("msg-lnl-error"));
             lblLikelihoodStatus.setForeground(CRITIC_COLOR);
+            displayWriter.println(resourceMap.getString("msg-see-error-log"));
+            errorMenuItem.setEnabled(true);
         }
 
         lnlCalculated = done;
@@ -746,7 +748,6 @@ public class XProtTestView extends FrameView {
     public void computationInterrupted() {
         lblLikelihoodStatus.setText(resourceMap.getString("msg-lnl-error"));
         lblLikelihoodStatus.setForeground(CRITIC_COLOR);
-        displayWriter.println(resourceMap.getString("msg-see-error-log"));
         errorMenuItem.setEnabled(true);
         lblMoreInfo.setVisible(true);
         disableHandler();

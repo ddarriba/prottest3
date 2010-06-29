@@ -1,6 +1,6 @@
 package es.uvigo.darwin.prottest;
 
-
+import es.uvigo.darwin.prottest.consensus.Consensus;
 import mpi.MPI;
 import pal.util.XMLConstants;
 import es.uvigo.darwin.prottest.facade.ProtTestFacade;
@@ -17,9 +17,12 @@ import es.uvigo.darwin.prottest.observer.ObservableModelUpdater;
 import es.uvigo.darwin.prottest.selection.AIC;
 import es.uvigo.darwin.prottest.selection.AICc;
 import es.uvigo.darwin.prottest.selection.BIC;
+import es.uvigo.darwin.prottest.selection.DT;
 import es.uvigo.darwin.prottest.selection.InformationCriterion;
 import es.uvigo.darwin.prottest.selection.LNL;
 import es.uvigo.darwin.prottest.selection.printer.PrintFramework;
+import es.uvigo.darwin.prottest.util.FixedBitSet;
+import es.uvigo.darwin.prottest.util.Utilities;
 import es.uvigo.darwin.prottest.util.argumentparser.ProtTestArgumentParser;
 import es.uvigo.darwin.prottest.util.collection.ModelCollection;
 import es.uvigo.darwin.prottest.util.collection.SingleModelCollection;
@@ -27,7 +30,11 @@ import es.uvigo.darwin.prottest.util.exception.ProtTestInternalException;
 import es.uvigo.darwin.prottest.util.factory.ProtTestFactory;
 import es.uvigo.darwin.prottest.util.logging.ProtTestLogger;
 import es.uvigo.darwin.prottest.util.printer.ProtTestPrinter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
+import pal.misc.Identifier;
 import pal.tree.Tree;
 
 /**
@@ -48,9 +55,9 @@ public class ProtTest implements XMLConstants {
     public static boolean MPJ_RUN;
     /** The ProtTest factory. */
     private static ProtTestFactory factory;
+
     /** The application printer. */
 //    private static ProtTestPrinter printer;
-
     /**
      * The main method. It initializes the MPJ runtime environment, parses 
      * the application arguments, initializes the application options and 
@@ -62,7 +69,7 @@ public class ProtTest implements XMLConstants {
 
         ProtTestLogger logger = ProtTestLogger.getDefaultLogger();
         logger.setStdHandlerLevel(Level.INFO);
-        
+
         // initializing MPJ environment (if available)
         try {
             String[] argsApp = MPI.Init(args);
@@ -94,7 +101,7 @@ public class ProtTest implements XMLConstants {
             }
             finalize(1);
         }
-        
+
         TreeFacade treeFacade = new TreeFacadeImpl();
         ProtTestFacade facade;
         if (MPJ_RUN) {
@@ -120,9 +127,10 @@ public class ProtTest implements XMLConstants {
             });
         }
 
-        if (opts.isDebug())
+        if (opts.isDebug()) {
             logger.setStdHandlerLevel(Level.ALL);
-        
+        }
+
         if (MPJ_ME == 0) {
             ProtTestPrinter.printHeader();
             opts.report();
@@ -134,6 +142,7 @@ public class ProtTest implements XMLConstants {
 
             if (MPJ_ME == 0) {
                 ModelCollection allModelsList = new SingleModelCollection(models, opts.getAlignment());
+
                 InformationCriterion ic;
                 //let's print results:
                 switch (opts.getSortBy()) {
@@ -146,6 +155,9 @@ public class ProtTest implements XMLConstants {
                     case ApplicationGlobals.SORTBY_AICC:
                         ic = new AICc(allModelsList, 1.0, opts.getSampleSize());
                         break;
+                    case ApplicationGlobals.SORTBY_DT:
+                        ic = new DT(allModelsList, 1.0, opts.getSampleSize());
+                        break;
                     case ApplicationGlobals.SORTBY_LNL:
                         ic = new LNL(allModelsList, 1.0, opts.getSampleSize());
                         break;
@@ -153,13 +165,13 @@ public class ProtTest implements XMLConstants {
                         throw new ProtTestInternalException(
                                 "Unrecognized information criterion");
                 }
-                
+
                 facade.printModelsSorted(ic);
 
                 if (opts.isAll()) {
                     PrintFramework.printFrameworksComparison(ic.getModelCollection());
                 }
-                
+
                 if (opts.isDisplayASCIITree()) {
                     logger.infoln(treeFacade.toASCII(ic.getBestModel().getTree()));
                 }
@@ -167,15 +179,83 @@ public class ProtTest implements XMLConstants {
                     logger.infoln(treeFacade.toNewick(ic.getBestModel().getTree(), true, true, false));
                 }
                 if (opts.isDisplayConsensusTree()) {
+
+                    Consensus consensus = treeFacade.createConsensus(ic, opts.getConsensusThreshold());
+
                     logger.infoln("");
                     logger.infoln("");
-                    logger.infoln("***********************************************");
-                    logger.infoln("           Consensus tree (" +
-                            opts.getConsensusThreshold() + ")");
-                    logger.infoln("***********************************************");
-                    Tree consensus = treeFacade.createConsensusTree(ic, opts.getConsensusThreshold());
-                    logger.infoln(treeFacade.toASCII(consensus));
+                    logger.infoln("----------------------------------------");
+                    logger.infoln("------------ Consensus Tree ------------");
+                    logger.infoln("----------------------------------------");
+                    logger.infoln("Selection criterion: . . . . " + ApplicationGlobals.SORTBY_NAMES[opts.getSortBy() - 'A']);
+                    logger.infoln("Sample size: . . . . . . . . " + opts.getSampleSize());
+                    logger.infoln("Consensus support threshold: " + opts.getConsensusThreshold());
+                    logger.infoln("----------------------------------------");
+                    logger.infoln("");
+
+                    Set<FixedBitSet> keySet = consensus.getCladeSupport().keySet();
+                    List<FixedBitSet> splitsInConsensus = new ArrayList<FixedBitSet>();
+                    List<FixedBitSet> splitsOutFromConsensus = new ArrayList<FixedBitSet>();
+
+                    for (FixedBitSet fbs : keySet) {
+                        if (fbs.cardinality() > 1) {
+                            double psupport = (1.0 * consensus.getCladeSupport().get(fbs)) / 1.0;
+                            if (psupport < opts.getConsensusThreshold()) {
+                                splitsOutFromConsensus.add(fbs);
+                            } else {
+                                splitsInConsensus.add(fbs);
+                            }
+                        }
+                    }
+
+                    logger.infoln("# # # # # # # # # # # # # # # #");
+                    logger.infoln(" ");
+                    logger.infoln("Species in order:");
+                    logger.infoln(" ");
+
+                    for (int i = 0; i < consensus.getIdGroup().getIdCount(); i++) {
+                        Identifier id = consensus.getIdGroup().getIdentifier(i);
+                        logger.infoln("    " + (i + 1) + ". " + id.getName());
+                    }
+                    logger.infoln(" ");
+                    logger.infoln("# # # # # # # # # # # # # # # #");
+                    logger.infoln(" ");
+                    logger.infoln("Sets included in the consensus tree");
+                    logger.infoln(" ");
+                    logger.info("    ");
+                    for (int i = 0; i < consensus.getIdGroup().getIdCount(); i++) {
+                        logger.info(String.valueOf(i + 1));
+                    }
+                    logger.infoln(" ");
+                    for (FixedBitSet fbs : splitsInConsensus) {
+                        logger.infoln("    " + fbs.splitRepresentation() + " ( " +
+                                Utilities.round(consensus.getCladeSupport().get(fbs), 5) + " )");
+                    }
+                    logger.infoln(" ");
+                    logger.infoln("Sets NOT included in consensus tree");
+                    logger.infoln(" ");
+                    logger.info("    ");
+                    for (int i = 0; i < consensus.getIdGroup().getIdCount(); i++) {
+                        logger.info(String.valueOf(i + 1));
+                    }
+                    logger.infoln(" ");
+                    for (FixedBitSet fbs : splitsOutFromConsensus) {
+                        logger.infoln("    " + fbs.splitRepresentation() + " ( " +
+                                Utilities.round(consensus.getCladeSupport().get(fbs), 5) + " )");
+                    }
+                    logger.infoln("\n");
+                    Tree consensusTree = consensus.getConsensusTree();
+                    String newickTree = treeFacade.toNewick(consensusTree, true, true, true);
+                    logger.infoln(newickTree);
+                    logger.infoln("");
+                    logger.infoln(treeFacade.toASCII(consensusTree));
+                    logger.infoln("");
+                    logger.infoln(treeFacade.branchInfo(consensusTree));
+                    logger.infoln("");
+                    logger.infoln(treeFacade.heightInfo(consensusTree));
+
                 }
+
             }
         } catch (ProtTestInternalException e) {
             logger.severeln(e.getMessage());

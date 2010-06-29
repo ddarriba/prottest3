@@ -240,6 +240,10 @@ public abstract class ProtTestFacadeImpl
     protected void errorln(String message) {
         severeln(message, ProtTestFacade.class);
     }
+    
+    protected void warnln(String message) {
+        warningln(message, ProtTestFacade.class);
+    }
 
     protected void verbose(String message) {
         fine(message, ProtTestFacade.class);

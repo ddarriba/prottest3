@@ -67,4 +67,5 @@ public interface TreeFacade {
      * @param threshold the minimum clade support
      */
     public Consensus createConsensus(InformationCriterion ic, double threshold);
+    
 }

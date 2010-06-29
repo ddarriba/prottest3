@@ -153,7 +153,7 @@ public class ApplicationOptions extends java.lang.Object {
         return sortBy;
     }
 
-     /**
+    /**
      * Sets the alignment filename without checking
      * 
      * @param alignFile the alignment filename
@@ -161,7 +161,7 @@ public class ApplicationOptions extends java.lang.Object {
     public void setAlignmentFilename(String alignFile) {
         this.align_file = alignFile;
     }
-    
+
     /**
      * Sets the alignment file
      * 
@@ -177,7 +177,7 @@ public class ApplicationOptions extends java.lang.Object {
             IOException {
 
         this.align_file = alignFile;
-        
+
         StringWriter sw = new StringWriter();
         setAlignment(AlignmentReader.readAlignment(new PrintWriter(sw), alignFile, debug));
         sw.flush();
@@ -657,10 +657,9 @@ public class ApplicationOptions extends java.lang.Object {
         println("			output file    	(optional) [default: standard output]								");
         println(" -sort sot_by_value 																	");
         println(" 		Ordering field	(optional) [default: " + ApplicationGlobals.DEFAULT_SORT_BY + "]");
-        println("             		A: AIC															");
-        println("             		B: BIC															");
-        println("             		C: AICc															");
-        println("             		D: LnL															");
+        for (char value : ApplicationGlobals.SORTBY_VALUES) {
+            println("             		" + value + ": " + ApplicationGlobals.SORTBY_NAMES[value - 'A']);
+        }
         println(" -all																				");
         println(" 		Displays a 7-framework comparison table										");
         println(" -S optimization_strategy															");
@@ -773,16 +772,7 @@ public class ApplicationOptions extends java.lang.Object {
         println("    Observed frequencies... : " + plusF);
 
         println("  Statistical framework");
-        if (sortBy == 'A') {
-            tmp = "AIC";
-        } else if (sortBy == 'B') {
-            tmp = "BIC";
-        } else if (sortBy == 'D') {
-            tmp = "-lnL";
-        } else {
-            tmp = "AICc";
-        }
-        println("    Sort models according to....: " + tmp);
+        println("    Sort models according to....: " + ApplicationGlobals.SORTBY_NAMES[getSortBy() - 'A']);
         if (sampleSizeMode == ApplicationGlobals.SIZEMODE_USERSIZE) {
             println("    Sample size.................: " + sampleSize);
         } else {
@@ -793,6 +783,10 @@ public class ApplicationOptions extends java.lang.Object {
         println("  Other options:");
         println("    Display best tree in ASCII..: " + displayASCIITree);
         println("    Display best tree in Newick.: " + displayNewickTree);
+        println("    Display consensus tree......: " + displayConsensusTree);
+        if (displayConsensusTree) {
+            println("    Consensus threshold.........: " + consensusThreshold);
+        }
         println("    Verbose.....................: " + debug);
 
         println("");

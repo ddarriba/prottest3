@@ -23,6 +23,9 @@ public class ProtTestLogFormatter extends Formatter {
         if (lr.getLevel().intValue() < Level.FINE.intValue()) {
             text.append(lr.getLevel().getName() + " : ");
         }
+        if (lr.getLevel().intValue() == Level.WARNING.intValue()) {
+            text.append("WARNING: ");
+        }
         text.append(lr.getMessage());
         
         return text.toString();

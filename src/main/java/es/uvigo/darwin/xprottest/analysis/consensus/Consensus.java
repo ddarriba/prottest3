@@ -20,7 +20,6 @@ import es.uvigo.darwin.prottest.util.Utilities;
 import es.uvigo.darwin.prottest.util.collection.ModelCollection;
 import es.uvigo.darwin.prottest.util.collection.SingleModelCollection;
 import es.uvigo.darwin.prottest.util.exception.ProtTestInternalException;
-import es.uvigo.darwin.prottest.util.logging.ProtTestLogger;
 import java.awt.Font;
 import pal.tree.Tree;
 import java.io.PrintWriter;
@@ -38,6 +37,7 @@ import pal.alignment.Alignment;
 import pal.misc.Identifier;
 
 import static es.uvigo.darwin.prottest.util.logging.ProtTestLogger.*;
+
 /**
  *
  * @author  diego
@@ -68,7 +68,7 @@ public class Consensus extends javax.swing.JFrame {
         this.models = new SingleModelCollection(models, alignment);
         this.displayWriter = new PrintWriter(new TextAreaWriter(displayArea));
         this.logHandler = getDefaultLogger().addHandler(displayWriter, Level.OFF);
-        
+
         resourceMap = Application.getInstance(es.uvigo.darwin.xprottest.XProtTestApp.class).getContext().getResourceMap(Consensus.class);
 
         Font f = new Font(Font.MONOSPACED, Font.PLAIN, 12);
@@ -562,7 +562,7 @@ public class Consensus extends javax.swing.JFrame {
             }
 
             logHandler.setLevel(Level.INFO);
-            
+
             if (ic == null || ic.getConfidenceModels().size() > 0) {
                 es.uvigo.darwin.prottest.consensus.Consensus consensus = null;
                 if (ic != null) {
@@ -625,7 +625,7 @@ public class Consensus extends javax.swing.JFrame {
                 }
                 println(" ");
                 for (FixedBitSet fbs : splitsInConsensus) {
-                    println("    " + fbs.splitRepresentation() + " ( " + 
+                    println("    " + fbs.splitRepresentation() + " ( " +
                             Utilities.round(consensus.getCladeSupport().get(fbs), 5) + " )");
                 }
                 println(" ");
@@ -637,7 +637,7 @@ public class Consensus extends javax.swing.JFrame {
                 }
                 println(" ");
                 for (FixedBitSet fbs : splitsOutFromConsensus) {
-                    println("    " + fbs.splitRepresentation() + " ( " + 
+                    println("    " + fbs.splitRepresentation() + " ( " +
                             Utilities.round(consensus.getCladeSupport().get(fbs), 5) + " )");
                 }
 
@@ -698,7 +698,6 @@ public class Consensus extends javax.swing.JFrame {
     private void println(String message) {
         infoln(message, this.getClass());
     }
-    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuild;
     private javax.swing.ButtonGroup btnGroupSampleSizeMode;

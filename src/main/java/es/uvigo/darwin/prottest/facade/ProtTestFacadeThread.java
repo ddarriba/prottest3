@@ -162,17 +162,18 @@ public class ProtTestFacadeThread
 
         long endTime = System.currentTimeMillis();
 
-        if (errorsFound) {
-            //check all models and remove those with errors
-            for (current = 0; current < runenv.length; current++) {
-                Model model = runenv[current].getModel();
-                if (!model.isComputed()) {
-                    arrayListModel.remove(model);
-                    numberOfModels--;
-                    errorln("Warning! : There were errors computing model " + model.getModelName());
-                }
+        //check all models and remove those with errors
+        for (current = 0; current < runenv.length; current++) {
+            Model model = runenv[current].getModel();
+            if (!model.isComputed()) {
+                arrayListModel.remove(model);
+                numberOfModels--;
+                warnln("There were errors computing model " + model.getModelName());
             }
         }
+
+        println("");
+        println("");
 
         // print optimization reports sorted
         Collections.sort(arrayListModel, new AminoAcidModelNaturalComparator());

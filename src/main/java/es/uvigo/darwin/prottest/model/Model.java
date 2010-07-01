@@ -34,6 +34,17 @@ public abstract class Model implements Serializable {
     public static final int DISTRIBUTION_GAMMA = 2;
     /** Useful constant for gamma distribution with a proportion of invariable sites. */
     public static final int DISTRIBUTION_GAMMA_INV = 3;
+    
+    // frequencies distribution
+    /** The value of Uniform Frequencies Distribution. */
+    static final int FREQ_DISTRIBUTION_UNIFORM = 1;
+    /** The value of Empirical Frequencies Distribution. */
+    static final int FREQ_DISTRIBUTION_EMPIRICAL = 2;
+    /** The value of Maximum Likelihood Frequencies Distribution. */
+    static final int FREQ_DISTRIBUTION_MAXIMUM_LIKELIHOOD = 3;
+    /** The value of any other frequencies distribution. */
+    static final int FREQ_DISTRIBUTION_OTHER = 4;
+    
     /** Useful constant for consider observed frequencies. */
     public static final String PROP_PLUS_F = "plusF";
     /** The matrix name. */
@@ -397,10 +408,7 @@ public abstract class Model implements Serializable {
     }
 
     /**
-     * Prints the report.
-     * 
-     * @param out the out
-     * @param verbose the verbose
+     * Prints the model status report.
      */
     public void printReport() {
 

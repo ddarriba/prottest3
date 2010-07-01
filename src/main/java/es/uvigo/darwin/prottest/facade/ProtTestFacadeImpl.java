@@ -1,5 +1,7 @@
 package es.uvigo.darwin.prottest.facade;
 
+import static es.uvigo.darwin.prottest.global.ApplicationGlobals.*;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -11,7 +13,6 @@ import es.uvigo.darwin.prottest.exe.RunEstimator;
 import es.uvigo.darwin.prottest.exe.util.TemporaryFileManager;
 import es.uvigo.darwin.prottest.facade.util.ProtTestParameterVO;
 import es.uvigo.darwin.prottest.facade.util.SelectionChunk;
-import es.uvigo.darwin.prottest.global.ApplicationGlobals;
 import es.uvigo.darwin.prottest.global.options.ApplicationOptions;
 import es.uvigo.darwin.prottest.model.Model;
 import es.uvigo.darwin.prottest.observer.ObservableModelUpdater;
@@ -177,7 +178,7 @@ public abstract class ProtTestFacadeImpl
 
         if (options.getTreeFile() == null) {
             // this way, the starting topology is the same for every model
-            if (options.strategyMode == ApplicationGlobals.OPTIMIZE_FIXED_BIONJ) {
+            if (options.strategyMode == OPTIMIZE_FIXED_BIONJ) {
                 // use JTT BIONJ Tree
                 Tree jttTree = calculateBionjJTT(options);
 

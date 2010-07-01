@@ -4,6 +4,8 @@
 //
 package es.uvigo.darwin.prottest.global.options;
 
+import static es.uvigo.darwin.prottest.global.AminoAcidApplicationGlobals.*;
+
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -14,8 +16,6 @@ import java.util.Vector;
 
 import pal.alignment.Alignment;
 import pal.tree.Tree;
-import es.uvigo.darwin.prottest.global.AminoAcidApplicationGlobals;
-import es.uvigo.darwin.prottest.global.ApplicationGlobals;
 import es.uvigo.darwin.prottest.model.Model;
 import es.uvigo.darwin.prottest.util.ProtTestAlignment;
 import es.uvigo.darwin.prottest.util.argumentparser.ProtTestArgumentParser;
@@ -35,12 +35,12 @@ import static es.uvigo.darwin.prottest.util.logging.ProtTestLogger.*;
  * application execution. It is a singleton class which gathers all
  * necessary options to run.
  */
-public class ApplicationOptions extends java.lang.Object {
+public class ApplicationOptions {
 
     /** Verbose mode on/off. */
-    protected boolean debug = ApplicationGlobals.DEFAULT_DEBUG;
+    protected boolean debug = DEFAULT_DEBUG;
     /** The sample size mode. */
-    protected int sampleSizeMode = ApplicationGlobals.DEFAULT_SAMPLE_SIZE_MODE;
+    protected int sampleSizeMode = DEFAULT_SAMPLE_SIZE_MODE;
     /** The sample size. It is only useful if the sample size mode is custom */
     protected double sampleSize = 0.0;
     /** The alignment filename. */
@@ -56,7 +56,7 @@ public class ApplicationOptions extends java.lang.Object {
     /** The number of categories. It is only useful if the distribution is gamma */
     public int ncat = 4;
     /** The optimization strategy mode. */
-    public int strategyMode = ApplicationGlobals.DEFAULT_STRATEGY_MODE;
+    public int strategyMode = DEFAULT_STRATEGY_MODE;
     /** The matrices of the models to optimize. */
     private Vector<String> matrices = new Vector<String>();	//{"JTT", "MtREV", "Dayhoff", "WAG"};
     /** The distributions of the models to optimize. */
@@ -67,19 +67,19 @@ public class ApplicationOptions extends java.lang.Object {
     private boolean plusF = false;
     // display options
     /** Display Newick tree on results. */
-    private boolean displayNewickTree = ApplicationGlobals.DEFAULT_DISPLAY_NEWICK_TREE;
+    private boolean displayNewickTree = DEFAULT_DISPLAY_NEWICK_TREE;
     /** Display ASCII tree on results. */
-    private boolean displayASCIITree = ApplicationGlobals.DEFAULT_DISPLAY_ASCII_TREE;
+    private boolean displayASCIITree = DEFAULT_DISPLAY_ASCII_TREE;
     /** Display Consensus tree on results. */
-    private boolean displayConsensusTree = ApplicationGlobals.DEFAULT_DISPLAY_CONSENSUS_TREE;
+    private boolean displayConsensusTree = DEFAULT_DISPLAY_CONSENSUS_TREE;
     /** Consensus threshold **/
     private double consensusThreshold;
     /** Display a 7-framework comparison. */
-    private boolean compareAll = ApplicationGlobals.DEFAULT_COMPARE_ALL;
+    private boolean compareAll = DEFAULT_COMPARE_ALL;
     /** Write a log file. */
     public boolean writeLog = true;
     /** Criterion to sort the models. */
-    private char sortBy = ApplicationGlobals.DEFAULT_SORT_BY;
+    private char sortBy = DEFAULT_SORT_BY;
 
     /**
      * Sets the number of categories.
@@ -487,7 +487,7 @@ public class ApplicationOptions extends java.lang.Object {
      * @param strategyMode the new strategy mode
      */
     public void setStrategyMode(int strategyMode) {
-        if (strategyMode == ApplicationGlobals.OPTIMIZE_USER && getTreeFile() == null) {
+        if (strategyMode == OPTIMIZE_USER && getTreeFile() == null) {
             throw new ProtTestInternalException("User defined topology must be set");
         }
         this.strategyMode = strategyMode;
@@ -497,30 +497,9 @@ public class ApplicationOptions extends java.lang.Object {
      * Instantiates a new application options.
      */
     public ApplicationOptions() {
-//		this.optBuilder = optBuilder;
         initVectors();
     }
 
-    /**
-     * Gets the ProtTestPrinter. This method will throw a runtime
-     * exception (ProtTestInternalException) if any instance tries
-     * to get the printer and the attribute was not initialized.
-     * 
-     * @return the application printer
-     */
-//     public ProtTestPrinter getPrinter() {
-//    	 if (printer == null)
-//    		 throw new ProtTestInternalException("Application printer was not initialized yet");
-//    	 return printer;
-//     }
-    /**
-     * Sets the ProtTestPrinter.
-     * 
-     * @param printer the new printer
-     */
-//    public void setPrinter(ProtTestPrinter printer) {
-//    	this.printer = printer;
-//    }
     /**
      * Fill in attribute values with the arguments.
      * 
@@ -562,11 +541,11 @@ public class ApplicationOptions extends java.lang.Object {
         setAll(arguments.isSet(ProtTestArgumentParser.PARAM_ALL_FRAMEWORK_COMPARISON));
         if (arguments.exists(ProtTestArgumentParser.PARAM_OPTIMIZATION_STRATEGY)) {
             if (getTreeFile() != null) {
-                strategyMode = ApplicationGlobals.OPTIMIZE_USER;
+                strategyMode = OPTIMIZE_USER;
             } else {
                 strategyMode = Integer.parseInt(arguments.getValue(ProtTestArgumentParser.PARAM_OPTIMIZATION_STRATEGY));
                 // Check
-                if (strategyMode == ApplicationGlobals.OPTIMIZE_USER &&
+                if (strategyMode == OPTIMIZE_USER &&
                         getTreeFile() == null) {
                     throw new IllegalArgumentException("User defined topology must be set");
                 }
@@ -626,8 +605,8 @@ public class ApplicationOptions extends java.lang.Object {
      * Inits the vectors.
      */
     private void initVectors() {
-//        for(int i=0; i<ApplicationGlobals.ALL_MATRICES.length; i++) {
-//            matrixes.addElement(ApplicationGlobals.ALL_MATRICES[i]);
+//        for(int i=0; i<ALL_MATRICES.length; i++) {
+//            matrixes.addElement(ALL_MATRICES[i]);
 //        }
         distributionsHash = new Hashtable<String, Integer>();
         distributionsHash.put("Uniform", new Integer(Model.DISTRIBUTION_UNIFORM));
@@ -638,8 +617,6 @@ public class ApplicationOptions extends java.lang.Object {
 
     /**
      * Display the command line usage of the application.
-     * 
-     * @param err the error output to write the usage information in
      */
     public static void usage() {
         println("-------------------------------------------------------------------------------------------------");
@@ -656,40 +633,40 @@ public class ApplicationOptions extends java.lang.Object {
         println(" -o output_filename 																	");
         println("			output file    	(optional) [default: standard output]								");
         println(" -sort sot_by_value 																	");
-        println(" 		Ordering field	(optional) [default: " + ApplicationGlobals.DEFAULT_SORT_BY + "]");
-        for (char value : ApplicationGlobals.SORTBY_VALUES) {
-            println("             		" + value + ": " + ApplicationGlobals.SORTBY_NAMES[value - 'A']);
+        println(" 		Ordering field	(optional) [default: " + DEFAULT_SORT_BY + "]");
+        for (char value : SORTBY_VALUES) {
+            println("             		" + value + ": " + SORTBY_NAMES[value - 'A']);
         }
         println(" -all																				");
         println(" 		Displays a 7-framework comparison table										");
         println(" -S optimization_strategy															");
-        println(" 		optimization strategy mode: [default: " + ApplicationGlobals.DEFAULT_STRATEGY_MODE + "]");
-        for (int i = 0; i < ApplicationGlobals.STRATEGIES.length; i++) {
-            println("             		" + i + ": " + ApplicationGlobals.STRATEGIES[i]);
+        println(" 		optimization strategy mode: [default: " + DEFAULT_STRATEGY_MODE + "]");
+        for (int i = 0; i < OPTIMIZE_NAMES.length; i++) {
+            println("             		" + i + ": " + OPTIMIZE_NAMES[i]);
         }
         println(" -sample sample_size_mode															");
-        println(" 		sample size for AICc and BIC corrections [default: " + ApplicationGlobals.DEFAULT_SAMPLE_SIZE_MODE + "]");
-        for (int i = 0; i < ApplicationGlobals.SIZE_MODES.length; i++) {
-            println("             		" + i + ": " + ApplicationGlobals.SIZE_MODES[i]);
+        println(" 		sample size for AICc and BIC corrections [default: " + DEFAULT_SAMPLE_SIZE_MODE + "]");
+        for (int i = 0; i < SIZE_MODE_NAMES.length; i++) {
+            println("             		" + i + ": " + SIZE_MODE_NAMES[i]);
         }
         println(" -size user_size  		");
-        println(" 		specified sample size, only for \"-sample " + ApplicationGlobals.SIZEMODE_USERSIZE + "\"");
+        println(" 		specified sample size, only for \"-sample " + SIZEMODE_USERSIZE + "\"");
         println(" -t1      				");
-        println(" 		display best-model's newick tree [default: " + ApplicationGlobals.DEFAULT_DISPLAY_NEWICK_TREE + "]");
+        println(" 		display best-model's newick tree [default: " + DEFAULT_DISPLAY_NEWICK_TREE + "]");
         println(" -t2      				");
-        println(" 		display best-model's ASCII tree  [default: " + ApplicationGlobals.DEFAULT_DISPLAY_ASCII_TREE + "]");
+        println(" 		display best-model's ASCII tree  [default: " + DEFAULT_DISPLAY_ASCII_TREE + "]");
         println(" -tc consensus_threshold ");
         println(" 		display consensus tree with the specified threshold");
         println(" -verbose 				");
-        println(" 		verbose mode [default: " + ApplicationGlobals.DEFAULT_DEBUG + "]");
+        println(" 		verbose mode [default: " + DEFAULT_DEBUG + "]");
         println(" -all-matrices			");
         println(" 		computes all available matrices");
         println(" -threads number_or_threads			");
         println(" 		number of threads to compute (only if MPJ is not used) [default: " +
-                ApplicationGlobals.DEFAULT_THREADS + "]");
+                DEFAULT_THREADS + "]");
         println(" -[model]");
         print("			model (Amino-acid) = ");
-        for (String matrix : Arrays.asList(AminoAcidApplicationGlobals.ALL_MATRICES)) {
+        for (String matrix : Arrays.asList(ALL_MATRICES)) {
             print(matrix + " ");
         }
         println("");
@@ -703,7 +680,7 @@ public class ApplicationOptions extends java.lang.Object {
         println(" -all-distributions");
         println(" 		include models with rate variation among sites, number of categories and both");
         println(" -ncat number_of_categories");
-        println(" 		define number of categories for +G and +I+G models [default: " + ApplicationGlobals.DEFAULT_NCAT + "]");
+        println(" 		define number of categories for +G and +I+G models [default: " + DEFAULT_NCAT + "]");
         println(" -F	");
         println(" 		include models with empirical frequency estimation ");
         println("-------------------------------------------------------------------------------------------------");
@@ -731,16 +708,13 @@ public class ApplicationOptions extends java.lang.Object {
             println("Maximum Likelihood (-lnL) framework");
         }
         if (sortBy != 'A' && sortBy != 'D') {
-            println("Sample size:  " + ApplicationGlobals.SIZE_MODES[sampleSizeMode]);
+            println("Sample size:  " + SIZE_MODE_NAMES[sampleSizeMode]);
             println("           =  " + ProtTestFormattedOutput.getDecimalString(sampleSize, 2));
         }
     }
 
     /**
-     * Report.
-     * 
-     * @param out the out
-     * @param graphical the graphical
+     * Report the current options.
      */
     public void report() {
         String tmp;
@@ -753,7 +727,7 @@ public class ApplicationOptions extends java.lang.Object {
         println("----------------");
         println("  Alignment file........... : " + align_file);
         println("  Tree..................... : " + tmp);
-        println("  StrategyMode............. : " + ApplicationGlobals.STRATEGIES[strategyMode]);
+        println("  StrategyMode............. : " + OPTIMIZE_NAMES[strategyMode]);
 
         println("  Candidate models......... : ");
         print("    Matrices............... : ");
@@ -772,13 +746,13 @@ public class ApplicationOptions extends java.lang.Object {
         println("    Observed frequencies... : " + plusF);
 
         println("  Statistical framework");
-        println("    Sort models according to....: " + ApplicationGlobals.SORTBY_NAMES[getSortBy() - 'A']);
-        if (sampleSizeMode == ApplicationGlobals.SIZEMODE_USERSIZE) {
+        println("    Sort models according to....: " + SORTBY_NAMES[getSortBy() - 'A']);
+        if (sampleSizeMode == SIZEMODE_USERSIZE) {
             println("    Sample size.................: " + sampleSize);
         } else {
             println("    Sample size.................: " + sampleSize + " (not calculated yet)");
         }
-        println("      sampleSizeMode............: " + ApplicationGlobals.SIZE_MODES[sampleSizeMode]);
+        println("      sampleSizeMode............: " + SIZE_MODE_NAMES[sampleSizeMode]);
 
         println("  Other options:");
         println("    Display best tree in ASCII..: " + displayASCIITree);

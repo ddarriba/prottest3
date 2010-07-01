@@ -9,12 +9,11 @@ import es.uvigo.darwin.prottest.util.exception.ProtTestInternalException;
 
 import static es.uvigo.darwin.prottest.util.logging.ProtTestLogger.*;
 
-// TODO: Auto-generated Javadoc
 /**
  * Template implementation for every subclass applying the
  * observer pattern into the analyzers. 
  * 
- * @author Francisco Abascal
+ * @author Federico Abascal
  * @author Diego Darriba
  * @since 3.0
  */
@@ -71,7 +70,6 @@ public abstract class RunEstimatorImpl
      * 
      * @param options the application options instance
      * @param model the amino-acid model to optimize
-     * @param numberOfThreads the number of threads to use in the optimization
      */
     public RunEstimatorImpl(ApplicationOptions options, Model model) {
         this(options, model, 1);
@@ -82,6 +80,7 @@ public abstract class RunEstimatorImpl
      * 
      * @param options the application options instance
      * @param model the amino-acid model to optimize
+     * @param numberOfThreads the number of threads to use in the optimization
      */
     public RunEstimatorImpl(ApplicationOptions options, Model model, int numberOfThreads) {
         this.options = options;
@@ -142,9 +141,6 @@ public abstract class RunEstimatorImpl
 
     /**
      * Prints a report of the execution.
-     * 
-     * @param out the output writer to write in
-     * @param pfine if debug mode is on
      */
     public abstract void printReport();
 

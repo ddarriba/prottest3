@@ -115,8 +115,8 @@ public class ProtTestFormattedOutput {
     /**
      * print whitespace of length of a string displaying a given integer
      *
-     * @param output stream
-     * @param maxNum number
+     * @param out the writer
+     * @param maxNum the number of white spaces
      */
     public static void displayIntegerWhite(PrintWriter out, int maxNum) {
         int lenMaxNum = Integer.toString(maxNum).length();

@@ -1,10 +1,11 @@
 package es.uvigo.darwin.prottest.util.argumentparser;
 
+import es.uvigo.darwin.prottest.global.ApplicationGlobals;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import es.uvigo.darwin.prottest.global.ApplicationGlobals;
 import es.uvigo.darwin.prottest.global.options.ApplicationOptions;
 import es.uvigo.darwin.prottest.util.factory.ProtTestFactory;
 

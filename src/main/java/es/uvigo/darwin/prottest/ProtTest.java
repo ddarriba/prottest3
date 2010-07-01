@@ -1,15 +1,15 @@
 package es.uvigo.darwin.prottest;
 
+import static es.uvigo.darwin.prottest.global.ApplicationGlobals.*;
+
 import es.uvigo.darwin.prottest.consensus.Consensus;
 import mpi.MPI;
-import pal.util.XMLConstants;
 import es.uvigo.darwin.prottest.facade.ProtTestFacade;
 import es.uvigo.darwin.prottest.facade.ProtTestFacadeMPJ;
 import es.uvigo.darwin.prottest.facade.ProtTestFacadeSequential;
 import es.uvigo.darwin.prottest.facade.ProtTestFacadeThread;
 import es.uvigo.darwin.prottest.facade.TreeFacade;
 import es.uvigo.darwin.prottest.facade.TreeFacadeImpl;
-import es.uvigo.darwin.prottest.global.ApplicationGlobals;
 import es.uvigo.darwin.prottest.global.options.ApplicationOptions;
 import es.uvigo.darwin.prottest.model.Model;
 import es.uvigo.darwin.prottest.observer.ModelUpdaterObserver;
@@ -40,30 +40,30 @@ import pal.tree.Tree;
 /**
  * This is the main class of ProtTest. It calls the methods in the
  * concrete facade to interact with the model layer of the application.
+ * 
+ * @author Diego Darriba
  */
-public class ProtTest implements XMLConstants {
+public class ProtTest {
 
     /** The Constant versionNumber. */
     public static final String versionNumber = "3.0-beta";
     /** The Constant versionDate. */
     public static final String versionDate = "1st December 2009";
-    /** The MPJ rank of the process. It is only useful if MPJ is running. */
+    /** The MPJ rank of the process. It is only useful if MPJ is running.*/
     public static int MPJ_ME;
-    /** The MPJ size of the communicator. It is only useful if MPJ is running. */
+    /** The MPJ size of the communicator. It is only useful if MPJ is running.*/
     public static int MPJ_SIZE;
     /** The MPJ running state. */
     public static boolean MPJ_RUN;
     /** The ProtTest factory. */
     private static ProtTestFactory factory;
 
-    /** The application printer. */
-//    private static ProtTestPrinter printer;
     /**
      * The main method. It initializes the MPJ runtime environment, parses 
      * the application arguments, initializes the application options and 
      * starts the analysis of the substitution models.
      * 
-     * @param args the args
+     * @param args the arguments
      */
     public static void main(String[] args) {
 
@@ -93,7 +93,8 @@ public class ProtTest implements XMLConstants {
         try {
             // check arguments and get application options
             numThreads = Integer.parseInt(
-                    factory.createProtTestArgumentParser(args, opts).getValue(ProtTestArgumentParser.PARAM_NUM_THREADS));
+                    factory.createProtTestArgumentParser(args, opts).
+                    getValue(ProtTestArgumentParser.PARAM_NUM_THREADS));
         } catch (IllegalArgumentException e) {
             if (MPJ_ME == 0) {
                 System.err.println(e.getMessage());
@@ -102,6 +103,7 @@ public class ProtTest implements XMLConstants {
             finalize(1);
         }
 
+        // get the facade instance
         TreeFacade treeFacade = new TreeFacadeImpl();
         ProtTestFacade facade;
         if (MPJ_RUN) {
@@ -112,11 +114,14 @@ public class ProtTest implements XMLConstants {
             facade = new ProtTestFacadeSequential();
         }
 
+        /* if multiple models are optimized together, the execution will be
+        monitorized  */
         if (MPJ_RUN || numThreads > 1) {
             facade.addObserver(new ModelUpdaterObserver() {
 
                 @Override
-                public void update(ObservableModelUpdater o, Model model, ApplicationOptions options) {
+                public void update(ObservableModelUpdater o, Model model,
+                        ApplicationOptions options) {
                     if (model.isComputed() && options != null) {
                         System.out.println("Computed: " + model.getModelName() + " (" + model.getLk() + ")");
                     } else {
@@ -138,27 +143,30 @@ public class ProtTest implements XMLConstants {
 
         Model[] models;
         try {
+
+            // model optimization
             models = facade.startAnalysis(opts);
 
+            // analyze results
             if (MPJ_ME == 0) {
-                ModelCollection allModelsList = new SingleModelCollection(models, opts.getAlignment());
+                ModelCollection allModelsList =
+                        new SingleModelCollection(models, opts.getAlignment());
 
                 InformationCriterion ic;
-                //let's print results:
                 switch (opts.getSortBy()) {
-                    case ApplicationGlobals.SORTBY_AIC:
+                    case SORTBY_AIC:
                         ic = new AIC(allModelsList, 1.0, opts.getSampleSize());
                         break;
-                    case ApplicationGlobals.SORTBY_BIC:
+                    case SORTBY_BIC:
                         ic = new BIC(allModelsList, 1.0, opts.getSampleSize());
                         break;
-                    case ApplicationGlobals.SORTBY_AICC:
+                    case SORTBY_AICC:
                         ic = new AICc(allModelsList, 1.0, opts.getSampleSize());
                         break;
-                    case ApplicationGlobals.SORTBY_DT:
+                    case SORTBY_DT:
                         ic = new DT(allModelsList, 1.0, opts.getSampleSize());
                         break;
-                    case ApplicationGlobals.SORTBY_LNL:
+                    case SORTBY_LNL:
                         ic = new LNL(allModelsList, 1.0, opts.getSampleSize());
                         break;
                     default:
@@ -166,18 +174,25 @@ public class ProtTest implements XMLConstants {
                                 "Unrecognized information criterion");
                 }
 
+                // let's print results:
                 facade.printModelsSorted(ic);
 
+                // display 7-framework comparison
                 if (opts.isAll()) {
                     PrintFramework.printFrameworksComparison(ic.getModelCollection());
                 }
 
+                // display best model tree in ASCII
                 if (opts.isDisplayASCIITree()) {
                     logger.infoln(treeFacade.toASCII(ic.getBestModel().getTree()));
                 }
+
+                // display best model tree in Newick
                 if (opts.isDisplayNewickTree()) {
                     logger.infoln(treeFacade.toNewick(ic.getBestModel().getTree(), true, true, false));
                 }
+
+                // display consensus tree data
                 if (opts.isDisplayConsensusTree()) {
 
                     Consensus consensus = treeFacade.createConsensus(ic, opts.getConsensusThreshold());
@@ -187,7 +202,7 @@ public class ProtTest implements XMLConstants {
                     logger.infoln("----------------------------------------");
                     logger.infoln("------------ Consensus Tree ------------");
                     logger.infoln("----------------------------------------");
-                    logger.infoln("Selection criterion: . . . . " + ApplicationGlobals.SORTBY_NAMES[opts.getSortBy() - 'A']);
+                    logger.infoln("Selection criterion: . . . . " + SORTBY_NAMES[opts.getSortBy() - 'A']);
                     logger.infoln("Sample size: . . . . . . . . " + opts.getSampleSize());
                     logger.infoln("Consensus support threshold: " + opts.getConsensusThreshold());
                     logger.infoln("----------------------------------------");
@@ -229,7 +244,8 @@ public class ProtTest implements XMLConstants {
                     logger.infoln(" ");
                     for (FixedBitSet fbs : splitsInConsensus) {
                         logger.infoln("    " + fbs.splitRepresentation() + " ( " +
-                                Utilities.round(consensus.getCladeSupport().get(fbs), 5) + " )");
+                                Utilities.round(consensus.getCladeSupport().
+                                get(fbs), 5) + " )");
                     }
                     logger.infoln(" ");
                     logger.infoln("Sets NOT included in consensus tree");
@@ -241,7 +257,8 @@ public class ProtTest implements XMLConstants {
                     logger.infoln(" ");
                     for (FixedBitSet fbs : splitsOutFromConsensus) {
                         logger.infoln("    " + fbs.splitRepresentation() + " ( " +
-                                Utilities.round(consensus.getCladeSupport().get(fbs), 5) + " )");
+                                Utilities.round(consensus.getCladeSupport().
+                                get(fbs), 5) + " )");
                     }
                     logger.infoln("\n");
                     Tree consensusTree = consensus.getConsensusTree();
@@ -257,10 +274,13 @@ public class ProtTest implements XMLConstants {
                 }
 
             }
+
         } catch (ProtTestInternalException e) {
             logger.severeln(e.getMessage());
             finalize(-1);
         }
+
+        // finalize execution
 
         finalize(0);
 
@@ -276,8 +296,6 @@ public class ProtTest implements XMLConstants {
      * @param status the finalization status
      */
     public static void finalize(int status) {
-
-//		ApplicationOptions.deleteTemporaryFiles();
 
         if (status != 0) {
             if (MPJ_RUN) {

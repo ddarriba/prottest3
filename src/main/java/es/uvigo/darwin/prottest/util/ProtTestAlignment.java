@@ -1,9 +1,10 @@
 package es.uvigo.darwin.prottest.util;
 
+import static es.uvigo.darwin.prottest.global.ApplicationGlobals.*;
+
 import java.io.PrintWriter;
 
 import pal.alignment.Alignment;
-import es.uvigo.darwin.prottest.global.ApplicationGlobals;
 import es.uvigo.darwin.prottest.util.printer.ProtTestFormattedOutput;
 
 /**
@@ -11,7 +12,7 @@ import es.uvigo.darwin.prottest.util.printer.ProtTestFormattedOutput;
  * Alignment, as could be the empirical frequencies or the
  * sample size calculation.
  *
- * @author Francisco Abascal
+ * @author Federico Abascal
  * @author Diego Darriba
  * @since 3.0
  */
@@ -30,15 +31,15 @@ public abstract class ProtTestAlignment {
 		//For AICc and  BIC frameworks
 		double sampleSize = 0.0;
 
-		if(sampleSizeMode == ApplicationGlobals.SIZEMODE_USERSIZE) {
+		if(sampleSizeMode == SIZEMODE_USERSIZE) {
 			sampleSize = customSampleSize;
-		} else if(sampleSizeMode == ApplicationGlobals.SIZEMODE_ALIGNMENT) {
+		} else if(sampleSizeMode == SIZEMODE_ALIGNMENT) {
 			sampleSize = (double)alignment.getSiteCount();
-		} else if(sampleSizeMode == ApplicationGlobals.SIZEMODE_ALIGNMENT_VAR) {
+		} else if(sampleSizeMode == SIZEMODE_ALIGNMENT_VAR) {
 			sampleSize = (double)alignment.getSiteCount() - calculateInvariableSites(alignment, false);
-		} else if(sampleSizeMode == ApplicationGlobals.SIZEMODE_SHANNON || sampleSizeMode == ApplicationGlobals.SIZEMODE_SHANNON_NxL) {
+		} else if(sampleSizeMode == SIZEMODE_SHANNON || sampleSizeMode == SIZEMODE_SHANNON_NxL) {
 			sampleSize = calculateShannonSampleSize(alignment, sampleSizeMode, false);
-		} else if(sampleSizeMode == ApplicationGlobals.SIZEMODE_NxL) {
+		} else if(sampleSizeMode == SIZEMODE_NxL) {
 			sampleSize = (double)alignment.getSiteCount() * (double)alignment.getSequenceCount();
 		}
 		return sampleSize;
@@ -95,8 +96,8 @@ public abstract class ProtTestAlignment {
 		int    numSites       = alignment.getSiteCount();
 		int    numSeqs        = alignment.getSequenceCount();
 		//int    pattern[][]    = new int   [numSites][numSeqs];
-		double freqs  [][]    = new double[numSites][ApplicationGlobals.NUM_STATES];
-		byte   state  [][]    = new byte  [numSites][ApplicationGlobals.NUM_STATES];
+		double freqs  [][]    = new double[numSites][AMINOACID_NUM_STATES];
+		byte   state  [][]    = new byte  [numSites][AMINOACID_NUM_STATES];
 		double siteS  []      = new double[numSites];
 		int    sequences[]    = new int[numSites];
 		double shannonEntropy = 0.0;
@@ -119,7 +120,7 @@ public abstract class ProtTestAlignment {
 		//For each alignment position, we calculate aminoacid frequencies. And also...
 		//For each alignment position, we calculate Shannon Entropy based on previous frequencies.
 		for(int i=0; i < numSites; i++) {
-			for(int j=0; j < ApplicationGlobals.NUM_STATES; j++) {
+			for(int j=0; j < AMINOACID_NUM_STATES; j++) {
 				//freqs[i][j] = (double)state[i][j]/(double)numSeqs;
 				freqs[i][j] = (double)state[i][j]/(double)sequences[i];
 				if(freqs[i][j] > 0)
@@ -155,14 +156,14 @@ public abstract class ProtTestAlignment {
 		if (verbose) {
 			for(int i=0; i < numSites; i++) {
 				System.out.print("[DEBUG] Position: " + i);
-				for(int j=0; j < ApplicationGlobals.NUM_STATES; j++) {
+				for(int j=0; j < AMINOACID_NUM_STATES; j++) {
 					System.out.print("\t"+state[i][j]);
 				}
 				System.out.println("");
 			}
 		}
 		
-		if(sampleSizeMode == ApplicationGlobals.SIZEMODE_SHANNON) {
+		if(sampleSizeMode == SIZEMODE_SHANNON) {
 			return -1.0*shannonEntropy; //sum of shannon Entropy positions.
 		} else { //if Options.SHANNON_NxL
 			double meanShannonEntropy;
@@ -170,8 +171,8 @@ public abstract class ProtTestAlignment {
 			double normalizedShannonEntropy = 0;
 			meanShannonEntropy = -1.0*shannonEntropy/(double)numSites; //mean S for sites
 			//let's normalize ShannonEntropy from 0 to 1:
-			for(int i=0; i<ApplicationGlobals.NUM_STATES; i++) {
-				maxShannonEntropy += (1.0/(double)ApplicationGlobals.NUM_STATES)*Math.log(1.0/(double)ApplicationGlobals.NUM_STATES)/Math.log(2);
+			for(int i=0; i<AMINOACID_NUM_STATES; i++) {
+				maxShannonEntropy += (1.0/(double)AMINOACID_NUM_STATES)*Math.log(1.0/(double)AMINOACID_NUM_STATES)/Math.log(2);
 			}
 			//by this moment we normalize by a "regla de tres" (POR HACER: ver si hay otra alternativa mejor)
 			//POR HACER: estudiar la distribución de las ShannonEntropies
@@ -193,10 +194,10 @@ public abstract class ProtTestAlignment {
 	public static double[] getFrequencies (Alignment alignment) {
 		int    numSites       = alignment.getSiteCount    ()   ;
 		int    numSeqs        = alignment.getSequenceCount()   ;
-		double freqs[]        = new double[ApplicationGlobals.NUM_STATES]          ;
-		int    aas  []        = new int   [ApplicationGlobals.NUM_STATES]          ;
+		double freqs[]        = new double[AMINOACID_NUM_STATES]          ;
+		int    aas  []        = new int   [AMINOACID_NUM_STATES]          ;
 		int    total_aas      = 0                              ;
-		for(int i=0; i < ApplicationGlobals.NUM_STATES; i++) aas[i] = 0;
+		for(int i=0; i < AMINOACID_NUM_STATES; i++) aas[i] = 0;
 
 		for(int i=0; i < numSites; i++)
 			for(int j=0; j < numSeqs; j++) {
@@ -207,7 +208,7 @@ public abstract class ProtTestAlignment {
 				}
 			}
 
-		for(int i=0; i < ApplicationGlobals.NUM_STATES; i++)
+		for(int i=0; i < AMINOACID_NUM_STATES; i++)
 			freqs[i] = (double)aas[i]/(double)total_aas;
 
 		return freqs;
@@ -222,7 +223,7 @@ public abstract class ProtTestAlignment {
 	public static void printFrequencies (double[] freqs, PrintWriter out) {
 		
 		out.println("Observed aminoacid frequencies:");
-		for(int i=0; i<ApplicationGlobals.NUM_STATES; i++) {
+		for(int i=0; i<AMINOACID_NUM_STATES; i++) {
 			char aa = charOfIndex(i);
 			out.print(" " + aa + ": " + ProtTestFormattedOutput.getDecimalString(freqs[i],3) + "   ");
 			if( (i+1)%5 == 0 )

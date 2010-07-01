@@ -9,7 +9,7 @@ import es.uvigo.darwin.prottest.observer.ModelUpdaterObserver;
  * an external likelihood calculator or directly calculates likelihood for any 
  * kind of model.
  * 
- * @author Francisco Abascal
+ * @author Federico Abascal
  * @author Diego Darriba
  * @since 3.0
  */

@@ -5,8 +5,9 @@
  */
 package es.uvigo.darwin.xprottest.analysis.consensus;
 
+import static es.uvigo.darwin.prottest.global.ApplicationGlobals.*;
+
 import es.uvigo.darwin.prottest.facade.TreeFacade;
-import es.uvigo.darwin.prottest.global.ApplicationGlobals;
 import es.uvigo.darwin.prottest.model.Model;
 import es.uvigo.darwin.prottest.selection.AIC;
 import es.uvigo.darwin.prottest.selection.AICc;
@@ -58,7 +59,7 @@ public class Consensus extends javax.swing.JFrame {
     private ModelCollection models;
     private Handler logHandler;
     private PrintWriter displayWriter;
-    private int sampleSizeMode = ApplicationGlobals.DEFAULT_SAMPLE_SIZE_MODE;
+    private int sampleSizeMode = DEFAULT_SAMPLE_SIZE_MODE;
     private double sampleSize = 1.0;
 
     /** Creates new form Consensus */
@@ -492,22 +493,22 @@ public class Consensus extends javax.swing.JFrame {
         txtSampleSize.setEnabled(false);
         if (btnName.equals(
                 java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/resources/ResultsView").getString("btn-sizemode-alignment"))) {
-            sampleSizeMode = ApplicationGlobals.SIZEMODE_ALIGNMENT;
+            sampleSizeMode = SIZEMODE_ALIGNMENT;
         } else if (btnName.equals(
                 java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/resources/ResultsView").getString("btn-sizemode-alignment-var"))) {
-            sampleSizeMode = ApplicationGlobals.SIZEMODE_ALIGNMENT_VAR;
+            sampleSizeMode = SIZEMODE_ALIGNMENT_VAR;
         } else if (btnName.equals(
                 java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/resources/ResultsView").getString("btn-sizemode-shannon"))) {
-            sampleSizeMode = ApplicationGlobals.SIZEMODE_SHANNON;
+            sampleSizeMode = SIZEMODE_SHANNON;
         } else if (btnName.equals(
                 java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/resources/ResultsView").getString("btn-sizemode-shannon-nxl"))) {
-            sampleSizeMode = ApplicationGlobals.SIZEMODE_SHANNON_NxL;
+            sampleSizeMode = SIZEMODE_SHANNON_NxL;
         } else if (btnName.equals(
                 java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/resources/ResultsView").getString("btn-sizemode-nxl"))) {
-            sampleSizeMode = ApplicationGlobals.SIZEMODE_NxL;
+            sampleSizeMode = SIZEMODE_NxL;
         } else if (btnName.equals(
                 java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/resources/ResultsView").getString("btn-sizemode-custom"))) {
-            sampleSizeMode = ApplicationGlobals.SIZEMODE_USERSIZE;
+            sampleSizeMode = SIZEMODE_USERSIZE;
             try {
                 sampleSize = Double.parseDouble(txtSampleSize.getText());
             } catch (NumberFormatException e) {

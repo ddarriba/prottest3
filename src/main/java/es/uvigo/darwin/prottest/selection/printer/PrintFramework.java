@@ -1,8 +1,9 @@
 package es.uvigo.darwin.prottest.selection.printer;
 
+import static es.uvigo.darwin.prottest.global.ApplicationGlobals.*;
+
 import java.util.Collections;
 
-import es.uvigo.darwin.prottest.global.ApplicationGlobals;
 import es.uvigo.darwin.prottest.model.Model;
 import es.uvigo.darwin.prottest.selection.AIC;
 import es.uvigo.darwin.prottest.selection.AICc;
@@ -130,9 +131,9 @@ public abstract class PrintFramework {
         String[] modelNames = new String[models.size()];
         double sampleSize1, sampleSize2, sampleSize3;
 
-        sampleSize1 = ProtTestAlignment.calculateSampleSize(models.getAlignment(), ApplicationGlobals.SIZEMODE_ALIGNMENT, NO_SAMPLE_SIZE);
-        sampleSize2 = ProtTestAlignment.calculateSampleSize(models.getAlignment(), ApplicationGlobals.SIZEMODE_SHANNON, NO_SAMPLE_SIZE);
-        sampleSize3 = ProtTestAlignment.calculateSampleSize(models.getAlignment(), ApplicationGlobals.SIZEMODE_SHANNON_NxL, NO_SAMPLE_SIZE);
+        sampleSize1 = ProtTestAlignment.calculateSampleSize(models.getAlignment(), SIZEMODE_ALIGNMENT, NO_SAMPLE_SIZE);
+        sampleSize2 = ProtTestAlignment.calculateSampleSize(models.getAlignment(), SIZEMODE_SHANNON, NO_SAMPLE_SIZE);
+        sampleSize3 = ProtTestAlignment.calculateSampleSize(models.getAlignment(), SIZEMODE_SHANNON_NxL, NO_SAMPLE_SIZE);
 
         InformationCriterion aicS1 = new AIC(models, 1.0, sampleSize1);
         InformationCriterion aiccS1 = new AICc(models, 1.0, sampleSize1);
@@ -160,12 +161,12 @@ public abstract class PrintFramework {
 
         StatFramework aicF, aicc1F, aicc2F, aicc3F, bic1F, bic2F, bic3F;
         aicF = new StatFramework(aicS1, "AIC", "AIC");
-        aicc1F = new StatFramework(aiccS1, "AICc(1)", "second-order AIC (sample size: " + ApplicationGlobals.SIZE_MODES[ApplicationGlobals.SIZEMODE_ALIGNMENT] + ")");
-        aicc2F = new StatFramework(aiccS2, "AICc(2)", "second-order AIC (sample size: " + ApplicationGlobals.SIZE_MODES[ApplicationGlobals.SIZEMODE_SHANNON] + ")");
-        aicc3F = new StatFramework(aiccS3, "AICc(3)", "second-order AIC (sample size: " + ApplicationGlobals.SIZE_MODES[ApplicationGlobals.SIZEMODE_SHANNON_NxL] + ")");
-        bic1F = new StatFramework(bicS1, "BIC(1)", "BIC (sample size: " + ApplicationGlobals.SIZE_MODES[ApplicationGlobals.SIZEMODE_ALIGNMENT] + ")");
-        bic2F = new StatFramework(bicS2, "BIC(2)", "BIC (sample size: " + ApplicationGlobals.SIZE_MODES[ApplicationGlobals.SIZEMODE_SHANNON] + ")");
-        bic3F = new StatFramework(bicS3, "BIC(3)", "BIC (sample size: " + ApplicationGlobals.SIZE_MODES[ApplicationGlobals.SIZEMODE_SHANNON_NxL] + ")");
+        aicc1F = new StatFramework(aiccS1, "AICc(1)", "second-order AIC (sample size: " + SIZE_MODE_NAMES[SIZEMODE_ALIGNMENT] + ")");
+        aicc2F = new StatFramework(aiccS2, "AICc(2)", "second-order AIC (sample size: " + SIZE_MODE_NAMES[SIZEMODE_SHANNON] + ")");
+        aicc3F = new StatFramework(aiccS3, "AICc(3)", "second-order AIC (sample size: " + SIZE_MODE_NAMES[SIZEMODE_SHANNON_NxL] + ")");
+        bic1F = new StatFramework(bicS1, "BIC(1)", "BIC (sample size: " + SIZE_MODE_NAMES[SIZEMODE_ALIGNMENT] + ")");
+        bic2F = new StatFramework(bicS2, "BIC(2)", "BIC (sample size: " + SIZE_MODE_NAMES[SIZEMODE_SHANNON] + ")");
+        bic3F = new StatFramework(bicS3, "BIC(3)", "BIC (sample size: " + SIZE_MODE_NAMES[SIZEMODE_SHANNON_NxL] + ")");
 
         //Hala, ahora a imprimir:
         println(ProtTestFormattedOutput.space(100, '-'));

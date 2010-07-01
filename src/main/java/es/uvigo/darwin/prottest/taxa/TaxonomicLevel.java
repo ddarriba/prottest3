@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package es.uvigo.darwin.prottest.taxa;
 
 import java.util.Collections;
@@ -61,7 +56,7 @@ public class TaxonomicLevel {
 
     /**
      * Returns a Set containing all the currently created taxonomic levels.
-     * @return
+     * @return the set of taxonomic levels
      */
     public static Set getTaxonomicLevels() {
         return Collections.unmodifiableSet(taxonomicLevels.entrySet());
@@ -70,5 +65,5 @@ public class TaxonomicLevel {
     /**
      * A hash map containing name, object pairs.
      */
-    private static Map taxonomicLevels = new HashMap();
+    private static Map<String, TaxonomicLevel> taxonomicLevels = new HashMap<String, TaxonomicLevel>();
 }

@@ -8,7 +8,7 @@ import es.uvigo.darwin.prottest.util.logging.ProtTestLogger;
 /**
  * A generic optimizer for amino-acid models
  * 
- * @author Francisco Abascal
+ * @author Federico Abascal
  * @author Diego Darriba
  * @since 3.0
  */

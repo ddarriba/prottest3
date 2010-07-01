@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
-import es.uvigo.darwin.prottest.global.AminoAcidApplicationGlobals;
+import static es.uvigo.darwin.prottest.global.AminoAcidApplicationGlobals.*;
 import es.uvigo.darwin.prottest.model.AminoAcidModel;
 import es.uvigo.darwin.prottest.model.Model;
 import es.uvigo.darwin.prottest.util.exception.ProtTestInternalException;
@@ -19,7 +19,7 @@ public class AminoAcidModelNaturalComparator implements Comparator<Model> {
 			AminoAcidModel arg1 = (AminoAcidModel) model1;
 			int value = 0;
 			if (!arg0.getMatrix().equals(arg1.getMatrix())) {
-				List<String> matrices = Arrays.asList(AminoAcidApplicationGlobals.ALL_MATRICES);
+				List<String> matrices = Arrays.asList(ALL_MATRICES);
 				int pos0 = matrices.indexOf(arg0.getMatrix());
 				int pos1 = matrices.indexOf(arg1.getMatrix());
 				if ( pos0 < pos1 )

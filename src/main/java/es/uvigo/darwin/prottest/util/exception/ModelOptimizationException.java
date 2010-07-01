@@ -5,8 +5,10 @@
 package es.uvigo.darwin.prottest.util.exception;
 
 /**
- *
- * @author diego
+ * Generic exception when model optimization
+ * 
+ * @author Diego Darriba
+ * @since 3.0
  */
 public class ModelOptimizationException extends ProtTestCheckedException {
 
@@ -29,6 +31,12 @@ public class ModelOptimizationException extends ProtTestCheckedException {
         super("Model optimization exception: " + description);
     }
 
+    /**
+     * Exception which occurs while execution a third-party application
+     * 
+     * @author Diego Darriba
+     * @since 3.0
+     */
     public static class ExternalExecutionException extends ModelOptimizationException {
 
         public ExternalExecutionException() {
@@ -44,6 +52,13 @@ public class ModelOptimizationException extends ProtTestCheckedException {
         }
     }
 
+    /**
+     * Exception which occurs when the current operating system is not supported
+     * (only when running non-portable applications)
+     * 
+     * @author Diego Darriba
+     * @since 3.0
+     */
     public static class OSNotSupportedException extends ExternalExecutionException {
 
         /**
@@ -54,6 +69,12 @@ public class ModelOptimizationException extends ProtTestCheckedException {
         }
     }
 
+    /**
+     * Exception while parsing the stats file provided by a third-party application
+     * 
+     * @author Diego Darriba
+     * @since 3.0
+     */
     public static class StatsFileFormatException extends ExternalExecutionException {
 
         /** The Constant serialVersionUID. */
@@ -79,31 +100,43 @@ public class ModelOptimizationException extends ProtTestCheckedException {
         }
     }
 
+    /**
+     * Exception while a required model matrix is not found
+     * 
+     * @author diego
+     * @since 3.0
+     */
     public static class ModelNotFoundException extends ExternalExecutionException {
 
         /** The Constant serialVersionUID. */
         private static final long serialVersionUID = 20090728L;
 
         /**
-         * Instantiates a new stats file format exception.
+         * Instantiates a new model not found exception.
          * 
-         * @param application the external model optimizer
+         * @param model the non existent model name
          */
         public ModelNotFoundException(String model) {
             super("cannot find " + model + " matrix description");
         }
 
         /**
-         * Instantiates a new stats file format exception.
+         * Instantiates a new model not found exception.
          * 
-         * @param application the external model optimizer
+         * @param model the non existent model name
          * @param description the description
          */
         public ModelNotFoundException(String model, String description) {
             super("cannot find " + model + " matrix description: " + description);
         }
     }
-    
+
+    /**
+     * External execution exception localized in PhyML
+     * 
+     * @author diego
+     * @since 3.0
+     */
     public static class PhyMLExecutionException extends ExternalExecutionException {
 
         private static final String applicationName = "PhyML";

@@ -1,5 +1,7 @@
 package es.uvigo.darwin.prottest.util.factory;
 
+import static es.uvigo.darwin.prottest.global.ApplicationGlobals.*;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -137,12 +139,12 @@ public class ProtTestFactory {
      */
     public ApplicationGlobals getApplicationGlobals() {
         ApplicationGlobals ap = null;
-        String analyzer = ApplicationGlobals.properties.getProperty("analyzer");
+        String analyzer = APPLICATION_PROPERTIES.getProperty("analyzer");
         switch (sort) {
             case PROTEIC:
-                if (analyzer.equals(ApplicationGlobals.ANALYZER_RAXML)) {
+                if (analyzer.equals(ANALYZER_RAXML)) {
                     ap = new RaxmlAminoAcidApplicationGlobals();
-                } else if (analyzer.equals(ApplicationGlobals.ANALYZER_PHYML)) {
+                } else if (analyzer.equals(ANALYZER_PHYML)) {
                     ap = new AminoAcidApplicationGlobals();
                 } else {
                     throw new ProtTestInternalException("Analyzer not supported by RunEstimator");
@@ -159,7 +161,7 @@ public class ProtTestFactory {
      * 
      * @param matrix the matrix
      * @param distribution the distribution
-     * @param modelProperties the model properties
+     * @param modelProperties the model APPLICATION_PROPERTIES
      * 
      * @return the model
      */
@@ -207,8 +209,8 @@ public class ProtTestFactory {
      */
     public RunEstimator createRunEstimator(ApplicationOptions options, Model model, int numberOfThreads) {
         RunEstimator runEstimator = null;
-        String analyzer = ApplicationGlobals.properties.getProperty("analyzer");
-        if (analyzer.equals(ApplicationGlobals.ANALYZER_PHYML)) {
+        String analyzer = APPLICATION_PROPERTIES.getProperty("analyzer");
+        if (analyzer.equals(ANALYZER_PHYML)) {
             switch (sort) {
                 case PROTEIC:
                     runEstimator = new PhyMLv3AminoAcidRunEstimator(options, model, numberOfThreads);
@@ -216,7 +218,7 @@ public class ProtTestFactory {
                 case NUCLEIC:
                     throw new ProtTestInternalException("Unsupported operation");
             }
-        } else if (analyzer.equals(ApplicationGlobals.ANALYZER_RAXML)) {
+        } else if (analyzer.equals(ANALYZER_RAXML)) {
             switch (sort) {
                 case PROTEIC:
 //				runEstimator = new RaxMLAminoAcidRunEstimator(options, model);
@@ -239,8 +241,8 @@ public class ProtTestFactory {
 
         String[] supportedLevels = {"INFO", "FINE", "FINER", "FINEST"};
 
-        String logDirName = ApplicationGlobals.properties.getProperty("log_dir");
-        String level = ApplicationGlobals.properties.getProperty("log_level", "info").toUpperCase();
+        String logDirName = APPLICATION_PROPERTIES.getProperty("log_dir");
+        String level = APPLICATION_PROPERTIES.getProperty("log_level", "info").toUpperCase();
         boolean supported = false;
         for (String testLevel : supportedLevels) {
             supported |= testLevel.equals(level);

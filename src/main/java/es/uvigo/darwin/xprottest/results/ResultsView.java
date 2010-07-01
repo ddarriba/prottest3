@@ -6,7 +6,8 @@
 
 package es.uvigo.darwin.xprottest.results;
 
-import es.uvigo.darwin.prottest.global.ApplicationGlobals;
+import static es.uvigo.darwin.prottest.global.ApplicationGlobals.*;
+
 import es.uvigo.darwin.prottest.model.Model;
 import es.uvigo.darwin.prottest.facade.util.SelectionChunk;
 import es.uvigo.darwin.prottest.selection.model.SelectionModel;
@@ -47,12 +48,12 @@ public class ResultsView extends javax.swing.JFrame {
     
     private void loadCache(double confidenceInterval) {
         // criterion cache
-        aicResults = new Hashtable<Integer, SelectionChunk>(ApplicationGlobals.SIZE_MODES.length - 1);
-        bicResults = new Hashtable<Integer, SelectionChunk>(ApplicationGlobals.SIZE_MODES.length - 1);
-        aiccResults = new Hashtable<Integer, SelectionChunk>(ApplicationGlobals.SIZE_MODES.length - 1);
-        dtResults = new Hashtable<Integer, SelectionChunk>(ApplicationGlobals.SIZE_MODES.length - 1);
-        for (int sizeMode : ApplicationGlobals.SIZE_MODE_VALUES)
-            if (sizeMode != ApplicationGlobals.SIZEMODE_USERSIZE) {
+        aicResults = new Hashtable<Integer, SelectionChunk>(SIZE_MODE_NAMES.length - 1);
+        bicResults = new Hashtable<Integer, SelectionChunk>(SIZE_MODE_NAMES.length - 1);
+        aiccResults = new Hashtable<Integer, SelectionChunk>(SIZE_MODE_NAMES.length - 1);
+        dtResults = new Hashtable<Integer, SelectionChunk>(SIZE_MODE_NAMES.length - 1);
+        for (int sizeMode : SIZE_MODE_VALUES)
+            if (sizeMode != SIZEMODE_USERSIZE) {
                 aicResults.put(sizeMode, mainFrame.getFacade().computeInformationCriterion(alignment, models, 
                     SelectionChunk.AIC, sizeMode, 0.0, confidenceInterval));
                 bicResults.put(sizeMode, mainFrame.getFacade().computeInformationCriterion(alignment, models, 
@@ -72,7 +73,7 @@ public class ResultsView extends javax.swing.JFrame {
         
         initComponents();
         loadCache(Double.parseDouble(sliderConfidenceInterval.getValue()+"")/100);
-        fillInResults(ApplicationGlobals.DEFAULT_SAMPLE_SIZE_MODE, 0.0);
+        fillInResults(DEFAULT_SAMPLE_SIZE_MODE, 0.0);
         
         lblNotComplete.setVisible(!correctDone);
     }
@@ -1251,37 +1252,37 @@ public class ResultsView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private String oldSampleSizeModeStr;
-    private int oldSampleSizeMode = ApplicationGlobals.DEFAULT_SAMPLE_SIZE_MODE;
+    private int oldSampleSizeMode = DEFAULT_SAMPLE_SIZE_MODE;
     private void setSampleSize(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setSampleSize
 
-        int sampleSizeMode = ApplicationGlobals.DEFAULT_SAMPLE_SIZE_MODE;
+        int sampleSizeMode = DEFAULT_SAMPLE_SIZE_MODE;
         double sampleSize = 0.0;
         String btnName = evt.getActionCommand();
         if (!btnName.equals(oldSampleSizeModeStr)) {
             if (btnName.equals(
                     java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/resources/ResultsView")
                     .getString("btn-sizemode-alignment")))
-                sampleSizeMode = ApplicationGlobals.SIZEMODE_ALIGNMENT;
+                sampleSizeMode = SIZEMODE_ALIGNMENT;
             else if (btnName.equals(
                     java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/resources/ResultsView")
                     .getString("btn-sizemode-alignment-var")))
-                sampleSizeMode = ApplicationGlobals.SIZEMODE_ALIGNMENT_VAR;
+                sampleSizeMode = SIZEMODE_ALIGNMENT_VAR;
             else if (btnName.equals(
                     java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/resources/ResultsView")
                     .getString("btn-sizemode-shannon")))
-                sampleSizeMode = ApplicationGlobals.SIZEMODE_SHANNON;
+                sampleSizeMode = SIZEMODE_SHANNON;
             else if (btnName.equals(
                     java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/resources/ResultsView")
                     .getString("btn-sizemode-shannon-nxl")))
-                sampleSizeMode = ApplicationGlobals.SIZEMODE_SHANNON_NxL;
+                sampleSizeMode = SIZEMODE_SHANNON_NxL;
             else if (btnName.equals(
                     java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/resources/ResultsView")
                     .getString("btn-sizemode-nxl")))
-                sampleSizeMode = ApplicationGlobals.SIZEMODE_NxL;
+                sampleSizeMode = SIZEMODE_NxL;
             else if (btnName.equals(
                     java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/resources/ResultsView")
                     .getString("btn-sizemode-custom"))) {
-                sampleSizeMode = ApplicationGlobals.SIZEMODE_USERSIZE;
+                sampleSizeMode = SIZEMODE_USERSIZE;
                 try {
                     sampleSize = Double.parseDouble(txtSampleSize.getText());
                 } catch (NumberFormatException e) {
@@ -1311,7 +1312,7 @@ public class ResultsView extends javax.swing.JFrame {
 
     private double oldCustomSampleSize;
     private void computeCustomSampleSize() {
-        int sampleSizeMode = ApplicationGlobals.SIZEMODE_USERSIZE;
+        int sampleSizeMode = SIZEMODE_USERSIZE;
         double sampleSize = 0.0;
         try {
             sampleSize = Double.parseDouble(txtSampleSize.getText());
@@ -1464,7 +1465,7 @@ public class ResultsView extends javax.swing.JFrame {
         
         SelectionChunk chunkAIC, chunkBIC, chunkAICC, chunkDT;
         double confidenceInterval = Double.parseDouble(sliderConfidenceInterval.getValue()+"")/100;
-        if (sampleSizeMode != ApplicationGlobals.SIZEMODE_USERSIZE) {
+        if (sampleSizeMode != SIZEMODE_USERSIZE) {
             chunkAIC = aicResults.get(sampleSizeMode);
             chunkBIC = bicResults.get(sampleSizeMode);
             chunkAICC = aiccResults.get(sampleSizeMode);

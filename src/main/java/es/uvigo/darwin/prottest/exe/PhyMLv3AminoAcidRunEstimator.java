@@ -9,7 +9,7 @@ import java.io.InputStreamReader;
 import pal.tree.ReadTree;
 import pal.tree.TreeParseException;
 import es.uvigo.darwin.prottest.exe.util.TemporaryFileManager;
-import es.uvigo.darwin.prottest.global.ApplicationGlobals;
+import static es.uvigo.darwin.prottest.global.AminoAcidApplicationGlobals.*;
 import es.uvigo.darwin.prottest.global.options.ApplicationOptions;
 import es.uvigo.darwin.prottest.model.AminoAcidModel;
 import es.uvigo.darwin.prottest.model.Model;
@@ -27,7 +27,7 @@ import java.util.Arrays;
  * The Class PhyMLAminoAcidRunEstimator. It optimizes Amino-Acid
  * model parameters using PhyML 3.0.
  * 
- * @author Francisco Abascal
+ * @author Federico Abascal
  * @author Diego Darriba
  * @since 3.0
  */
@@ -121,11 +121,11 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
         }
         String topo = "lr";
         switch (options.strategyMode) {
-            case ApplicationGlobals.OPTIMIZE_BIONJ:
+            case OPTIMIZE_BIONJ:
                 tr = "BIONJ";
                 topo = "l";
                 break;
-            case ApplicationGlobals.OPTIMIZE_FIXED_BIONJ:
+            case OPTIMIZE_FIXED_BIONJ:
                 if (TemporaryFileManager.getInstance().getTreeFilename(Thread.currentThread()) != null) {
                     tr = TemporaryFileManager.getInstance().getTreeFilename(Thread.currentThread());
                     topo = "l";
@@ -133,10 +133,10 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
                     topo = "r";
                 }
                 break;
-            case ApplicationGlobals.OPTIMIZE_ML:
+            case OPTIMIZE_ML:
                 topo = "tl";
                 break;
-            case ApplicationGlobals.OPTIMIZE_USER:
+            case OPTIMIZE_USER:
                 tr = TemporaryFileManager.getInstance().getTreeFilename(Thread.currentThread());
                 topo = "l";
         }
@@ -209,7 +209,7 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
                 str[22] = "-b";
                 str[23] = "0";
 
-                if (ApplicationGlobals.properties.getProperty("phyml_thread_scheduling", "false").equalsIgnoreCase("true")) {
+                if (APPLICATION_PROPERTIES.getProperty("phyml_thread_scheduling", "false").equalsIgnoreCase("true")) {
                     str[24] = "--num_threads";
                     str[25] = String.valueOf(numberOfThreads);
                 }

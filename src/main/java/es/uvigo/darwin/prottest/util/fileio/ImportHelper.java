@@ -147,7 +147,8 @@ public class ImportHelper {
 
     /**
      * All read attempts pass through this function.
-     * @return
+     * 
+     * @return the next char
      * @throws IOException
      */
     public char read() throws IOException {

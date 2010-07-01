@@ -42,13 +42,14 @@ public class AlignmentReader {
     /**
      * Read alignment.
      * 
-     * @param out the out
+     * @param output the output writer
      * @param filename the filename
      * @param debug the debug
      * 
      * @return the alignment
      * 
-     * @throws AlignmentParseException the alignment parse exception
+     * @throws AlignmentParseException the alignment parse exception.
+     * @throws FileNotFoundException Signals that the input filename does not exist.
      * @throws IOException Signals that an I/O exception has occurred.
      */
     public static Alignment readAlignment(PrintWriter output, String filename, boolean debug)
@@ -129,13 +130,12 @@ public class AlignmentReader {
      * Read alignment.
      * 
      * @param out the out
-     * @param filename the filename
-     * @param debug the debug
+     * @param pr the pushback reader which contains the alignment
+     * @param debug the debug state
      * 
      * @return the alignment
      * 
      * @throws AlignmentParseException the alignment parse exception
-     * @throws IOException Signals that an I/O exception has occurred.
      */
     public static Alignment readAlignment(PrintWriter out, PushbackReader pr, boolean debug)
             throws AlignmentParseException {
@@ -204,7 +204,7 @@ public class AlignmentReader {
      * 
      * @return the tree
      * 
-     * @throws TreeFormatException the tree format exception
+     * @throws TreeFormatException When the input filename is not in the right format
      */
     public static Tree readTree(PrintWriter out, String filename, boolean debug)
             throws TreeFormatException {

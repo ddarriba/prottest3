@@ -1,5 +1,7 @@
 package es.uvigo.darwin.prottest.facade;
 
+import static es.uvigo.darwin.prottest.global.ApplicationGlobals.*;
+
 import es.uvigo.darwin.prottest.exe.util.TemporaryFileManager;
 import java.io.PrintWriter;
 import java.util.Collections;
@@ -15,7 +17,6 @@ import es.uvigo.darwin.prottest.facade.strategy.DynamicDistributionStrategy;
 import es.uvigo.darwin.prottest.facade.strategy.HybridDistributionStrategy;
 import es.uvigo.darwin.prottest.facade.strategy.ImprovedDynamicDistributionStrategy;
 import es.uvigo.darwin.prottest.facade.strategy.StaticDistributionStrategy;
-import es.uvigo.darwin.prottest.global.ApplicationGlobals;
 import es.uvigo.darwin.prottest.global.options.ApplicationOptions;
 import es.uvigo.darwin.prottest.model.Model;
 import es.uvigo.darwin.prottest.util.ProtTestAlignment;
@@ -110,7 +111,7 @@ public class ProtTestFacadeMPJ extends ProtTestFacadeImpl {
                         options.getAlignment(), options.getTree(), options.ncat);
             }
         }
-        String strategyProp = ApplicationGlobals.properties.getProperty("parallel_strategy", "static");
+        String strategyProp = APPLICATION_PROPERTIES.getProperty("parallel_strategy", "static");
 
         if (strategyProp.equals("dynamic")) {
             strategy = new DynamicDistributionStrategy(mpjMe, mpjSize, options, cpManager);
@@ -119,7 +120,7 @@ public class ProtTestFacadeMPJ extends ProtTestFacadeImpl {
         } else if (strategyProp.equals("hybrid")) {
             int numberOfThreads;
             try {
-                numberOfThreads = Integer.parseInt(ApplicationGlobals.properties.getProperty("number_of_threads", 
+                numberOfThreads = Integer.parseInt(APPLICATION_PROPERTIES.getProperty("number_of_threads", 
                     String.valueOf(Runtime.getRuntime().availableProcessors())));
             } catch (NumberFormatException ex) {
                 numberOfThreads = Runtime.getRuntime().availableProcessors();
@@ -139,7 +140,7 @@ public class ProtTestFacadeMPJ extends ProtTestFacadeImpl {
         if (mpjMe == 0) {
             println("**********************************************************");
             //this is only for doing output prettier
-            if (options.getSampleSizeMode() == ApplicationGlobals.SIZEMODE_SHANNON || options.getSampleSizeMode() == ApplicationGlobals.SIZEMODE_SHANNON_NxL) {
+            if (options.getSampleSizeMode() == SIZEMODE_SHANNON || options.getSampleSizeMode() == SIZEMODE_SHANNON_NxL) {
                 double tmpSampleSize = ProtTestAlignment.calculateShannonSampleSize(options.getAlignment(), options.getSampleSizeMode(), true);
                 errorln("Shannon entropy based sample size: " + ProtTestFormattedOutput.getDecimalString(tmpSampleSize, 2));
             }

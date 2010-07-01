@@ -2,7 +2,6 @@ package es.uvigo.darwin.prottest.facade.util;
 
 import java.util.Collection;
 
-import es.uvigo.darwin.prottest.global.ApplicationGlobals;
 import es.uvigo.darwin.prottest.model.Model;
 import es.uvigo.darwin.prottest.selection.InformationCriterion;
 import es.uvigo.darwin.prottest.selection.model.SelectionModel;
@@ -14,26 +13,6 @@ public class SelectionChunk {
 	public static final int AICC = 3;
 	public static final int DT = 4;
 	public static final int LNL = 5;
-	
-	// size modes
-    
-    /** The Constant SIZEMODE_SHANNON. */
-    public static final int SIZEMODE_SHANNON       = ApplicationGlobals.SIZEMODE_SHANNON;
-    
-    /** The Constant SIZEMODE_SHANNON_NxL. */
-    public static final int SIZEMODE_SHANNON_NxL   = ApplicationGlobals.SIZEMODE_SHANNON_NxL;
-    
-    /** The Constant SIZEMODE_ALIGNMENT. */
-    public static final int SIZEMODE_ALIGNMENT     = ApplicationGlobals.SIZEMODE_ALIGNMENT;
-    
-    /** The Constant SIZEMODE_ALIGNMENT_VAR. */
-    public static final int SIZEMODE_ALIGNMENT_VAR = ApplicationGlobals.SIZEMODE_ALIGNMENT_VAR;
-    
-    /** The Constant SIZEMODE_NxL. */
-    public static final int SIZEMODE_NxL           = ApplicationGlobals.SIZEMODE_NxL;
-    
-    /** The Constant SIZEMODE_USERSIZE. */
-    public static final int SIZEMODE_USERSIZE      = ApplicationGlobals.SIZEMODE_USERSIZE;
 	
 	private InformationCriterion informationCriterion;
         

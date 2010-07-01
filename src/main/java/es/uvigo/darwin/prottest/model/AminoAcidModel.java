@@ -2,7 +2,6 @@ package es.uvigo.darwin.prottest.model;
 
 import pal.alignment.Alignment;
 import pal.tree.Tree;
-import es.uvigo.darwin.prottest.global.ApplicationGlobals;
 import es.uvigo.darwin.prottest.util.factory.ProtTestFactory;
 
 /**
@@ -25,9 +24,9 @@ public class AminoAcidModel extends Model {
 		super(matrix, distribution, plusF, alignment, tree, ncat);
 		
 		if (isPlusF())
-	    	frequenciesDistribution = ApplicationGlobals.FREQ_DISTRIBUTION_EMPIRICAL;
+	    	frequenciesDistribution = FREQ_DISTRIBUTION_EMPIRICAL;
 	    else
-	    	frequenciesDistribution = ApplicationGlobals.FREQ_DISTRIBUTION_OTHER;
+	    	frequenciesDistribution = FREQ_DISTRIBUTION_OTHER;
 	}
 
 	/* (non-Javadoc)

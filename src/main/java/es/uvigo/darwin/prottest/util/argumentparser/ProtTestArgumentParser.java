@@ -1,5 +1,8 @@
 package es.uvigo.darwin.prottest.util.argumentparser;
 
+import static es.uvigo.darwin.prottest.global.ApplicationGlobals.*;
+
+import es.uvigo.darwin.prottest.global.ProtTestConsoleParameters;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -7,67 +10,28 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import es.uvigo.darwin.prottest.global.ApplicationGlobals;
 import es.uvigo.darwin.prottest.global.options.ApplicationOptions;
 
 /**
  * The Class ModelTestArgumentParser.
  */
-public abstract class ProtTestArgumentParser {
+public abstract class ProtTestArgumentParser 
+        implements ProtTestConsoleParameters {
 
-    /** Data type parameter token. */
-    public static final String PARAM_DATA_TYPE = "d";		// data type
-    /** Nucleotide data type parameter value. */
-    public static final String DATA_TYPE_NUCLEOTIDE = "nt";
-    /** Amino-acid data type parameter value. */
-    public static final String DATA_TYPE_AMINOACID = "aa";	// default
-    /** Number of threads parameter token. */
-    public static final String PARAM_NUM_THREADS = "threads";
-    /** Alignment file parameter token. */
-    public static final String PARAM_ALIGNMENT_FILE = "i";	// alignment file (required)
-    /** Output file parameter token. */
-    public static final String PARAM_OUTPUT_FILE = "o";		// output file
-    /** Tree file parameter token. */
-    public static final String PARAM_TREE_FILE = "t";		// tree file
-    /** Sort by parameter token. */
-    public static final String PARAM_SORT_BY = "sort";          // sort field
-    /** Display all framework comparison parameter token. */
-    public static final String PARAM_ALL_FRAMEWORK_COMPARISON = "all";	// display 7-framework comparison table
-    /** Optimization strategy selection parameter token. */
-    public static final String PARAM_OPTIMIZATION_STRATEGY = "S";	// optimization strategy
-    /** Sample size mode parameter token. */
-    public static final String PARAM_SAMPLE_SIZE_MODE = "sample";	// sample size for AICc and BIC corrections
-    /** Specific sample size parameter token. */
-    public static final String PARAM_SPECIFIC_SAMPLE_SIZE = "size";	// specific sample size
-    /** Display Newick tree parameter token. */
-    public static final String PARAM_DISPLAY_NEWICK_TREE = "t1";	// display newick tree
-    /** Display ASCII tree parameter token. */
-    public static final String PARAM_DISPLAY_ASCII_TREE = "t2";		// display ASCII tree
-    /** Display Consensus tree parameter token. */
-    public static final String PARAM_DISPLAY_CONSENSUS_TREE = "tc";	// display Consensus tree
-    /** Include models with observed frequencies parameter token. */
-    public static final String PARAM_PLUSF = "F";
-    /** Include models with a proportion invariable sites parameter token. */
-    public static final String PARAM_PLUSI = "I";
-    /** Include models with rate variation among sites and number of categories parameter token. */
-    public static final String PARAM_PLUSG = "G";
-    /** Include models with a proportion of invariable sites and rate variation parameter token. */
-    public static final String PARAM_PLUSIG = "IG";
-    /** User defined number of categories parameter token. */
-    public static final String PARAM_NCAT = "ncat";
-    /** Include models with all distributions (like -I -G). */
-    public static final String PARAM_ALL_DISTRIBUTIONS = "all-distributions";
-    /** Verbose mode parameter token. */
-    public static final String PARAM_VERBOSE = "verbose";
-    /** Hashtable to associate parameter tokens within parameter arguments requirements. */
+    
+    /** Hashtable to associate parameter tokens within parameter localArguments requirements. */
     protected static Hashtable<String, Boolean> valuesRequired;
-    /** Hashtable to associate parameter tokens within parameter arguments range. */
+    /** Hashtable to associate parameter tokens within parameter localArguments range. */
     protected static HashMap<String, String[]> argumentValues;
-    /** Hashtable to handle special arguments like "all-distributions". */
+    /** Hashtable to handle special localArguments like "all-distributions". */
     protected static HashMap<String, Map<String, String>> specialArguments;
-    /** The default properties. */
+    /** The default APPLICATION_PROPERTIES. */
     private static Properties defaultProperties;
-
+    /** The argument  prefix. */
+    public static final String ARG_TOKEN = "-";
+    /** The command line localArguments. */
+    private Properties arguments;
+    
     static {
 
         valuesRequired = new Hashtable<String, Boolean>();
@@ -76,22 +40,22 @@ public abstract class ProtTestArgumentParser {
         valuesRequired.put(PARAM_ALIGNMENT_FILE, true);
         valuesRequired.put(PARAM_OUTPUT_FILE, true);
         valuesRequired.put(PARAM_TREE_FILE, true);
-        String[] sortByValues = String.valueOf(ApplicationGlobals.SORTBY_VALUES).split("");
+        String[] sortByValues = String.valueOf(SORTBY_VALUES).split("");
         valuesRequired.put(PARAM_SORT_BY, true);
         argumentValues.put(PARAM_SORT_BY, sortByValues);
-        String[] optimizationStrategies = new String[ApplicationGlobals.OPTIMIZE_VALUES.length];
-        for (int index = 0; index < ApplicationGlobals.OPTIMIZE_VALUES.length; index++) {
-            optimizationStrategies[index] = String.valueOf(ApplicationGlobals.OPTIMIZE_VALUES[index]);
+        String[] optimizationStrategies = new String[OPTIMIZE_VALUES.length];
+        for (int index = 0; index < OPTIMIZE_VALUES.length; index++) {
+            optimizationStrategies[index] = String.valueOf(OPTIMIZE_VALUES[index]);
         }
         valuesRequired.put(PARAM_OPTIMIZATION_STRATEGY, true);
         argumentValues.put(PARAM_OPTIMIZATION_STRATEGY, optimizationStrategies);
         String[] sampleSizeModes = {
-            String.valueOf(ApplicationGlobals.SIZEMODE_SHANNON),
-            String.valueOf(ApplicationGlobals.SIZEMODE_SHANNON_NxL),
-            String.valueOf(ApplicationGlobals.SIZEMODE_ALIGNMENT),
-            String.valueOf(ApplicationGlobals.SIZEMODE_ALIGNMENT_VAR),
-            String.valueOf(ApplicationGlobals.SIZEMODE_NxL),
-            String.valueOf(ApplicationGlobals.SIZEMODE_USERSIZE)
+            String.valueOf(SIZEMODE_SHANNON),
+            String.valueOf(SIZEMODE_SHANNON_NxL),
+            String.valueOf(SIZEMODE_ALIGNMENT),
+            String.valueOf(SIZEMODE_ALIGNMENT_VAR),
+            String.valueOf(SIZEMODE_NxL),
+            String.valueOf(SIZEMODE_USERSIZE)
         };
         valuesRequired.put(PARAM_NUM_THREADS, true);
         valuesRequired.put(PARAM_SAMPLE_SIZE_MODE, true);
@@ -116,22 +80,18 @@ public abstract class ProtTestArgumentParser {
 
         defaultProperties = new Properties();
 
-        defaultProperties.setProperty(PARAM_NUM_THREADS, String.valueOf(ApplicationGlobals.DEFAULT_THREADS));
-        defaultProperties.setProperty(PARAM_NCAT, String.valueOf(ApplicationGlobals.DEFAULT_NCAT));
-        defaultProperties.setProperty(PARAM_SORT_BY, String.valueOf(ApplicationGlobals.DEFAULT_SORT_BY));
-        defaultProperties.setProperty(PARAM_OPTIMIZATION_STRATEGY, String.valueOf(ApplicationGlobals.DEFAULT_STRATEGY_MODE));
-        defaultProperties.setProperty(PARAM_SAMPLE_SIZE_MODE, String.valueOf(ApplicationGlobals.DEFAULT_SAMPLE_SIZE_MODE));
+        defaultProperties.setProperty(PARAM_NUM_THREADS, String.valueOf(DEFAULT_THREADS));
+        defaultProperties.setProperty(PARAM_NCAT, String.valueOf(DEFAULT_NCAT));
+        defaultProperties.setProperty(PARAM_SORT_BY, String.valueOf(DEFAULT_SORT_BY));
+        defaultProperties.setProperty(PARAM_OPTIMIZATION_STRATEGY, String.valueOf(DEFAULT_STRATEGY_MODE));
+        defaultProperties.setProperty(PARAM_SAMPLE_SIZE_MODE, String.valueOf(DEFAULT_SAMPLE_SIZE_MODE));
         defaultProperties.setProperty(PARAM_DATA_TYPE, DATA_TYPE_AMINOACID);
     }
-    /** The argument  prefix. */
-    public static final String ARG_TOKEN = "-";
-    /** The command line arguments. */
-    private Properties arguments;
 
     /**
      * Instantiates a new model test argument parser.
      * 
-     * @param args the command line arguments
+     * @param args the command line localArguments
      * @param options the application options
      * 
      * @throws IllegalArgumentException when exists some error in the command line argument
@@ -144,19 +104,19 @@ public abstract class ProtTestArgumentParser {
     }
 
     /**
-     * Check arguments are grammatically correct and parse them into
+     * Check localArguments are grammatically correct and parse them into
      * the instance.
      * 
-     * @param args the command line arguments
+     * @param args the command line localArguments
      * 
-     * @return the argument properties
+     * @return the argument APPLICATION_PROPERTIES
      * 
      * @throws IllegalArgumentException when exists some error in the command line argument
      */
     private Properties checkArgs(String[] args)
             throws IllegalArgumentException {
 
-        Properties arguments = new Properties(defaultProperties);
+        Properties localArguments = new Properties(defaultProperties);
         int i = 0;
         while (i < args.length) {
 
@@ -186,9 +146,9 @@ public abstract class ProtTestArgumentParser {
                                     mapValues.put(key, value);
                                 }
                             }
-                            putArgument(mapValues, arguments);
+                            putArgument(mapValues, localArguments);
                         } else {
-                            putArgument(arg, value, arguments);
+                            putArgument(arg, value, localArguments);
                         }
                     } else {
                         IllegalArgumentException e = new IllegalArgumentException("Parameter " + arg + " requires a value");
@@ -197,9 +157,9 @@ public abstract class ProtTestArgumentParser {
                 } else {
                     if (specialArguments.containsKey(arg)) {
                         Map<String, String> mapValues = specialArguments.get(arg);
-                        putArgument(mapValues, arguments);
+                        putArgument(mapValues, localArguments);
                     } else {
-                        putArgument(arg, "T", arguments);
+                        putArgument(arg, "T", localArguments);
                     }
                 }
             } else {
@@ -207,7 +167,7 @@ public abstract class ProtTestArgumentParser {
             }
             i++;
         }
-        return arguments;
+        return localArguments;
 
     }
 
@@ -244,7 +204,7 @@ public abstract class ProtTestArgumentParser {
 
     /**
      * Gets the value of an argument. If the argument key is not found,
-     * the default arguments will be checked. If the argument key does
+     * the default localArguments will be checked. If the argument key does
      * not exist, the method will return null.
      * 
      * @param arg the argument to check
@@ -263,7 +223,7 @@ public abstract class ProtTestArgumentParser {
      * 
      * @param key the argument key
      * @param value the argument value
-     * @param arguments the argument list
+     * @param localArguments the argument list
      */
     private void putArgument(String key, String value, Properties arguments) {
         if (arguments.containsKey(key)) {
@@ -278,11 +238,11 @@ public abstract class ProtTestArgumentParser {
      * argument will take the new value, and a warning message will be 
      * printed into standard error output.
      * 
-     * @param items the new arguments to put
-     * @param arguments the argument list
+     * @param items the new localArguments to put
+     * @param localArguments the argument list
      */
     private void putArgument(Map<String, String> items, Properties arguments) {
-        // arguments.putAll(items);
+        // localArguments.putAll(items);
         for (String key : items.keySet()) {
             putArgument(key, items.get(key), arguments);
         }

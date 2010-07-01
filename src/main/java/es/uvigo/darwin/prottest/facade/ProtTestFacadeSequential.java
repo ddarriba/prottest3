@@ -4,8 +4,9 @@ import java.io.PrintWriter;
 import java.util.Date;
 import java.util.Properties;
 
+import static es.uvigo.darwin.prottest.global.ApplicationGlobals.*;
+
 import es.uvigo.darwin.prottest.exe.RunEstimator;
-import es.uvigo.darwin.prottest.global.ApplicationGlobals;
 import es.uvigo.darwin.prottest.global.options.ApplicationOptions;
 import es.uvigo.darwin.prottest.model.Model;
 import es.uvigo.darwin.prottest.observer.ObservableModelUpdater;
@@ -35,7 +36,7 @@ public class ProtTestFacadeSequential extends ProtTestFacadeImpl {
 
         println("**********************************************************");
         //this is only for doing output prettier
-        if (options.getSampleSizeMode() == ApplicationGlobals.SIZEMODE_SHANNON || options.getSampleSizeMode() == ApplicationGlobals.SIZEMODE_SHANNON_NxL) {
+        if (options.getSampleSizeMode() == SIZEMODE_SHANNON || options.getSampleSizeMode() == SIZEMODE_SHANNON_NxL) {
             double tmpSampleSize = ProtTestAlignment.calculateShannonSampleSize(options.getAlignment(), options.getSampleSizeMode(), true);
             println("Shannon entropy based sample size: " + ProtTestFormattedOutput.getDecimalString(tmpSampleSize, 2));
         }

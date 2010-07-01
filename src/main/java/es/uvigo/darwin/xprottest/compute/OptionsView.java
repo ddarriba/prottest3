@@ -9,7 +9,7 @@ package es.uvigo.darwin.xprottest.compute;
 import es.uvigo.darwin.xprottest.*;
 import es.uvigo.darwin.xprottest.util.OptimizationStrategyWrapper;
 import es.uvigo.darwin.prottest.facade.util.ProtTestParameterVO;
-import es.uvigo.darwin.prottest.global.AminoAcidApplicationGlobals;
+import static es.uvigo.darwin.prottest.global.AminoAcidApplicationGlobals.*;
 import es.uvigo.darwin.prottest.global.options.ApplicationOptions;
 import es.uvigo.darwin.prottest.util.exception.AlignmentParseException;
 import es.uvigo.darwin.prottest.util.exception.ProtTestInternalException;
@@ -76,7 +76,7 @@ public class OptionsView extends javax.swing.JFrame {
                 .addContainerGap();
         GroupLayout.SequentialGroup sg2 = jPanel1Layout.createSequentialGroup()
                 .addContainerGap();
-        String[] matrices = AminoAcidApplicationGlobals.ALL_MATRICES;
+        String[] matrices = ALL_MATRICES;
         cbMatrices = new ArrayList<JCheckBox>(matrices.length);
         int i = 0;
         for (String matrix : matrices) {
@@ -483,11 +483,11 @@ public class OptionsView extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        for (int optimizeValue : AminoAcidApplicationGlobals.OPTIMIZE_VALUES) {
-            OptimizationStrategyWrapper optimizeItem = new OptimizationStrategyWrapper(AminoAcidApplicationGlobals.STRATEGIES[optimizeValue], optimizeValue);
+        for (int optimizeValue : OPTIMIZE_VALUES) {
+            OptimizationStrategyWrapper optimizeItem = new OptimizationStrategyWrapper(OPTIMIZE_NAMES[optimizeValue], optimizeValue);
             cmbStrategyMode.addItem(optimizeItem);
         }
-        cmbStrategyMode.setSelectedIndex(AminoAcidApplicationGlobals.DEFAULT_STRATEGY_MODE);
+        cmbStrategyMode.setSelectedIndex(DEFAULT_STRATEGY_MODE);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -585,7 +585,7 @@ public class OptionsView extends javax.swing.JFrame {
                     .getContext().getResourceMap(OptionsView.class);
         File f = null;
         if (((OptimizationStrategyWrapper)cmbStrategyMode.getSelectedItem()).getValue()
-                == AminoAcidApplicationGlobals.OPTIMIZE_USER) {
+                == OPTIMIZE_USER) {
             
             FileDialog fc = new FileDialog(this, "Load DNA alignment", FileDialog.LOAD);
 	fc.setDirectory(System.getProperty("user.dir"));
@@ -668,9 +668,9 @@ public class OptionsView extends javax.swing.JFrame {
         cbDistInvGC.setSelected(true);
         cbDistInvariant.setSelected(true);
         cbEmpiricalF.setSelected(true);
-        txtNCat.setText(String.valueOf(AminoAcidApplicationGlobals.DEFAULT_NCAT));
+        txtNCat.setText(String.valueOf(DEFAULT_NCAT));
         sliderProcessors.setValue(sliderProcessors.getMaximum());
-        cmbStrategyMode.setSelectedIndex(AminoAcidApplicationGlobals.DEFAULT_STRATEGY_MODE);
+        cmbStrategyMode.setSelectedIndex(DEFAULT_STRATEGY_MODE);
         onChangeOptions(null);
         sliderProcessorsStateChanged(null);
         setUserTree(null);

@@ -17,7 +17,7 @@ import es.uvigo.darwin.prottest.util.comparator.ModelWeightComparator;
 import es.uvigo.darwin.prottest.util.exception.ProtTestInternalException;
 
 /**
- * The Class DynamicDistributionStrategy.
+ * This strategy distributes the workload in a dynamic way.
  */
 public class DynamicDistributionStrategy extends DistributionStrategy {
 

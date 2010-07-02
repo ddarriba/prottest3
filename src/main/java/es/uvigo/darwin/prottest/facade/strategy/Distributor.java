@@ -11,7 +11,8 @@ import es.uvigo.darwin.prottest.util.comparator.ModelWeightComparator;
 import es.uvigo.darwin.prottest.util.exception.ProtTestInternalException;
 
 /**
- * This class depends on MPJ-Express. Its behavior is inherently coupled to 
+ * This class distributes wrok load in an MPJ-Express environment.
+ * Its behavior is inherently coupled to 
  * ImprovedDynamicDistributionStrategy's, providing the root process with
  * the possibility of distribute the models and also computing likelihood
  * values asynchronously.

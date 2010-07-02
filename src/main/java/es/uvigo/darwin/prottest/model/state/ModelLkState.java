@@ -38,6 +38,8 @@ public abstract class ModelLkState implements Serializable {
 	 * Sets the alpha estimated value.
 	 * 
 	 * @param alpha the new alpha estimated value
+         *
+         * @return the new state
 	 */
 	public abstract ModelLkState setAlpha(double alpha);
 
@@ -52,6 +54,8 @@ public abstract class ModelLkState implements Serializable {
 	 * Sets the proportion of invariant sites.
 	 * 
 	 * @param inv the new proportion of invariant sites
+         * 
+         * @return the new state
 	 */
 	public abstract ModelLkState setInv(double inv);
 }

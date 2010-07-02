@@ -21,7 +21,11 @@ import es.uvigo.darwin.prottest.util.exception.TreeFormatException;
 import java.io.FileNotFoundException;
 
 /**
- * The facade to provide ProtTest functionality to external objects.
+ * Declaration of general services of ProtTest-HPC
+ * 
+ * @author Diego Darriba
+ * 
+ * @since 3.0
  */
 public interface ProtTestFacade extends ModelUpdaterObserver {
 
@@ -49,6 +53,17 @@ public interface ProtTestFacade extends ModelUpdaterObserver {
      */
     public void printModelsSorted(InformationCriterion informationCriterion);
 
+    /**
+     * Calculates a Information Criterion wrapped into a Selection chunk object,
+     * which is a value-object
+     * 
+     * @param alignment the alignment.
+     * @param models the optimized models .
+     * @param criterion the Information Criterion Constant.
+     * @param sampleSizeMode the sample size mode.
+     * @param sampleSize the sample size (if custom).
+     * @param confidenceInterval the confidence interval.
+     */
     public SelectionChunk computeInformationCriterion(Alignment alignment, Model[] models,
             int criterion, int sampleSizeMode, double sampleSize,
             double confidenceInterval);
@@ -83,7 +98,7 @@ public interface ProtTestFacade extends ModelUpdaterObserver {
      * @throws IOException Signals that an I/O exception has occurred.
      */
     public Tree readTree(PrintWriter out, String filename, boolean debug)
-            throws TreeFormatException;
+            throws TreeFormatException, FileNotFoundException, IOException;
 
 //	**********************************************************
 //	   					 MISC SERVICES

@@ -37,7 +37,9 @@ public class ModelFilledLkState extends ModelLkState {
 		return lk;
 	}
 
-	/* (non-Javadoc)
+	/**
+         * Throws an internal exception.
+         * 
 	 * @see es.uvigo.darwin.prottest.model.state.ModelLkState#setLk(double)
 	 */
 	@Override

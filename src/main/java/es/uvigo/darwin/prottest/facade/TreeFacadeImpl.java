@@ -10,6 +10,13 @@ import es.uvigo.darwin.prottest.tree.TreeUtils;
 import es.uvigo.darwin.prottest.util.exception.ProtTestInternalException;
 import java.io.StringWriter;
 
+/**
+ * Generic implementation of the Tree Facade services
+ * 
+ * @author Diego Darriba
+ * 
+ * @since 3.0
+ */
 public class TreeFacadeImpl implements TreeFacade {
 
     public String toASCII(Tree tree) {

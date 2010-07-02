@@ -6,6 +6,13 @@ import java.util.List;
 import pal.tree.Tree;
 import es.uvigo.darwin.prottest.selection.InformationCriterion;
 
+/**
+ * Declaration of services related to phylogenetic tree management.
+ * 
+ * @author Diego Darriba
+ * 
+ * @since 3.0
+ */
 public interface TreeFacade {
 
     //	**********************************************************

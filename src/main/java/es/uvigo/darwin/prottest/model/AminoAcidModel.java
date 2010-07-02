@@ -6,6 +6,10 @@ import es.uvigo.darwin.prottest.util.factory.ProtTestFactory;
 
 /**
  * Substitution model form amino-acid sequences
+ * 
+ * @author Diego Darriba
+ * 
+ * @since 3.0
  */
 public class AminoAcidModel extends Model {
 

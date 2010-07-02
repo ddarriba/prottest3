@@ -1,6 +1,5 @@
 package es.uvigo.darwin.prottest.selection;
 
-import java.io.PrintWriter;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -11,13 +10,12 @@ import java.util.Vector;
 
 import es.uvigo.darwin.prottest.model.Model;
 import es.uvigo.darwin.prottest.selection.model.SelectionModel;
-import es.uvigo.darwin.prottest.selection.printer.PrintFramework;
 import es.uvigo.darwin.prottest.util.collection.ModelCollection;
 import es.uvigo.darwin.prottest.util.collection.SingleModelCollection;
-import es.uvigo.darwin.prottest.util.factory.ProtTestFactory;
 import pal.alignment.Alignment;
 
 /**
+ * Generic implementation of an information criterion for model selection.
  * Model selection is used to model-averaging and estimate parameter importance
  * in an evolutionary context after computing likelihood values for every model.
  */

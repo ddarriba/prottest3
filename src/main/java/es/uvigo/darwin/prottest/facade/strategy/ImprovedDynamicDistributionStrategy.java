@@ -15,7 +15,8 @@ import es.uvigo.darwin.prottest.util.comparator.ModelWeightComparator;
 import es.uvigo.darwin.prottest.util.exception.ProtTestInternalException;
 
 /**
- * The Class ImprovedDynamicDistributionStrategy.
+ * This class improves the dynamic behaviour adding a distributor
+ * thread.
  */
 public class ImprovedDynamicDistributionStrategy extends DistributionStrategy {
 

@@ -50,7 +50,7 @@ public class AlignmentReader {
      * 
      * @throws AlignmentParseException the alignment parse exception.
      * @throws FileNotFoundException Signals that the input filename does not exist.
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException Signals that an I/O exception has occured.
      */
     public static Alignment readAlignment(PrintWriter output, String filename, boolean debug)
             throws AlignmentParseException, FileNotFoundException, IOException {
@@ -136,9 +136,10 @@ public class AlignmentReader {
      * @return the alignment
      * 
      * @throws AlignmentParseException the alignment parse exception
+     * @throws IOException Signals that an I/O exception has occured.
      */
     public static Alignment readAlignment(PrintWriter out, PushbackReader pr, boolean debug)
-            throws AlignmentParseException {
+            throws AlignmentParseException, IOException {
 
         if (debug) {
             out.println("");
@@ -149,19 +150,6 @@ public class AlignmentReader {
         try {
             alignment = new ReadAlignment(pr);
         } catch (pal.alignment.AlignmentParseException e) {
-            if (debug) {
-                out.println("Error: Alignment parsing problem");
-            }
-            throw new AlignmentParseException(e.getMessage());
-        } catch (IOException e) {
-            if (debug) {
-                out.println("Error: File not found (IO error)");
-            }
-            throw new AlignmentParseException(e.getMessage());
-        } catch (Exception e) {
-            if (debug) {
-                out.println("Error: Alignment parsing problem");
-            }
             throw new AlignmentParseException(e.getMessage());
         }
 
@@ -205,9 +193,11 @@ public class AlignmentReader {
      * @return the tree
      * 
      * @throws TreeFormatException When the input filename is not in the right format
+     * @throws FileNotFoundException Signals that the input filename does not exist.
+     * @throws IOException Signals that an I/O exception has occured.
      */
     public static Tree readTree(PrintWriter out, String filename, boolean debug)
-            throws TreeFormatException {
+            throws TreeFormatException, FileNotFoundException, IOException {
         //FOR PHYML:
         //if tree is not in newick format, reformat and save to a new file:
         //TreeUtils: public static void printNH(Tree tree, java.io.PrintWriter out)
@@ -219,8 +209,6 @@ public class AlignmentReader {
             tree = new ReadTree(filename);
         } catch (TreeParseException e) {
             throw new TreeFormatException("Error: Wrong tree format : " + e.getMessage());
-        } catch (IOException e) {
-            throw new TreeFormatException("Error: " + e.getMessage());
         }
         if (debug) {
             out.println("Tree contains " + tree.getExternalNodeCount() + " external nodes");

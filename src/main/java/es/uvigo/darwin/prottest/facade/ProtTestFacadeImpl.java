@@ -69,9 +69,9 @@ public abstract class ProtTestFacadeImpl
      */
     public void printModelsSorted(InformationCriterion informationCriterion) {
 
-        PrintFramework printFramework = new AminoAcidPrintFramework(informationCriterion);
+        PrintFramework printFramework = new AminoAcidPrintFramework();
 
-        printFramework.printModelsSorted();
+        printFramework.printModelsSorted(informationCriterion);
 
     }
 
@@ -94,7 +94,7 @@ public abstract class ProtTestFacadeImpl
      * @see es.uvigo.darwin.prottest.facade.ProtTestFacade#readTree(java.io.PrintWriter, java.lang.String, boolean)
      */
     public Tree readTree(PrintWriter out, String filename, boolean debug)
-            throws TreeFormatException {
+            throws TreeFormatException, FileNotFoundException, IOException {
 
         return AlignmentReader.readTree(out, filename, debug);
     

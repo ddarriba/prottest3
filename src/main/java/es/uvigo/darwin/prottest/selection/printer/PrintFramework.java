@@ -16,38 +16,18 @@ import es.uvigo.darwin.prottest.util.comparator.LKComparator;
 import es.uvigo.darwin.prottest.util.logging.ProtTestLogger;
 import es.uvigo.darwin.prottest.util.printer.ProtTestFormattedOutput;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class PrintFramework.
+ * Utility to print application data into loggers.
  */
 public abstract class PrintFramework {
 
+    /** Constant sample size when it's not user defined. Just for visibility */
     private static final double NO_SAMPLE_SIZE = 0.0;
-    /** The information criterion. */
-    private InformationCriterion informationCriterion;
 
     /**
-     * Gets the information criterion.
-     * 
-     * @return the information criterion
+     * Prints the models sorted by a concrete information criterion.
      */
-    protected InformationCriterion getInformationCriterion() {
-        return informationCriterion;
-    }
-
-    /**
-     * Instantiates a new prints the framework.
-     * 
-     * @param informationCriterion the information criterion
-     */
-    public PrintFramework(InformationCriterion informationCriterion) {
-        this.informationCriterion = informationCriterion;
-    }
-
-    /**
-     * Prints the models sorted.
-     */
-    public final void printModelsSorted() {
+    public final void printModelsSorted(InformationCriterion informationCriterion) {
 
         int fieldLength = 15;
         int numberOfFields = 5;
@@ -99,12 +79,12 @@ public abstract class PrintFramework {
         }
 
         println(ProtTestFormattedOutput.space(lineLength, '-'));
-//			out.println(" *: models sorted according to this column"                  );
+
         println(ProtTestFormattedOutput.space(lineLength, '-'));
 
-        printRelativeImportance();
+        printRelativeImportance(informationCriterion);
 
-        printModelAveragedEstimation();
+        printModelAveragedEstimation(informationCriterion);
 
     }
 
@@ -117,7 +97,7 @@ public abstract class PrintFramework {
     }
 
     /**
-     * Prints the frameworks comparison.
+     * Prints the comparison over the 7 frameworks.
      */
     public static void printFrameworksComparison(ModelCollection models) {
 
@@ -340,11 +320,15 @@ public abstract class PrintFramework {
 
     /**
      * Prints the relative importance.
+     * 
+     * @param ic the information criterion
      */
-    abstract void printRelativeImportance();
+    abstract void printRelativeImportance(InformationCriterion ic);
 
     /**
      * Prints the model averaged estimation.
+     * 
+     * @param ic the information criterion
      */
-    abstract void printModelAveragedEstimation();
+    abstract void printModelAveragedEstimation(InformationCriterion ic);
 }

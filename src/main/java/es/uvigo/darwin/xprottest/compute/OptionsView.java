@@ -17,6 +17,7 @@ import es.uvigo.darwin.prottest.util.exception.TreeFormatException;
 import java.awt.Color;
 import java.awt.FileDialog;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -626,6 +627,14 @@ public class OptionsView extends javax.swing.JFrame {
                         cmbStrategyMode.setSelectedIndex(0);
                     }
                 } catch (TreeFormatException ex) {
+                    mainFrame.getDisplayWriter().println(ex.getMessage());
+                    setUserTree(null);
+                    cmbStrategyMode.setSelectedIndex(0);
+                } catch (FileNotFoundException ex) {
+                    mainFrame.getDisplayWriter().println(ex.getMessage());
+                    setUserTree(null);
+                    cmbStrategyMode.setSelectedIndex(0);
+                } catch (IOException ex) {
                     mainFrame.getDisplayWriter().println(ex.getMessage());
                     setUserTree(null);
                     cmbStrategyMode.setSelectedIndex(0);

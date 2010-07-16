@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.1" encoding="UTF-8" ?>
 
 <Form version="1.5" maxVersion="1.5" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <NonVisualComponents>
@@ -43,15 +43,15 @@
                       <Component id="subMatPanel" min="-2" max="-2" attributes="1"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="lblUserTree" alignment="0" pref="316" max="32767" attributes="1"/>
+                          <Component id="lblUserTree" alignment="0" pref="354" max="32767" attributes="1"/>
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="lblNumModelsLabel" pref="241" max="32767" attributes="1"/>
+                              <Component id="lblNumModelsLabel" pref="279" max="32767" attributes="1"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="lblNumModels" min="-2" pref="69" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="cmbStrategyMode" alignment="0" pref="316" max="32767" attributes="1"/>
+                          <Component id="cmbStrategyMode" alignment="0" pref="354" max="32767" attributes="1"/>
                           <Component id="distributionsPanel" alignment="0" max="32767" attributes="1"/>
-                          <Component id="lblStrategyMode" alignment="0" pref="316" max="32767" attributes="1"/>
+                          <Component id="lblStrategyMode" alignment="0" pref="354" max="32767" attributes="1"/>
                           <Group type="102" alignment="1" attributes="0">
                               <Component id="btnCompute" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
@@ -227,7 +227,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace pref="70" max="32767" attributes="0"/>
+                      <EmptySpace pref="83" max="32767" attributes="0"/>
                       <Component id="msgValidate" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -354,7 +354,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="cbEmpiricalF" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="187" max="32767" attributes="0"/>
+                      <EmptySpace pref="212" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -479,7 +479,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="lblNumProc" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="sliderProcessors" pref="410" max="32767" attributes="1"/>
+                  <Component id="sliderProcessors" pref="437" max="32767" attributes="1"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>

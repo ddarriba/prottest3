@@ -18,7 +18,6 @@ import es.uvigo.darwin.prottest.global.RaxmlAminoAcidApplicationGlobals;
 import es.uvigo.darwin.prottest.global.options.ApplicationOptions;
 import es.uvigo.darwin.prottest.model.AminoAcidModel;
 import es.uvigo.darwin.prottest.model.Model;
-import es.uvigo.darwin.prottest.selection.InformationCriterion;
 import es.uvigo.darwin.prottest.selection.printer.AminoAcidPrintFramework;
 import es.uvigo.darwin.prottest.selection.printer.PrintFramework;
 import es.uvigo.darwin.prottest.util.argumentparser.AminoAcidArgumentParser;
@@ -265,17 +264,15 @@ public class ProtTestFactory {
 
     /**
      * Creates a new ProtTest object.
-     * 
-     * @param informationCriterion the information criterion
-     * 
+     *
      * @return the prints the framework
      */
-    public PrintFramework createPrintFramework(InformationCriterion informationCriterion) {
+    public PrintFramework createPrintFramework() {
         PrintFramework pf = null;
 
         switch (sort) {
             case PROTEIC:
-                pf = new AminoAcidPrintFramework(informationCriterion);
+                pf = new AminoAcidPrintFramework();
                 break;
             case NUCLEIC:
                 throw new ProtTestInternalException("Not implemented");

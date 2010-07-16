@@ -275,7 +275,7 @@ public class ApplicationOptions {
      * @throws TreeFormatException Signals there was an error parsing the tree file
      */
     public void setTreeFile(String treeFile)
-            throws TreeFormatException {
+            throws TreeFormatException, FileNotFoundException, IOException {
         if (treeFile != null) {
             this.tree_file = treeFile;
 
@@ -519,7 +519,13 @@ public class ApplicationOptions {
             throw new IllegalArgumentException("Required input file argument -i");
         }
         if (arguments.exists(ProtTestArgumentParser.PARAM_TREE_FILE)) {
-            setTreeFile(arguments.getValue(ProtTestArgumentParser.PARAM_TREE_FILE));
+            try {
+                setTreeFile(arguments.getValue(ProtTestArgumentParser.PARAM_TREE_FILE));
+            } catch (FileNotFoundException ex) {
+                throw new IllegalArgumentException(ex.getMessage());
+            } catch (IOException ex) {
+                throw new IllegalArgumentException(ex.getMessage());
+            }
         }
         if (arguments.exists(ProtTestArgumentParser.PARAM_OUTPUT_FILE)) {
             //open the PrintWriter with file

@@ -28,7 +28,7 @@ public class XProtTestApp extends SingleFrameApplication {
 
     static {
         if (Utilities.isWindows() == false) {
-            FONT_CONSOLE = new Font("Monaco", 0, 10);
+            FONT_CONSOLE = new Font(Font.MONOSPACED, 0, 10);
         } else {
             FONT_CONSOLE = new Font("Lucida Console", 0, 11);
         }

@@ -10,10 +10,8 @@ import java.io.FileNotFoundException;
 import es.uvigo.darwin.xprottest.compute.RunningFrame;
 import es.uvigo.darwin.xprottest.compute.OptionsView;
 import org.jdesktop.application.Action;
-import org.jdesktop.application.ResourceMap;
 import org.jdesktop.application.SingleFrameApplication;
 import org.jdesktop.application.FrameView;
-import org.jdesktop.application.TaskMonitor;
 import org.jdesktop.application.ResourceMap;
 import org.jdesktop.application.Application;
 import java.awt.event.ActionEvent;
@@ -57,6 +55,7 @@ import java.awt.BorderLayout;
 import java.awt.Insets;
 import java.util.logging.Handler;
 import java.util.logging.Level;
+import javax.swing.JScrollPane;
 
 /**
  * The XProtTest main frame offers whole connection between the application
@@ -225,11 +224,11 @@ public class XProtTestView extends FrameView {
         disableHandler();
     }
 
-    private void disableHandler() {
+    public void disableHandler() {
         mainHandler.setLevel(Level.OFF);
     }
     
-    private void enableHandler() {
+    public void enableHandler() {
         mainHandler.setLevel(Level.INFO);
     }
     @Action
@@ -278,7 +277,7 @@ public class XProtTestView extends FrameView {
 
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(es.uvigo.darwin.xprottest.XProtTestApp.class).getContext().getResourceMap(XProtTestView.class);
 
-        mainPanel.setSize(new java.awt.Dimension(500, 560));
+        mainPanel.setSize(new java.awt.Dimension(500, 860));
         mainPanel.setBorder(new javax.swing.plaf.BorderUIResource.EmptyBorderUIResource(new java.awt.Insets(20, 20, 20, 20)));
         mainPanel.setLocation(new java.awt.Point(10, -10));
         mainPanel.setVisible(true);
@@ -290,7 +289,7 @@ public class XProtTestView extends FrameView {
         mainPanel.setName("mainPanel"); // NOI18N
         //mainPanel.setPreferredSize(new java.awt.Dimension(500, 600));
 
-        mainScrollPane.setSize(new java.awt.Dimension(590, 600));
+        mainScrollPane.setSize(590,800);//new java.awt.Dimension(590, 600));
         mainScrollPane.setLocation(new java.awt.Point(20, 20));
         mainScrollPane.setVisible(true);
         mainScrollPane.setAutoscrolls(true);
@@ -301,7 +300,7 @@ public class XProtTestView extends FrameView {
         mainTextArea.setMargin(new Insets(5, 5, 5, 5));
         mainTextArea.setBackground(Color.white);
         mainTextArea.setEditable(false);
-        mainTextArea.setSize(new java.awt.Dimension(15, 10));
+        mainTextArea.setSize(500,800);//new java.awt.Dimension(15, 10));
         mainTextArea.setAutoscrolls(true);
         mainTextArea.setVisible(true);
 
@@ -311,6 +310,9 @@ public class XProtTestView extends FrameView {
         //mainTextArea.setRows(30);
         mainTextArea.setName("mainTextArea"); // NOI18N
         //mainScrollPane.setViewportView(mainTextArea);
+        mainScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        mainTextArea.setWrapStyleWord(true);
+        mainTextArea.setLineWrap(true);
 
         statusPanel.setPreferredSize(new java.awt.Dimension(592, 30));
         statusPanel.setBorder(new javax.swing.plaf.BorderUIResource.EtchedBorderUIResource(1, new java.awt.Color(182, 182, 182), new java.awt.Color(89, 89, 89)));
@@ -352,60 +354,6 @@ public class XProtTestView extends FrameView {
         statusPanel.add(lblLikelihoodStatus, BorderLayout.LINE_START);
         statusPanel.add(lblDataFileStatus, BorderLayout.LINE_END);
 
-        /*
-        javax.swing.GroupLayout statusPanelLayout = new javax.swing.GroupLayout(statusPanel);
-        statusPanel.setLayout(statusPanelLayout);
-        statusPanelLayout.setHorizontalGroup(
-        statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGroup(statusPanelLayout.createSequentialGroup()
-        .addContainerGap()
-        .addComponent(lblLikelihoodStatus)
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(lblDataFileStatus, javax.swing.GroupLayout.DEFAULT_SIZE, 332, Short.MAX_VALUE)
-        .addContainerGap())
-        );
-        statusPanelLayout.setVerticalGroup(
-        statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGroup(statusPanelLayout.createSequentialGroup()
-        .addContainerGap()
-        .addGroup(statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-        .addComponent(lblLikelihoodStatus)
-        .addComponent(lblDataFileStatus))
-        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        lblMoreInfo.setForeground(resourceMap.getColor("lblMoreInfo.foreground")); // NOI18N
-        lblMoreInfo.setText(resourceMap.getString("lblMoreInfo.text")); // NOI18N
-        lblMoreInfo.setName("lblMoreInfo"); // NOI18N
-        javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
-        mainPanel.setLayout(mainPanelLayout);
-        mainPanelLayout.setHorizontalGroup(
-        mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGroup(mainPanelLayout.createSequentialGroup()
-        .addContainerGap()
-        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGroup(mainPanelLayout.createSequentialGroup()
-        .addGap(12, 12, 12)
-        .addComponent(lblMoreInfo, javax.swing.GroupLayout.DEFAULT_SIZE, 527, Short.MAX_VALUE)
-        .addContainerGap())
-        .addGroup(mainPanelLayout.createSequentialGroup()
-        .addComponent(mainScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 539, Short.MAX_VALUE)
-        .addContainerGap())
-        .addGroup(mainPanelLayout.createSequentialGroup()
-        .addComponent(statusPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 539, Short.MAX_VALUE)
-        .addContainerGap())))
-        );
-        mainPanelLayout.setVerticalGroup(
-        mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
-        .addContainerGap()
-        .addComponent(mainScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 470, Short.MAX_VALUE)
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-        .addComponent(statusPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(lblMoreInfo)
-        .addContainerGap())
-        );
-         */
         menuBar.setName("menuBar"); // NOI18N
 
         javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(es.uvigo.darwin.xprottest.XProtTestApp.class).getContext().getActionMap(XProtTestView.class, this);
@@ -441,6 +389,7 @@ public class XProtTestView extends FrameView {
         editCopyMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.CTRL_MASK));
         editCopyMenuItem.setMnemonic('c');
         editCopyMenuItem.setText(resourceMap.getString("menu-copy")); // NOI18N
+        editCopyMenuItem.setToolTipText(resourceMap.getString("editCopyMenuItem.toolTipText"));
         editCopyMenuItem.setName("editCopyMenuItem"); // NOI18N
         editMenu.add(editCopyMenuItem);
 
@@ -448,11 +397,13 @@ public class XProtTestView extends FrameView {
         editSelectAllMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
         editSelectAllMenuItem.setMnemonic('a');
         editSelectAllMenuItem.setText(resourceMap.getString("menu-selectAll")); // NOI18N
+        editSelectAllMenuItem.setToolTipText(resourceMap.getString("editSelectAllMenuItem.toolTipText"));
         editSelectAllMenuItem.setName("editSelectAllMenuItem"); // NOI18N
         editMenu.add(editSelectAllMenuItem);
 
         preferencesMenuItem.setMnemonic('p');
         preferencesMenuItem.setText(resourceMap.getString("menu-preferences")); // NOI18N
+        preferencesMenuItem.setToolTipText(resourceMap.getString("editPreferencesMenuItem.toolTipText"));
         preferencesMenuItem.setName("preferencesMenuItem"); // NOI18N
         preferencesMenuItem.addActionListener(new java.awt.event.ActionListener() {
 
@@ -522,12 +473,14 @@ public class XProtTestView extends FrameView {
         resultsMenuItem.setText(bundle.getString("item-results")); // NOI18N
         resultsMenuItem.setEnabled(false);
         resultsMenuItem.setName("resultsMenuItem"); // NOI18N
+        resultsMenuItem.setToolTipText(resourceMap.getString("resultsMenuItem.toolTipText")); // NOI18N
         resultsMenu.add(resultsMenuItem);
 
         errorMenuItem.setAction(actionMap.get("showErrorLog")); // NOI18N
         errorMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
         errorMenuItem.setMnemonic('e');
         errorMenuItem.setText(resourceMap.getString("errorMenuItem.text")); // NOI18N
+        errorMenuItem.setToolTipText(resourceMap.getString("errorMenuItem.toolTipText"));
         errorMenuItem.setEnabled(false);
         errorMenuItem.setName("errorMenuItem"); // NOI18N
         resultsMenu.add(errorMenuItem);
@@ -581,7 +534,9 @@ public class XProtTestView extends FrameView {
         if (dataFileName != null) {
             enableHandler();
             try {
+                ProtTestPrinter.printPreAnalysisHeader();
                 File f = new File(fc.getDirectory() + dataFileName);//fc.getSelectedFile();
+                ProtTestPrinter.printFileData(f);
                 if (alignmentFile == null || !f.getAbsolutePath().equals(alignmentFile.getAbsolutePath())) {
                     lblLikelihoodStatus.setText(resourceMap.getString("msg-no-lnl-calculated"));
                     lblLikelihoodStatus.setForeground(CRITIC_COLOR);
@@ -838,7 +793,7 @@ public class XProtTestView extends FrameView {
         TreeFacade treeFacade = new TreeFacadeImpl();
         if (models != null) {
             if (treeView == null) {
-                treeView = new TreeView(treeFacade, tree, models);
+                treeView = new TreeView(this, treeFacade, tree, models);
             }
             treeView.setVisible(true);
         }
@@ -849,7 +804,7 @@ public class XProtTestView extends FrameView {
         TreeFacade treeFacade = new TreeFacadeImpl();
         if (models != null) {
             if (consensusView == null) {
-                consensusView = new Consensus(treeFacade, models, alignment);
+                consensusView = new Consensus(this, treeFacade, models, alignment);
             }
             consensusView.setVisible(true);
         }

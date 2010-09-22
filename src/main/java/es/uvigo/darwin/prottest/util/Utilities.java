@@ -128,21 +128,9 @@ public class Utilities {
      * @return the string
      */
     public static String calculateRuntime(long startTime, long endTime) {
-		long seconds = (long) Math.round((endTime - startTime)/1000.0);
-		int  hours   = (int ) (seconds/(60.0*60.0));
-		int  rest1   = (int ) (seconds%(60.0*60.0));
-		int  minutes = (int ) (rest1/60.0);
-		seconds      = (int ) (seconds - (hours*60*60 + minutes*60));
-        String h = "" + hours;
-        String m = "" + minutes;
-        String s = "" + seconds;
-        if(minutes < 10)
-            m = "0"+m;
-        if(seconds < 10)
-            s = "0"+s;
-		return h + "h:" + m + ":" + s + "";
+        return arrangeRuntime(endTime - startTime);
     }
-    
+
     /**
      * Gets the path.
      * 

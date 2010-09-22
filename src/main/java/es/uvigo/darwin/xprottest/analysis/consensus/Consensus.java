@@ -5,6 +5,8 @@
  */
 package es.uvigo.darwin.xprottest.analysis.consensus;
 
+import es.uvigo.darwin.prottest.util.logging.ProtTestLogger;
+import es.uvigo.darwin.prottest.util.printer.ProtTestPrinter;
 import static es.uvigo.darwin.prottest.global.ApplicationGlobals.*;
 
 import es.uvigo.darwin.prottest.facade.TreeFacade;
@@ -61,10 +63,12 @@ public class Consensus extends javax.swing.JFrame {
     private PrintWriter displayWriter;
     private int sampleSizeMode = DEFAULT_SAMPLE_SIZE_MODE;
     private double sampleSize = 1.0;
+    private XProtTestView mainFrame;
 
     /** Creates new form Consensus */
-    public Consensus(TreeFacade facade, Model[] models, Alignment alignment) {
+    public Consensus(XProtTestView mainFrame, TreeFacade facade, Model[] models, Alignment alignment) {
         initComponents();
+        this.mainFrame = mainFrame;
         this.facade = facade;
         this.models = new SingleModelCollection(models, alignment);
         this.displayWriter = new PrintWriter(new TextAreaWriter(displayArea));
@@ -114,6 +118,7 @@ public class Consensus extends javax.swing.JFrame {
         sizeModeShannonNL = new javax.swing.JRadioButton();
         lblSampleSize = new javax.swing.JLabel();
         lblSampleSizeMode = new javax.swing.JLabel();
+        btnExport = new javax.swing.JButton();
         displayScroll = new javax.swing.JScrollPane();
         displayArea = new javax.swing.JTextArea();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -123,7 +128,7 @@ public class Consensus extends javax.swing.JFrame {
         editCopyMenuItem = new javax.swing.JMenuItem();
         selectAllMenuItem = new javax.swing.JMenuItem();
 
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(es.uvigo.darwin.xprottest.XProtTestApp.class).getContext().getResourceMap(Consensus.class);
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance().getContext().getResourceMap(Consensus.class);
         setTitle(resourceMap.getString("Form.title")); // NOI18N
         setName("Form"); // NOI18N
 
@@ -139,7 +144,7 @@ public class Consensus extends javax.swing.JFrame {
         lblCriterion.setText(resourceMap.getString("lblCriterion.text")); // NOI18N
         lblCriterion.setName("lblCriterion"); // NOI18N
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(es.uvigo.darwin.xprottest.XProtTestApp.class).getContext().getActionMap(Consensus.class, this);
+        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance().getContext().getActionMap(Consensus.class, this);
         radioAIC.setAction(actionMap.get("disableSampleSize")); // NOI18N
         btnGrpCriterion.add(radioAIC);
         radioAIC.setText(resourceMap.getString("radioAIC.text")); // NOI18N
@@ -299,6 +304,11 @@ public class Consensus extends javax.swing.JFrame {
         lblSampleSizeMode.setText(resourceMap.getString("lblSampleSizeMode.text")); // NOI18N
         lblSampleSizeMode.setName("lblSampleSizeMode"); // NOI18N
 
+        btnExport.setAction(actionMap.get("exportData")); // NOI18N
+        btnExport.setText(resourceMap.getString("btnExport.text")); // NOI18N
+        btnExport.setEnabled(false);
+        btnExport.setName("btnExport"); // NOI18N
+
         javax.swing.GroupLayout settingsPanelLayout = new javax.swing.GroupLayout(settingsPanel);
         settingsPanel.setLayout(settingsPanelLayout);
         settingsPanelLayout.setHorizontalGroup(
@@ -309,7 +319,7 @@ public class Consensus extends javax.swing.JFrame {
                         .addContainerGap()
                         .addGroup(settingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblCriterion, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 628, Short.MAX_VALUE)
+                            .addComponent(lblTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 636, Short.MAX_VALUE)
                             .addGroup(settingsPanelLayout.createSequentialGroup()
                                 .addGap(12, 12, 12)
                                 .addComponent(radioAIC)
@@ -327,14 +337,16 @@ public class Consensus extends javax.swing.JFrame {
                                 .addComponent(lblConsensusType, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(lblPercent))
-                            .addComponent(sliderConsType, javax.swing.GroupLayout.DEFAULT_SIZE, 628, Short.MAX_VALUE)
+                            .addComponent(sliderConsType, javax.swing.GroupLayout.DEFAULT_SIZE, 636, Short.MAX_VALUE)
                             .addGroup(settingsPanelLayout.createSequentialGroup()
                                 .addComponent(lblMR, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(129, 129, 129)
                                 .addComponent(btnBuild)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 253, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnExport)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 182, Short.MAX_VALUE)
                                 .addComponent(lblStrict, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(sliderConfidence, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 628, Short.MAX_VALUE)
+                            .addComponent(sliderConfidence, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 636, Short.MAX_VALUE)
                             .addGroup(settingsPanelLayout.createSequentialGroup()
                                 .addComponent(lblConfInt)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -345,9 +357,7 @@ public class Consensus extends javax.swing.JFrame {
                             .addGroup(settingsPanelLayout.createSequentialGroup()
                                 .addComponent(sizeModeAlignment3)
                                 .addGap(15, 15, 15))
-                            .addGroup(settingsPanelLayout.createSequentialGroup()
-                                .addComponent(sizeModeNL, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                            .addComponent(sizeModeNL, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(settingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, settingsPanelLayout.createSequentialGroup()
@@ -360,7 +370,7 @@ public class Consensus extends javax.swing.JFrame {
                                 .addComponent(sizeModeShannon, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(sizeModeShannonNL, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(lblSampleSize, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 516, Short.MAX_VALUE)))
+                            .addComponent(lblSampleSize, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 504, Short.MAX_VALUE)))
                     .addGroup(settingsPanelLayout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(lblSampleSizeMode, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -412,7 +422,9 @@ public class Consensus extends javax.swing.JFrame {
                 .addGroup(settingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblMR)
                     .addComponent(lblStrict)
-                    .addComponent(btnBuild))
+                    .addGroup(settingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnBuild)
+                        .addComponent(btnExport)))
                 .addContainerGap())
         );
 
@@ -420,17 +432,16 @@ public class Consensus extends javax.swing.JFrame {
 
         displayArea.setColumns(20);
         displayArea.setEditable(false);
+        displayArea.setLineWrap(true);
         displayArea.setRows(5);
         displayArea.setName("displayArea"); // NOI18N
         displayScroll.setViewportView(displayArea);
 
         jMenuBar1.setName("jMenuBar1"); // NOI18N
 
-        windowMenu.setText(resourceMap.getString("menu-window")); // NOI18N
         windowMenu.setName("windowMenu"); // NOI18N
 
         closeMenuItem.setAction(actionMap.get("Close")); // NOI18N
-        closeMenuItem.setText(resourceMap.getString("menu-close")); // NOI18N
         closeMenuItem.setName("closeMenuItem"); // NOI18N
         windowMenu.add(closeMenuItem);
 
@@ -440,13 +451,10 @@ public class Consensus extends javax.swing.JFrame {
         editMenu.setName("editMenu"); // NOI18N
 
         editCopyMenuItem.setAction(actionMap.get("editCopy")); // NOI18N
-        editCopyMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.CTRL_MASK));
-        editCopyMenuItem.setText(resourceMap.getString("menu-copy")); // NOI18N
         editCopyMenuItem.setName("editCopyMenuItem"); // NOI18N
         editMenu.add(editCopyMenuItem);
 
         selectAllMenuItem.setAction(actionMap.get("editSelectAll")); // NOI18N
-        selectAllMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
         selectAllMenuItem.setText(resourceMap.getString("selectAllMenuItem.text")); // NOI18N
         selectAllMenuItem.setName("selectAllMenuItem"); // NOI18N
         editMenu.add(selectAllMenuItem);
@@ -462,7 +470,7 @@ public class Consensus extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(displayScroll, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 656, Short.MAX_VALUE)
+                    .addComponent(displayScroll, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 664, Short.MAX_VALUE)
                     .addComponent(settingsPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -626,8 +634,8 @@ public class Consensus extends javax.swing.JFrame {
                 }
                 println(" ");
                 for (FixedBitSet fbs : splitsInConsensus) {
-                    println("    " + fbs.splitRepresentation() + " ( " +
-                            Utilities.round(consensus.getCladeSupport().get(fbs), 5) + " )");
+                    println("    " + fbs.splitRepresentation() + " ( "
+                            + Utilities.round(consensus.getCladeSupport().get(fbs), 5) + " )");
                 }
                 println(" ");
                 println("Sets NOT included in consensus tree");
@@ -638,8 +646,8 @@ public class Consensus extends javax.swing.JFrame {
                 }
                 println(" ");
                 for (FixedBitSet fbs : splitsOutFromConsensus) {
-                    println("    " + fbs.splitRepresentation() + " ( " +
-                            Utilities.round(consensus.getCladeSupport().get(fbs), 5) + " )");
+                    println("    " + fbs.splitRepresentation() + " ( "
+                            + Utilities.round(consensus.getCladeSupport().get(fbs), 5) + " )");
                 }
 
                 Tree consensusTree = consensus.getConsensusTree();
@@ -660,6 +668,7 @@ public class Consensus extends javax.swing.JFrame {
             println(resourceMap.getString("msg-sample-size-error"));
         }
         logHandler.setLevel(Level.OFF);
+        btnExport.setEnabled(!displayArea.getText().equals(""));
     }
 
     @Action
@@ -699,8 +708,17 @@ public class Consensus extends javax.swing.JFrame {
     private void println(String message) {
         infoln(message, this.getClass());
     }
+
+    @Action
+    public void exportData() {
+        mainFrame.enableHandler();
+        ProtTestPrinter.printTreeHeader("MODEL AVERAGED PHYLOGENY");
+        ProtTestLogger.getDefaultLogger().infoln(displayArea.getText());
+        mainFrame.disableHandler();
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuild;
+    private javax.swing.JButton btnExport;
     private javax.swing.ButtonGroup btnGroupSampleSizeMode;
     private javax.swing.ButtonGroup btnGrpCriterion;
     private javax.swing.JMenuItem closeMenuItem;

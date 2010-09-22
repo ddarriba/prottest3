@@ -5,6 +5,7 @@ import java.util.Date;
 
 import es.uvigo.darwin.prottest.ProtTest;
 import es.uvigo.darwin.prottest.util.logging.ProtTestLogger;
+import java.io.File;
 
 /**
  * The Class ProtTestPrinter provides a common PrintWriter module to
@@ -35,14 +36,13 @@ public class ProtTestPrinter {
     public static void printHeader() {
         println("");
         println("");
-        println("ProtTest-HPC - " + ProtTest.versionNumber + ProtTestFormattedOutput.space(10 - ProtTest.versionNumber.length(), ' ') +
-                "                   Selection of models of protein evolution");
-        println("(c) 2004-2010                     Diego Darriba, Guillermo Taboada, Ramón Doallo");
-        println("                                  Federico Abascal, Rafael Zardoya, David Posada");
+        println("ProtTest " + ProtTest.versionNumber
+                + ProtTestFormattedOutput.space(13 - ProtTest.versionNumber.length(), ' ') +
+                                      "Fast selection of the best-fit models of protein evolution");
+        println("(c) 2009-2010                     Diego Darriba, Guillermo Taboada, Ramón Doallo");
         println("(FA, DP)            Facultad de Biologia, Universidad de Vigo, 36200 Vigo, Spain");
         println("(FA, DP) Facultade de Informática, Universidade da Coruña, 15071 A Coruña, Spain");
-        println("(RZ)                   Museo Nacional de Ciencias Naturales, 28006 Madrid, Spain");
-        println("Contact:                 ddarriba@udc.es, fedeabascal@yahoo.es, dposada@uvigo.es");
+        println("Contact:                                       ddarriba@udc.es, dposada@uvigo.es");
         println("--------------------------------------------------------------------------------");
         println("");
         println((new Date()).toString());
@@ -51,7 +51,49 @@ public class ProtTestPrinter {
         println("");
     }
 
-    private static void println(String text) {
+    /**
+     * Prints out the header of the pre-analysis section.
+     */
+    public static void printPreAnalysisHeader() {
+        println("");
+        println("********************************************************");
+        println("                  ALIGNMENT ANALYSIS                    ");
+        println("********************************************************");
+        println("");
+    }
+
+    /**
+     * Prints out the header of the selection section
+     */
+    public static void printSelectionHeader(String criterionName) {
+        println("");
+        println("");
+        println("********************************************************");
+        println(ProtTestFormattedOutput.space(28 - criterionName.length()/2, ' ') + criterionName);
+        println("********************************************************");
+    }
+
+    /**
+     * Prints out the header of the tree display
+     */
+    public static void printTreeHeader(String modelName) {
+        println("");
+        println("********************************************************");
+        println(ProtTestFormattedOutput.space(28 - modelName.length()/2, ' ') + modelName);
+        println("********************************************************");
+        println("");
+    }
+
+    /**
+     * Prints file data
+     */
+    public static void printFileData(File f) {
+        println("");
+        println("File: " + f.getAbsolutePath());
+        println("Size: " + f.length());
+        println("");
+    }
+    public static void println(String text) {
         ProtTestLogger.infoln(text, ProtTestPrinter.class);
     }
 

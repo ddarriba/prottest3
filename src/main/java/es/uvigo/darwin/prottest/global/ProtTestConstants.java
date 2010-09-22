@@ -92,6 +92,13 @@ public interface ProtTestConstants {
         "DT",
         "-lnL"
     };
+    static final String[] CRITERION_NAMES = {
+        "AKAIKE INFORMATION CRITERION",
+        "BAYESIAN INFORMATION CRITERION",
+        "CORRECTED AKAIKE INFORMATION CRITERION",
+        "DECISION THEORY CRITERION",
+        "LOG-LIKELIHOOD"
+    };
     /** Set of values of sort modes. */
     static final char[] SORTBY_VALUES = {
         SORTBY_AIC,

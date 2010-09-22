@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.1" encoding="UTF-8" ?>
 
 <Form version="1.5" maxVersion="1.5" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <NonVisualComponents>
@@ -32,7 +32,7 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="resultsTabbedPane" alignment="0" pref="670" max="32767" attributes="0"/>
+                  <Component id="resultsTabbedPane" alignment="0" pref="671" max="32767" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
@@ -42,10 +42,7 @@
                                       <Component id="sizeModeAlignment" min="-2" max="-2" attributes="1"/>
                                       <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
                                   </Group>
-                                  <Group type="102" attributes="1">
-                                      <Component id="sizeModeNL" max="32767" attributes="1"/>
-                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                  </Group>
+                                  <Component id="sizeModeNL" max="32767" attributes="1"/>
                               </Group>
                           </Group>
                           <Component id="lblConfInt" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -64,17 +61,16 @@
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="sizeModeShannonNL" min="-2" pref="140" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="lblSampleSize" alignment="0" pref="557" max="32767" attributes="1"/>
+                          <Component id="lblSampleSize" alignment="0" pref="533" max="32767" attributes="1"/>
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="lblConfidence" min="-2" pref="32" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="sliderConfidenceInterval" pref="513" max="32767" attributes="0"/>
+                              <Component id="sliderConfidenceInterval" pref="489" max="32767" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
                   <Component id="lblSampleSizeMode" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="lblNotComplete" alignment="1" pref="670" max="32767" attributes="0"/>
+                  <Component id="lblNotComplete" alignment="1" pref="671" max="32767" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="lblComandLineLabel" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -83,10 +79,11 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="lblSelectedModel" pref="539" max="32767" attributes="0"/>
-                              <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
+                              <Component id="lblSelectedModel" pref="386" max="32767" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="btnExport" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="jScrollPane1" alignment="0" pref="568" max="32767" attributes="0"/>
+                          <Component id="jScrollPane1" alignment="0" pref="557" max="32767" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
@@ -126,11 +123,12 @@
               <EmptySpace max="-2" attributes="0"/>
               <Component id="lblNotComplete" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="resultsTabbedPane" pref="508" max="32767" attributes="0"/>
+              <Component id="resultsTabbedPane" pref="496" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="lblSelectedModelLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="lblSelectedModel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnExport" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
@@ -174,7 +172,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="aicScrollPanel" alignment="1" pref="641" max="32767" attributes="0"/>
+                          <Component id="aicScrollPanel" alignment="1" pref="635" max="32767" attributes="0"/>
                           <Component id="aicDataPanel" alignment="1" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -185,7 +183,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="aicScrollPanel" pref="338" max="32767" attributes="0"/>
+                      <Component id="aicScrollPanel" pref="300" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="aicDataPanel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
@@ -245,9 +243,9 @@
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Component id="displayAICoInv" min="-2" max="-2" attributes="0"/>
-                                      <Component id="displayAICoInvAlpha" pref="229" max="32767" attributes="0"/>
-                                      <Component id="displayAICoAlphaInv" pref="229" max="32767" attributes="0"/>
-                                      <Component id="displayAICoAlpha" alignment="0" pref="229" max="32767" attributes="0"/>
+                                      <Component id="displayAICoInvAlpha" pref="223" max="32767" attributes="0"/>
+                                      <Component id="displayAICoAlphaInv" pref="223" max="32767" attributes="0"/>
+                                      <Component id="displayAICoAlpha" alignment="0" pref="223" max="32767" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
                               </Group>
@@ -273,7 +271,7 @@
                                       <Component id="displayAICImpF" alignment="0" max="32767" attributes="1"/>
                                   </Group>
                               </Group>
-                              <Component id="lblAICPI" pref="243" max="32767" attributes="0"/>
+                              <Component id="lblAICPI" pref="237" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
@@ -478,7 +476,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="bicScrollPanel" alignment="1" pref="641" max="32767" attributes="0"/>
+                          <Component id="bicScrollPanel" alignment="1" pref="635" max="32767" attributes="0"/>
                           <Component id="bicDataPanel" alignment="1" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -489,7 +487,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="bicScrollPanel" pref="338" max="32767" attributes="0"/>
+                      <Component id="bicScrollPanel" pref="300" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="bicDataPanel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
@@ -549,9 +547,9 @@
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Component id="displayBICoInv" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="displayBICoInvAlpha" alignment="0" pref="229" max="32767" attributes="0"/>
-                                      <Component id="displayBICoAlphaInv" alignment="0" pref="229" max="32767" attributes="0"/>
-                                      <Component id="displayBICoAlpha" alignment="0" pref="229" max="32767" attributes="0"/>
+                                      <Component id="displayBICoInvAlpha" alignment="0" pref="223" max="32767" attributes="0"/>
+                                      <Component id="displayBICoAlphaInv" alignment="0" pref="223" max="32767" attributes="0"/>
+                                      <Component id="displayBICoAlpha" alignment="0" pref="223" max="32767" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
                               </Group>
@@ -579,7 +577,7 @@
                               </Group>
                               <Group type="102" alignment="1" attributes="0">
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="lblBICPI" pref="243" max="32767" attributes="0"/>
+                                  <Component id="lblBICPI" pref="237" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
@@ -785,7 +783,7 @@
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="aiccScrollPanel" alignment="0" pref="641" max="32767" attributes="0"/>
+                          <Component id="aiccScrollPanel" alignment="0" pref="635" max="32767" attributes="0"/>
                           <Component id="aiccDataPanel" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -796,7 +794,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="aiccScrollPanel" pref="338" max="32767" attributes="0"/>
+                      <Component id="aiccScrollPanel" pref="300" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="aiccDataPanel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
@@ -856,9 +854,9 @@
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Component id="displayAICcoInv" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="displayAICcoInvAlpha" alignment="0" pref="229" max="32767" attributes="0"/>
-                                      <Component id="displayAICcoAlphaInv" alignment="0" pref="229" max="32767" attributes="0"/>
-                                      <Component id="displayAICcoAlpha" alignment="0" pref="229" max="32767" attributes="0"/>
+                                      <Component id="displayAICcoInvAlpha" alignment="0" pref="223" max="32767" attributes="0"/>
+                                      <Component id="displayAICcoAlphaInv" alignment="0" pref="223" max="32767" attributes="0"/>
+                                      <Component id="displayAICcoAlpha" alignment="0" pref="223" max="32767" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
                               </Group>
@@ -884,7 +882,7 @@
                                       <Component id="displayAICcImpF" alignment="0" max="32767" attributes="1"/>
                                   </Group>
                               </Group>
-                              <Component id="lblAICcPI" alignment="0" pref="243" max="32767" attributes="0"/>
+                              <Component id="lblAICcPI" alignment="0" pref="237" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
@@ -1089,7 +1087,7 @@
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="dtScrollPanel" alignment="0" pref="641" max="32767" attributes="0"/>
+                          <Component id="dtScrollPanel" alignment="0" pref="635" max="32767" attributes="0"/>
                           <Component id="dtDataPanel" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -1100,7 +1098,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="dtScrollPanel" pref="338" max="32767" attributes="0"/>
+                      <Component id="dtScrollPanel" pref="300" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="dtDataPanel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
@@ -1160,9 +1158,9 @@
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Component id="displayDToInv" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="displayDToInvAlpha" alignment="0" pref="229" max="32767" attributes="0"/>
-                                      <Component id="displayDToAlphaInv" alignment="0" pref="229" max="32767" attributes="0"/>
-                                      <Component id="displayDToAlpha" alignment="0" pref="229" max="32767" attributes="0"/>
+                                      <Component id="displayDToInvAlpha" alignment="0" pref="223" max="32767" attributes="0"/>
+                                      <Component id="displayDToAlphaInv" alignment="0" pref="223" max="32767" attributes="0"/>
+                                      <Component id="displayDToAlpha" alignment="0" pref="223" max="32767" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
                               </Group>
@@ -1188,7 +1186,7 @@
                                       <Component id="displayDTImpF" alignment="0" max="32767" attributes="1"/>
                                   </Group>
                               </Group>
-                              <Component id="lblDTPI" alignment="0" pref="243" max="32767" attributes="0"/>
+                              <Component id="lblDTPI" alignment="0" pref="237" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
@@ -1575,6 +1573,15 @@
         <Property name="horizontalAlignment" type="int" value="4"/>
         <Property name="text" type="java.lang.String" resourceKey="lblConfidence.text"/>
         <Property name="name" type="java.lang.String" value="lblConfidence" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnExport">
+      <Properties>
+        <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+          <action class="es.uvigo.darwin.xprottest.results.ResultsView" id="exportData" methodName="exportData"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Export to main console" noResource="true"/>
+        <Property name="name" type="java.lang.String" value="btnExport" noResource="true"/>
       </Properties>
     </Component>
   </SubComponents>

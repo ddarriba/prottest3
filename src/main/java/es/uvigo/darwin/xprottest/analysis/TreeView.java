@@ -8,6 +8,9 @@ package es.uvigo.darwin.xprottest.analysis;
 
 import es.uvigo.darwin.prottest.facade.TreeFacade;
 import es.uvigo.darwin.prottest.model.Model;
+import es.uvigo.darwin.prottest.util.logging.ProtTestLogger;
+import es.uvigo.darwin.prottest.util.printer.ProtTestPrinter;
+import es.uvigo.darwin.xprottest.XProtTestView;
 import java.awt.Font;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -25,9 +28,11 @@ public class TreeView extends javax.swing.JFrame {
     private List<Tree> trees;
     private TreeFacade facade;
     private PrintWriter displayWriter;
+    private XProtTestView mainFrame;
     
     /** Creates new form TreeView */
-    public TreeView(TreeFacade facade, Tree tree, Model[] models) {
+    public TreeView(XProtTestView mainFrame, TreeFacade facade, Tree tree, Model[] models) {
+        this.mainFrame = mainFrame;
         this.tree = tree;
         this.facade = facade;
         this.trees = new ArrayList<Tree>(models.length);
@@ -68,17 +73,19 @@ public class TreeView extends javax.swing.JFrame {
         optionsPanel = new javax.swing.JPanel();
         cmbTreeSelection = new javax.swing.JComboBox();
         cmbTreeFormatSelection = new javax.swing.JComboBox();
+        btnExport = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         windowMenu = new javax.swing.JMenu();
         closeMenuItem = new javax.swing.JMenuItem();
         editMenu = new javax.swing.JMenu();
         editCopyMenuItem = new javax.swing.JMenuItem();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        editSelectAllMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/analysis/resources/TreeView"); // NOI18N
         setTitle(bundle.getString("title")); // NOI18N
         setName("Form"); // NOI18N
+        setResizable(false);
 
         displayScroll.setName("displayScroll"); // NOI18N
 
@@ -90,7 +97,7 @@ public class TreeView extends javax.swing.JFrame {
 
         optionsPanel.setName("optionsPanel"); // NOI18N
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(es.uvigo.darwin.xprottest.XProtTestApp.class).getContext().getActionMap(TreeView.class, this);
+        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance().getContext().getActionMap(TreeView.class, this);
         cmbTreeSelection.setAction(actionMap.get("treeFormatSelection")); // NOI18N
         cmbTreeSelection.setName("cmbTreeSelection"); // NOI18N
 
@@ -99,6 +106,10 @@ public class TreeView extends javax.swing.JFrame {
         cmbTreeFormatSelection.setAction(actionMap.get("treeFormatSelection")); // NOI18N
         cmbTreeFormatSelection.setName("cmbTreeFormatSelection"); // NOI18N
 
+        btnExport.setAction(actionMap.get("exportData")); // NOI18N
+        btnExport.setText("Export to main console"); // NOI18N
+        btnExport.setName("btnExport"); // NOI18N
+
         javax.swing.GroupLayout optionsPanelLayout = new javax.swing.GroupLayout(optionsPanel);
         optionsPanel.setLayout(optionsPanelLayout);
         optionsPanelLayout.setHorizontalGroup(
@@ -106,9 +117,10 @@ public class TreeView extends javax.swing.JFrame {
             .addGroup(optionsPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(cmbTreeSelection, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(192, 192, 192)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
                 .addComponent(cmbTreeFormatSelection, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnExport))
         );
         optionsPanelLayout.setVerticalGroup(
             optionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -116,18 +128,18 @@ public class TreeView extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(optionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cmbTreeSelection, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnExport)
                     .addComponent(cmbTreeFormatSelection, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jMenuBar1.setName("jMenuBar1"); // NOI18N
 
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(es.uvigo.darwin.xprottest.XProtTestApp.class).getContext().getResourceMap(TreeView.class);
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance().getContext().getResourceMap(TreeView.class);
         windowMenu.setText(resourceMap.getString("windowMenu.text")); // NOI18N
         windowMenu.setName("windowMenu"); // NOI18N
 
         closeMenuItem.setAction(actionMap.get("close")); // NOI18N
-        closeMenuItem.setText(resourceMap.getString("menu-close")); // NOI18N
         closeMenuItem.setName("closeMenuItem"); // NOI18N
         windowMenu.add(closeMenuItem);
 
@@ -137,16 +149,12 @@ public class TreeView extends javax.swing.JFrame {
         editMenu.setName("editMenu"); // NOI18N
 
         editCopyMenuItem.setAction(actionMap.get("editCopy")); // NOI18N
-        editCopyMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.CTRL_MASK));
-        editCopyMenuItem.setText(resourceMap.getString("menu-copy")); // NOI18N
         editCopyMenuItem.setName("editCopyMenuItem"); // NOI18N
         editMenu.add(editCopyMenuItem);
 
-        jMenuItem1.setAction(actionMap.get("editSelectAll")); // NOI18N
-        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem1.setText(resourceMap.getString("menu-selectAll")); // NOI18N
-        jMenuItem1.setName("jMenuItem1"); // NOI18N
-        editMenu.add(jMenuItem1);
+        editSelectAllMenuItem.setAction(actionMap.get("editSelectAll")); // NOI18N
+        editSelectAllMenuItem.setName("editSelectAllMenuItem"); // NOI18N
+        editMenu.add(editSelectAllMenuItem);
 
         jMenuBar1.add(editMenu);
 
@@ -158,9 +166,9 @@ public class TreeView extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(displayScroll, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 527, Short.MAX_VALUE)
-                    .addComponent(optionsPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(displayScroll, javax.swing.GroupLayout.DEFAULT_SIZE, 527, Short.MAX_VALUE)
+                    .addComponent(optionsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -169,7 +177,7 @@ public class TreeView extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(optionsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(displayScroll, javax.swing.GroupLayout.DEFAULT_SIZE, 436, Short.MAX_VALUE)
+                .addComponent(displayScroll, javax.swing.GroupLayout.DEFAULT_SIZE, 451, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -178,6 +186,7 @@ public class TreeView extends javax.swing.JFrame {
 
     private void displayAsciiTree(Tree tree) {
         displayArea.setText("");
+        displayArea.setLineWrap(false);
         displayWriter.println(facade.toASCII(tree));
         displayWriter.println(" ");
         displayWriter.println(facade.branchInfo(tree));
@@ -187,6 +196,7 @@ public class TreeView extends javax.swing.JFrame {
 
     private void displayNewickTree(Tree tree) {
         displayArea.setText("");
+        displayArea.setLineWrap(true);
         String newickTree = facade.toNewick(tree, true, true, false);
         displayWriter.println(newickTree);
     }
@@ -219,6 +229,14 @@ public class TreeView extends javax.swing.JFrame {
         this.setVisible(false);
     }
 
+    @Action
+    public void exportData() {
+        mainFrame.enableHandler();
+        ProtTestPrinter.printTreeHeader(((TreeWrapper)cmbTreeSelection.getSelectedItem()).toString());
+        ProtTestLogger.getDefaultLogger().infoln(displayArea.getText());
+        mainFrame.disableHandler();
+    }
+
 //    @Action
 //    public void buildConsensus() {
 //        double threshold = Double.parseDouble(txtThreshold.getText());
@@ -235,6 +253,7 @@ public class TreeView extends javax.swing.JFrame {
 //    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnExport;
     private javax.swing.JMenuItem closeMenuItem;
     private javax.swing.JComboBox cmbTreeFormatSelection;
     private javax.swing.JComboBox cmbTreeSelection;
@@ -242,8 +261,8 @@ public class TreeView extends javax.swing.JFrame {
     private javax.swing.JScrollPane displayScroll;
     private javax.swing.JMenuItem editCopyMenuItem;
     private javax.swing.JMenu editMenu;
+    private javax.swing.JMenuItem editSelectAllMenuItem;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel optionsPanel;
     private javax.swing.ButtonGroup treeDisplayTypeBtnGroup;
     private javax.swing.JMenu windowMenu;

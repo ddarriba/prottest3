@@ -14,7 +14,15 @@ import es.uvigo.darwin.xprottest.util.TextAreaAppender;
 import es.uvigo.darwin.prottest.model.Model;
 import es.uvigo.darwin.prottest.observer.ModelUpdaterObserver;
 import es.uvigo.darwin.prottest.observer.ObservableModelUpdater;
+import es.uvigo.darwin.prottest.util.Utilities;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Iterator;
+import javax.swing.Timer;
 
 /**
  *
@@ -23,11 +31,18 @@ import java.io.PrintWriter;
 public class RunningFrame extends javax.swing.JFrame
         implements ModelUpdaterObserver {
 
+    private static final int TIMER_UPDATE_FREQUENCY = 1000;
     private XProtTestView mainFrame;
     private Task task;
     private int computedModels;
     private int numModels;
     private PrintWriter displayWriter;
+    /** Timer for calculate the elapsed time **/
+    private Calendar startTime;
+    /** Timer for display the elapsed time **/
+    Timer timer;
+    private HashMap<String, Long> partialTimestamps;
+    private ArrayList<String> runningModels;
     // var used to discard concurrent messages during
     // proccess cancel
     private boolean running;
@@ -37,16 +52,31 @@ public class RunningFrame extends javax.swing.JFrame
         initComponents();
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
+        this.startTime = Calendar.getInstance();
         this.mainFrame = mainFrame;
         this.numModels = numModels;
         this.displayWriter = new PrintWriter(new TextAreaAppender(computedTextArea));
         this.running = true;
+        this.partialTimestamps = new HashMap<String, Long>();
+        this.runningModels = new ArrayList<String>();
 
         lblNumModels.setText(String.valueOf(numModels));
         lblExecutedModels.setText(String.valueOf(computedModels));
         runningProgress.setMaximum(numModels);
         runningProgress.setMinimum(0);
         runningProgress.setValue(computedModels);
+
+        timer = new Timer(TIMER_UPDATE_FREQUENCY, new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                lblElapsedTime.setText(Utilities.calculateRuntime(
+                        startTime.getTimeInMillis(),
+                        Calendar.getInstance().getTimeInMillis()));
+                updateHeader();
+            }
+        });
+
+        timer.start();
     }
 
     public void setTask(Task task) {
@@ -69,9 +99,10 @@ public class RunningFrame extends javax.swing.JFrame
         lblSeparator = new javax.swing.JLabel();
         computedScrollArea = new javax.swing.JScrollPane();
         computedTextArea = new javax.swing.JTextArea();
+        lblElapsedTime = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(es.uvigo.darwin.xprottest.XProtTestApp.class).getContext().getResourceMap(RunningFrame.class);
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance().getContext().getResourceMap(RunningFrame.class);
         setTitle(resourceMap.getString("Form.title")); // NOI18N
         setName("Form"); // NOI18N
 
@@ -80,7 +111,7 @@ public class RunningFrame extends javax.swing.JFrame
 
         runningProgress.setName("runningProgress"); // NOI18N
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(es.uvigo.darwin.xprottest.XProtTestApp.class).getContext().getActionMap(RunningFrame.class, this);
+        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance().getContext().getActionMap(RunningFrame.class, this);
         cancelButton.setAction(actionMap.get("cancelExecution")); // NOI18N
         cancelButton.setText(resourceMap.getString("cancelButton.text")); // NOI18N
         cancelButton.setName("cancelButton"); // NOI18N
@@ -105,6 +136,9 @@ public class RunningFrame extends javax.swing.JFrame
         computedTextArea.setName("computedTextArea"); // NOI18N
         computedScrollArea.setViewportView(computedTextArea);
 
+        lblElapsedTime.setText(resourceMap.getString("lblElapsedTime.text")); // NOI18N
+        lblElapsedTime.setName("lblElapsedTime"); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -112,12 +146,14 @@ public class RunningFrame extends javax.swing.JFrame
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(computedScrollArea, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 259, Short.MAX_VALUE)
-                    .addComponent(runningProgress, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 259, Short.MAX_VALUE)
+                    .addComponent(computedScrollArea, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 329, Short.MAX_VALUE)
+                    .addComponent(runningProgress, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 329, Short.MAX_VALUE)
                     .addComponent(lblRunning, javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addComponent(cancelButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 125, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(lblElapsedTime)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 135, Short.MAX_VALUE)
                         .addComponent(lblExecutedModels)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lblSeparator)
@@ -137,7 +173,8 @@ public class RunningFrame extends javax.swing.JFrame
                     .addComponent(cancelButton)
                     .addComponent(lblNumModels)
                     .addComponent(lblSeparator)
-                    .addComponent(lblExecutedModels))
+                    .addComponent(lblExecutedModels)
+                    .addComponent(lblElapsedTime))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(computedScrollArea, javax.swing.GroupLayout.DEFAULT_SIZE, 315, Short.MAX_VALUE)
                 .addContainerGap())
@@ -145,6 +182,7 @@ public class RunningFrame extends javax.swing.JFrame
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
     @Action
     public void cancelExecution() {
         ExternalExecutionManager.getInstance().killProcesses();
@@ -163,36 +201,58 @@ public class RunningFrame extends javax.swing.JFrame
     private javax.swing.JButton cancelButton;
     private javax.swing.JScrollPane computedScrollArea;
     private javax.swing.JTextArea computedTextArea;
+    private javax.swing.JLabel lblElapsedTime;
     private javax.swing.JLabel lblExecutedModels;
     private javax.swing.JLabel lblNumModels;
     private javax.swing.JLabel lblRunning;
     private javax.swing.JLabel lblSeparator;
     private javax.swing.JProgressBar runningProgress;
     // End of variables declaration//GEN-END:variables
+
+    public void updateHeader() {
+        StringBuffer models = new StringBuffer();
+        Iterator it = runningModels.iterator();
+        while (it.hasNext()) {
+            models.append(it.next());
+            if (it.hasNext()) {
+                models.append(", ");
+            }
+        }
+        lblRunning.setText("Computing: " + models);
+    }
+
     public void update(ObservableModelUpdater o, Model model, ApplicationOptions options) {
         if (running) {
             if (options == null) {
-                displayWriter.println("Computing " + model.getModelName() + "...");
+//                displayWriter.println("Computing " + model.getModelName() + "...");
+                runningModels.add(model.getModelName());
+                partialTimestamps.put(model.getModelName(), Calendar.getInstance().getTimeInMillis());
             } else {
                 computedModels++;
                 runningProgress.setValue(computedModels);
                 lblExecutedModels.setText(String.valueOf(computedModels));
+                runningModels.remove(model.getModelName());
                 if (model.isComputed()) {
+                    StringBuffer partialTime = new StringBuffer("");
                     displayWriter.println("Computed " + model.getModelName() + "(" + model.getLk() + ")");
+                    long currentTimestamp = Calendar.getInstance().getTimeInMillis();
+                    long partialTimestamp = partialTimestamps.get(model.getModelName());
+                    displayWriter.println("    " + Utilities.calculateRuntime(partialTimestamp, currentTimestamp) +
+                            "     Elapsed time: " + Utilities.calculateRuntime(startTime.getTimeInMillis(), currentTimestamp));
                 } else {
 //                    if (options != null) {
-                        // Follow error behavior
-                        if (mainFrame.getErrorBehavior() == XProtTestApp.ERROR_BEHAVIOR_CONTINUE) {
-                            displayWriter.println("There were errors computing " + model.getModelName());
-                        } else if (mainFrame.getErrorBehavior() == XProtTestApp.ERROR_BEHAVIOR_STOP) {
-                            running = false;
-                            mainFrame.computationInterrupted();
-                            cancelExecution();
-                        } else {
-                            running = false;
-                            cancelExecution();
-                            throw new RuntimeException("Unsupported error behavior : " + mainFrame.getErrorBehavior());
-                        }
+                    // Follow error behavior
+                    if (mainFrame.getErrorBehavior() == XProtTestApp.ERROR_BEHAVIOR_CONTINUE) {
+                        displayWriter.println("There were errors computing " + model.getModelName());
+                    } else if (mainFrame.getErrorBehavior() == XProtTestApp.ERROR_BEHAVIOR_STOP) {
+                        running = false;
+                        mainFrame.computationInterrupted();
+                        cancelExecution();
+                    } else {
+                        running = false;
+                        cancelExecution();
+                        throw new RuntimeException("Unsupported error behavior : " + mainFrame.getErrorBehavior());
+                    }
 //                    }
                 }
             }

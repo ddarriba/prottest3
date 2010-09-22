@@ -3,19 +3,20 @@
  *
  * Created on Oct 2, 2009, 11:31:32 PM
  */
-
 package es.uvigo.darwin.xprottest.results;
 
 import static es.uvigo.darwin.prottest.global.ApplicationGlobals.*;
 
 import es.uvigo.darwin.prottest.model.Model;
 import es.uvigo.darwin.prottest.facade.util.SelectionChunk;
+import es.uvigo.darwin.prottest.selection.InformationCriterion;
 import es.uvigo.darwin.prottest.selection.model.SelectionModel;
 import es.uvigo.darwin.prottest.util.ProtTestAlignment;
 import es.uvigo.darwin.prottest.util.printer.ProtTestFormattedOutput;
+import es.uvigo.darwin.prottest.util.printer.ProtTestPrinter;
 import java.util.Collection;
-import java.util.Hashtable;
 import javax.swing.JTable;
+import org.jdesktop.application.Action;
 import pal.alignment.Alignment;
 import javax.swing.RowSorter;
 import javax.swing.event.ListSelectionEvent;
@@ -23,6 +24,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import es.uvigo.darwin.xprottest.XProtTestView;
+import java.util.HashMap;
 
 /**
  * The view of the model selection results. It includes a selection
@@ -32,49 +34,54 @@ import es.uvigo.darwin.xprottest.XProtTestView;
  */
 public class ResultsView extends javax.swing.JFrame {
 
+    private static final int AIC_TAB = 0;
+    private static final int BIC_TAB = 1;
+    private static final int AICC_TAB = 2;
+    private static final int DT_TAB = 3;
     private static final int numDecimals = 5;
     private int rows;
-    
     javax.swing.table.DefaultTableModel aicTableModel,
             bicTableModel,
             aiccTableModel,
             dtTableModel;
-
     private Model[] models;
     private Alignment alignment;
     private XProtTestView mainFrame;
-    
-    private Hashtable<Integer, SelectionChunk> aicResults, bicResults, aiccResults, dtResults;
-    
+    private int sampleSizeMode = DEFAULT_SAMPLE_SIZE_MODE;
+    private double sampleSize = 0.0;
+    private HashMap<Integer, SelectionChunk> aicResults, bicResults, aiccResults, dtResults;
+
     private void loadCache(double confidenceInterval) {
         // criterion cache
-        aicResults = new Hashtable<Integer, SelectionChunk>(SIZE_MODE_NAMES.length - 1);
-        bicResults = new Hashtable<Integer, SelectionChunk>(SIZE_MODE_NAMES.length - 1);
-        aiccResults = new Hashtable<Integer, SelectionChunk>(SIZE_MODE_NAMES.length - 1);
-        dtResults = new Hashtable<Integer, SelectionChunk>(SIZE_MODE_NAMES.length - 1);
-        for (int sizeMode : SIZE_MODE_VALUES)
+        aicResults = new HashMap<Integer, SelectionChunk>(SIZE_MODE_NAMES.length - 1);
+        bicResults = new HashMap<Integer, SelectionChunk>(SIZE_MODE_NAMES.length - 1);
+        aiccResults = new HashMap<Integer, SelectionChunk>(SIZE_MODE_NAMES.length - 1);
+        dtResults = new HashMap<Integer, SelectionChunk>(SIZE_MODE_NAMES.length - 1);
+        for (int sizeMode : SIZE_MODE_VALUES) {
             if (sizeMode != SIZEMODE_USERSIZE) {
-                aicResults.put(sizeMode, mainFrame.getFacade().computeInformationCriterion(alignment, models, 
-                    SelectionChunk.AIC, sizeMode, 0.0, confidenceInterval));
-                bicResults.put(sizeMode, mainFrame.getFacade().computeInformationCriterion(alignment, models, 
-                    SelectionChunk.BIC, sizeMode, 0.0, confidenceInterval));
-                aiccResults.put(sizeMode, mainFrame.getFacade().computeInformationCriterion(alignment, models, 
-                    SelectionChunk.AICC, sizeMode, 0.0, confidenceInterval));
-                dtResults.put(sizeMode, mainFrame.getFacade().computeInformationCriterion(alignment, models, 
-                    SelectionChunk.DT, sizeMode, 0.0, confidenceInterval));
+                aicResults.put(sizeMode, mainFrame.getFacade().computeInformationCriterion(alignment, models,
+                        SelectionChunk.AIC, sizeMode, 0.0, confidenceInterval));
+                bicResults.put(sizeMode, mainFrame.getFacade().computeInformationCriterion(alignment, models,
+                        SelectionChunk.BIC, sizeMode, 0.0, confidenceInterval));
+                aiccResults.put(sizeMode, mainFrame.getFacade().computeInformationCriterion(alignment, models,
+                        SelectionChunk.AICC, sizeMode, 0.0, confidenceInterval));
+                dtResults.put(sizeMode, mainFrame.getFacade().computeInformationCriterion(alignment, models,
+                        SelectionChunk.DT, sizeMode, 0.0, confidenceInterval));
             }
+        }
     }
+
     /** Creates new form ResultsView */
     public ResultsView(XProtTestView mainFrame, Alignment alignment, Model[] models, boolean correctDone) {
         this.mainFrame = mainFrame;
         this.alignment = alignment;
         this.rows = models.length;
         this.models = models;
-        
+
         initComponents();
-        loadCache(Double.parseDouble(sliderConfidenceInterval.getValue()+"")/100);
+        loadCache(Double.parseDouble(sliderConfidenceInterval.getValue() + "") / 100);
         fillInResults(DEFAULT_SAMPLE_SIZE_MODE, 0.0);
-        
+
         lblNotComplete.setVisible(!correctDone);
     }
 
@@ -195,9 +202,10 @@ public class ResultsView extends javax.swing.JFrame {
         lblSelectedModel = new javax.swing.JLabel();
         lblNotComplete = new javax.swing.JLabel();
         lblConfidence = new javax.swing.JLabel();
+        btnExport = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(es.uvigo.darwin.xprottest.XProtTestApp.class).getContext().getResourceMap(ResultsView.class);
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance().getContext().getResourceMap(ResultsView.class);
         setTitle(resourceMap.getString("Form.title")); // NOI18N
         setName("Form"); // NOI18N
         setResizable(false);
@@ -319,9 +327,9 @@ public class ResultsView extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(aicDataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(displayAICoInv)
-                            .addComponent(displayAICoInvAlpha, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
-                            .addComponent(displayAICoAlphaInv, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
-                            .addComponent(displayAICoAlpha, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE))
+                            .addComponent(displayAICoInvAlpha, javax.swing.GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE)
+                            .addComponent(displayAICoAlphaInv, javax.swing.GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE)
+                            .addComponent(displayAICoAlpha, javax.swing.GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE))
                         .addGap(40, 40, 40))
                     .addGroup(aicDataPanelLayout.createSequentialGroup()
                         .addContainerGap()
@@ -340,7 +348,7 @@ public class ResultsView extends javax.swing.JFrame {
                             .addComponent(displayAICImpAlpha, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(displayAICImpAlphaInv, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(displayAICImpF, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addComponent(lblAICPI, javax.swing.GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE))
+                    .addComponent(lblAICPI, javax.swing.GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE))
                 .addContainerGap())
         );
         aicDataPanelLayout.setVerticalGroup(
@@ -394,7 +402,7 @@ public class ResultsView extends javax.swing.JFrame {
             .addGroup(aicPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(aicPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(aicScrollPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 641, Short.MAX_VALUE)
+                    .addComponent(aicScrollPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 635, Short.MAX_VALUE)
                     .addComponent(aicDataPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -402,7 +410,7 @@ public class ResultsView extends javax.swing.JFrame {
             aicPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, aicPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(aicScrollPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 338, Short.MAX_VALUE)
+                .addComponent(aicScrollPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(aicDataPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -523,9 +531,9 @@ public class ResultsView extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(bicDataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(displayBICoInv)
-                            .addComponent(displayBICoInvAlpha, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
-                            .addComponent(displayBICoAlphaInv, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
-                            .addComponent(displayBICoAlpha, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE))
+                            .addComponent(displayBICoInvAlpha, javax.swing.GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE)
+                            .addComponent(displayBICoAlphaInv, javax.swing.GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE)
+                            .addComponent(displayBICoAlpha, javax.swing.GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE))
                         .addGap(40, 40, 40))
                     .addGroup(bicDataPanelLayout.createSequentialGroup()
                         .addContainerGap()
@@ -546,7 +554,7 @@ public class ResultsView extends javax.swing.JFrame {
                             .addComponent(displayBICImpF, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(bicDataPanelLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblBICPI, javax.swing.GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE)))
+                        .addComponent(lblBICPI, javax.swing.GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         bicDataPanelLayout.setVerticalGroup(
@@ -600,7 +608,7 @@ public class ResultsView extends javax.swing.JFrame {
             .addGroup(bicPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(bicPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(bicScrollPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 641, Short.MAX_VALUE)
+                    .addComponent(bicScrollPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 635, Short.MAX_VALUE)
                     .addComponent(bicDataPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -608,7 +616,7 @@ public class ResultsView extends javax.swing.JFrame {
             bicPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, bicPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(bicScrollPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 338, Short.MAX_VALUE)
+                .addComponent(bicScrollPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(bicDataPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -727,9 +735,9 @@ public class ResultsView extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(aiccDataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(displayAICcoInv)
-                            .addComponent(displayAICcoInvAlpha, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
-                            .addComponent(displayAICcoAlphaInv, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
-                            .addComponent(displayAICcoAlpha, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE))
+                            .addComponent(displayAICcoInvAlpha, javax.swing.GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE)
+                            .addComponent(displayAICcoAlphaInv, javax.swing.GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE)
+                            .addComponent(displayAICcoAlpha, javax.swing.GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE))
                         .addGap(40, 40, 40))
                     .addGroup(aiccDataPanelLayout.createSequentialGroup()
                         .addContainerGap()
@@ -748,7 +756,7 @@ public class ResultsView extends javax.swing.JFrame {
                             .addComponent(displayAICcImpAlpha, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(displayAICcImpAlphaInv, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(displayAICcImpF, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addComponent(lblAICcPI, javax.swing.GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE))
+                    .addComponent(lblAICcPI, javax.swing.GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE))
                 .addContainerGap())
         );
         aiccDataPanelLayout.setVerticalGroup(
@@ -802,7 +810,7 @@ public class ResultsView extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, aiccPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(aiccPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(aiccScrollPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 641, Short.MAX_VALUE)
+                    .addComponent(aiccScrollPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 635, Short.MAX_VALUE)
                     .addComponent(aiccDataPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -810,7 +818,7 @@ public class ResultsView extends javax.swing.JFrame {
             aiccPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, aiccPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(aiccScrollPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 338, Short.MAX_VALUE)
+                .addComponent(aiccScrollPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(aiccDataPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -929,9 +937,9 @@ public class ResultsView extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(dtDataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(displayDToInv)
-                            .addComponent(displayDToInvAlpha, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
-                            .addComponent(displayDToAlphaInv, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
-                            .addComponent(displayDToAlpha, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE))
+                            .addComponent(displayDToInvAlpha, javax.swing.GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE)
+                            .addComponent(displayDToAlphaInv, javax.swing.GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE)
+                            .addComponent(displayDToAlpha, javax.swing.GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE))
                         .addGap(40, 40, 40))
                     .addGroup(dtDataPanelLayout.createSequentialGroup()
                         .addContainerGap()
@@ -950,7 +958,7 @@ public class ResultsView extends javax.swing.JFrame {
                             .addComponent(displayDTImpAlpha, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(displayDTImpAlphaInv, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(displayDTImpF, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addComponent(lblDTPI, javax.swing.GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE))
+                    .addComponent(lblDTPI, javax.swing.GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE))
                 .addContainerGap())
         );
         dtDataPanelLayout.setVerticalGroup(
@@ -1004,7 +1012,7 @@ public class ResultsView extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dtPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(dtPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(dtScrollPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 641, Short.MAX_VALUE)
+                    .addComponent(dtScrollPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 635, Short.MAX_VALUE)
                     .addComponent(dtDataPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -1012,7 +1020,7 @@ public class ResultsView extends javax.swing.JFrame {
             dtPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dtPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(dtScrollPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 338, Short.MAX_VALUE)
+                .addComponent(dtScrollPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(dtDataPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -1043,7 +1051,7 @@ public class ResultsView extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(es.uvigo.darwin.xprottest.XProtTestApp.class).getContext().getActionMap(ResultsView.class, this);
+        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance().getContext().getActionMap(ResultsView.class, this);
         sizeModeAlignment.setAction(actionMap.get("setSampleSize")); // NOI18N
         sampleSizeModeButtonGroup.add(sizeModeAlignment);
         sizeModeAlignment.setSelected(true);
@@ -1154,6 +1162,10 @@ public class ResultsView extends javax.swing.JFrame {
         lblConfidence.setText(resourceMap.getString("lblConfidence.text")); // NOI18N
         lblConfidence.setName("lblConfidence"); // NOI18N
 
+        btnExport.setAction(actionMap.get("exportData")); // NOI18N
+        btnExport.setText("Export to main console"); // NOI18N
+        btnExport.setName("btnExport"); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -1161,7 +1173,7 @@ public class ResultsView extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(resultsTabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 670, Short.MAX_VALUE)
+                    .addComponent(resultsTabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 671, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -1170,9 +1182,7 @@ public class ResultsView extends javax.swing.JFrame {
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(sizeModeAlignment)
                                         .addGap(15, 15, 15))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(sizeModeNL, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))))
+                                    .addComponent(sizeModeNL, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                             .addComponent(lblConfInt))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -1186,14 +1196,13 @@ public class ResultsView extends javax.swing.JFrame {
                                 .addComponent(sizeModeShannon, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(sizeModeShannonNL, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(lblSampleSize, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 557, Short.MAX_VALUE)
+                            .addComponent(lblSampleSize, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 533, Short.MAX_VALUE)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                 .addComponent(lblConfidence, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(sliderConfidenceInterval, javax.swing.GroupLayout.DEFAULT_SIZE, 513, Short.MAX_VALUE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                                .addComponent(sliderConfidenceInterval, javax.swing.GroupLayout.DEFAULT_SIZE, 489, Short.MAX_VALUE))))
                     .addComponent(lblSampleSizeMode)
-                    .addComponent(lblNotComplete, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 670, Short.MAX_VALUE)
+                    .addComponent(lblNotComplete, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 671, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblComandLineLabel)
@@ -1201,9 +1210,10 @@ public class ResultsView extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblSelectedModel, javax.swing.GroupLayout.DEFAULT_SIZE, 539, Short.MAX_VALUE)
-                                .addGap(29, 29, 29))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 568, Short.MAX_VALUE))))
+                                .addComponent(lblSelectedModel, javax.swing.GroupLayout.DEFAULT_SIZE, 386, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnExport))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 557, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -1233,11 +1243,12 @@ public class ResultsView extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblNotComplete)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(resultsTabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 508, Short.MAX_VALUE)
+                .addComponent(resultsTabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 496, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblSelectedModelLabel)
-                    .addComponent(lblSelectedModel))
+                    .addComponent(lblSelectedModel)
+                    .addComponent(btnExport))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(11, 11, 11)
@@ -1250,38 +1261,31 @@ public class ResultsView extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
     private String oldSampleSizeModeStr;
     private int oldSampleSizeMode = DEFAULT_SAMPLE_SIZE_MODE;
     private void setSampleSize(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setSampleSize
 
-        int sampleSizeMode = DEFAULT_SAMPLE_SIZE_MODE;
-        double sampleSize = 0.0;
+        sampleSizeMode = DEFAULT_SAMPLE_SIZE_MODE;
+        sampleSize = 0.0;
         String btnName = evt.getActionCommand();
         if (!btnName.equals(oldSampleSizeModeStr)) {
             if (btnName.equals(
-                    java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/resources/ResultsView")
-                    .getString("btn-sizemode-alignment")))
+                    java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/resources/ResultsView").getString("btn-sizemode-alignment"))) {
                 sampleSizeMode = SIZEMODE_ALIGNMENT;
-            else if (btnName.equals(
-                    java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/resources/ResultsView")
-                    .getString("btn-sizemode-alignment-var")))
+            } else if (btnName.equals(
+                    java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/resources/ResultsView").getString("btn-sizemode-alignment-var"))) {
                 sampleSizeMode = SIZEMODE_ALIGNMENT_VAR;
-            else if (btnName.equals(
-                    java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/resources/ResultsView")
-                    .getString("btn-sizemode-shannon")))
+            } else if (btnName.equals(
+                    java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/resources/ResultsView").getString("btn-sizemode-shannon"))) {
                 sampleSizeMode = SIZEMODE_SHANNON;
-            else if (btnName.equals(
-                    java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/resources/ResultsView")
-                    .getString("btn-sizemode-shannon-nxl")))
+            } else if (btnName.equals(
+                    java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/resources/ResultsView").getString("btn-sizemode-shannon-nxl"))) {
                 sampleSizeMode = SIZEMODE_SHANNON_NxL;
-            else if (btnName.equals(
-                    java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/resources/ResultsView")
-                    .getString("btn-sizemode-nxl")))
+            } else if (btnName.equals(
+                    java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/resources/ResultsView").getString("btn-sizemode-nxl"))) {
                 sampleSizeMode = SIZEMODE_NxL;
-            else if (btnName.equals(
-                    java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/resources/ResultsView")
-                    .getString("btn-sizemode-custom"))) {
+            } else if (btnName.equals(
+                    java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/resources/ResultsView").getString("btn-sizemode-custom"))) {
                 sampleSizeMode = SIZEMODE_USERSIZE;
                 try {
                     sampleSize = Double.parseDouble(txtSampleSize.getText());
@@ -1292,13 +1296,12 @@ public class ResultsView extends javax.swing.JFrame {
 
             txtSampleSize.setEnabled(false);
             fillInResults(sampleSizeMode, sampleSize);
-            
+
             oldSampleSizeModeStr = btnName;
             oldSampleSizeMode = sampleSizeMode;
             oldCustomSampleSize = 0.0;
         }
 }//GEN-LAST:event_setSampleSize
-
     private boolean waitingForSampleSize = false;
     private void setCustomSampleSize(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setCustomSampleSize
         if (sizeModeCustom.isSelected()
@@ -1309,8 +1312,8 @@ public class ResultsView extends javax.swing.JFrame {
             waitingForSampleSize = true;
         }
     }//GEN-LAST:event_setCustomSampleSize
-
     private double oldCustomSampleSize;
+
     private void computeCustomSampleSize() {
         int sampleSizeMode = SIZEMODE_USERSIZE;
         double sampleSize = 0.0;
@@ -1319,7 +1322,7 @@ public class ResultsView extends javax.swing.JFrame {
         } catch (NumberFormatException e) {
             sampleSize = 0.0;
         }
-        
+
         if (waitingForSampleSize || sampleSize != oldCustomSampleSize) {
             fillInResults(sampleSizeMode, sampleSize);
             oldCustomSampleSize = sampleSize;
@@ -1335,21 +1338,21 @@ public class ResultsView extends javax.swing.JFrame {
     }//GEN-LAST:event_txtSampleSizeMousePressed
 
     private void txtSampleSizeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSampleSizeKeyPressed
-        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER)
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
             computeCustomSampleSize();
+        }
     }//GEN-LAST:event_txtSampleSizeKeyPressed
 
     private void sliderConfidenceIntervalStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sliderConfidenceIntervalStateChanged
-        double confidenceInterval = Double.parseDouble(sliderConfidenceInterval.getValue()+"")/100;
+        double confidenceInterval = Double.parseDouble(sliderConfidenceInterval.getValue() + "") / 100;
         lblConfidence.setText(String.valueOf(confidenceInterval));
 }//GEN-LAST:event_sliderConfidenceIntervalStateChanged
 
     private void sliderConfidenceIntervalMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sliderConfidenceIntervalMouseReleased
-        double confidenceInterval = Double.parseDouble(sliderConfidenceInterval.getValue()+"")/100;
+        double confidenceInterval = Double.parseDouble(sliderConfidenceInterval.getValue() + "") / 100;
         loadCache(confidenceInterval);
         fillInResults(oldSampleSizeMode, Double.parseDouble(txtSampleSize.getText()));
     }//GEN-LAST:event_sliderConfidenceIntervalMouseReleased
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel aicDataPanel;
     private javax.swing.JPanel aicPanel;
@@ -1363,6 +1366,7 @@ public class ResultsView extends javax.swing.JFrame {
     private javax.swing.JPanel bicPanel;
     private javax.swing.JScrollPane bicScrollPanel;
     private javax.swing.JTable bicTable;
+    private javax.swing.JButton btnExport;
     private javax.swing.JLabel displayAICImpAlpha;
     private javax.swing.JLabel displayAICImpAlphaInv;
     private javax.swing.JLabel displayAICImpF;
@@ -1460,85 +1464,80 @@ public class ResultsView extends javax.swing.JFrame {
     private javax.swing.JSlider sliderConfidenceInterval;
     private javax.swing.JTextField txtSampleSize;
     // End of variables declaration//GEN-END:variables
-    
+
     private void fillInResults(int sampleSizeMode, double sampleSize) {
-        
+
         SelectionChunk chunkAIC, chunkBIC, chunkAICC, chunkDT;
-        double confidenceInterval = Double.parseDouble(sliderConfidenceInterval.getValue()+"")/100;
+        double confidenceInterval = Double.parseDouble(sliderConfidenceInterval.getValue() + "") / 100;
         if (sampleSizeMode != SIZEMODE_USERSIZE) {
             chunkAIC = aicResults.get(sampleSizeMode);
             chunkBIC = bicResults.get(sampleSizeMode);
             chunkAICC = aiccResults.get(sampleSizeMode);
             chunkDT = dtResults.get(sampleSizeMode);
         } else {
-            chunkAIC = mainFrame.getFacade().computeInformationCriterion(alignment, models, 
+            chunkAIC = mainFrame.getFacade().computeInformationCriterion(alignment, models,
                     SelectionChunk.AIC, sampleSizeMode, sampleSize, confidenceInterval);
-            chunkBIC = mainFrame.getFacade().computeInformationCriterion(alignment, models, 
+            chunkBIC = mainFrame.getFacade().computeInformationCriterion(alignment, models,
                     SelectionChunk.BIC, sampleSizeMode, sampleSize, confidenceInterval);
-            chunkAICC = mainFrame.getFacade().computeInformationCriterion(alignment, models, 
+            chunkAICC = mainFrame.getFacade().computeInformationCriterion(alignment, models,
                     SelectionChunk.AICC, sampleSizeMode, sampleSize, confidenceInterval);
-            chunkDT = mainFrame.getFacade().computeInformationCriterion(alignment, models, 
+            chunkDT = mainFrame.getFacade().computeInformationCriterion(alignment, models,
                     SelectionChunk.DT, sampleSizeMode, sampleSize, confidenceInterval);
         }
 
-        mainFrame.getFacade().printModelsSorted(chunkAIC.getInformationCriterion());
-        mainFrame.getFacade().printModelsSorted(chunkBIC.getInformationCriterion());
-        mainFrame.getFacade().printModelsSorted(chunkAICC.getInformationCriterion());
-        mainFrame.getFacade().printModelsSorted(chunkDT.getInformationCriterion());
-        
         Collection<SelectionModel> aicIt = chunkAIC.getConfidenceModels();
         Collection<SelectionModel> bicIt = chunkBIC.getConfidenceModels();
         Collection<SelectionModel> aiccIt = chunkAICC.getConfidenceModels();
         Collection<SelectionModel> dtIt = chunkDT.getConfidenceModels();
-        
+
         aicTableModel.setRowCount(aicIt.size());
         fillTable(aicIt, aicTable);
-            
-        displayAICoAlpha.setText(ProtTestFormattedOutput.getDecimalString(chunkAIC.getOverallAlpha(),numDecimals));
-        displayAICoAlphaInv.setText(ProtTestFormattedOutput.getDecimalString(chunkAIC.getOverallAlphaInv(),numDecimals));
-        displayAICoInvAlpha.setText(ProtTestFormattedOutput.getDecimalString(chunkAIC.getOverallInvAlpha(),numDecimals));
-        displayAICoInv.setText(ProtTestFormattedOutput.getDecimalString(chunkAIC.getOverallInv(),numDecimals));
-        displayAICImpAlpha.setText(ProtTestFormattedOutput.getDecimalString(chunkAIC.getAlphaImportance(),numDecimals));
-        displayAICImpInv.setText(ProtTestFormattedOutput.getDecimalString(chunkAIC.getInvImportance(),numDecimals));
-        displayAICImpAlphaInv.setText(ProtTestFormattedOutput.getDecimalString(chunkAIC.getAlphaInvImportance(),numDecimals));
-        displayAICImpF.setText(ProtTestFormattedOutput.getDecimalString(chunkAIC.getFImportance(),numDecimals));
-        
+
+        displayAICoAlpha.setText(ProtTestFormattedOutput.getDecimalString(chunkAIC.getOverallAlpha(), numDecimals));
+        displayAICoAlphaInv.setText(ProtTestFormattedOutput.getDecimalString(chunkAIC.getOverallAlphaInv(), numDecimals));
+        displayAICoInvAlpha.setText(ProtTestFormattedOutput.getDecimalString(chunkAIC.getOverallInvAlpha(), numDecimals));
+        displayAICoInv.setText(ProtTestFormattedOutput.getDecimalString(chunkAIC.getOverallInv(), numDecimals));
+        displayAICImpAlpha.setText(ProtTestFormattedOutput.getDecimalString(chunkAIC.getAlphaImportance(), numDecimals));
+        displayAICImpInv.setText(ProtTestFormattedOutput.getDecimalString(chunkAIC.getInvImportance(), numDecimals));
+        displayAICImpAlphaInv.setText(ProtTestFormattedOutput.getDecimalString(chunkAIC.getAlphaInvImportance(), numDecimals));
+        displayAICImpF.setText(ProtTestFormattedOutput.getDecimalString(chunkAIC.getFImportance(), numDecimals));
+
         bicTableModel.setRowCount(bicIt.size());
         fillTable(bicIt, bicTable);
 
-        displayBICoAlpha.setText(ProtTestFormattedOutput.getDecimalString(chunkBIC.getOverallAlpha(),numDecimals));
-        displayBICoAlphaInv.setText(ProtTestFormattedOutput.getDecimalString(chunkBIC.getOverallAlphaInv(),numDecimals));
-        displayBICoInvAlpha.setText(ProtTestFormattedOutput.getDecimalString(chunkBIC.getOverallInvAlpha(),numDecimals));
-        displayBICoInv.setText(ProtTestFormattedOutput.getDecimalString(chunkBIC.getOverallInv(),numDecimals));
-        displayBICImpAlpha.setText(ProtTestFormattedOutput.getDecimalString(chunkBIC.getAlphaImportance(),numDecimals));
-        displayBICImpInv.setText(ProtTestFormattedOutput.getDecimalString(chunkBIC.getInvImportance(),numDecimals));
-        displayBICImpAlphaInv.setText(ProtTestFormattedOutput.getDecimalString(chunkBIC.getAlphaInvImportance(),numDecimals));
-        displayBICImpF.setText(ProtTestFormattedOutput.getDecimalString(chunkBIC.getFImportance(),numDecimals));
-        
+        displayBICoAlpha.setText(ProtTestFormattedOutput.getDecimalString(chunkBIC.getOverallAlpha(), numDecimals));
+        displayBICoAlphaInv.setText(ProtTestFormattedOutput.getDecimalString(chunkBIC.getOverallAlphaInv(), numDecimals));
+        displayBICoInvAlpha.setText(ProtTestFormattedOutput.getDecimalString(chunkBIC.getOverallInvAlpha(), numDecimals));
+        displayBICoInv.setText(ProtTestFormattedOutput.getDecimalString(chunkBIC.getOverallInv(), numDecimals));
+        displayBICImpAlpha.setText(ProtTestFormattedOutput.getDecimalString(chunkBIC.getAlphaImportance(), numDecimals));
+        displayBICImpInv.setText(ProtTestFormattedOutput.getDecimalString(chunkBIC.getInvImportance(), numDecimals));
+        displayBICImpAlphaInv.setText(ProtTestFormattedOutput.getDecimalString(chunkBIC.getAlphaInvImportance(), numDecimals));
+        displayBICImpF.setText(ProtTestFormattedOutput.getDecimalString(chunkBIC.getFImportance(), numDecimals));
+
         aiccTableModel.setRowCount(aiccIt.size());
         fillTable(aiccIt, aiccTable);
-        
-        displayAICcoAlpha.setText(ProtTestFormattedOutput.getDecimalString(chunkAICC.getOverallAlpha(),numDecimals));
-        displayAICcoAlphaInv.setText(ProtTestFormattedOutput.getDecimalString(chunkAICC.getOverallAlphaInv(),numDecimals));
-        displayAICcoInvAlpha.setText(ProtTestFormattedOutput.getDecimalString(chunkAICC.getOverallInvAlpha(),numDecimals));
-        displayAICcoInv.setText(ProtTestFormattedOutput.getDecimalString(chunkAICC.getOverallInv(),numDecimals));
-        displayAICcImpAlpha.setText(ProtTestFormattedOutput.getDecimalString(chunkAICC.getAlphaImportance(),numDecimals));
-        displayAICcImpInv.setText(ProtTestFormattedOutput.getDecimalString(chunkAICC.getInvImportance(),numDecimals));
-        displayAICcImpAlphaInv.setText(ProtTestFormattedOutput.getDecimalString(chunkAICC.getAlphaInvImportance(),numDecimals));
-        displayAICcImpF.setText(ProtTestFormattedOutput.getDecimalString(chunkAICC.getFImportance(),numDecimals));
+
+        displayAICcoAlpha.setText(ProtTestFormattedOutput.getDecimalString(chunkAICC.getOverallAlpha(), numDecimals));
+        displayAICcoAlphaInv.setText(ProtTestFormattedOutput.getDecimalString(chunkAICC.getOverallAlphaInv(), numDecimals));
+        displayAICcoInvAlpha.setText(ProtTestFormattedOutput.getDecimalString(chunkAICC.getOverallInvAlpha(), numDecimals));
+        displayAICcoInv.setText(ProtTestFormattedOutput.getDecimalString(chunkAICC.getOverallInv(), numDecimals));
+        displayAICcImpAlpha.setText(ProtTestFormattedOutput.getDecimalString(chunkAICC.getAlphaImportance(), numDecimals));
+        displayAICcImpInv.setText(ProtTestFormattedOutput.getDecimalString(chunkAICC.getInvImportance(), numDecimals));
+        displayAICcImpAlphaInv.setText(ProtTestFormattedOutput.getDecimalString(chunkAICC.getAlphaInvImportance(), numDecimals));
+        displayAICcImpF.setText(ProtTestFormattedOutput.getDecimalString(chunkAICC.getFImportance(), numDecimals));
 
         dtTableModel.setRowCount(dtIt.size());
         fillTable(dtIt, dtTable);
 
-        displayDToAlpha.setText(ProtTestFormattedOutput.getDecimalString(chunkDT.getOverallAlpha(),numDecimals));
-        displayDToAlphaInv.setText(ProtTestFormattedOutput.getDecimalString(chunkDT.getOverallAlphaInv(),numDecimals));
-        displayDToInvAlpha.setText(ProtTestFormattedOutput.getDecimalString(chunkDT.getOverallInvAlpha(),numDecimals));
-        displayDToInv.setText(ProtTestFormattedOutput.getDecimalString(chunkDT.getOverallInv(),numDecimals));
-        displayDTImpAlpha.setText(ProtTestFormattedOutput.getDecimalString(chunkDT.getAlphaImportance(),numDecimals));
-        displayDTImpInv.setText(ProtTestFormattedOutput.getDecimalString(chunkDT.getInvImportance(),numDecimals));
-        displayDTImpAlphaInv.setText(ProtTestFormattedOutput.getDecimalString(chunkDT.getAlphaInvImportance(),numDecimals));
-        displayDTImpF.setText(ProtTestFormattedOutput.getDecimalString(chunkDT.getFImportance(),numDecimals));
-        
+        displayDToAlpha.setText(ProtTestFormattedOutput.getDecimalString(chunkDT.getOverallAlpha(), numDecimals));
+        displayDToAlphaInv.setText(ProtTestFormattedOutput.getDecimalString(chunkDT.getOverallAlphaInv(), numDecimals));
+        displayDToInvAlpha.setText(ProtTestFormattedOutput.getDecimalString(chunkDT.getOverallInvAlpha(), numDecimals));
+        displayDToInv.setText(ProtTestFormattedOutput.getDecimalString(chunkDT.getOverallInv(), numDecimals));
+        displayDTImpAlpha.setText(ProtTestFormattedOutput.getDecimalString(chunkDT.getAlphaImportance(), numDecimals));
+        displayDTImpInv.setText(ProtTestFormattedOutput.getDecimalString(chunkDT.getInvImportance(), numDecimals));
+        displayDTImpAlphaInv.setText(ProtTestFormattedOutput.getDecimalString(chunkDT.getAlphaInvImportance(), numDecimals));
+        displayDTImpF.setText(ProtTestFormattedOutput.getDecimalString(chunkDT.getFImportance(), numDecimals));
+
         lblSampleSize.setText(String.valueOf(ProtTestAlignment.calculateSampleSize(alignment, sampleSizeMode, sampleSize)));
     }
 
@@ -1546,22 +1545,19 @@ public class ResultsView extends javax.swing.JFrame {
         int row = 0;
         for (SelectionModel model : iterator) {
             table.setValueAt(
-                model.getModel().getModelName(), row, 0);
+                    model.getModel().getModelName(), row, 0);
             table.setValueAt(
-                model.getModel().getLk(), row, 1);
+                    model.getModel().getLk(), row, 1);
             try {
                 table.setValueAt(
                         new Double(
-                            ProtTestFormattedOutput.getDecimalString(model.getValue(),numDecimals))
-                        , row, 2);
+                        ProtTestFormattedOutput.getDecimalString(model.getValue(), numDecimals)), row, 2);
                 table.setValueAt(
                         new Double(
-                            ProtTestFormattedOutput.getDecimalString(model.getDeltaValue(),numDecimals))
-                        , row, 3);
+                        ProtTestFormattedOutput.getDecimalString(model.getDeltaValue(), numDecimals)), row, 3);
                 table.setValueAt(
                         new Double(
-                            ProtTestFormattedOutput.getDecimalString(model.getWeightValue(),numDecimals)
-                        ), row, 4);
+                        ProtTestFormattedOutput.getDecimalString(model.getWeightValue(), numDecimals)), row, 4);
             } catch (NumberFormatException e) {
                 table.setValueAt(Double.NaN, row, 2);
                 table.setValueAt(Double.NaN, row, 3);
@@ -1570,49 +1566,51 @@ public class ResultsView extends javax.swing.JFrame {
             row++;
         }
     }
-    
+
     private void showCommandLine(String modelName) {
         for (Model model : models) {
             if (model.getModelName().equals(modelName)) {
                 lblSelectedModel.setText(modelName);
-                StringBuffer command = new StringBuffer();
-                for (int i = 1; i < model.getCommandLine().length; i++){
-                    command.append(model.getCommandLine()[i] + " ");
+                StringBuilder command = new StringBuilder();
+                for (int i = 1; i < model.getCommandLine().length; i++) {
+                    command.append(model.getCommandLine()[i]).append(" ");
                 }
                 lblCommandLine.setText(command.toString());
                 break;
             }
         }
     }
-    
+
     class SelectionListener implements ListSelectionListener {
+
         JTable table;
-    
+
         // It is necessary to keep the table since it is not possible
         // to determine the table from the event's source
         SelectionListener(JTable table) {
             this.table = table;
         }
+
         public void valueChanged(ListSelectionEvent e) {
             // If cell selection is enabled, both row and column change events are fired
             int first = 0, last = 0;
             if (e.getSource() == table.getSelectionModel()
-                  && table.getRowSelectionAllowed()) {
+                    && table.getRowSelectionAllowed()) {
                 // Column selection changed
                 first = e.getFirstIndex();
                 last = e.getLastIndex();
             } else if (e.getSource() == table.getColumnModel().getSelectionModel()
-                   && table.getColumnSelectionAllowed() ){
+                    && table.getColumnSelectionAllowed()) {
                 // Row selection changed
                 first = e.getFirstIndex();
                 last = e.getLastIndex();
             }
-    
+
             if (e.getValueIsAdjusting()) {
                 // The mouse button has not yet been released
             } else {
                 try {
-                    showCommandLine(table.getValueAt(table.getSelectedRow(), 0).toString()); 
+                    showCommandLine(table.getValueAt(table.getSelectedRow(), 0).toString());
                 } catch (IndexOutOfBoundsException ex) {
                     // Clear
                     lblCommandLine.setText("");
@@ -1622,4 +1620,50 @@ public class ResultsView extends javax.swing.JFrame {
         }
     }
 
+    @Action
+    public void exportData() {
+        InformationCriterion ic = null;
+        if (sampleSizeMode != SIZEMODE_USERSIZE) {
+            switch (resultsTabbedPane.getSelectedIndex()) {
+                case AIC_TAB:
+                    ic = aicResults.get(sampleSizeMode).getInformationCriterion();
+                    break;
+                case BIC_TAB:
+                    ic = bicResults.get(sampleSizeMode).getInformationCriterion();
+                    break;
+                case AICC_TAB:
+                    ic = aiccResults.get(sampleSizeMode).getInformationCriterion();
+                    break;
+                case DT_TAB:
+                    ic = dtResults.get(sampleSizeMode).getInformationCriterion();
+                    break;
+            }
+        } else {
+            double confidenceInterval = Double.parseDouble(sliderConfidenceInterval.getValue() + "") / 100;
+            switch (resultsTabbedPane.getSelectedIndex()) {
+                case AIC_TAB:
+                    ic = mainFrame.getFacade().computeInformationCriterion(alignment, models,
+                    SelectionChunk.AIC, sampleSizeMode, sampleSize, confidenceInterval).getInformationCriterion();
+                    break;
+                case BIC_TAB:
+                    ic = mainFrame.getFacade().computeInformationCriterion(alignment, models,
+                    SelectionChunk.BIC, sampleSizeMode, sampleSize, confidenceInterval).getInformationCriterion();
+                    break;
+                case AICC_TAB:
+                    ic = mainFrame.getFacade().computeInformationCriterion(alignment, models,
+                    SelectionChunk.AICC, sampleSizeMode, sampleSize, confidenceInterval).getInformationCriterion();
+                    break;
+                case DT_TAB:
+                    ic = mainFrame.getFacade().computeInformationCriterion(alignment, models,
+                    SelectionChunk.DT, sampleSizeMode, sampleSize, confidenceInterval).getInformationCriterion();
+                    break;
+            }
+        }
+        if (ic != null) {
+            mainFrame.enableHandler();
+            ProtTestPrinter.printSelectionHeader(CRITERION_NAMES[resultsTabbedPane.getSelectedIndex()]);
+            mainFrame.getFacade().printModelsSorted(ic);
+            mainFrame.disableHandler();
+        }
+    }
 }

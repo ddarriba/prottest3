@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.1" encoding="UTF-8" ?>
 
 <Form version="1.5" maxVersion="1.5" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <NonVisualComponents>
@@ -13,7 +13,6 @@
       <SubComponents>
         <Menu class="javax.swing.JMenu" name="windowMenu">
           <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="menu-window"/>
             <Property name="name" type="java.lang.String" value="windowMenu" noResource="true"/>
           </Properties>
           <SubComponents>
@@ -22,7 +21,6 @@
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
                   <action class="xprottest.analysis.consensus.Consensus" id="Close" methodName="Close"/>
                 </Property>
-                <Property name="text" type="java.lang.String" resourceKey="menu-close"/>
                 <Property name="name" type="java.lang.String" value="closeMenuItem" noResource="true"/>
               </Properties>
             </MenuItem>
@@ -39,10 +37,6 @@
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
                   <action class="xprottest.analysis.consensus.Consensus" id="editCopy" methodName="editCopy"/>
                 </Property>
-                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
-                  <KeyStroke key="Ctrl+C"/>
-                </Property>
-                <Property name="text" type="java.lang.String" resourceKey="menu-copy"/>
                 <Property name="name" type="java.lang.String" value="editCopyMenuItem" noResource="true"/>
               </Properties>
             </MenuItem>
@@ -50,9 +44,6 @@
               <Properties>
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
                   <action class="xprottest.analysis.consensus.Consensus" id="editSelectAll" methodName="editSelectAll"/>
-                </Property>
-                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
-                  <KeyStroke key="Ctrl+A"/>
                 </Property>
                 <Property name="text" type="java.lang.String" resourceKey="selectAllMenuItem.text"/>
                 <Property name="name" type="java.lang.String" value="selectAllMenuItem" noResource="true"/>
@@ -74,6 +65,7 @@
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="2"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
     <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
@@ -88,7 +80,7 @@
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
-                  <Component id="displayScroll" alignment="0" pref="656" max="32767" attributes="0"/>
+                  <Component id="displayScroll" alignment="0" pref="664" max="32767" attributes="0"/>
                   <Component id="settingsPanel" alignment="0" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -127,7 +119,7 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="lblCriterion" alignment="0" min="-2" pref="161" max="-2" attributes="0"/>
-                              <Component id="lblTitle" alignment="0" pref="628" max="32767" attributes="0"/>
+                              <Component id="lblTitle" alignment="0" pref="636" max="32767" attributes="0"/>
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace min="12" pref="12" max="12" attributes="0"/>
                                   <Component id="radioAIC" min="-2" max="-2" attributes="0"/>
@@ -147,15 +139,17 @@
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="lblPercent" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <Component id="sliderConsType" alignment="0" pref="628" max="32767" attributes="0"/>
+                              <Component id="sliderConsType" alignment="0" pref="636" max="32767" attributes="0"/>
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="lblMR" min="-2" pref="76" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="129" max="-2" attributes="0"/>
                                   <Component id="btnBuild" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace pref="253" max="32767" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="btnExport" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace pref="182" max="32767" attributes="0"/>
                                   <Component id="lblStrict" min="-2" pref="40" max="-2" attributes="0"/>
                               </Group>
-                              <Component id="sliderConfidence" alignment="1" pref="628" max="32767" attributes="0"/>
+                              <Component id="sliderConfidence" alignment="1" pref="636" max="32767" attributes="0"/>
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="lblConfInt" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
@@ -170,10 +164,7 @@
                                   <Component id="sizeModeAlignment3" min="-2" max="-2" attributes="1"/>
                                   <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
                               </Group>
-                              <Group type="102" alignment="1" attributes="1">
-                                  <Component id="sizeModeNL" max="32767" attributes="1"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                              </Group>
+                              <Component id="sizeModeNL" alignment="1" max="32767" attributes="1"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="1" attributes="0">
@@ -189,7 +180,7 @@
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="sizeModeShannonNL" min="-2" pref="140" max="-2" attributes="0"/>
                               </Group>
-                              <Component id="lblSampleSize" alignment="0" pref="516" max="32767" attributes="1"/>
+                              <Component id="lblSampleSize" alignment="0" pref="504" max="32767" attributes="1"/>
                           </Group>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
@@ -253,7 +244,10 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="lblMR" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="lblStrict" min="-2" max="-2" attributes="0"/>
-                      <Component id="btnBuild" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="btnBuild" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnExport" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -546,6 +540,16 @@
             <Property name="name" type="java.lang.String" value="lblSampleSizeMode" noResource="true"/>
           </Properties>
         </Component>
+        <Component class="javax.swing.JButton" name="btnExport">
+          <Properties>
+            <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+              <action class="es.uvigo.darwin.xprottest.analysis.consensus.Consensus" id="exportData" methodName="exportData"/>
+            </Property>
+            <Property name="text" type="java.lang.String" resourceKey="btnExport.text"/>
+            <Property name="enabled" type="boolean" value="false"/>
+            <Property name="name" type="java.lang.String" value="btnExport" noResource="true"/>
+          </Properties>
+        </Component>
       </SubComponents>
     </Container>
     <Container class="javax.swing.JScrollPane" name="displayScroll">
@@ -562,6 +566,7 @@
           <Properties>
             <Property name="columns" type="int" value="20"/>
             <Property name="editable" type="boolean" value="false"/>
+            <Property name="lineWrap" type="boolean" value="true"/>
             <Property name="rows" type="int" value="5"/>
             <Property name="name" type="java.lang.String" value="displayArea" noResource="true"/>
           </Properties>

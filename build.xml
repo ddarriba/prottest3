@@ -4,7 +4,7 @@
 <!-- (If you delete it and reopen the project it will be recreated.) -->
 <project name="ProtTest-HPC" default="default" basedir=".">
     <description>Builds, tests, and runs the project ProtTest-HPC.</description>
-    <import file="build-impl.xml"/>
+    <import file="buildconf/build-impl.xml"/>
 
     <property name="src.resources.dir" value="src/main/resources"/>
     

@@ -38,6 +38,10 @@ public class ResultsView extends javax.swing.JFrame {
     private static final int BIC_TAB = 1;
     private static final int AICC_TAB = 2;
     private static final int DT_TAB = 3;
+    private static final String PARAMETER_F = "+F";
+    private static final String PARAMETER_I = "+I";
+    private static final String PARAMETER_G = "+G";
+    private static final String PARAMETER_IG = "+I+G";
     private static final int numDecimals = 5;
     private int rows;
     javax.swing.table.DefaultTableModel aicTableModel,
@@ -50,6 +54,11 @@ public class ResultsView extends javax.swing.JFrame {
     private int sampleSizeMode = DEFAULT_SAMPLE_SIZE_MODE;
     private double sampleSize = 0.0;
     private HashMap<Integer, SelectionChunk> aicResults, bicResults, aiccResults, dtResults;
+
+    private boolean existInvModels = false,
+            existGammaModels = false,
+            existGammaInvModels = false,
+            existFModels = false;
 
     private void loadCache(double confidenceInterval) {
         // criterion cache
@@ -77,6 +86,18 @@ public class ResultsView extends javax.swing.JFrame {
         this.alignment = alignment;
         this.rows = models.length;
         this.models = models;
+
+        for (Model model : models) {
+            if (!existInvModels && model.isInv() && !model.isGamma()) {
+                existInvModels = true;
+            } else if (!existGammaModels && !model.isInv() && model.isGamma()) {
+                existGammaModels = true;
+            } else if (!existGammaInvModels && model.isInv() && model.isGamma()) {
+                existGammaInvModels = true;
+            } else if (!existFModels && model.isPlusF()) {
+                existFModels = true;
+            }
+        }
 
         initComponents();
         loadCache(Double.parseDouble(sliderConfidenceInterval.getValue() + "") / 100);
@@ -1163,7 +1184,6 @@ public class ResultsView extends javax.swing.JFrame {
         lblConfidence.setName("lblConfidence"); // NOI18N
 
         btnExport.setAction(actionMap.get("exportData")); // NOI18N
-        btnExport.setText("Export to main console"); // NOI18N
         btnExport.setName("btnExport"); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -1493,50 +1513,50 @@ public class ResultsView extends javax.swing.JFrame {
         aicTableModel.setRowCount(aicIt.size());
         fillTable(aicIt, aicTable);
 
-        displayAICoAlpha.setText(ProtTestFormattedOutput.getDecimalString(chunkAIC.getOverallAlpha(), numDecimals));
-        displayAICoAlphaInv.setText(ProtTestFormattedOutput.getDecimalString(chunkAIC.getOverallAlphaInv(), numDecimals));
-        displayAICoInvAlpha.setText(ProtTestFormattedOutput.getDecimalString(chunkAIC.getOverallInvAlpha(), numDecimals));
-        displayAICoInv.setText(ProtTestFormattedOutput.getDecimalString(chunkAIC.getOverallInv(), numDecimals));
-        displayAICImpAlpha.setText(ProtTestFormattedOutput.getDecimalString(chunkAIC.getAlphaImportance(), numDecimals));
-        displayAICImpInv.setText(ProtTestFormattedOutput.getDecimalString(chunkAIC.getInvImportance(), numDecimals));
-        displayAICImpAlphaInv.setText(ProtTestFormattedOutput.getDecimalString(chunkAIC.getAlphaInvImportance(), numDecimals));
-        displayAICImpF.setText(ProtTestFormattedOutput.getDecimalString(chunkAIC.getFImportance(), numDecimals));
+        displayAICoAlpha.setText(getDisplayValue(chunkAIC.getOverallAlpha(), PARAMETER_G));
+        displayAICoAlphaInv.setText(getDisplayValue(chunkAIC.getOverallAlphaInv(), PARAMETER_IG));
+        displayAICoInvAlpha.setText(getDisplayValue(chunkAIC.getOverallInvAlpha(), PARAMETER_IG));
+        displayAICoInv.setText(getDisplayValue(chunkAIC.getOverallInv(), PARAMETER_I));
+        displayAICImpAlpha.setText(getDisplayValue(chunkAIC.getAlphaImportance(), PARAMETER_G));
+        displayAICImpInv.setText(getDisplayValue(chunkAIC.getInvImportance(), PARAMETER_I));
+        displayAICImpAlphaInv.setText(getDisplayValue(chunkAIC.getAlphaInvImportance(), PARAMETER_IG));
+        displayAICImpF.setText(getDisplayValue(chunkAIC.getFImportance(), PARAMETER_F));
 
         bicTableModel.setRowCount(bicIt.size());
         fillTable(bicIt, bicTable);
 
-        displayBICoAlpha.setText(ProtTestFormattedOutput.getDecimalString(chunkBIC.getOverallAlpha(), numDecimals));
-        displayBICoAlphaInv.setText(ProtTestFormattedOutput.getDecimalString(chunkBIC.getOverallAlphaInv(), numDecimals));
-        displayBICoInvAlpha.setText(ProtTestFormattedOutput.getDecimalString(chunkBIC.getOverallInvAlpha(), numDecimals));
-        displayBICoInv.setText(ProtTestFormattedOutput.getDecimalString(chunkBIC.getOverallInv(), numDecimals));
-        displayBICImpAlpha.setText(ProtTestFormattedOutput.getDecimalString(chunkBIC.getAlphaImportance(), numDecimals));
-        displayBICImpInv.setText(ProtTestFormattedOutput.getDecimalString(chunkBIC.getInvImportance(), numDecimals));
-        displayBICImpAlphaInv.setText(ProtTestFormattedOutput.getDecimalString(chunkBIC.getAlphaInvImportance(), numDecimals));
-        displayBICImpF.setText(ProtTestFormattedOutput.getDecimalString(chunkBIC.getFImportance(), numDecimals));
+        displayBICoAlpha.setText(getDisplayValue(chunkBIC.getOverallAlpha(), PARAMETER_G));
+        displayBICoAlphaInv.setText(getDisplayValue(chunkBIC.getOverallAlphaInv(), PARAMETER_IG));
+        displayBICoInvAlpha.setText(getDisplayValue(chunkBIC.getOverallInvAlpha(), PARAMETER_IG));
+        displayBICoInv.setText(getDisplayValue(chunkBIC.getOverallInv(), PARAMETER_I));
+        displayBICImpAlpha.setText(getDisplayValue(chunkBIC.getAlphaImportance(), PARAMETER_G));
+        displayBICImpInv.setText(getDisplayValue(chunkBIC.getInvImportance(), PARAMETER_I));
+        displayBICImpAlphaInv.setText(getDisplayValue(chunkBIC.getAlphaInvImportance(), PARAMETER_IG));
+        displayBICImpF.setText(getDisplayValue(chunkBIC.getFImportance(), PARAMETER_F));
 
         aiccTableModel.setRowCount(aiccIt.size());
         fillTable(aiccIt, aiccTable);
 
-        displayAICcoAlpha.setText(ProtTestFormattedOutput.getDecimalString(chunkAICC.getOverallAlpha(), numDecimals));
-        displayAICcoAlphaInv.setText(ProtTestFormattedOutput.getDecimalString(chunkAICC.getOverallAlphaInv(), numDecimals));
-        displayAICcoInvAlpha.setText(ProtTestFormattedOutput.getDecimalString(chunkAICC.getOverallInvAlpha(), numDecimals));
-        displayAICcoInv.setText(ProtTestFormattedOutput.getDecimalString(chunkAICC.getOverallInv(), numDecimals));
-        displayAICcImpAlpha.setText(ProtTestFormattedOutput.getDecimalString(chunkAICC.getAlphaImportance(), numDecimals));
-        displayAICcImpInv.setText(ProtTestFormattedOutput.getDecimalString(chunkAICC.getInvImportance(), numDecimals));
-        displayAICcImpAlphaInv.setText(ProtTestFormattedOutput.getDecimalString(chunkAICC.getAlphaInvImportance(), numDecimals));
-        displayAICcImpF.setText(ProtTestFormattedOutput.getDecimalString(chunkAICC.getFImportance(), numDecimals));
+        displayAICcoAlpha.setText(getDisplayValue(chunkAICC.getOverallAlpha(), PARAMETER_G));
+        displayAICcoAlphaInv.setText(getDisplayValue(chunkAICC.getOverallAlphaInv(), PARAMETER_IG));
+        displayAICcoInvAlpha.setText(getDisplayValue(chunkAICC.getOverallInvAlpha(), PARAMETER_IG));
+        displayAICcoInv.setText(getDisplayValue(chunkAICC.getOverallInv(), PARAMETER_I));
+        displayAICcImpAlpha.setText(getDisplayValue(chunkAICC.getAlphaImportance(), PARAMETER_G));
+        displayAICcImpInv.setText(getDisplayValue(chunkAICC.getInvImportance(), PARAMETER_I));
+        displayAICcImpAlphaInv.setText(getDisplayValue(chunkAICC.getAlphaInvImportance(), PARAMETER_IG));
+        displayAICcImpF.setText(getDisplayValue(chunkAICC.getFImportance(), PARAMETER_F));
 
         dtTableModel.setRowCount(dtIt.size());
         fillTable(dtIt, dtTable);
 
-        displayDToAlpha.setText(ProtTestFormattedOutput.getDecimalString(chunkDT.getOverallAlpha(), numDecimals));
-        displayDToAlphaInv.setText(ProtTestFormattedOutput.getDecimalString(chunkDT.getOverallAlphaInv(), numDecimals));
-        displayDToInvAlpha.setText(ProtTestFormattedOutput.getDecimalString(chunkDT.getOverallInvAlpha(), numDecimals));
-        displayDToInv.setText(ProtTestFormattedOutput.getDecimalString(chunkDT.getOverallInv(), numDecimals));
-        displayDTImpAlpha.setText(ProtTestFormattedOutput.getDecimalString(chunkDT.getAlphaImportance(), numDecimals));
-        displayDTImpInv.setText(ProtTestFormattedOutput.getDecimalString(chunkDT.getInvImportance(), numDecimals));
-        displayDTImpAlphaInv.setText(ProtTestFormattedOutput.getDecimalString(chunkDT.getAlphaInvImportance(), numDecimals));
-        displayDTImpF.setText(ProtTestFormattedOutput.getDecimalString(chunkDT.getFImportance(), numDecimals));
+        displayDToAlpha.setText(getDisplayValue(chunkDT.getOverallAlpha(), PARAMETER_G));
+        displayDToAlphaInv.setText(getDisplayValue(chunkDT.getOverallAlphaInv(), PARAMETER_IG));
+        displayDToInvAlpha.setText(getDisplayValue(chunkDT.getOverallInvAlpha(), PARAMETER_IG));
+        displayDToInv.setText(getDisplayValue(chunkDT.getOverallInv(), PARAMETER_I));
+        displayDTImpAlpha.setText(getDisplayValue(chunkDT.getAlphaImportance(), PARAMETER_G));
+        displayDTImpInv.setText(getDisplayValue(chunkDT.getInvImportance(), PARAMETER_I));
+        displayDTImpAlphaInv.setText(getDisplayValue(chunkDT.getAlphaInvImportance(), PARAMETER_IG));
+        displayDTImpF.setText(getDisplayValue(chunkDT.getFImportance(), PARAMETER_F));
 
         lblSampleSize.setText(String.valueOf(ProtTestAlignment.calculateSampleSize(alignment, sampleSizeMode, sampleSize)));
     }
@@ -1618,6 +1638,28 @@ public class ResultsView extends javax.swing.JFrame {
                 }
             }
         }
+    }
+
+
+    private String getDisplayValue(double value, String parameter) {
+        String toDisplay;
+        boolean existModels = false;
+        if (parameter.equals(PARAMETER_I)) {
+            existModels = existInvModels;
+        } else if (parameter.equals(PARAMETER_G)) {
+            existModels = existGammaModels;
+        } else if (parameter.equals(PARAMETER_IG)) {
+            existModels = existGammaInvModels;
+        } else if (parameter.equals(PARAMETER_F)) {
+            existModels = existFModels;
+        }
+        
+        if (existModels) {
+            toDisplay = ProtTestFormattedOutput.getDecimalString(value, numDecimals);
+        } else {
+            toDisplay = "No " + parameter + " models";
+        }
+        return toDisplay;
     }
 
     @Action

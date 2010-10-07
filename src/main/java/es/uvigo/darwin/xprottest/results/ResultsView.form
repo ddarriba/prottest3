@@ -1580,7 +1580,6 @@
         <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
           <action class="es.uvigo.darwin.xprottest.results.ResultsView" id="exportData" methodName="exportData"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Export to main console" noResource="true"/>
         <Property name="name" type="java.lang.String" value="btnExport" noResource="true"/>
       </Properties>
     </Component>

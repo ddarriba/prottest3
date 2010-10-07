@@ -6,12 +6,12 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import java.util.Vector;
 
 import es.uvigo.darwin.prottest.model.Model;
 import es.uvigo.darwin.prottest.selection.model.SelectionModel;
 import es.uvigo.darwin.prottest.util.collection.ModelCollection;
 import es.uvigo.darwin.prottest.util.collection.SingleModelCollection;
+import java.util.ArrayList;
 import pal.alignment.Alignment;
 
 /**
@@ -30,7 +30,7 @@ public abstract class InformationCriterion {
     /** The confidence interval. */
     protected double confidenceInterval;
     /** The set of models that fall into the confidence interval. */
-    protected Vector<SelectionModel> confidenceModels;
+    protected List<SelectionModel> confidenceModels;
     /** The cumulative weight of the parameter. */
     protected double cumWeight;
     /** The overall alpha value. */
@@ -167,7 +167,7 @@ public abstract class InformationCriterion {
         int numberOfModels = models.size();
         this.confidenceInterval = confidenceInterval;
         this.hashModels = new HashMap<Model, SelectionModel>(numberOfModels);
-        this.confidenceModels = new Vector<SelectionModel>();
+        this.confidenceModels = new ArrayList<SelectionModel>();
         this.selectionModels = getSelectionModels(models);
         Collections.sort(selectionModels);
         compute();
@@ -257,7 +257,7 @@ public abstract class InformationCriterion {
      * in the interval by chance (see below).
      */
     public void buildConfidenceInterval() {
-        confidenceModels = new Vector<SelectionModel>();
+        confidenceModels = new ArrayList<SelectionModel>();
 
         // first construct the confidence interval for models
         if (confidenceInterval >= 1.0) {
@@ -322,7 +322,7 @@ public abstract class InformationCriterion {
      */
     public ModelCollection getModelCollection() {
         ModelCollection models = new SingleModelCollection(alignment);
-        for (SelectionModel model : selectionModels) {
+        for (SelectionModel model : confidenceModels) {
             models.add(model.getModel());
         }
         return models;

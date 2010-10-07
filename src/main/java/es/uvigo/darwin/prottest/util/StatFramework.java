@@ -25,7 +25,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 package es.uvigo.darwin.prottest.util;
 
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Iterator;
 
 import es.uvigo.darwin.prottest.selection.InformationCriterion;
@@ -38,10 +38,10 @@ public class StatFramework {
         //implementa métodos para dar el ranking y el peso a partir del String modelName
         //implementa métodos para dar el modelName y el peso a partir del ranking
     
-    private Hashtable<String, Integer> hashSorted;          //clave: nombre modelo, valor: ranking
-    private Hashtable<Integer, String> hashSortedReverse;   //clave: raking,        valor: nombre
-    private Hashtable<String, Double> hashWeights;          //clave: nombre modelo, valor: peso
-    private Hashtable<String, Double> hashDeltas;           //clave: nombre modelo, valor delta
+    private HashMap<String, Integer> hashSorted;          //clave: nombre modelo, valor: ranking
+    private HashMap<Integer, String> hashSortedReverse;   //clave: raking,        valor: nombre
+    private HashMap<String, Double> hashWeights;          //clave: nombre modelo, valor: peso
+    private HashMap<String, Double> hashDeltas;           //clave: nombre modelo, valor delta
     private String    framework;
     private String    description;
     private double    alphaImp       = 0.0;
@@ -69,10 +69,10 @@ public class StatFramework {
     }
     
     private void initHashes (InformationCriterion ic, String[] names) {
-        hashSorted        = new Hashtable<String, Integer>(); //clave: nombre modelo, valor ranking
-        hashSortedReverse = new Hashtable<Integer, String>(); //clave: raking, valor: nombre
-        hashWeights       = new Hashtable<String, Double>(); //clave: nombre modelo, valor peso
-        hashDeltas        = new Hashtable<String, Double>(); //clave: nombre modelo, valor delta
+        hashSorted        = new HashMap<String, Integer>(); //clave: nombre modelo, valor ranking
+        hashSortedReverse = new HashMap<Integer, String>(); //clave: raking, valor: nombre
+        hashWeights       = new HashMap<String, Double>(); //clave: nombre modelo, valor peso
+        hashDeltas        = new HashMap<String, Double>(); //clave: nombre modelo, valor delta
         Iterator<SelectionModel> selectionModels = ic.allIterator();
         int position = 0;
         while (selectionModels.hasNext()) {

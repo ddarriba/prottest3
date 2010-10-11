@@ -17,6 +17,14 @@ public interface ProtTestConstants {
     /** The number of states for amino-acids. */
     static final int AMINOACID_NUM_STATES = 20;
     
+    /** The empirical frequencies parameter. */
+    static final String PARAMETER_F = "+F";
+    /** The invariant sites parameter. */
+    static final String PARAMETER_I = "+I";
+    /** The gamma distribution parameter. */
+    static final String PARAMETER_G = "+G";
+    /** The invariant sites and gamma distribution parameter. */
+    static final String PARAMETER_IG = "+I+G";
 
     // size modes
     /** Shannon sample size mode. */
@@ -135,4 +143,7 @@ public interface ProtTestConstants {
     // Tree properties
     /** Tree property for write branch length averaging */
     static final String PROP_BRANCH_LENGTH_AVERAGING = "branch_length_averaging";
+
+    static final int IMPORTANCE_PRECISSION = 3;
+    static final int CRITERION_PRECISSION = 5;
 }

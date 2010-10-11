@@ -138,7 +138,7 @@ public class ProtTest {
 
         if (MPJ_ME == 0) {
             ProtTestPrinter.printHeader();
-            opts.report();
+            opts.reportComplete();
         }
 
         Model[] models;

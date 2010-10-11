@@ -1,6 +1,6 @@
 package es.uvigo.darwin.prottest.selection.printer;
 
-
+import static es.uvigo.darwin.prottest.global.ApplicationGlobals.*;
 import es.uvigo.darwin.prottest.selection.InformationCriterion;
 import es.uvigo.darwin.prottest.util.printer.ProtTestFormattedOutput;
 
@@ -26,10 +26,10 @@ public class AminoAcidPrintFramework extends PrintFramework {
 		println("***********************************************");
 		println("Relative importance of parameters");
 		println("***********************************************");
-		println("  alpha       (+G):  " + ProtTestFormattedOutput.space(3, ' ') + ProtTestFormattedOutput.getDecimalString(ic.getAlphaImportance(), 2));//calculateAlphaImportance(false), 2));
-		println("  p-inv       (+I):  " + ProtTestFormattedOutput.space(3, ' ') + ProtTestFormattedOutput.getDecimalString(ic.getInvImportance(), 2));
-		println("  alpha+p-inv (+I+G):" + ProtTestFormattedOutput.space(3, ' ') + ProtTestFormattedOutput.getDecimalString(ic.getAlphaInvImportance(), 2));
-		println("  freqs       (+F):  " + ProtTestFormattedOutput.space(3, ' ') + ProtTestFormattedOutput.getDecimalString(ic.getFImportance(), 2));
+		println("  alpha       (+G):  " + ProtTestFormattedOutput.space(3, ' ') + getDisplayValue(ic.getAlphaImportance(), PARAMETER_G, ic.isExistGammaModels()));
+		println("  p-inv       (+I):  " + ProtTestFormattedOutput.space(3, ' ') + getDisplayValue(ic.getInvImportance(), PARAMETER_I, ic.isExistInvModels()));
+		println("  alpha+p-inv (+I+G):" + ProtTestFormattedOutput.space(3, ' ') + getDisplayValue(ic.getAlphaInvImportance(), PARAMETER_IG, ic.isExistGammaInvModels()));
+		println("  freqs       (+F):  " + ProtTestFormattedOutput.space(3, ' ') + getDisplayValue(ic.getFImportance(), PARAMETER_F, ic.isExistFModels()));
 		println("");
 	}
 
@@ -42,10 +42,10 @@ public class AminoAcidPrintFramework extends PrintFramework {
 		println("***********************************************");
 		println("Model-averaged estimate of parameters");
 		println("***********************************************");
-		println("  alpha (+G):        " + ProtTestFormattedOutput.space(3,  ' ') + ProtTestFormattedOutput.getDecimalString(ic.getOverallAlpha(), 2));
-		println("  p-inv (+I):        " + ProtTestFormattedOutput.space(3,  ' ') + ProtTestFormattedOutput.getDecimalString(ic.getOverallInv(), 2));
-		println("  alpha (+I+G):      " + ProtTestFormattedOutput.space(3,  ' ') + ProtTestFormattedOutput.getDecimalString(ic.getOverallAlphaInv(), 2));
-		println("  p-inv (+I+G):      " + ProtTestFormattedOutput.space(3,  ' ') + ProtTestFormattedOutput.getDecimalString(ic.getOverallInvAlpha(), 2));
+		println("  alpha (+G):        " + ProtTestFormattedOutput.space(3,  ' ') + getDisplayValue(ic.getOverallAlpha(), PARAMETER_G, ic.isExistGammaModels()));
+		println("  p-inv (+I):        " + ProtTestFormattedOutput.space(3,  ' ') + getDisplayValue(ic.getOverallInv(), PARAMETER_I, ic.isExistInvModels()));
+		println("  alpha (+I+G):      " + ProtTestFormattedOutput.space(3,  ' ') + getDisplayValue(ic.getOverallAlphaInv(), PARAMETER_IG, ic.isExistGammaInvModels()));
+		println("  p-inv (+I+G):      " + ProtTestFormattedOutput.space(3,  ' ') + getDisplayValue(ic.getOverallInvAlpha(), PARAMETER_IG, ic.isExistGammaInvModels()));
 	}
 
 }

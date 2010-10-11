@@ -132,7 +132,6 @@ public class OptionsView extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
         subMatPanel = new javax.swing.JPanel();
         subMatricesPanel = new javax.swing.JPanel();
         distributionsPanel = new javax.swing.JPanel();
@@ -148,20 +147,18 @@ public class OptionsView extends javax.swing.JFrame {
         lblNumModelsLabel = new javax.swing.JLabel();
         lblNumModels = new javax.swing.JLabel();
         btnCompute = new javax.swing.JButton();
-        lblStrategyMode = new javax.swing.JLabel();
-        cmbStrategyMode = new javax.swing.JComboBox();
-        lblUserTree = new javax.swing.JLabel();
-        jPanel1 = new javax.swing.JPanel();
+        processorsPanel = new javax.swing.JPanel();
         sliderProcessors = new javax.swing.JSlider();
         lblNumProc = new javax.swing.JLabel();
         btnSetDefault = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
-
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(es.uvigo.darwin.xprottest.XProtTestApp.class).getContext().getResourceMap(OptionsView.class);
-        jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
-        jLabel1.setName("jLabel1"); // NOI18N
+        startingTopologiesPanel = new javax.swing.JPanel();
+        lblStrategyMode = new javax.swing.JLabel();
+        cmbStrategyMode = new javax.swing.JComboBox();
+        lblUserTree = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance().getContext().getResourceMap(OptionsView.class);
         setTitle(resourceMap.getString("Form.title")); // NOI18N
         setName("Form"); // NOI18N
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -184,7 +181,7 @@ public class OptionsView extends javax.swing.JFrame {
         );
         subMatricesPanelLayout.setVerticalGroup(
             subMatricesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 234, Short.MAX_VALUE)
+            .addGap(0, 283, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout subMatPanelLayout = new javax.swing.GroupLayout(subMatPanel);
@@ -238,8 +235,9 @@ public class OptionsView extends javax.swing.JFrame {
         });
 
         txtNCat.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        txtNCat.setText(resourceMap.getString("txtNCat.text")); // NOI18N
-        txtNCat.setToolTipText("null");
+        txtNCat.setText(String.valueOf(DEFAULT_NCAT));
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/compute/resources/OptionsView"); // NOI18N
+        txtNCat.setToolTipText(bundle.getString("txtNCat.toolTip")); // NOI18N
         txtNCat.setName("txtNCat"); // NOI18N
 
         cbDistInvGC.setFont(cbDistInvGC.getFont());
@@ -274,7 +272,7 @@ public class OptionsView extends javax.swing.JFrame {
                 .addComponent(txtNCat, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, rateVarPanelLayout.createSequentialGroup()
-                .addContainerGap(70, Short.MAX_VALUE)
+                .addContainerGap(94, Short.MAX_VALUE)
                 .addComponent(msgValidate)
                 .addContainerGap())
         );
@@ -297,7 +295,6 @@ public class OptionsView extends javax.swing.JFrame {
 
         cbEmpiricalF.setFont(cbEmpiricalF.getFont());
         cbEmpiricalF.setSelected(true);
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/compute/resources/OptionsView"); // NOI18N
         cbEmpiricalF.setText(bundle.getString("cbEmpiricalF.text")); // NOI18N
         cbEmpiricalF.setToolTipText(resourceMap.getString("cbEmpiricalF.toolTipText")); // NOI18N
         cbEmpiricalF.setName("cbEmpiricalF"); // NOI18N
@@ -314,34 +311,13 @@ public class OptionsView extends javax.swing.JFrame {
             .addGroup(empiricalFPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(cbEmpiricalF)
-                .addContainerGap(187, Short.MAX_VALUE))
+                .addContainerGap(223, Short.MAX_VALUE))
         );
         empiricalFPanelLayout.setVerticalGroup(
             empiricalFPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(empiricalFPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(cbEmpiricalF)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        javax.swing.GroupLayout distributionsPanelLayout = new javax.swing.GroupLayout(distributionsPanel);
-        distributionsPanel.setLayout(distributionsPanelLayout);
-        distributionsPanelLayout.setHorizontalGroup(
-            distributionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(distributionsPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(distributionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(rateVarPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(empiricalFPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        distributionsPanelLayout.setVerticalGroup(
-            distributionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(distributionsPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(rateVarPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(empiricalFPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -354,26 +330,42 @@ public class OptionsView extends javax.swing.JFrame {
         lblNumModels.setForeground(resourceMap.getColor("lblNumModelsLabel.foreground")); // NOI18N
         lblNumModels.setName("lblNumModels"); // NOI18N
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(es.uvigo.darwin.xprottest.XProtTestApp.class).getContext().getActionMap(OptionsView.class, this);
+        javax.swing.GroupLayout distributionsPanelLayout = new javax.swing.GroupLayout(distributionsPanel);
+        distributionsPanel.setLayout(distributionsPanelLayout);
+        distributionsPanelLayout.setHorizontalGroup(
+            distributionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, distributionsPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(distributionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(rateVarPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(empiricalFPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(distributionsPanelLayout.createSequentialGroup()
+                        .addComponent(lblNumModelsLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(lblNumModels, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        distributionsPanelLayout.setVerticalGroup(
+            distributionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(distributionsPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(rateVarPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(empiricalFPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(distributionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblNumModels, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblNumModelsLabel))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance().getContext().getActionMap(OptionsView.class, this);
         btnCompute.setAction(actionMap.get("computeLikelihood")); // NOI18N
         btnCompute.setText(resourceMap.getString("btnCompute.text")); // NOI18N
         btnCompute.setName("btnCompute"); // NOI18N
 
-        lblStrategyMode.setFont(lblStrategyMode.getFont());
-        java.util.ResourceBundle bundle1 = java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/resources/OptionsView"); // NOI18N
-        lblStrategyMode.setText(bundle1.getString("lbl-strategy-mode")); // NOI18N
-        lblStrategyMode.setName("lblStrategyMode"); // NOI18N
-
-        cmbStrategyMode.setAction(actionMap.get("setStrategyMode")); // NOI18N
-        cmbStrategyMode.setName("cmbStrategyMode"); // NOI18N
-
-        lblUserTree.setFont(XProtTestApp.FONT_OPTION_LABEL);
-        lblUserTree.setForeground(resourceMap.getColor("lblUserTree.foreground")); // NOI18N
-        lblUserTree.setText(bundle.getString("msg-no-user-tree-loaded")); // NOI18N
-        lblUserTree.setName("lblUserTree"); // NOI18N
-
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, resourceMap.getString("jPanel1.border.title"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, XProtTestApp.FONT_PANEL_TITLE, resourceMap.getColor("jPanel1.border.titleColor"))); // NOI18N
-        jPanel1.setName("jPanel1"); // NOI18N
+        processorsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, resourceMap.getString("processorsPanel.border.title"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, XProtTestApp.FONT_PANEL_TITLE, resourceMap.getColor("processorsPanel.border.titleColor"))); // NOI18N
+        processorsPanel.setName("processorsPanel"); // NOI18N
 
         sliderProcessors.setMinimum(1);
         sliderProcessors.setMaximum(
@@ -395,25 +387,25 @@ public class OptionsView extends javax.swing.JFrame {
 
         lblNumProc.setFont(lblNumProc.getFont());
         lblNumProc.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblNumProc.setText("[" + String.valueOf(sliderProcessors.getValue()) + "]");
+        lblNumProc.setText(String.valueOf(sliderProcessors.getValue()));
         lblNumProc.setName("lblNumProc"); // NOI18N
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout processorsPanelLayout = new javax.swing.GroupLayout(processorsPanel);
+        processorsPanel.setLayout(processorsPanelLayout);
+        processorsPanelLayout.setHorizontalGroup(
+            processorsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(processorsPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(lblNumProc)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(sliderProcessors, javax.swing.GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE)
+                .addComponent(sliderProcessors, javax.swing.GroupLayout.DEFAULT_SIZE, 442, Short.MAX_VALUE)
                 .addContainerGap())
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        processorsPanelLayout.setVerticalGroup(
+            processorsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(processorsPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(processorsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(sliderProcessors, javax.swing.GroupLayout.DEFAULT_SIZE, 47, Short.MAX_VALUE)
                     .addComponent(lblNumProc))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -429,58 +421,41 @@ public class OptionsView extends javax.swing.JFrame {
         btnCancel.setToolTipText(resourceMap.getString("btnCancel.toolTipText")); // NOI18N
         btnCancel.setName("btnCancel"); // NOI18N
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+        startingTopologiesPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, resourceMap.getString("startingTopologiesPanel.border.title"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, XProtTestApp.FONT_PANEL_TITLE, resourceMap.getColor("startingTopologiesPanel.border.titleColor"))); // NOI18N
+        startingTopologiesPanel.setName("startingTopologiesPanel"); // NOI18N
+
+        lblStrategyMode.setFont(lblStrategyMode.getFont());
+        lblStrategyMode.setText(bundle.getString("lbl-strategy-mode")); // NOI18N
+        lblStrategyMode.setName("lblStrategyMode"); // NOI18N
+
+        cmbStrategyMode.setAction(actionMap.get("setStrategyMode")); // NOI18N
+        cmbStrategyMode.setName("cmbStrategyMode"); // NOI18N
+
+        lblUserTree.setFont(XProtTestApp.FONT_OPTION_LABEL);
+        lblUserTree.setForeground(resourceMap.getColor("lblUserTree.foreground")); // NOI18N
+        lblUserTree.setText(bundle.getString("msg-no-user-tree-loaded")); // NOI18N
+        lblUserTree.setName("lblUserTree"); // NOI18N
+
+        javax.swing.GroupLayout startingTopologiesPanelLayout = new javax.swing.GroupLayout(startingTopologiesPanel);
+        startingTopologiesPanel.setLayout(startingTopologiesPanelLayout);
+        startingTopologiesPanelLayout.setHorizontalGroup(
+            startingTopologiesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(startingTopologiesPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(subMatPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(lblUserTree, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 316, Short.MAX_VALUE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addComponent(lblNumModelsLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 241, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(lblNumModels, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(cmbStrategyMode, javax.swing.GroupLayout.Alignment.LEADING, 0, 316, Short.MAX_VALUE)
-                            .addComponent(distributionsPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lblStrategyMode, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 316, Short.MAX_VALUE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnCompute)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnSetDefault)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnCancel)))))
+                .addGroup(startingTopologiesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(cmbStrategyMode, 0, 329, Short.MAX_VALUE)
+                    .addComponent(lblStrategyMode, javax.swing.GroupLayout.DEFAULT_SIZE, 329, Short.MAX_VALUE)
+                    .addComponent(lblUserTree, javax.swing.GroupLayout.DEFAULT_SIZE, 329, Short.MAX_VALUE))
                 .addContainerGap())
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        startingTopologiesPanelLayout.setVerticalGroup(
+            startingTopologiesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(startingTopologiesPanelLayout.createSequentialGroup()
+                .addComponent(lblStrategyMode)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(subMatPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(distributionsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblNumModelsLabel)
-                            .addComponent(lblNumModels, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblStrategyMode)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cmbStrategyMode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblUserTree)
-                        .addGap(12, 12, 12)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnCancel)
-                            .addComponent(btnSetDefault)
-                            .addComponent(btnCompute))))
+                .addComponent(cmbStrategyMode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblUserTree)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -489,6 +464,47 @@ public class OptionsView extends javax.swing.JFrame {
             cmbStrategyMode.addItem(optimizeItem);
         }
         cmbStrategyMode.setSelectedIndex(DEFAULT_STRATEGY_MODE);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(processorsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(subMatPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(distributionsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(startingTopologiesPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(btnCompute)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnSetDefault)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnCancel)))
+                .addContainerGap())
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(processorsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(distributionsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(startingTopologiesPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(subMatPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnCancel)
+                    .addComponent(btnSetDefault)
+                    .addComponent(btnCompute))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -702,8 +718,6 @@ public class OptionsView extends javax.swing.JFrame {
     private javax.swing.JComboBox cmbStrategyMode;
     private javax.swing.JPanel distributionsPanel;
     private javax.swing.JPanel empiricalFPanel;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblNCat;
     private javax.swing.JLabel lblNumModels;
     private javax.swing.JLabel lblNumModelsLabel;
@@ -711,8 +725,10 @@ public class OptionsView extends javax.swing.JFrame {
     private javax.swing.JLabel lblStrategyMode;
     private javax.swing.JLabel lblUserTree;
     private javax.swing.JLabel msgValidate;
+    private javax.swing.JPanel processorsPanel;
     private javax.swing.JPanel rateVarPanel;
     private javax.swing.JSlider sliderProcessors;
+    private javax.swing.JPanel startingTopologiesPanel;
     private javax.swing.JPanel subMatPanel;
     private javax.swing.JPanel subMatricesPanel;
     private javax.swing.JTextField txtNCat;

@@ -5,6 +5,7 @@
  */
 package es.uvigo.darwin.xprottest.analysis.consensus;
 
+import es.uvigo.darwin.prottest.util.printer.ProtTestFormattedOutput;
 import es.uvigo.darwin.prottest.util.logging.ProtTestLogger;
 import es.uvigo.darwin.prottest.util.printer.ProtTestPrinter;
 import static es.uvigo.darwin.prottest.global.ApplicationGlobals.*;
@@ -629,9 +630,26 @@ public class Consensus extends javax.swing.JFrame {
                 println("Sets included in the consensus tree");
                 println(" ");
                 print("    ");
-                for (int i = 0; i < consensus.getIdGroup().getIdCount(); i++) {
-                    print(String.valueOf(i + 1));
+
+                int numTaxa = consensus.getIdGroup().getIdCount();
+                for (int i = 0; i < numTaxa; i++) {
+                    print("" + String.valueOf(i + 1).charAt(0));
                 }
+                println(" ");
+                if (numTaxa >= 10) {
+                    print(ProtTestFormattedOutput.space(4 + 9, ' '));
+                    for (int i = 9; i < numTaxa; i++) {
+                        print("" + String.valueOf(i + 1).charAt(1));
+                    }
+                }
+                println(" ");
+                if (numTaxa >= 100) {
+                    print(ProtTestFormattedOutput.space(4 + 99, ' '));
+                    for (int i = 99; i < numTaxa; i++) {
+                        print("" + String.valueOf(i + 1).charAt(3));
+                    }
+                }
+
                 println(" ");
                 for (FixedBitSet fbs : splitsInConsensus) {
                     println("    " + fbs.splitRepresentation() + " ( "
@@ -641,10 +659,26 @@ public class Consensus extends javax.swing.JFrame {
                 println("Sets NOT included in consensus tree");
                 println(" ");
                 print("    ");
-                for (int i = 0; i < consensus.getIdGroup().getIdCount(); i++) {
-                    print(String.valueOf(i + 1));
+
+                for (int i = 0; i < numTaxa; i++) {
+                    print("" + String.valueOf(i + 1).charAt(0));
                 }
                 println(" ");
+                if (numTaxa >= 10) {
+                    print(ProtTestFormattedOutput.space(4 + 9, ' '));
+                    for (int i = 9; i < numTaxa; i++) {
+                        print("" + String.valueOf(i + 1).charAt(1));
+                    }
+                }
+                println(" ");
+                if (numTaxa >= 100) {
+                    print(ProtTestFormattedOutput.space(4 + 99, ' '));
+                    for (int i = 99; i < numTaxa; i++) {
+                        print("" + String.valueOf(i + 1).charAt(3));
+                    }
+                }
+                println(" ");
+                
                 for (FixedBitSet fbs : splitsOutFromConsensus) {
                     println("    " + fbs.splitRepresentation() + " ( "
                             + Utilities.round(consensus.getCladeSupport().get(fbs), 5) + " )");

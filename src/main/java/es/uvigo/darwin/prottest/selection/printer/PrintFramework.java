@@ -318,6 +318,16 @@ public abstract class PrintFramework {
         println("");
     }
 
+    public static String getDisplayValue(double value, String parameter, boolean existModels) {
+        String toDisplay;
+        if (existModels) {
+            toDisplay = ProtTestFormattedOutput.getDecimalString(value, IMPORTANCE_PRECISSION);
+        } else {
+            toDisplay = "No " + parameter + " models";
+        }
+        return toDisplay;
+    }
+
     /**
      * Prints the relative importance.
      * 

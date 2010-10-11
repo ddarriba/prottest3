@@ -23,12 +23,15 @@ import pal.tree.SimpleTree;
 import pal.tree.Tree;
 import es.uvigo.darwin.prottest.selection.InformationCriterion;
 import es.uvigo.darwin.prottest.selection.model.SelectionModel;
+import es.uvigo.darwin.prottest.selection.printer.PrintFramework;
 import es.uvigo.darwin.prottest.tree.TreeUtils;
 import es.uvigo.darwin.prottest.util.FixedBitSet;
 import es.uvigo.darwin.prottest.util.Utilities;
 import es.uvigo.darwin.prottest.util.exception.ImportException;
 import es.uvigo.darwin.prottest.util.exception.ProtTestInternalException;
 import es.uvigo.darwin.prottest.util.fileio.NexusExporter;
+import es.uvigo.darwin.prottest.util.printer.ProtTestFormattedOutput;
+import es.uvigo.darwin.prottest.util.printer.ProtTestPrinter;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Set;
@@ -741,8 +744,17 @@ public class Consensus {
             out.println("Sets included in the consensus tree");
             out.println(" ");
             out.print("    ");
+
+            int numTaxa = consensus.getIdGroup().getIdCount();
             for (int i = 0; i < consensus.getIdGroup().getIdCount(); i++) {
-                out.print(i + 1);
+                out.print(String.valueOf(i + 1).charAt(0));
+            }
+            out.println(" ");
+            if (numTaxa >= 10) {
+                ProtTestFormattedOutput.space(4 + 9, ' ');
+                for (int i = 9; i < consensus.getIdGroup().getIdCount(); i++) {
+                    out.print(String.valueOf(i + 1).charAt(1));
+                }
             }
             out.println(" ");
             for (FixedBitSet fbs : splitsInConsensus) {

@@ -59,6 +59,22 @@ public class SelectionChunk {
         this.informationCriterion = informationCriterion;
     }
 
+    public boolean existGammaModels() {
+        return informationCriterion.isExistGammaModels();
+    }
+
+    public boolean existInvModels() {
+        return informationCriterion.isExistInvModels();
+    }
+
+    public boolean existGammaInvModels() {
+        return informationCriterion.isExistGammaInvModels();
+    }
+
+    public boolean existFModels() {
+        return informationCriterion.isExistFModels();
+    }
+    
     /**
      * Gets the criterion value of a specific substitution model.
      * 

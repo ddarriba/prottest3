@@ -54,6 +54,27 @@ public abstract class InformationCriterion {
     /** The alignment */
     protected Alignment alignment;
 
+    private boolean existInvModels = false,
+            existGammaModels = false,
+            existGammaInvModels = false,
+            existFModels = false;
+
+    public boolean isExistFModels() {
+        return existFModels;
+    }
+
+    public boolean isExistGammaInvModels() {
+        return existGammaInvModels;
+    }
+
+    public boolean isExistGammaModels() {
+        return existGammaModels;
+    }
+
+    public boolean isExistInvModels() {
+        return existInvModels;
+    }
+
     /**
      * Gets the overall alpha value.
      * 
@@ -170,6 +191,17 @@ public abstract class InformationCriterion {
         this.confidenceModels = new ArrayList<SelectionModel>();
         this.selectionModels = getSelectionModels(models);
         Collections.sort(selectionModels);
+        for (Model model : models) {
+            if (!existInvModels && model.isInv() && !model.isGamma()) {
+                existInvModels = true;
+            } else if (!existGammaModels && !model.isInv() && model.isGamma()) {
+                existGammaModels = true;
+            } else if (!existGammaInvModels && model.isInv() && model.isGamma()) {
+                existGammaInvModels = true;
+            } else if (!existFModels && model.isPlusF()) {
+                existFModels = true;
+            }
+        }
         compute();
     }
 

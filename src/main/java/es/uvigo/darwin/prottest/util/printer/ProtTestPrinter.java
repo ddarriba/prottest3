@@ -4,6 +4,7 @@ import java.io.PrintWriter;
 import java.util.Date;
 
 import es.uvigo.darwin.prottest.ProtTest;
+import es.uvigo.darwin.prottest.global.options.ApplicationOptions;
 import es.uvigo.darwin.prottest.util.logging.ProtTestLogger;
 import java.io.File;
 
@@ -14,6 +15,8 @@ import java.io.File;
  */
 public class ProtTestPrinter {
 
+    private static final String H_RULE =
+            "********************************************************";
     /** The output print writer. */
     private PrintWriter out;
     /** The error print writer. */
@@ -56,9 +59,9 @@ public class ProtTestPrinter {
      */
     public static void printPreAnalysisHeader() {
         println("");
-        println("********************************************************");
-        println("                  ALIGNMENT ANALYSIS                    ");
-        println("********************************************************");
+        println(H_RULE);
+        println(center("ALIGNMENT ANALYSIS"));
+        println(H_RULE);
         println("");
     }
 
@@ -68,9 +71,9 @@ public class ProtTestPrinter {
     public static void printSelectionHeader(String criterionName) {
         println("");
         println("");
-        println("********************************************************");
-        println(ProtTestFormattedOutput.space(28 - criterionName.length()/2, ' ') + criterionName);
-        println("********************************************************");
+        println(H_RULE);
+        println(center(criterionName));
+        println(H_RULE);
     }
 
     /**
@@ -78,9 +81,18 @@ public class ProtTestPrinter {
      */
     public static void printTreeHeader(String modelName) {
         println("");
-        println("********************************************************");
-        println(ProtTestFormattedOutput.space(28 - modelName.length()/2, ' ') + modelName);
-        println("********************************************************");
+        println(H_RULE);
+        println(center(modelName));
+        println(H_RULE);
+        println("");
+    }
+
+    public static void printExecutionHeader(ApplicationOptions options) {
+        println("");
+        println(H_RULE);
+        println(center("MODEL OPTIMIZATION"));
+        println(H_RULE);
+        options.reportModelOptimization();
         println("");
     }
 
@@ -104,6 +116,9 @@ public class ProtTestPrinter {
         println("");
         println("");
         println("ProtTest-HPC - " + ProtTest.versionNumber);
+    }
+    private static String center(String text) {
+        return ProtTestFormattedOutput.space((H_RULE.length() - text.length())/2, ' ') + text;
     }
 
     /**

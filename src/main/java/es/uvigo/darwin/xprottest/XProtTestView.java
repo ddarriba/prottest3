@@ -463,14 +463,14 @@ public class XProtTestView extends FrameView {
         menuBar.add(analysisMenu);
 
         resultsMenu.setAction(actionMap.get("showResultsWindow")); // NOI18N
-        resultsMenu.setMnemonic('R');
+        resultsMenu.setMnemonic('S');
         resultsMenu.setText(bundle.getString("item-results")); // NOI18N
         resultsMenu.setName("resultsMenu"); // NOI18N
 
         resultsMenuItem.setAction(actionMap.get("showResultsWindow")); // NOI18N
         resultsMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
         resultsMenuItem.setMnemonic('r');
-        resultsMenuItem.setText(bundle.getString("item-results")); // NOI18N
+        resultsMenuItem.setText(bundle.getString("item-results-sub")); // NOI18N
         resultsMenuItem.setEnabled(false);
         resultsMenuItem.setName("resultsMenuItem"); // NOI18N
         resultsMenuItem.setToolTipText(resourceMap.getString("resultsMenuItem.toolTipText")); // NOI18N
@@ -613,6 +613,8 @@ public class XProtTestView extends FrameView {
     public void computeLikelihood(int numModels, ApplicationOptions options) {
 
         enableHandler();
+        
+        ProtTestPrinter.printExecutionHeader(options);
         
         preferencesMenuItem.setEnabled(false);
         this.numModels = numModels;

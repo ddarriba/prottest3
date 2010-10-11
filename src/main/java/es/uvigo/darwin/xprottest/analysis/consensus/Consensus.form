@@ -546,7 +546,6 @@
               <action class="es.uvigo.darwin.xprottest.analysis.consensus.Consensus" id="exportData" methodName="exportData"/>
             </Property>
             <Property name="text" type="java.lang.String" resourceKey="btnExport.text"/>
-            <Property name="enabled" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="btnExport" noResource="true"/>
           </Properties>
         </Component>

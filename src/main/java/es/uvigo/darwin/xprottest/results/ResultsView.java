@@ -6,6 +6,7 @@
 package es.uvigo.darwin.xprottest.results;
 
 import static es.uvigo.darwin.prottest.global.ApplicationGlobals.*;
+import static es.uvigo.darwin.prottest.selection.printer.PrintFramework.getDisplayValue;
 
 import es.uvigo.darwin.prottest.model.Model;
 import es.uvigo.darwin.prottest.facade.util.SelectionChunk;
@@ -38,11 +39,6 @@ public class ResultsView extends javax.swing.JFrame {
     private static final int BIC_TAB = 1;
     private static final int AICC_TAB = 2;
     private static final int DT_TAB = 3;
-    private static final String PARAMETER_F = "+F";
-    private static final String PARAMETER_I = "+I";
-    private static final String PARAMETER_G = "+G";
-    private static final String PARAMETER_IG = "+I+G";
-    private static final int numDecimals = 5;
     private int rows;
     javax.swing.table.DefaultTableModel aicTableModel,
             bicTableModel,
@@ -55,10 +51,10 @@ public class ResultsView extends javax.swing.JFrame {
     private double sampleSize = 0.0;
     private HashMap<Integer, SelectionChunk> aicResults, bicResults, aiccResults, dtResults;
 
-    private boolean existInvModels = false,
-            existGammaModels = false,
-            existGammaInvModels = false,
-            existFModels = false;
+//    private boolean existInvModels = false,
+//            existGammaModels = false,
+//            existGammaInvModels = false,
+//            existFModels = false;
 
     private void loadCache(double confidenceInterval) {
         // criterion cache
@@ -87,17 +83,17 @@ public class ResultsView extends javax.swing.JFrame {
         this.rows = models.length;
         this.models = models;
 
-        for (Model model : models) {
-            if (!existInvModels && model.isInv() && !model.isGamma()) {
-                existInvModels = true;
-            } else if (!existGammaModels && !model.isInv() && model.isGamma()) {
-                existGammaModels = true;
-            } else if (!existGammaInvModels && model.isInv() && model.isGamma()) {
-                existGammaInvModels = true;
-            } else if (!existFModels && model.isPlusF()) {
-                existFModels = true;
-            }
-        }
+//        for (Model model : models) {
+//            if (!existInvModels && model.isInv() && !model.isGamma()) {
+//                existInvModels = true;
+//            } else if (!existGammaModels && !model.isInv() && model.isGamma()) {
+//                existGammaModels = true;
+//            } else if (!existGammaInvModels && model.isInv() && model.isGamma()) {
+//                existGammaInvModels = true;
+//            } else if (!existFModels && model.isPlusF()) {
+//                existFModels = true;
+//            }
+//        }
 
         initComponents();
         loadCache(Double.parseDouble(sliderConfidenceInterval.getValue() + "") / 100);
@@ -1513,50 +1509,50 @@ public class ResultsView extends javax.swing.JFrame {
         aicTableModel.setRowCount(aicIt.size());
         fillTable(aicIt, aicTable);
 
-        displayAICoAlpha.setText(getDisplayValue(chunkAIC.getOverallAlpha(), PARAMETER_G));
-        displayAICoAlphaInv.setText(getDisplayValue(chunkAIC.getOverallAlphaInv(), PARAMETER_IG));
-        displayAICoInvAlpha.setText(getDisplayValue(chunkAIC.getOverallInvAlpha(), PARAMETER_IG));
-        displayAICoInv.setText(getDisplayValue(chunkAIC.getOverallInv(), PARAMETER_I));
-        displayAICImpAlpha.setText(getDisplayValue(chunkAIC.getAlphaImportance(), PARAMETER_G));
-        displayAICImpInv.setText(getDisplayValue(chunkAIC.getInvImportance(), PARAMETER_I));
-        displayAICImpAlphaInv.setText(getDisplayValue(chunkAIC.getAlphaInvImportance(), PARAMETER_IG));
-        displayAICImpF.setText(getDisplayValue(chunkAIC.getFImportance(), PARAMETER_F));
+        displayAICoAlpha.setText(getDisplayValue(chunkAIC.getOverallAlpha(), PARAMETER_G, chunkAIC.existGammaModels()));
+        displayAICoAlphaInv.setText(getDisplayValue(chunkAIC.getOverallAlphaInv(), PARAMETER_IG, chunkAIC.existGammaInvModels()));
+        displayAICoInvAlpha.setText(getDisplayValue(chunkAIC.getOverallInvAlpha(), PARAMETER_IG, chunkAIC.existGammaInvModels()));
+        displayAICoInv.setText(getDisplayValue(chunkAIC.getOverallInv(), PARAMETER_I, chunkAIC.existInvModels()));
+        displayAICImpAlpha.setText(getDisplayValue(chunkAIC.getAlphaImportance(), PARAMETER_G, chunkAIC.existGammaModels()));
+        displayAICImpInv.setText(getDisplayValue(chunkAIC.getInvImportance(), PARAMETER_I, chunkAIC.existInvModels()));
+        displayAICImpAlphaInv.setText(getDisplayValue(chunkAIC.getAlphaInvImportance(), PARAMETER_IG, chunkAIC.existGammaInvModels()));
+        displayAICImpF.setText(getDisplayValue(chunkAIC.getFImportance(), PARAMETER_F, chunkAIC.existFModels()));
 
         bicTableModel.setRowCount(bicIt.size());
         fillTable(bicIt, bicTable);
 
-        displayBICoAlpha.setText(getDisplayValue(chunkBIC.getOverallAlpha(), PARAMETER_G));
-        displayBICoAlphaInv.setText(getDisplayValue(chunkBIC.getOverallAlphaInv(), PARAMETER_IG));
-        displayBICoInvAlpha.setText(getDisplayValue(chunkBIC.getOverallInvAlpha(), PARAMETER_IG));
-        displayBICoInv.setText(getDisplayValue(chunkBIC.getOverallInv(), PARAMETER_I));
-        displayBICImpAlpha.setText(getDisplayValue(chunkBIC.getAlphaImportance(), PARAMETER_G));
-        displayBICImpInv.setText(getDisplayValue(chunkBIC.getInvImportance(), PARAMETER_I));
-        displayBICImpAlphaInv.setText(getDisplayValue(chunkBIC.getAlphaInvImportance(), PARAMETER_IG));
-        displayBICImpF.setText(getDisplayValue(chunkBIC.getFImportance(), PARAMETER_F));
+        displayBICoAlpha.setText(getDisplayValue(chunkBIC.getOverallAlpha(), PARAMETER_G, chunkBIC.existGammaModels()));
+        displayBICoAlphaInv.setText(getDisplayValue(chunkBIC.getOverallAlphaInv(), PARAMETER_IG, chunkBIC.existGammaInvModels()));
+        displayBICoInvAlpha.setText(getDisplayValue(chunkBIC.getOverallInvAlpha(), PARAMETER_IG, chunkBIC.existGammaInvModels()));
+        displayBICoInv.setText(getDisplayValue(chunkBIC.getOverallInv(), PARAMETER_I, chunkBIC.existInvModels()));
+        displayBICImpAlpha.setText(getDisplayValue(chunkBIC.getAlphaImportance(), PARAMETER_G, chunkBIC.existGammaModels()));
+        displayBICImpInv.setText(getDisplayValue(chunkBIC.getInvImportance(), PARAMETER_I, chunkBIC.existInvModels()));
+        displayBICImpAlphaInv.setText(getDisplayValue(chunkBIC.getAlphaInvImportance(), PARAMETER_IG, chunkBIC.existGammaInvModels()));
+        displayBICImpF.setText(getDisplayValue(chunkBIC.getFImportance(), PARAMETER_F, chunkBIC.existFModels()));
 
         aiccTableModel.setRowCount(aiccIt.size());
         fillTable(aiccIt, aiccTable);
 
-        displayAICcoAlpha.setText(getDisplayValue(chunkAICC.getOverallAlpha(), PARAMETER_G));
-        displayAICcoAlphaInv.setText(getDisplayValue(chunkAICC.getOverallAlphaInv(), PARAMETER_IG));
-        displayAICcoInvAlpha.setText(getDisplayValue(chunkAICC.getOverallInvAlpha(), PARAMETER_IG));
-        displayAICcoInv.setText(getDisplayValue(chunkAICC.getOverallInv(), PARAMETER_I));
-        displayAICcImpAlpha.setText(getDisplayValue(chunkAICC.getAlphaImportance(), PARAMETER_G));
-        displayAICcImpInv.setText(getDisplayValue(chunkAICC.getInvImportance(), PARAMETER_I));
-        displayAICcImpAlphaInv.setText(getDisplayValue(chunkAICC.getAlphaInvImportance(), PARAMETER_IG));
-        displayAICcImpF.setText(getDisplayValue(chunkAICC.getFImportance(), PARAMETER_F));
+        displayAICcoAlpha.setText(getDisplayValue(chunkAICC.getOverallAlpha(), PARAMETER_G, chunkAICC.existGammaModels()));
+        displayAICcoAlphaInv.setText(getDisplayValue(chunkAICC.getOverallAlphaInv(), PARAMETER_IG, chunkAICC.existGammaInvModels()));
+        displayAICcoInvAlpha.setText(getDisplayValue(chunkAICC.getOverallInvAlpha(), PARAMETER_IG, chunkAICC.existGammaInvModels()));
+        displayAICcoInv.setText(getDisplayValue(chunkAICC.getOverallInv(), PARAMETER_I, chunkAICC.existInvModels()));
+        displayAICcImpAlpha.setText(getDisplayValue(chunkAICC.getAlphaImportance(), PARAMETER_G, chunkAICC.existGammaModels()));
+        displayAICcImpInv.setText(getDisplayValue(chunkAICC.getInvImportance(), PARAMETER_I, chunkAICC.existInvModels()));
+        displayAICcImpAlphaInv.setText(getDisplayValue(chunkAICC.getAlphaInvImportance(), PARAMETER_IG, chunkAICC.existGammaInvModels()));
+        displayAICcImpF.setText(getDisplayValue(chunkAICC.getFImportance(), PARAMETER_F, chunkAICC.existFModels()));
 
         dtTableModel.setRowCount(dtIt.size());
         fillTable(dtIt, dtTable);
 
-        displayDToAlpha.setText(getDisplayValue(chunkDT.getOverallAlpha(), PARAMETER_G));
-        displayDToAlphaInv.setText(getDisplayValue(chunkDT.getOverallAlphaInv(), PARAMETER_IG));
-        displayDToInvAlpha.setText(getDisplayValue(chunkDT.getOverallInvAlpha(), PARAMETER_IG));
-        displayDToInv.setText(getDisplayValue(chunkDT.getOverallInv(), PARAMETER_I));
-        displayDTImpAlpha.setText(getDisplayValue(chunkDT.getAlphaImportance(), PARAMETER_G));
-        displayDTImpInv.setText(getDisplayValue(chunkDT.getInvImportance(), PARAMETER_I));
-        displayDTImpAlphaInv.setText(getDisplayValue(chunkDT.getAlphaInvImportance(), PARAMETER_IG));
-        displayDTImpF.setText(getDisplayValue(chunkDT.getFImportance(), PARAMETER_F));
+        displayDToAlpha.setText(getDisplayValue(chunkDT.getOverallAlpha(), PARAMETER_G, chunkDT.existGammaModels()));
+        displayDToAlphaInv.setText(getDisplayValue(chunkDT.getOverallAlphaInv(), PARAMETER_IG, chunkDT.existGammaInvModels()));
+        displayDToInvAlpha.setText(getDisplayValue(chunkDT.getOverallInvAlpha(), PARAMETER_IG, chunkDT.existGammaInvModels()));
+        displayDToInv.setText(getDisplayValue(chunkDT.getOverallInv(), PARAMETER_I, chunkDT.existInvModels()));
+        displayDTImpAlpha.setText(getDisplayValue(chunkDT.getAlphaImportance(), PARAMETER_G, chunkDT.existGammaModels()));
+        displayDTImpInv.setText(getDisplayValue(chunkDT.getInvImportance(), PARAMETER_I, chunkDT.existInvModels()));
+        displayDTImpAlphaInv.setText(getDisplayValue(chunkDT.getAlphaInvImportance(), PARAMETER_IG, chunkDT.existGammaInvModels()));
+        displayDTImpF.setText(getDisplayValue(chunkDT.getFImportance(), PARAMETER_F, chunkDT.existFModels()));
 
         lblSampleSize.setText(String.valueOf(ProtTestAlignment.calculateSampleSize(alignment, sampleSizeMode, sampleSize)));
     }
@@ -1571,13 +1567,13 @@ public class ResultsView extends javax.swing.JFrame {
             try {
                 table.setValueAt(
                         new Double(
-                        ProtTestFormattedOutput.getDecimalString(model.getValue(), numDecimals)), row, 2);
+                        ProtTestFormattedOutput.getDecimalString(model.getValue(), CRITERION_PRECISSION)), row, 2);
                 table.setValueAt(
                         new Double(
-                        ProtTestFormattedOutput.getDecimalString(model.getDeltaValue(), numDecimals)), row, 3);
+                        ProtTestFormattedOutput.getDecimalString(model.getDeltaValue(), CRITERION_PRECISSION)), row, 3);
                 table.setValueAt(
                         new Double(
-                        ProtTestFormattedOutput.getDecimalString(model.getWeightValue(), numDecimals)), row, 4);
+                        ProtTestFormattedOutput.getDecimalString(model.getWeightValue(), CRITERION_PRECISSION)), row, 4);
             } catch (NumberFormatException e) {
                 table.setValueAt(Double.NaN, row, 2);
                 table.setValueAt(Double.NaN, row, 3);
@@ -1641,26 +1637,26 @@ public class ResultsView extends javax.swing.JFrame {
     }
 
 
-    private String getDisplayValue(double value, String parameter) {
-        String toDisplay;
-        boolean existModels = false;
-        if (parameter.equals(PARAMETER_I)) {
-            existModels = existInvModels;
-        } else if (parameter.equals(PARAMETER_G)) {
-            existModels = existGammaModels;
-        } else if (parameter.equals(PARAMETER_IG)) {
-            existModels = existGammaInvModels;
-        } else if (parameter.equals(PARAMETER_F)) {
-            existModels = existFModels;
-        }
-        
-        if (existModels) {
-            toDisplay = ProtTestFormattedOutput.getDecimalString(value, numDecimals);
-        } else {
-            toDisplay = "No " + parameter + " models";
-        }
-        return toDisplay;
-    }
+//    private String getDisplayValue(double value, String parameter) {
+//        String toDisplay;
+//        boolean existModels = false;
+//        if (parameter.equals(PARAMETER_I)) {
+//            existModels = existInvModels;
+//        } else if (parameter.equals(PARAMETER_G)) {
+//            existModels = existGammaModels;
+//        } else if (parameter.equals(PARAMETER_IG)) {
+//            existModels = existGammaInvModels;
+//        } else if (parameter.equals(PARAMETER_F)) {
+//            existModels = existFModels;
+//        }
+//
+//        if (existModels) {
+//            toDisplay = ProtTestFormattedOutput.getDecimalString(value, IMPORTANCE_PRECISSION);
+//        } else {
+//            toDisplay = "No " + parameter + " models";
+//        }
+//        return toDisplay;
+//    }
 
     @Action
     public void exportData() {

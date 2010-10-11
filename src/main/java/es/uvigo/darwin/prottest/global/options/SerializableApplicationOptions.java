@@ -1,7 +1,7 @@
 package es.uvigo.darwin.prottest.global.options;
 
 import java.io.Serializable;
-import java.util.Vector;
+import java.util.List;
 
 /**
  * This class is a serializable version of {@link ApplicationOptions ApplicationOptions}.
@@ -25,9 +25,9 @@ public class SerializableApplicationOptions implements Serializable {
     /** The optimization strategy mode. */
     public int strategyMode;
     /** The matrices of the models to optimize. */
-    private Vector<String> matrices;
+    private List<String> matrices;
     /** The distributions of the models to optimize. */
-    private Vector<Integer> distributions;
+    private List<Integer> distributions;
     /** Boolean value to consider or not different kind of amino-acid frequencies. */
     private boolean plusF;
 
@@ -72,7 +72,7 @@ public class SerializableApplicationOptions implements Serializable {
      * 
      * @return the collection of matrix names
      */
-    public Vector<String> getMatrices() {
+    public List<String> getMatrices() {
         return matrices;
     }
 
@@ -81,7 +81,7 @@ public class SerializableApplicationOptions implements Serializable {
      * 
      * @return the collection of distribution identifiers
      */
-    public Vector<Integer> getDistributions() {
+    public List<Integer> getDistributions() {
         return distributions;
     }
 

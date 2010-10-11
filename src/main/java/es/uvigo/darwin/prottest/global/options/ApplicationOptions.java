@@ -11,8 +11,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Arrays;
-import java.util.Hashtable;
-import java.util.Vector;
 
 import pal.alignment.Alignment;
 import pal.tree.Tree;
@@ -27,6 +25,9 @@ import es.uvigo.darwin.prottest.util.logging.ProtTestLogger;
 import es.uvigo.darwin.prottest.util.printer.ProtTestFormattedOutput;
 
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Level;
 import static es.uvigo.darwin.prottest.util.logging.ProtTestLogger.*;
 
@@ -58,11 +59,11 @@ public class ApplicationOptions {
     /** The optimization strategy mode. */
     public int strategyMode = DEFAULT_STRATEGY_MODE;
     /** The matrices of the models to optimize. */
-    private Vector<String> matrices = new Vector<String>();	//{"JTT", "MtREV", "Dayhoff", "WAG"};
+    private List<String> matrices = new ArrayList<String>();	//{"JTT", "MtREV", "Dayhoff", "WAG"};
     /** The distributions of the models to optimize. */
-    private Vector<Integer> distributions = new Vector<Integer>();	//{0,1,2,3};
+    private List<Integer> distributions = new ArrayList<Integer>();	//{0,1,2,3};
     /** Hash table with the relationship between distribution name and distribution internal parameter. */
-    private Hashtable<String, Integer> distributionsHash;
+    private HashMap<String, Integer> distributionsHash;
     /** Boolean value to consider or not different kind of amino-acid frequencies. */
     private boolean plusF = false;
     // display options
@@ -301,8 +302,8 @@ public class ApplicationOptions {
      * @return the model matrices
      */
     @SuppressWarnings("unchecked")
-    public Vector<String> getMatrices() {
-        Vector<String> matricesClone = (Vector<String>) matrices.clone();
+    public List<String> getMatrices() {
+        List<String> matricesClone = new ArrayList<String>(matrices);
         return matricesClone;
     }
 
@@ -311,7 +312,7 @@ public class ApplicationOptions {
      * 
      * @param newMatrices the new model matrices
      */
-    public void setMatrices(Vector<String> newMatrices) {
+    public void setMatrices(List<String> newMatrices) {
         matrices = newMatrices;
     }
 
@@ -323,7 +324,7 @@ public class ApplicationOptions {
      * @return the matrix at the required position
      */
     public String getMatrixAt(int pos) {
-        return matrices.elementAt(pos);
+        return matrices.get(pos);
     }
 
     /**
@@ -345,7 +346,7 @@ public class ApplicationOptions {
      * @return true, if the matrix was successfully removed
      */
     public boolean removeMatrix(String matrix) {
-        return matrices.removeElement(matrix);
+        return matrices.remove(matrix);
     }
 
     /**
@@ -355,7 +356,7 @@ public class ApplicationOptions {
      */
     public void addMatrix(String matrix) {
         if (!matrices.contains(matrix)) {
-            matrices.addElement(matrix);
+            matrices.add(matrix);
         }
     }
 
@@ -364,9 +365,8 @@ public class ApplicationOptions {
      * 
      * @return the distributions
      */
-    @SuppressWarnings("unchecked")
-    public Vector<Integer> getDistributions() {
-        Vector<Integer> distributionsClone = (Vector<Integer>) distributions.clone();
+    public List<Integer> getDistributions() {
+        List<Integer> distributionsClone = new ArrayList<Integer>(distributions);
         return distributionsClone;
     }
 
@@ -375,7 +375,7 @@ public class ApplicationOptions {
      * 
      * @param newDistributions the new distributions
      */
-    public void setDistributions(Vector<Integer> newDistributions) {
+    public void setDistributions(List<Integer> newDistributions) {
         distributions = newDistributions;
     }
 
@@ -396,7 +396,7 @@ public class ApplicationOptions {
      * @return the distribution at the required position
      */
     public int getDistributionAt(int pos) {
-        return distributions.elementAt(pos);
+        return distributions.get(pos);
     }
 
     /**
@@ -429,7 +429,7 @@ public class ApplicationOptions {
     public void addDistribution(String distribution) {
         Integer distributionValue = distributionsHash.get(distribution);
         if (!distributions.contains(distributionValue)) {
-            distributions.addElement(distributionValue);
+            distributions.add(distributionValue);
         }
     }
 
@@ -442,7 +442,7 @@ public class ApplicationOptions {
      */
     public boolean removeDistribution(String distribution) {
         Integer distributionValue = distributionsHash.get(distribution);
-        return distributions.removeElement(distributionValue);
+        return distributions.remove(distributionValue);
     }
 
     /**
@@ -497,7 +497,7 @@ public class ApplicationOptions {
      * Instantiates a new application options.
      */
     public ApplicationOptions() {
-        initVectors();
+        initLists();
     }
 
     /**
@@ -608,13 +608,13 @@ public class ApplicationOptions {
     }
 
     /**
-     * Inits the vectors.
+     * Inits the Lists.
      */
-    private void initVectors() {
+    private void initLists() {
 //        for(int i=0; i<ALL_MATRICES.length; i++) {
 //            matrixes.addElement(ALL_MATRICES[i]);
 //        }
-        distributionsHash = new Hashtable<String, Integer>();
+        distributionsHash = new HashMap<String, Integer>();
         distributionsHash.put("Uniform", new Integer(Model.DISTRIBUTION_UNIFORM));
         distributionsHash.put("+I", new Integer(Model.DISTRIBUTION_INVARIABLE));
         distributionsHash.put("+G", new Integer(Model.DISTRIBUTION_GAMMA));
@@ -719,10 +719,7 @@ public class ApplicationOptions {
         }
     }
 
-    /**
-     * Report the current options.
-     */
-    public void report() {
+    public void reportModelOptimization() {
         String tmp;
         tmp = "BioNJ";
         if (tree_file != null) {
@@ -738,7 +735,7 @@ public class ApplicationOptions {
         println("  Candidate models......... : ");
         print("    Matrices............... : ");
         for (int i = 0; i < matrices.size(); i++) {
-            print(matrices.elementAt(i) + " ");
+            print(matrices.get(i) + " ");
         }
         println("");
         print("    Distributions.......... : ");
@@ -750,6 +747,14 @@ public class ApplicationOptions {
         }
         println("");
         println("    Observed frequencies... : " + plusF);
+        println("");
+    }
+
+    /**
+     * Report the current options.
+     */
+    public void reportComplete() {
+        reportModelOptimization();
 
         println("  Statistical framework");
         println("    Sort models according to....: " + SORTBY_NAMES[getSortBy() - 'A']);

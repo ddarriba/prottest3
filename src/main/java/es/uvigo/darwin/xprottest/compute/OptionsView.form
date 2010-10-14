@@ -500,7 +500,7 @@
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder title="Amino-acid frequencies">
+            <TitledBorder title="Starting topology">
               <Property name="titleX" resourceKey="startingTopologiesPanel.border.title"/>
               <Connection PropertyName="font" code="XProtTestApp.FONT_PANEL_TITLE" type="code"/>
               <Property name="color" resourceKey="startingTopologiesPanel.border.titleColor"/>

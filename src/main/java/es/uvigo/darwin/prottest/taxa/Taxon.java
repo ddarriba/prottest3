@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package es.uvigo.darwin.prottest.taxa;
 
 import es.uvigo.darwin.prottest.util.attributable.AttributableHelper;

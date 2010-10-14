@@ -1,10 +1,22 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+Copyright (C) 2009  Diego Darriba
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+*/
 package es.uvigo.darwin.prottest.util.fileio;
 
-import es.uvigo.darwin.prottest.consensus.*;
 import java.io.File;
 import java.util.List;
 import java.io.BufferedReader;
@@ -24,7 +36,7 @@ import es.uvigo.darwin.prottest.tree.WeightedTree;
 
 /**
  *
- * @author diego
+ * @author Diego Darriba
  */
 public class SimpleNewickTreeReader extends TreeReader {
 

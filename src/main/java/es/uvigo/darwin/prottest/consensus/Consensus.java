@@ -71,6 +71,10 @@ public class Consensus {
     private Map<FixedBitSet, Double> cladeSupport;
     /** The inner consensus tree. */
     private Tree consensusTree;
+    /** The splits included in consensus tree */
+    private List<FixedBitSet> splitsInConsensus = new ArrayList<FixedBitSet>();
+    /** The splits not included in consensus tree */
+    private List<FixedBitSet> splitsOutFromConsensus = new ArrayList<FixedBitSet>();
 
     /**
      * Gets the clade support, with Support instances
@@ -525,6 +529,21 @@ public class Consensus {
         cons.setAttribute(cons.getRoot(), TreeUtils.TREE_NAME_ATTRIBUTE,
                 "cons_" + thresholdAsPercent + "_majRule");
 
+        Set<FixedBitSet> keySet = getSupport().keySet();
+        FixedBitSet[] keys = keySet.toArray(new FixedBitSet[0]);
+        Arrays.sort(keys);
+
+        for (FixedBitSet fbs : keys) {
+            if (fbs.cardinality() > 1) {
+                double psupport = (1.0 * getSupport().get(fbs).getTreesWeightWithClade()) / cumWeight;
+                if (psupport < supportThreshold) {
+                    splitsOutFromConsensus.add(fbs);
+                } else {
+                    splitsInConsensus.add(fbs);
+                }
+            }
+        }
+
         return cons;
 
     }
@@ -789,9 +808,66 @@ public class Consensus {
         } catch (FileNotFoundException e) {
             out.println("File not found: " + filename);
         } catch (IOException e1) {
-            e1.printStackTrace();
+            out.println("IO Error: " + e1.getMessage());
         }
         out.flush();
+    }
+
+    public String getTaxaHeader() {
+        StringBuilder taxaHeader = new StringBuilder();
+        for (int i = 0; i < numTaxa; i++) {
+            taxaHeader.append(String.valueOf(i + 1).charAt(0));
+        }
+        if (numTaxa >= 10) {
+            taxaHeader.append('\n');
+            taxaHeader.append(ProtTestFormattedOutput.space(4 + 9, ' '));
+            for (int i = 9; i < numTaxa; i++) {
+                taxaHeader.append(String.valueOf(i + 1).charAt(1));
+            }
+        }
+        if (numTaxa >= 100) {
+            taxaHeader.append('\n');
+            taxaHeader.append(ProtTestFormattedOutput.space(4 + 99, ' '));
+            for (int i = 99; i < numTaxa; i++) {
+                taxaHeader.append(String.valueOf(i + 1).charAt(3));
+            }
+        }
+
+        return taxaHeader.toString();
+    }
+
+    public String getSetsIncluded() {
+        StringBuilder setsIncluded = new StringBuilder();
+        setsIncluded.append("    ");
+        setsIncluded.append(getTaxaHeader());
+
+        setsIncluded.append('\n');
+        for (FixedBitSet fbs : splitsInConsensus) {
+            setsIncluded.append("    ")
+                    .append(fbs.splitRepresentation())
+                    .append(" ( ")
+                    .append(Utilities.round(getCladeSupport().get(fbs), 5))
+                    .append(" )")
+                    .append('\n');
+        }
+        return setsIncluded.toString();
+    }
+
+    public String getSetsNotIncluded() {
+        StringBuilder setsIncluded = new StringBuilder();
+        setsIncluded.append("    ");
+        setsIncluded.append(getTaxaHeader());
+
+        setsIncluded.append('\n');
+        for (FixedBitSet fbs : splitsOutFromConsensus) {
+            setsIncluded.append("    ")
+                    .append(fbs.splitRepresentation())
+                    .append(" ( ")
+                    .append(Utilities.round(getCladeSupport().get(fbs), 5))
+                    .append(" )")
+                    .append('\n');
+        }
+        return setsIncluded.toString();
     }
 
     private BranchDistances getBranchDistances(int value) {

@@ -5,7 +5,6 @@
  */
 package es.uvigo.darwin.xprottest.analysis.consensus;
 
-import es.uvigo.darwin.prottest.util.printer.ProtTestFormattedOutput;
 import es.uvigo.darwin.prottest.util.logging.ProtTestLogger;
 import es.uvigo.darwin.prottest.util.printer.ProtTestPrinter;
 import static es.uvigo.darwin.prottest.global.ApplicationGlobals.*;
@@ -18,23 +17,18 @@ import es.uvigo.darwin.prottest.selection.BIC;
 import es.uvigo.darwin.prottest.selection.DT;
 import es.uvigo.darwin.prottest.selection.InformationCriterion;
 import es.uvigo.darwin.prottest.selection.LNL;
-import es.uvigo.darwin.prottest.util.FixedBitSet;
 import es.uvigo.darwin.prottest.util.ProtTestAlignment;
-import es.uvigo.darwin.prottest.util.Utilities;
 import es.uvigo.darwin.prottest.util.collection.ModelCollection;
 import es.uvigo.darwin.prottest.util.collection.SingleModelCollection;
 import es.uvigo.darwin.prottest.util.exception.ProtTestInternalException;
 import java.awt.Font;
 import pal.tree.Tree;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.ResourceMap;
 import es.uvigo.darwin.xprottest.XProtTestView;
 import es.uvigo.darwin.xprottest.util.TextAreaWriter;
-import java.util.List;
-import java.util.Set;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import pal.alignment.Alignment;
@@ -600,21 +594,6 @@ public class Consensus extends javax.swing.JFrame {
 
                 println("");
 
-                Set<FixedBitSet> keySet = consensus.getCladeSupport().keySet();
-                List<FixedBitSet> splitsInConsensus = new ArrayList<FixedBitSet>();
-                List<FixedBitSet> splitsOutFromConsensus = new ArrayList<FixedBitSet>();
-
-                for (FixedBitSet fbs : keySet) {
-                    if (fbs.cardinality() > 1) {
-                        double psupport = (1.0 * consensus.getCladeSupport().get(fbs)) / 1.0;
-                        if (psupport < supportThreshold) {
-                            splitsOutFromConsensus.add(fbs);
-                        } else {
-                            splitsInConsensus.add(fbs);
-                        }
-                    }
-                }
-
                 println("# # # # # # # # # # # # # # # #");
                 println(" ");
                 println("Species in order:");
@@ -629,65 +608,28 @@ public class Consensus extends javax.swing.JFrame {
                 println(" ");
                 println("Sets included in the consensus tree");
                 println(" ");
-                print("    ");
 
                 int numTaxa = consensus.getIdGroup().getIdCount();
-                for (int i = 0; i < numTaxa; i++) {
-                    print("" + String.valueOf(i + 1).charAt(0));
-                }
-                println(" ");
-                if (numTaxa >= 10) {
-                    print(ProtTestFormattedOutput.space(4 + 9, ' '));
-                    for (int i = 9; i < numTaxa; i++) {
-                        print("" + String.valueOf(i + 1).charAt(1));
-                    }
-                }
-                println(" ");
-                if (numTaxa >= 100) {
-                    print(ProtTestFormattedOutput.space(4 + 99, ' '));
-                    for (int i = 99; i < numTaxa; i++) {
-                        print("" + String.valueOf(i + 1).charAt(3));
-                    }
-                }
-
-                println(" ");
-                for (FixedBitSet fbs : splitsInConsensus) {
-                    println("    " + fbs.splitRepresentation() + " ( "
-                            + Utilities.round(consensus.getCladeSupport().get(fbs), 5) + " )");
-                }
+                println(consensus.getSetsIncluded());
+                
                 println(" ");
                 println("Sets NOT included in consensus tree");
                 println(" ");
-                print("    ");
 
-                for (int i = 0; i < numTaxa; i++) {
-                    print("" + String.valueOf(i + 1).charAt(0));
-                }
+                println(consensus.getSetsNotIncluded());
+
                 println(" ");
-                if (numTaxa >= 10) {
-                    print(ProtTestFormattedOutput.space(4 + 9, ' '));
-                    for (int i = 9; i < numTaxa; i++) {
-                        print("" + String.valueOf(i + 1).charAt(1));
-                    }
-                }
+                println("# # # # # # # # # # # # # # # #");
                 println(" ");
-                if (numTaxa >= 100) {
-                    print(ProtTestFormattedOutput.space(4 + 99, ' '));
-                    for (int i = 99; i < numTaxa; i++) {
-                        print("" + String.valueOf(i + 1).charAt(3));
-                    }
-                }
-                println(" ");
-                
-                for (FixedBitSet fbs : splitsOutFromConsensus) {
-                    println("    " + fbs.splitRepresentation() + " ( "
-                            + Utilities.round(consensus.getCladeSupport().get(fbs), 5) + " )");
-                }
 
                 Tree consensusTree = consensus.getConsensusTree();
                 String newickTree = facade.toNewick(consensusTree, true, true, true);
                 println(newickTree);
-                println("");
+
+                println(" ");
+                println("# # # # # # # # # # # # # # # #");
+                println(" ");
+
                 println(facade.toASCII(consensusTree));
                 println(" ");
                 println(facade.branchInfo(consensusTree));

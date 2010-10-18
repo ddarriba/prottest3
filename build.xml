@@ -2,8 +2,8 @@
 <!-- You may freely edit this file. See commented blocks below for -->
 <!-- some examples of how to customize the build. -->
 <!-- (If you delete it and reopen the project it will be recreated.) -->
-<project name="ProtTest-HPC" default="default" basedir=".">
-    <description>Builds, tests, and runs the project ProtTest-HPC.</description>
+<project name="ProtTest" default="default" basedir=".">
+    <description>Builds, tests, and runs the project ProtTest.</description>
     <import file="buildconf/build-impl.xml"/>
 
     <property name="src.resources.dir" value="src/main/resources"/>

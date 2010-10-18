@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------
-ProtTest-HPC Readme -	9/Dec/2009
+ProtTest3 Readme -	18/Oct/2010
 
 Diego Darriba (ddarriba@udc.es)
 Guillermo L. Taboada (taboada@udc.es)
@@ -32,33 +32,37 @@ TOC
 
 Console version
 
-$ tar zvxf prottest-hpc.tar.gz
+$ tar zvxf prottest-3.0b-yyyymmdd.tar.gz
 (Linux/Unix/OS X)
-$ export PROTTEST_HOME=$PWD/prottest-hpc
+$ export PROTTEST_HOME=$PWD/prottest3.0b
 (Windows)
-$ set PROTTEST_HOME=$CWD\prottest-hpc
-$ cd prottest-hpc
-$ java -jar prottest-hpc.jar -i examples/COX2_PF0016/alignment -all-matrices -all-distributions -threads 2
+$ set PROTTEST_HOME=$CWD\prottest3.0b
+$ cd $PROTTEST_HOME
+$ java -jar prottest-3.0b.jar -i examples/COX2_PF0016/alignment -all-matrices -all-distributions -threads 2
 
 Graphical version
 
-$ tar zvxf XProtTest.tar.gz
-$ cd XProtTest
-$ java -jar XProtTest.jar
+$ tar zvxf prottest-3.0b-yyyymmdd.tar.gz
+(Linux/Unix/OS X)
+$ export PROTTEST_HOME=$PWD/prottest3.0b
+(Windows)
+$ set PROTTEST_HOME=$CWD\prottest3.0b
+$ cd $PROTTEST_HOME
+$ ./runXProtTest.sh
 
 -----------------------------------------------------------------------------
 1. Introduction
 -----------------------------------------------------------------------------
 
-ProtTest-HPC is a High Performance Computing implementation of ProtTest, for
+ProtTest3 is a High Performance Computing implementation of ProtTest, for
 selection of best-fit models of protein evolution. It is currently under
 development so it could have some errors and the documentation is pending.
 
-Please, report bugs and enquiries about ProtTest-HPC to: ddarriba@udc.es,
+Please, report bugs and enquiries about ProtTest3 to: ddarriba@udc.es,
 dposada@uvigo.es, fedeabascal@yahoo.es.
 
 The main page of the ProtTest project is located at
-http://darwin.uvigo.es/software/prottest.html
+http://darwin.uvigo.es/software/prottesthpc
 
 -----------------------------------------------------------------------------
 2. Installation
@@ -71,7 +75,7 @@ please refer to the 'How to run' section.
 3. Structure
 -----------------------------------------------------------------------------
 
-Inside the ProtTest-HPC you should find the following structure:
+Inside the ProtTest3 directory you should find the following structure:
 
 $PROTTEST_HOME/
   |
@@ -83,28 +87,29 @@ $PROTTEST_HOME/
   |
   | filecluster8.conf.template  # machines file template for 8 node cluster
   | machines			# machines file for cluster execution
-  | prottest.properties		# ProtTest-HPC configuration file (always required)
-  | prottest-hpc.jar		# ProtTest-HPC package
+  | prottest.properties		# ProtTest3 configuration file (always required)
+  | prottest-3.0b.jar		# ProtTest3 package
   | README			# this README file
-  | runProtTestHPC.sh		# basic script for ProtTest-HPC cluster execution
-  | runXProtTestHPC.sh		# basic script for ProtTest-HPC graphical version
+  | COPYING                     # ProtTest3 licese
+  | runProtTestHPC.sh		# basic script for ProtTest3 cluster execution
+  | runXProtTestHPC.sh		# basic script for ProtTest3 graphical version
   
-- The ProtTest-HPC properties (prottest.properties) file must be located in the 
-ProtTest-HPC root directory. It has the execution preferences. Please refer to such
+- The ProtTest properties (prottest.properties) file must be located in the 
+ProtTest root directory. It has the execution preferences. Please refer to such
 file to know more about the execution properties.
 
 - The external applications should be located on "bin" directory under the 
-ProtTest-HPC root, where at least the one which matches your computer architecture
+ProtTest root, where at least the one which matches your computer architecture
 must exist.
 
 -----------------------------------------------------------------------------
 4. How to run
 -----------------------------------------------------------------------------
 
-There are several ways to run ProtTest-HPC according to the resources you want
+There are several ways to run ProtTest according to the resources you want
 to use.
 
-It's preferred to use JRE 1.6 to run ProtTest-HPC, in fact, the graphical user
+It's preferred to use JRE 1.6 to run ProtTest, in fact, the graphical user
 interface will only work with JRE 1.6 or newer version.
 
 You can download the newest version at http://java.sun.com/javase/
@@ -193,7 +198,7 @@ These are the parameters of the sequential execution:
 Basic execution example:
 
 	$ cd $PROTTEST_HOME
-	$ java -jar prottest-hpc.jar -i examples/COX2_PF0016/alignment -all-matrices -all-distributions
+	$ java -jar prottest-3.0b.jar -i examples/COX2_PF0016/alignment -all-matrices -all-distributions
 
 
 -----------------------------------------------------------------------------
@@ -205,7 +210,7 @@ can use up to the number of cores in your machine and beyond. Following the basi
 execution example, a recommended multithread execution in a quad-core machine will be:
 
 	$ cd $PROTTEST_HOME
-	$ java -jar prottest-hpc.jar -i examples/COX2_PF0016/alignment -all-matrices -all-distributions -threads 4
+	$ java -jar prottest-3.0b.jar -i examples/COX2_PF0016/alignment -all-matrices -all-distributions -threads 4
 
 It is remarkable that the substitution models will not be computed in a specific
 order, so the full output will be shown once all models have been computed. 
@@ -215,9 +220,9 @@ Meanwhile, the main thread will notify each executed model by the standard outpu
 	4.2.3 Cluster execution
 -----------------------------------------------------------------------------
 
-1. Besides the multithreading support, it is possible to run ProtTest-HPC in 
+1. Besides the multithreading support, it is possible to run ProtTest in 
 a cluster. This support has been implemented using a Java message-passing 
-(MPJ) library, MPJ Express (http://mpj-express.org/). To execute ProtTest-HPC 
+(MPJ) library, MPJ Express (http://mpj-express.org/). To execute ProtTest 
 in a cluster environment you have to:
 
 $ cd $PROTTEST_HOME
@@ -242,7 +247,7 @@ $MPJ_HOME/bin). A ssh service must be running in the machines listed in the
 machines file. Moreover, port 10000 should be free. For more details refer to
 the MPJ Express documentation.
 
-4. Run ProtTest-HPC. For the execution the ProtTest-HPC distribution provides a
+4. Run ProtTest. For the execution the ProtTest distribution provides a
 bash script: 'runProtTestHPC.sh'
 
 The basic syntax is:
@@ -255,14 +260,14 @@ $ ./runProtTestHPC.sh 2 -i examples/COX2_PF0016/alignment -all-matrices -all-dis
 -----------------------------------------------------------------------------
 
 This strategy relies on a thread-based implementation of phyml together with the
-distributed memory of ProtTest-HPC version. Please request us the thread-based 
+distributed memory of ProtTest version. Please request us the thread-based
 phyml source code and further documentation.
 
 -----------------------------------------------------------------------------
 	4.3. Graphical user interface execution
 -----------------------------------------------------------------------------
 
-If you are running ProtTest-HPC on your desktop computer, you'd better use the
+If you are running ProtTest on your desktop computer, you'd better use the
 graphical user interface, provided by the XProtTest package. It will be
 show results clearer to the user and will be easier to manipulate them too.
 

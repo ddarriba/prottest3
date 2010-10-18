@@ -641,72 +641,77 @@ public class ApplicationOptions {
         println("-------------------------------------------------------------------------------------------------");
         println("Basic usage: ");
         println(" - Sequential version: ");
-        println("		java -jar prottest-2.1.jar -i alignm_file [OPTIONS]					");
+        println("        java -jar prottest-2.1.jar -i alignm_file [OPTIONS]");
         println(" - Parallel version: ");
-        println("		mpjrun.sh -wdir $PWD/ -np [NUM_PROCS] -jar ModelTest-2.1.jar -i alignm_file [OPTIONS]");
-        println("OPTIONS:                                           								");
-        println(" -i alignment_filename																");
-        println("			alignment input file (required)                  							");
-        println(" -t tree_filename																	");
-        println("			tree file      	(optional) [default: NJ tree]								");
-        println(" -o output_filename 																	");
-        println("			output file    	(optional) [default: standard output]								");
-        println(" -sort sot_by_value 																	");
-        println(" 		Ordering field	(optional) [default: " + DEFAULT_SORT_BY + "]");
+        println("        mpjrun.sh -wdir $PWD/ -np [NUM_PROCS] -jar ModelTest-2.1.jar -i alignm_file [OPTIONS]");
+        println("OPTIONS:");
+        println(" -i alignment_filename");
+        println("            Alignment input file (required)");
+        println(" -t tree_filename");
+        println("            Tree file       (optional) [default: NJ tree]");
+        println(" -o output_filename");
+        println("            Output file     (optional) [default: standard output]");
+        println(" -all-matrices");
+        println("            Compute all available matrices");
+        println(" -[matrix]");
+        print(  "            Include matrix (Amino-acid) = "  );
+        int count = 0;
+        for (String matrix : Arrays.asList(ALL_MATRICES)) {
+            print(matrix + " ");
+            if (count == (ALL_MATRICES.length/2)) {
+                println("");
+                print("	                ");
+            }
+        }
+        println("");
+        println("                (requires at least one substitution matrix)");
+        println(" -I");
+        println("            Include models with a proportion of invariable sites");
+        println(" -G");
+        println("            Include models with rate variation among sites and number of categories");
+        println(" -IG");
+        println("            include models with both +I and +G properties");
+        println(" -all-distributions");
+        println("            Include models with rate variation among sites, number of categories and both");
+        println(" -ncat number_of_categories");
+        println("            Define number of categories for +G and +I+G models [default: " + DEFAULT_NCAT + "]");
+        println(" -F");
+        println("            Include models with empirical frequency estimation ");
+        println(" -sort sot_by_value");
+        println("            Ordering field	(optional) [default: " + DEFAULT_SORT_BY + "]");
         for (char value : SORTBY_VALUES) {
             println("             		" + value + ": " + SORTBY_NAMES[value - 'A']);
         }
-        println(" -all																				");
-        println(" 		Displays a 7-framework comparison table										");
-        println(" -S optimization_strategy															");
-        println(" 		optimization strategy mode: [default: " + DEFAULT_STRATEGY_MODE + "]");
+        println(" -all");
+        println("            Displays a 7-framework comparison table");
+        println(" -S optimization_strategy");
+        println("            Optimization strategy mode: [default: " + DEFAULT_STRATEGY_MODE + "]");
         for (int i = 0; i < OPTIMIZE_NAMES.length; i++) {
             println("             		" + i + ": " + OPTIMIZE_NAMES[i]);
         }
-        println(" -sample sample_size_mode															");
-        println(" 		sample size for AICc and BIC corrections [default: " + DEFAULT_SAMPLE_SIZE_MODE + "]");
+        println(" -sample sample_size_mode");
+        println("            Sample size for AICc and BIC corrections [default: " + DEFAULT_SAMPLE_SIZE_MODE + "]");
         for (int i = 0; i < SIZE_MODE_NAMES.length; i++) {
             println("             		" + i + ": " + SIZE_MODE_NAMES[i]);
         }
         println(" -size user_size  		");
-        println(" 		specified sample size, only for \"-sample " + SIZEMODE_USERSIZE + "\"");
+        println("            Specified sample size, only for \"-sample " + SIZEMODE_USERSIZE + "\"");
         println(" -t1      				");
-        println(" 		display best-model's newick tree [default: " + DEFAULT_DISPLAY_NEWICK_TREE + "]");
+        println("            Display best-model's newick tree [default: " + DEFAULT_DISPLAY_NEWICK_TREE + "]");
         println(" -t2      				");
-        println(" 		display best-model's ASCII tree  [default: " + DEFAULT_DISPLAY_ASCII_TREE + "]");
+        println("            Display best-model's ASCII tree  [default: " + DEFAULT_DISPLAY_ASCII_TREE + "]");
         println(" -tc consensus_threshold ");
-        println(" 		display consensus tree with the specified threshold");
-        println(" -verbose 				");
-        println(" 		verbose mode [default: " + DEFAULT_DEBUG + "]");
-        println(" -all-matrices			");
-        println(" 		computes all available matrices");
+        println("            Display consensus tree with the specified threshold");
         println(" -threads number_or_threads			");
-        println(" 		number of threads to compute (only if MPJ is not used) [default: " +
+        println("            Number of threads requested to compute (only if MPJ is not used) [default: " +
                 DEFAULT_THREADS + "]");
-        println(" -[model]");
-        print("			model (Amino-acid) = ");
-        for (String matrix : Arrays.asList(ALL_MATRICES)) {
-            print(matrix + " ");
-        }
-        println("");
-        println("							(requires at least one substitution matrix)");
-        println(" -I	");
-        println(" 		include models with a proportion of invariable sites");
-        println(" -G	");
-        println(" 		include models with rate variation among sites and number of categories");
-        println(" -IG	");
-        println(" 		include models with both +I and +G properties");
-        println(" -all-distributions");
-        println(" 		include models with rate variation among sites, number of categories and both");
-        println(" -ncat number_of_categories");
-        println(" 		define number of categories for +G and +I+G models [default: " + DEFAULT_NCAT + "]");
-        println(" -F	");
-        println(" 		include models with empirical frequency estimation ");
+        println(" -verbose");
+        println("            Verbose mode [default: " + DEFAULT_DEBUG + "]");
         println("-------------------------------------------------------------------------------------------------");
         println("Example: ");
-        println("- Sequential version:		");
-        println("    java -jar ModelTest-2.1.jar -i alignm_file -t tree_file -S 0 -sample 1 -all-matrices -all-distributions -F > output		");
-        println("- Parallel version:		");
+        println("- Sequential version:");
+        println("    java -jar ModelTest-2.1.jar -i alignm_file -t tree_file -S 0 -sample 1 -all-matrices -all-distributions -F > output");
+        println("- Parallel version:");
         println("    mpjrun.sh -wdir $PWD/ -np 2 -jar ModelTest-2.1.jar -i alignm_file -t tree_file -S 0 -sample 1 -all-matrices -all-distributions -F");
     }
 

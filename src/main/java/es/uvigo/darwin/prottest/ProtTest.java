@@ -39,7 +39,6 @@ import es.uvigo.darwin.prottest.selection.InformationCriterion;
 import es.uvigo.darwin.prottest.selection.LNL;
 import es.uvigo.darwin.prottest.selection.printer.PrintFramework;
 import es.uvigo.darwin.prottest.util.FixedBitSet;
-import es.uvigo.darwin.prottest.util.Utilities;
 import es.uvigo.darwin.prottest.util.argumentparser.ProtTestArgumentParser;
 import es.uvigo.darwin.prottest.util.collection.ModelCollection;
 import es.uvigo.darwin.prottest.util.collection.SingleModelCollection;
@@ -47,9 +46,11 @@ import es.uvigo.darwin.prottest.util.exception.ProtTestInternalException;
 import es.uvigo.darwin.prottest.util.factory.ProtTestFactory;
 import es.uvigo.darwin.prottest.util.logging.ProtTestLogger;
 import es.uvigo.darwin.prottest.util.printer.ProtTestPrinter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Handler;
 import java.util.logging.Level;
 import pal.misc.Identifier;
 import pal.tree.Tree;
@@ -84,8 +85,19 @@ public class ProtTest {
      */
     public static void main(String[] args) {
 
+        args = ProtTestFactory.initialize(args);
+        factory = ProtTestFactory.getInstance();
+
         ProtTestLogger logger = ProtTestLogger.getDefaultLogger();
         logger.setStdHandlerLevel(Level.INFO);
+        try {
+            Handler logHandler = factory.createLogHandler();
+            if (logHandler != null) {
+                logger.addHandler(logHandler);
+            }
+        } catch (IOException ex) {
+            logger.severeln(ex.getMessage());
+        }
 
         // initializing MPJ environment (if available)
         try {
@@ -99,9 +111,6 @@ public class ProtTest {
             MPJ_SIZE = 1;
             MPJ_RUN = false;
         }
-
-        args = ProtTestFactory.initialize(args);
-        factory = ProtTestFactory.getInstance();
 
         // parse arguments
         ApplicationOptions opts = new ApplicationOptions();
@@ -201,25 +210,27 @@ public class ProtTest {
 
                 // display best model tree in ASCII
                 if (opts.isDisplayASCIITree()) {
+                    ProtTestPrinter.printTreeHeader(ic.getBestModel().getModelName());
                     logger.infoln(treeFacade.toASCII(ic.getBestModel().getTree()));
                 }
 
                 // display best model tree in Newick
                 if (opts.isDisplayNewickTree()) {
+                    if (!opts.isDisplayASCIITree()) {
+                        ProtTestPrinter.printTreeHeader(ic.getBestModel().getModelName());
+                    }
                     logger.infoln(treeFacade.toNewick(ic.getBestModel().getTree(), true, true, false));
                 }
 
                 // display consensus tree data
                 if (opts.isDisplayConsensusTree()) {
 
+                    ProtTestPrinter.printTreeHeader("MODEL AVERAGED PHYLOGENY");
                     Consensus consensus = treeFacade.createConsensus(ic, opts.getConsensusThreshold());
 
-                    logger.infoln("");
-                    logger.infoln("");
-                    logger.infoln("----------------------------------------");
-                    logger.infoln("------------ Consensus Tree ------------");
                     logger.infoln("----------------------------------------");
                     logger.infoln("Selection criterion: . . . . " + SORTBY_NAMES[opts.getSortBy() - 'A']);
+                    logger.infoln("Confidence interval: . . . . " + ic.getConfidenceInterval());
                     logger.infoln("Sample size: . . . . . . . . " + opts.getSampleSize());
                     logger.infoln("Consensus support threshold: " + opts.getConsensusThreshold());
                     logger.infoln("----------------------------------------");
@@ -254,34 +265,25 @@ public class ProtTest {
                     logger.infoln(" ");
                     logger.infoln("Sets included in the consensus tree");
                     logger.infoln(" ");
-                    logger.info("    ");
-                    for (int i = 0; i < consensus.getIdGroup().getIdCount(); i++) {
-                        logger.info(String.valueOf(i + 1));
-                    }
-                    logger.infoln(" ");
-                    for (FixedBitSet fbs : splitsInConsensus) {
-                        logger.infoln("    " + fbs.splitRepresentation() + " ( " +
-                                Utilities.round(consensus.getCladeSupport().
-                                get(fbs), 5) + " )");
-                    }
+
+                    int numTaxa = consensus.getIdGroup().getIdCount();
+                    logger.infoln(consensus.getSetsIncluded());
+
                     logger.infoln(" ");
                     logger.infoln("Sets NOT included in consensus tree");
                     logger.infoln(" ");
-                    logger.info("    ");
-                    for (int i = 0; i < consensus.getIdGroup().getIdCount(); i++) {
-                        logger.info(String.valueOf(i + 1));
-                    }
+
+                    logger.infoln(consensus.getSetsNotIncluded());
+
                     logger.infoln(" ");
-                    for (FixedBitSet fbs : splitsOutFromConsensus) {
-                        logger.infoln("    " + fbs.splitRepresentation() + " ( " +
-                                Utilities.round(consensus.getCladeSupport().
-                                get(fbs), 5) + " )");
-                    }
-                    logger.infoln("\n");
+                    logger.infoln("# # # # # # # # # # # # # # # #");
+                    logger.infoln(" ");
                     Tree consensusTree = consensus.getConsensusTree();
                     String newickTree = treeFacade.toNewick(consensusTree, true, true, true);
                     logger.infoln(newickTree);
-                    logger.infoln("");
+                    logger.infoln(" ");
+                    logger.infoln("# # # # # # # # # # # # # # # #");
+                    logger.infoln(" ");
                     logger.infoln(treeFacade.toASCII(consensusTree));
                     logger.infoln("");
                     logger.infoln(treeFacade.branchInfo(consensusTree));

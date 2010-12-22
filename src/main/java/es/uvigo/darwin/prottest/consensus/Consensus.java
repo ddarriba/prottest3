@@ -40,7 +40,6 @@ import pal.tree.SimpleTree;
 import pal.tree.Tree;
 import es.uvigo.darwin.prottest.selection.InformationCriterion;
 import es.uvigo.darwin.prottest.selection.model.SelectionModel;
-import es.uvigo.darwin.prottest.selection.printer.PrintFramework;
 import es.uvigo.darwin.prottest.tree.TreeUtils;
 import es.uvigo.darwin.prottest.util.FixedBitSet;
 import es.uvigo.darwin.prottest.util.Utilities;
@@ -48,7 +47,6 @@ import es.uvigo.darwin.prottest.util.exception.ImportException;
 import es.uvigo.darwin.prottest.util.exception.ProtTestInternalException;
 import es.uvigo.darwin.prottest.util.fileio.NexusExporter;
 import es.uvigo.darwin.prottest.util.printer.ProtTestFormattedOutput;
-import es.uvigo.darwin.prottest.util.printer.ProtTestPrinter;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Set;
@@ -70,7 +68,7 @@ public class Consensus {
     final static public int BRANCH_LENGTHS_MEDIAN = 2;
     /** Default branch lengths algorithm */
     private static final BranchDistances DEFAULT_BRANCH_DISTANCES =
-            BranchDistances.WeightedAverage;
+            BranchDistances.WeightedMedian;
     /** The Constant FIRST (just for source code visibility). */
     private static final int FIRST = 0;
     /** The weighted trees in consensus. */
@@ -161,7 +159,7 @@ public class Consensus {
             throw new ProtTestInternalException();
         }
         //check compatibility
-        if (trees.size() == 0) {
+        if (trees.isEmpty()) {
             trees.add(wTree);
             numTaxa = wTree.getTree().getIdCount();
             idGroup = pal.tree.TreeUtils.getLeafIdGroup(wTree.getTree());
@@ -378,7 +376,7 @@ public class Consensus {
      */
     private Tree buildTree(double supportThreshold, BranchDistances branchDistances) {
 
-        if (trees.size() == 0) {
+        if (trees.isEmpty()) {
             throw new ProtTestInternalException("There are no trees to consense");
         }
 
@@ -420,6 +418,7 @@ public class Consensus {
         // sorts support from largest to smallest
         final Comparator<Map.Entry<FixedBitSet, Support>> comparator = new Comparator<Map.Entry<FixedBitSet, Support>>() {
 
+            @Override
             public int compare(Map.Entry<FixedBitSet, Support> o1, Map.Entry<FixedBitSet, Support> o2) {
                 double diff = o2.getValue().treesWeightWithClade - o1.getValue().treesWeightWithClade;
                 if (diff > 0.0) {
@@ -518,7 +517,7 @@ public class Consensus {
                         break;
                     }
 
-                    if (split.size() == 0) {
+                    if (split.isEmpty()) {
                         System.err.println("Bug??");
                         assert (false);
                     }
@@ -580,6 +579,7 @@ public class Consensus {
              * 
              * @return the weighted average of the set
              */
+            @Override
             public double build(List<WeightLengthPair> values) {
                 double avg = 0.0;
                 double cumWeight = 0.0;
@@ -601,6 +601,7 @@ public class Consensus {
              * 
              * @return the weighted median of the set
              */
+            @Override
             public double build(List<WeightLengthPair> values) {
                 Collections.sort(values);
                 double median = -1;

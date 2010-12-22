@@ -57,13 +57,13 @@ public class ProtTestPrinter {
         println("");
         println("");
         println("ProtTest " + ProtTest.versionNumber
-                + ProtTestFormattedOutput.space(13 - ProtTest.versionNumber.length(), ' ') +
-                                      "Fast selection of the best-fit models of protein evolution");
-        println("(c) 2009-2010                     Diego Darriba, Guillermo Taboada, Ramón Doallo");
-        println("(FA, DP)            Facultad de Biologia, Universidad de Vigo, 36200 Vigo, Spain");
-        println("(FA, DP) Facultade de Informática, Universidade da Coruña, 15071 A Coruña, Spain");
-        println("Contact:                                       ddarriba@udc.es, dposada@uvigo.es");
-        println("--------------------------------------------------------------------------------");
+                + ProtTestFormattedOutput.space(27 - ProtTest.versionNumber.length(), ' ') +
+                                                    "Fast selection of the best-fit models of protein evolution");
+        println("(c) 2009-2010   Diego Darriba (1,2), Guillermo Taboada (2), Ramón Doallo (2), David Posada (1)");
+        println("(1)                               Facultad de Biologia, Universidad de Vigo, 36200 Vigo, Spain");
+        println("(2)                    Facultade de Informática, Universidade da Coruña, 15071 A Coruña, Spain");
+        println("Contact:                                                     ddarriba@udc.es, dposada@uvigo.es");
+        println("----------------------------------------------------------------------------------------------");
         println("");
         println((new Date()).toString());
         println("OS = " + System.getProperty("os.name") +

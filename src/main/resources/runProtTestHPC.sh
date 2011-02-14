@@ -1,4 +1,4 @@
 export MPJ_HOME=$PWD/mpj
 export NP=$1
 shift
-$MPJ_HOME/bin/mpjrun.sh -wdir $PWD/ -np $NP -jar prottest-3.0b.jar  $*
+$MPJ_HOME/bin/mpjrun.sh -wdir $PWD/ -np $NP -jar prottest-3.0.jar  $*

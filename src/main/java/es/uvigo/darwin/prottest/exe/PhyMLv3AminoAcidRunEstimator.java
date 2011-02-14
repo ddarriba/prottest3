@@ -166,14 +166,23 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
                 str[i] = "";
             }
 
-            if (getPhymlVersion() != null) {
+            java.io.File currentDir = new java.io.File("");
+            File phymlBin = new File(currentDir.getAbsolutePath() + "/bin/phyml");
+            String phymlBinName;
+            if (phymlBin.exists() && phymlBin.canExecute()) {
+                phymlBinName = phymlBin.getAbsolutePath();
+            } else {
+                phymlBinName = getPhymlVersion();
+            }
+
+            if (phymlBinName != null) {
 
                 //     phyml -i seq_file_name -d aa ¿-q? -f d/e (d para -F y e para +F) -v 0/e (para -I o +I) -a e (para estimar alpha)
                 //         -c 0/4/8 (num rate categories) -u user_tree_file (opcional)
                 //         -o tlr/lr (dependiendo de si optimizamos la topología o no)
                 //         -m WAG (default) | JTT | MtREV | Dayhoff | DCMut | RtREV | CpREV | VT | Blosum62 | MtMam | MtArt | HIVw |  HIVb | custom
-                java.io.File currentDir = new java.io.File("");
-                str[0] = currentDir.getAbsolutePath() + "/bin/" + getPhymlVersion();
+
+                str[0] = phymlBinName;
 
                 // input alignment
                 str[4] = "-i";

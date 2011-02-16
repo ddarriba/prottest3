@@ -217,25 +217,15 @@ public class Consensus {
 
     /**
      * Instantiates a new unweighted consensus builder.
-     * 
-     * @param trees the trees
-     * @param supportThreshold the minimum support for a clade
-     */
-    public Consensus(List<Tree> trees, double supportThreshold) {
-        this(trees, supportThreshold, 0);
-    }
-
-    /**
-     * Instantiates a new unweighted consensus builder.
-     * 
+     *
      * @param trees the trees
      * @param supportThreshold the minimum support for a clade
      * @param branchDistances the method to get the consensus branch lengths
      */
-    public Consensus(List<Tree> trees, double supportThreshold, int branchDistances) {
+    public Consensus(List<WeightedTree> trees, double supportThreshold, int branchDistances) {
         this.trees = new ArrayList<WeightedTree>();
-        for (Tree tree : trees) {
-            this.addTree(new UnweightedTree(tree));
+        for (WeightedTree tree : trees) {
+            this.addTree(tree);
         }
 
         consensusTree = buildTree(supportThreshold, getBranchDistances(branchDistances));

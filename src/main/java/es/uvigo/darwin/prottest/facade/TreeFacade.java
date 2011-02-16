@@ -22,6 +22,7 @@ import java.util.List;
 
 import pal.tree.Tree;
 import es.uvigo.darwin.prottest.selection.InformationCriterion;
+import es.uvigo.darwin.prottest.tree.WeightedTree;
 
 /**
  * Declaration of services related to phylogenetic tree management.
@@ -71,10 +72,10 @@ public interface TreeFacade {
     /**
      * Create a consensus tree from a list of trees.
      * 
-     * @param treeCollection the trees to build consensus
+     * @param treeCollection the trees and its weights to build consensus
      * @param threshold the minimum clade support
      */
-    public Tree createConsensusTree(List<Tree> treeCollection, double threshold);
+    public Tree createConsensusTree(List<WeightedTree> treeCollection, double threshold);
 
     /**
      * Create a weighted consensus tree from an information criterion.

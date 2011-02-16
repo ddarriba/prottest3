@@ -23,7 +23,6 @@ import converter.Factory;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.PushbackReader;
-import java.util.Vector;
 
 import es.uvigo.darwin.prottest.util.exception.AlignmentParseException;
 import es.uvigo.darwin.prottest.util.exception.TreeFormatException;
@@ -33,6 +32,8 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -73,12 +74,12 @@ public class AlignmentReader {
             throws AlignmentParseException, FileNotFoundException, IOException {
 
         Alignment alignment;
-        StringBuffer text = new StringBuffer();
+        StringBuilder text = new StringBuilder();
 
         BufferedReader br = new BufferedReader(new FileReader(filename));
         String s;
         while ((s = br.readLine()) != null) {
-            text.append(s + "\r\n");
+            text.append(s).append("\r\n");
         }
         br.close();
 
@@ -170,7 +171,7 @@ public class AlignmentReader {
             throw new AlignmentParseException(e.getMessage());
         }
 
-        Vector<String> seqNames = new Vector<String>(alignment.getSequenceCount());
+        List<String> seqNames = new ArrayList<String>(alignment.getSequenceCount());
         for (int i = 0; i < alignment.getSequenceCount(); i++) {
             seqNames.add(alignment.getIdentifier(i).getName());
         }
@@ -178,9 +179,9 @@ public class AlignmentReader {
         String currString;
         int size = alignment.getSequenceCount();
         for (int i = 0; i < size; i++) {
-            currString = (String) seqNames.elementAt(i);
+            currString = (String) seqNames.get(i);
             for (int j = i + 1; j < size; j++) {
-                if (seqNames.elementAt(j).equals(currString)) {
+                if (seqNames.get(j).equals(currString)) {
                     throw new AlignmentParseException("ERROR: There are duplicated taxa names in the alignment: " + currString);
                 }
             }

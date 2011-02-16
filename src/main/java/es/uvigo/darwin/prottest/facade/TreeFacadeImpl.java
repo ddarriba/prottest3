@@ -24,6 +24,7 @@ import pal.tree.Tree;
 import es.uvigo.darwin.prottest.consensus.Consensus;
 import es.uvigo.darwin.prottest.selection.InformationCriterion;
 import es.uvigo.darwin.prottest.tree.TreeUtils;
+import es.uvigo.darwin.prottest.tree.WeightedTree;
 import es.uvigo.darwin.prottest.util.exception.ProtTestInternalException;
 import java.io.StringWriter;
 
@@ -65,13 +66,13 @@ public class TreeFacadeImpl implements TreeFacade {
         return TreeUtils.toNewick(tree, printLengths, printInternalLabels, printCladeSupport);
     }
 
-    public Tree createConsensusTree(List<Tree> treeColection,
+    public Tree createConsensusTree(List<WeightedTree> treeColection,
             double threshold) {
 
         if (threshold < 0.5 || threshold > 1.0) {
             throw new ProtTestInternalException("Invalid threshold value: " + threshold);
         }
-        Consensus consensus = new Consensus(treeColection, threshold);
+        Consensus consensus = new Consensus(treeColection, threshold, Consensus.BRANCH_LENGTHS_MEDIAN);
         Tree cons = consensus.getConsensusTree();
         return cons;
     }

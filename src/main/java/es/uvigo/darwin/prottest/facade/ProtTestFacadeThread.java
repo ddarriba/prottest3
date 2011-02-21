@@ -157,18 +157,16 @@ public class ProtTestFacadeThread
         }
 
         boolean errorsFound = false;
-
         Collection<Future<Object>> futures = null;
         try {
             futures = threadPool.invokeAll(c);
         } catch (InterruptedException e) {
         }
-
         if (futures != null) {
             for (Future<Object> f : futures) {
                 try {
                     f.get();
-                } catch (InterruptedException ex) {
+                                    } catch (InterruptedException ex) {
                     errorsFound = true;
                 } catch (ExecutionException ex) {
                     // Internal exception while computing model.

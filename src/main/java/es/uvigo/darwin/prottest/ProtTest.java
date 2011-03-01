@@ -127,6 +127,16 @@ public class ProtTest {
                 ApplicationOptions.usage();
             }
             finalize(1);
+        } catch (ProtTestInternalException e) {
+            if (MPJ_ME == 0) {
+                System.err.println(e.getMessage());
+            }
+            finalize(1);
+        } catch (ExceptionInInitializerError e) {
+            if (MPJ_ME == 0) {
+                System.err.println("An error has occurred while initializing. Check your prottest.properties file.");
+            }
+            finalize(1);
         }
 
         // get the facade instance
@@ -295,6 +305,9 @@ public class ProtTest {
             }
 
         } catch (ProtTestInternalException e) {
+            logger.severeln(e.getMessage());
+            finalize(-1);
+        } catch (UnsupportedOperationException e) {
             logger.severeln(e.getMessage());
             finalize(-1);
         }

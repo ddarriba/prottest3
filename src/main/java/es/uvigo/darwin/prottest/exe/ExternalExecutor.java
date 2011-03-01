@@ -83,11 +83,6 @@ public class ExternalExecutor {
         } catch (IOException ex) {
             throw new ProtTestInternalException(ex.getMessage());
         }
-
-        StreamGobbler errorGobbler = new StreamGobbler(new InputStreamReader(proc.getErrorStream()), "Phyml-Error", true, this.getClass());
-        StreamGobbler outputGobbler = new StreamGobbler(new InputStreamReader(proc.getInputStream()), "Phyml-Output", true, this.getClass());
-        errorGobbler.start();
-        outputGobbler.start();
         
         try {    
             int exitVal = proc.waitFor();

@@ -28,7 +28,7 @@ import java.util.Properties;
 public abstract class ApplicationGlobals implements ProtTestConstants {
 
     /** The application APPLICATION_PROPERTIES. */
-    public static Properties APPLICATION_PROPERTIES;
+    public static final Properties APPLICATION_PROPERTIES;
     
     static {
         APPLICATION_PROPERTIES = new Properties();

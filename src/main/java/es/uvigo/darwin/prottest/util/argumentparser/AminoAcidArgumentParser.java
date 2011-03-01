@@ -32,7 +32,7 @@ import es.uvigo.darwin.prottest.util.factory.ProtTestFactory;
 public class AminoAcidArgumentParser extends ProtTestArgumentParser {
 
 	/** Amino-Acid model matrices to include in the analysis. */
-	public static List<String> PARAM_MATRICES;
+	public static final List<String> PARAM_MATRICES;
 
 	/** Include models with all matrices (like -JTT -LG -etc,). */
 	public static final String PARAM_ALL_MATRICES = "all-matrices";

@@ -48,6 +48,7 @@ public class AminoAcidApplicationGlobals extends ApplicationGlobals {
 	/* (non-Javadoc)
 	 * @see es.uvigo.darwin.prottest.global.ApplicationGlobals#getSupportedMatrices()
 	 */
+    @Override
 	public List<String> getSupportedMatrices() {
 		return Arrays.asList(ALL_MATRICES);
 	}
@@ -55,6 +56,7 @@ public class AminoAcidApplicationGlobals extends ApplicationGlobals {
 	/* (non-Javadoc)
 	 * @see es.uvigo.darwin.prottest.global.ApplicationGlobals#getModelName(java.lang.String, int)
 	 */
+    @Override
 	public String getModelName(String matrix, int frequenciesDistribution) {
 		return matrix;
 	}

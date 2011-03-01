@@ -172,7 +172,7 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
             if (phymlBin.exists() && phymlBin.canExecute()) {
                 phymlBinName = phymlBin.getAbsolutePath();
             } else {
-                phymlBinName = getPhymlVersion();
+                phymlBinName = currentDir.getAbsolutePath() + "/bin/" + getPhymlVersion();
             }
 
             if (phymlBinName != null) {
@@ -253,8 +253,8 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
             }
             proc.getOutputStream().close();
 
-            StreamGobbler errorGobbler = new StreamGobbler(new InputStreamReader(proc.getErrorStream()), "Phyml-Error", true, RunEstimator.class);
-            StreamGobbler outputGobbler = new StreamGobbler(new InputStreamReader(proc.getInputStream()), "Phyml-Output", true, RunEstimator.class);
+            StreamGobbler errorGobbler = new PhymlStreamGobbler(new InputStreamReader(proc.getErrorStream()), "Phyml-Error", true, RunEstimator.class);
+            StreamGobbler outputGobbler = new PhymlStreamGobbler(new InputStreamReader(proc.getInputStream()), "Phyml-Output", true, RunEstimator.class);
             errorGobbler.start();
             outputGobbler.start();
             int exitVal = proc.waitFor();

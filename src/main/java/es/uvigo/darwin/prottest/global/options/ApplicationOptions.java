@@ -23,7 +23,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Arrays;
 
 import pal.alignment.Alignment;
 import pal.tree.Tree;
@@ -33,6 +32,7 @@ import es.uvigo.darwin.prottest.util.argumentparser.ProtTestArgumentParser;
 import es.uvigo.darwin.prottest.util.exception.AlignmentParseException;
 import es.uvigo.darwin.prottest.util.exception.ProtTestInternalException;
 import es.uvigo.darwin.prottest.util.exception.TreeFormatException;
+import es.uvigo.darwin.prottest.util.factory.ProtTestFactory;
 import es.uvigo.darwin.prottest.util.fileio.AlignmentReader;
 import es.uvigo.darwin.prottest.util.logging.ProtTestLogger;
 import es.uvigo.darwin.prottest.util.printer.ProtTestFormattedOutput;
@@ -656,12 +656,14 @@ public class ApplicationOptions {
         println(" -[matrix]");
         print(  "            Include matrix (Amino-acid) = "  );
         int count = 0;
-        for (String matrix : Arrays.asList(ALL_MATRICES)) {
+        List<String> matrices = ProtTestFactory.getInstance().getApplicationGlobals().getSupportedMatrices();
+        for (String matrix : matrices) {
             print(matrix + " ");
-            if (count == (ALL_MATRICES.length/2)) {
+            if (count == (7)) {
                 println("");
-                print("	                ");
+                print("	                                  ");
             }
+            count++;
         }
         println("");
         println("                (requires at least one substitution matrix)");

@@ -46,6 +46,25 @@ public class Utilities {
         }
         return token;    
     }
+
+    /**
+     * Next token.
+     *
+     * @param str the string
+     * @param previousToken the previous token
+     *
+     * @return the next token
+     */
+    public static String nextToken (String str, String previousToken) {
+        StringTokenizer st = new StringTokenizer(str);
+        String token = "";
+        while (st.hasMoreTokens()) {
+            token = st.nextToken();
+            if (token.equals(previousToken))
+                return st.nextToken();
+        }
+        return null;
+    }
     
     /**
      * Checks if is windows.

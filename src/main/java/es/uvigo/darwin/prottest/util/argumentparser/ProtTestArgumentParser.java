@@ -22,7 +22,6 @@ import static es.uvigo.darwin.prottest.global.ApplicationGlobals.*;
 import es.uvigo.darwin.prottest.global.ProtTestConsoleParameters;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -37,13 +36,13 @@ public abstract class ProtTestArgumentParser
 
     
     /** Hashtable to associate parameter tokens within parameter localArguments requirements. */
-    protected static Hashtable<String, Boolean> valuesRequired;
+    protected static final HashMap<String, Boolean> valuesRequired;
     /** Hashtable to associate parameter tokens within parameter localArguments range. */
-    protected static HashMap<String, String[]> argumentValues;
+    protected static final HashMap<String, String[]> argumentValues;
     /** Hashtable to handle special localArguments like "all-distributions". */
-    protected static HashMap<String, Map<String, String>> specialArguments;
+    protected static final HashMap<String, Map<String, String>> specialArguments;
     /** The default APPLICATION_PROPERTIES. */
-    private static Properties defaultProperties;
+    private static final Properties defaultProperties;
     /** The argument  prefix. */
     public static final String ARG_TOKEN = "-";
     /** The command line localArguments. */
@@ -51,7 +50,7 @@ public abstract class ProtTestArgumentParser
     
     static {
 
-        valuesRequired = new Hashtable<String, Boolean>();
+        valuesRequired = new HashMap<String, Boolean>();
         argumentValues = new HashMap<String, String[]>();
         specialArguments = new HashMap<String, Map<String, String>>();
         valuesRequired.put(PARAM_ALIGNMENT_FILE, true);

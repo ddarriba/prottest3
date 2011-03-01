@@ -24,30 +24,37 @@ import java.io.InputStreamReader;
 
 /**
  * Allows the asynchronous logging of an input stream.
- * 
+ *
  * @author Federico Abascal
  */
-public abstract class StreamGobbler extends Thread {
-
-    protected InputStreamReader isr;
-    protected String type;
-    protected boolean printIt;
-    protected Class caller;
+public class RaxMLStreamGobbler extends StreamGobbler {
 
     /**
      * Instantiates a new StreamGobbler
-     * 
+     *
      * @param isr the input stream reader to evaluate
      * @param type the prefix of the output lines
      * @param printIt true, if the errors should be logged
      * @param caller the caller
      */
-    public StreamGobbler(InputStreamReader isr, String type, boolean printIt, Class caller) {
-        this.isr = isr;
-        this.type = type;
-        this.printIt = printIt;
-        this.caller = caller;
+    public RaxMLStreamGobbler(InputStreamReader isr, String type, boolean printIt, Class caller) {
+        super(isr,type,printIt,caller);
     }
 
-}
+        @Override
+    /* (non-Javadoc)
+     * @see java.lang.Thread#run()
+     */
+    public void run() {
+        try {
+            //InputStreamReader isr = new InputStreamReader(is);
+            BufferedReader br = new BufferedReader(isr);
+            String line = null;
+            while ((line = br.readLine()) != null) {
+                ProtTestLogger.finestln(type + ">" + line, caller);
+            }
+        } catch (IOException ioe) {
 
+        }
+    }
+}

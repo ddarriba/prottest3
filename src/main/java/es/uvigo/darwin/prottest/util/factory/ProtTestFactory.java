@@ -28,6 +28,7 @@ import java.util.Properties;
 import pal.alignment.Alignment;
 import pal.tree.Tree;
 import es.uvigo.darwin.prottest.exe.PhyMLv3AminoAcidRunEstimator;
+import es.uvigo.darwin.prottest.exe.RaxMLAminoAcidRunEstimator;
 import es.uvigo.darwin.prottest.exe.RunEstimator;
 import es.uvigo.darwin.prottest.global.AminoAcidApplicationGlobals;
 import es.uvigo.darwin.prottest.global.ApplicationGlobals;
@@ -74,7 +75,7 @@ public class ProtTestFactory {
             throws IllegalArgumentException {
         if (sort <= 0 || sort > MAX_SORT) {
             throw new IllegalArgumentException(
-                    "Cannot create factory (unexistent sort)");
+                    "Cannot create factory (unexistent sort : "+ sort +")");
         }
         this.sort = sort;
     }
@@ -143,7 +144,7 @@ public class ProtTestFactory {
                 mtap = new AminoAcidArgumentParser(args, options);
                 break;
             case NUCLEIC:
-                throw new ProtTestInternalException("Unsupported operation");
+                throw new ProtTestInternalException("Unsupported operation: nucleic data");
         }
         return mtap;
     }
@@ -163,11 +164,11 @@ public class ProtTestFactory {
                 } else if (analyzer.equals(ANALYZER_PHYML)) {
                     ap = new AminoAcidApplicationGlobals();
                 } else {
-                    throw new ProtTestInternalException("Analyzer not supported by RunEstimator");
+                    throw new ProtTestInternalException("Analyzer "+ analyzer  +" not supported by RunEstimator. Check your prottest.properties file");
                 }
                 break;
             case NUCLEIC:
-                throw new ProtTestInternalException("Unsupported operation");
+                throw new ProtTestInternalException("Unsupported operation: nucleic data");
         }
         return ap;
     }
@@ -198,7 +199,7 @@ public class ProtTestFactory {
                         alignment, tree, ncat);
                 break;
             case NUCLEIC:
-                throw new ProtTestInternalException("Unsupported operation");
+                throw new ProtTestInternalException("Unsupported operation: nucleic data");
         }
         return model;
     }
@@ -232,18 +233,18 @@ public class ProtTestFactory {
                     runEstimator = new PhyMLv3AminoAcidRunEstimator(options, model, numberOfThreads);
                     break;
                 case NUCLEIC:
-                    throw new ProtTestInternalException("Unsupported operation");
+                    throw new ProtTestInternalException("Unsupported operation: nucleic data");
             }
         } else if (analyzer.equals(ANALYZER_RAXML)) {
             switch (sort) {
                 case PROTEIC:
-//				runEstimator = new RaxMLAminoAcidRunEstimator(options, model);
+                    runEstimator = new RaxMLAminoAcidRunEstimator(options, model);
                     break;
                 case NUCLEIC:
-                    throw new ProtTestInternalException("Unsupported operation");
+                    throw new ProtTestInternalException("Unsupported operation: nucleic data");
             }
         } else {
-            throw new ProtTestInternalException("Analyzer not supported by RunEstimator");
+            throw new ProtTestInternalException("Analyzer "+ analyzer +" not supported by RunEstimator");
         }
         return runEstimator;
     }
@@ -292,7 +293,7 @@ public class ProtTestFactory {
                 pf = new AminoAcidPrintFramework();
                 break;
             case NUCLEIC:
-                throw new ProtTestInternalException("Not implemented");
+                throw new ProtTestInternalException("Unsupported operation: nucleic data");
         }
 
         return pf;

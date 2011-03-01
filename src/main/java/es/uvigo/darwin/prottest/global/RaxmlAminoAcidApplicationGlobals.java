@@ -28,7 +28,7 @@ public class RaxmlAminoAcidApplicationGlobals extends
 		AminoAcidApplicationGlobals {
 
 	/** The Amino-Acid substitution matrices supported by RAxML. */
-	public static String[] ALL_MATRICES	= { 
+	public static final String[] RAXML_MATRICES	= {
 		 "JTT",
 		 "DCMut",
 		 "MtREV",
@@ -39,12 +39,14 @@ public class RaxmlAminoAcidApplicationGlobals extends
 		 "CpREV",
 		 "Blosum62",
 		 "VT",
+                 "FLU"
 	};
-	
+
 	/* (non-Javadoc)
 	 * @see es.uvigo.darwin.prottest.global.ApplicationGlobals#getSupportedMatrices()
 	 */
+    @Override
 	public List<String> getSupportedMatrices() {
-		return Arrays.asList(ALL_MATRICES);
+		return Arrays.asList(RAXML_MATRICES);
 	}
 }

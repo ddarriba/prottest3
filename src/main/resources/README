@@ -253,7 +253,7 @@ bash script: 'runProtTestHPC.sh'
 The basic syntax is:
 	./runProtTestHPC.sh $NUMBER_OF_PROCESSORS $APPLICATION_PARAMETERS
 
-$ ./runProtTestHPC.sh 2 -i examples/COX2_PF0016/alignment -all-matrices -all-distributions 4
+$ ./runProtTestHPC.sh 2 -i examples/COX2_PF0016/alignment -all-matrices -all-distributions
 
 -----------------------------------------------------------------------------
 	4.2.4 Cluster hybrid execution

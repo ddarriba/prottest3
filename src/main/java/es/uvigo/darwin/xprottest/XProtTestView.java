@@ -59,6 +59,7 @@ import es.uvigo.darwin.xprottest.analysis.consensus.Consensus;
 import es.uvigo.darwin.xprottest.compute.OptionsView;
 import es.uvigo.darwin.xprottest.results.ErrorLogView;
 import es.uvigo.darwin.xprottest.results.ResultsView;
+import es.uvigo.darwin.xprottest.util.BrowserLauncher;
 import java.awt.BorderLayout;
 import java.awt.Insets;
 import java.io.FileWriter;
@@ -69,7 +70,7 @@ import javax.swing.JDialog;
 import javax.swing.JScrollPane;
 import org.jdesktop.application.ApplicationContext;
 import org.jdesktop.application.TaskService;
-import org.virion.jam.util.BrowserLauncher;
+
 
 /**
  * The XProtTest main frame offers whole connection between the application

@@ -14,7 +14,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
 package es.uvigo.darwin.prottest;
 
 import static es.uvigo.darwin.prottest.global.ApplicationGlobals.*;
@@ -88,17 +88,6 @@ public class ProtTest {
         args = ProtTestFactory.initialize(args);
         factory = ProtTestFactory.getInstance();
 
-        ProtTestLogger logger = ProtTestLogger.getDefaultLogger();
-        logger.setStdHandlerLevel(Level.INFO);
-        try {
-            Handler logHandler = factory.createLogHandler();
-            if (logHandler != null) {
-                logger.addHandler(logHandler);
-            }
-        } catch (IOException ex) {
-            logger.severeln(ex.getMessage());
-        }
-
         // initializing MPJ environment (if available)
         try {
             String[] argsApp = MPI.Init(args);
@@ -110,6 +99,19 @@ public class ProtTest {
             MPJ_ME = 0;
             MPJ_SIZE = 1;
             MPJ_RUN = false;
+        }
+
+        ProtTestLogger logger = ProtTestLogger.getDefaultLogger();
+        logger.setStdHandlerLevel(Level.INFO);
+        if (MPJ_ME == 0) {
+            try {
+                Handler logHandler = factory.createLogHandler();
+                if (logHandler != null) {
+                    logger.addHandler(logHandler);
+                }
+            } catch (IOException ex) {
+                logger.severeln(ex.getMessage());
+            }
         }
 
         // parse arguments

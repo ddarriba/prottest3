@@ -174,8 +174,6 @@ public class HybridDistributionStrategy extends DistributionStrategy {
             }
         }
 
-        System.out.println("-----------------------------------BREAK!!!!! [" + mpjMe + "]");
-
         endTime = System.currentTimeMillis();
 
         while (pme.hasMoreTasks()) {
@@ -192,7 +190,6 @@ public class HybridDistributionStrategy extends DistributionStrategy {
             computedModels = gather();
         }
 
-        System.out.println("-----------------------------------DONE!!!!! [" + mpjMe + "]");
     }
 
     /* (non-Javadoc)
@@ -222,11 +219,11 @@ public class HybridDistributionStrategy extends DistributionStrategy {
             displs = distributor.getDispls();
         }
 
+        MPI.COMM_WORLD.Bcast(itemsPerProc, 0, mpjSize, MPI.INT, 0);
+
         // gathering optimized models
         MPI.COMM_WORLD.Gatherv(modelSet.toArray(new Model[0]), 0, modelSet.size(), MPI.OBJECT,
                 allModels, 0, itemsPerProc, displs, MPI.OBJECT, 0);
-//		else
-//			allModels = modelSet.toArray(new Model[0]);
 
         return allModels;
     }

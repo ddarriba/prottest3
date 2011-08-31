@@ -14,7 +14,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
 package es.uvigo.darwin.prottest.util.factory;
 
 import static es.uvigo.darwin.prottest.global.ApplicationGlobals.*;
@@ -63,6 +63,8 @@ public class ProtTestFactory {
     private static ProtTestFactory instance;
     /** The sort. */
     private int sort;
+    /** Unique log handler. */
+    private Handler logHandler;
 
     /**
      * Instantiates a new prot test factory.
@@ -75,7 +77,7 @@ public class ProtTestFactory {
             throws IllegalArgumentException {
         if (sort <= 0 || sort > MAX_SORT) {
             throw new IllegalArgumentException(
-                    "Cannot create factory (unexistent sort : "+ sort +")");
+                    "Cannot create factory (unexistent sort : " + sort + ")");
         }
         this.sort = sort;
     }
@@ -164,7 +166,7 @@ public class ProtTestFactory {
                 } else if (analyzer.equals(ANALYZER_PHYML)) {
                     ap = new AminoAcidApplicationGlobals();
                 } else {
-                    throw new ProtTestInternalException("Analyzer "+ analyzer  +" not supported by RunEstimator. Check your prottest.properties file");
+                    throw new ProtTestInternalException("Analyzer " + analyzer + " not supported by RunEstimator. Check your prottest.properties file");
                 }
                 break;
             case NUCLEIC:
@@ -244,11 +246,11 @@ public class ProtTestFactory {
                     throw new ProtTestInternalException("Unsupported operation: nucleic data");
             }
         } else {
-            throw new ProtTestInternalException("Analyzer "+ analyzer +" not supported by RunEstimator");
+            throw new ProtTestInternalException("Analyzer " + analyzer + " not supported by RunEstimator");
         }
         return runEstimator;
     }
-    
+
     public Handler createLogHandler() throws IOException {
         //   Log level is configurable:
         //   'info'    Only general information messages are logged (default)
@@ -256,28 +258,32 @@ public class ProtTestFactory {
         //   'finer'   More complex debug information is logged
         //   'finest'  All activity is tracked
 
-        String[] supportedLevels = {"INFO", "FINE", "FINER", "FINEST"};
+        if (logHandler == null) {
 
-        String logDirName = APPLICATION_PROPERTIES.getProperty("log_dir");
-        String level = APPLICATION_PROPERTIES.getProperty("log_level", "info").toUpperCase();
-        boolean supported = false;
-        for (String testLevel : supportedLevels) {
-            supported |= testLevel.equals(level);
-        }
+            String[] supportedLevels = {"INFO", "FINE", "FINER", "FINEST"};
 
-        Handler logHandler = null;
-        if (logDirName != null && supported) {
-            File logDir = new File(logDirName);
-            if (!logDir.exists()) {
-                logDir.mkdirs();
+            String logDirName = APPLICATION_PROPERTIES.getProperty("log_dir");
+            String level = APPLICATION_PROPERTIES.getProperty("log_level", "info").toUpperCase();
+            boolean supported = false;
+            for (String testLevel : supportedLevels) {
+                supported |= testLevel.equals(level);
             }
-            File logFile = File.createTempFile(
-                    "prottest-hpc_", ".log", logDir);
-            FileOutputStream fos = new FileOutputStream(logFile);
-            logHandler = new StreamHandler(fos, new ProtTestLogFormatter());
-            logHandler.setLevel(Level.parse(level));
+
+            if (logDirName != null && supported) {
+                File logDir = new File(logDirName);
+                if (!logDir.exists()) {
+                    logDir.mkdirs();
+                }
+                File logFile = File.createTempFile(
+                        "prottest3_", ".log", logDir);
+                FileOutputStream fos = new FileOutputStream(logFile);
+                logHandler = new StreamHandler(fos, new ProtTestLogFormatter());
+                logHandler.setLevel(Level.parse(level));
+            }
+
         }
         return logHandler;
+
     }
 
     /**

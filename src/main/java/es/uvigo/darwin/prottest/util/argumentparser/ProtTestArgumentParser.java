@@ -138,6 +138,11 @@ public abstract class ProtTestArgumentParser
 
             String arg = args[i];
             if (!arg.startsWith(ARG_TOKEN)) {
+                System.err.print("Command line: ");
+                for (String simpleArg : args) {
+                    System.err.print(simpleArg + " ");
+                }
+                System.err.println(" ");
                 throw new IllegalArgumentException("Arguments must start with \"-\". The ofending argument was: " + arg);
             }
 

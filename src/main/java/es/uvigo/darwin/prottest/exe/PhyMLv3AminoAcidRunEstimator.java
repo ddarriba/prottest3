@@ -161,7 +161,7 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
         try {
             Runtime runtime = Runtime.getRuntime();
 
-            String str[] = new String[26];
+            String str[] = new String[29];
             for (int i = 0; i < str.length; i++) {
                 str[i] = "";
             }
@@ -200,6 +200,8 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
                         throw new ModelNotFoundException(model.getMatrix());
                     }
                     str[9] = "custom";
+                    str[27] = "--aa_rate_file";
+                    str[28] = modelFile.getAbsolutePath();
                 } else {
                     str[9] = model.getMatrix();
                 }
@@ -240,7 +242,8 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
                     str[24] = "--num_threads";
                     str[25] = String.valueOf(numberOfThreads);
                 }
-
+                str[26] = "--no_memory_check";
+                
                 model.setCommandLine(str);
                 proc = runtime.exec(str);
                 proc.getOutputStream().write(modelFile.getPath().getBytes());
@@ -319,8 +322,12 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
                 if (line.length() > 0) {
                     if (line.startsWith(". Model of amino acids substitution")) {
                         String matrixName = Utilities.lastToken(line);
+                        
+                        //TODO: This line exists due to a bug in the phyml latest versions
+                        //      where the HIVw matrix is shown as HIVb in the stats file
+                        if (!model.getMatrix().equals("HIVw"))
                         if (!(model.getMatrix().equals(matrixName) || (modelFile.exists() &&
-                                matrixName.equals("file")))) {
+                                matrixName.equals("Custom")))) {
                             String errorMsg = "Matrix names doesn't match";
                             errorln("PHYML: " + line);
                             errorln("Last token: " + Utilities.lastToken(line));

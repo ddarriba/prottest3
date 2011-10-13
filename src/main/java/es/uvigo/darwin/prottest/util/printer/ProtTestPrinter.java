@@ -69,6 +69,9 @@ public class ProtTestPrinter {
         println("OS = " + System.getProperty("os.name") +
                 " (" + System.getProperty("os.version") + ")");
         println("");
+        println("Citation: Darriba D, Taboada GL, Doallo R, Posada D. ProtTest 3: fast selection of best-fit ");
+        println("          models of protein evolution. Bioinformatics, 27:1164-1165, 2011");
+        println("");
     }
 
     /**

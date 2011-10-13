@@ -837,6 +837,13 @@ public class Consensus {
             taxaHeader.append('\n');
             taxaHeader.append(ProtTestFormattedOutput.space(4 + 99, ' '));
             for (int i = 99; i < numTaxa; i++) {
+                taxaHeader.append(String.valueOf(i + 1).charAt(2));
+            }
+        }
+        if (numTaxa >= 1000) {
+            taxaHeader.append('\n');
+            taxaHeader.append(ProtTestFormattedOutput.space(4 + 999, ' '));
+            for (int i = 999; i < numTaxa; i++) {
                 taxaHeader.append(String.valueOf(i + 1).charAt(3));
             }
         }

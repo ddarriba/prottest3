@@ -105,11 +105,6 @@ public abstract class ProtTestAlignment {
 	 */
 	public static double calculateShannonSampleSize (Alignment alignment, int sampleSizeMode, boolean verbose) {
 
-		//TODO: effect of gaps.
-		//TODO: hacer gráfica que representa, según aceptamos más  divergencia en un alineamiento (y más
-		//          secuencias, claro) cómo va cambiando la ShannonSampleSize. P.e. con RAS
-		//SitePattern sP = SitePattern.getSitePattern(alignment);
-
 		int    numSites       = alignment.getSiteCount();
 		int    numSeqs        = alignment.getSequenceCount();
 		//int    pattern[][]    = new int   [numSites][numSeqs];

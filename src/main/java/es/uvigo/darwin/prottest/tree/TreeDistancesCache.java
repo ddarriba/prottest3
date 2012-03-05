@@ -118,7 +118,6 @@ public class TreeDistancesCache {
             return result;
         }
 
-        //TODO: Make this method become conmutative
         @Override
         public boolean equals(Object obj) {
             if (this == obj) {

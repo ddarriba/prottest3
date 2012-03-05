@@ -54,7 +54,6 @@ import es.uvigo.darwin.prottest.util.logging.ProtTestLogger;
 import java.io.StringWriter;
 import static es.uvigo.darwin.prottest.util.logging.ProtTestLogger.*;
 
-// TODO: Auto-generated Javadoc
 /**
  * An abstract implementation of the ProtTest facade.
  */

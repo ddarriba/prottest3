@@ -31,7 +31,6 @@ import es.uvigo.darwin.prottest.util.printer.ProtTestFormattedOutput;
 
 import static es.uvigo.darwin.prottest.util.logging.ProtTestLogger.*;
 
-// TODO: Auto-generated Javadoc
 import java.io.StringWriter;
 
 /**
@@ -270,7 +269,6 @@ public abstract class Model implements Serializable {
                 numOfTransCategories = ncat;
                 break;
             case DISTRIBUTION_GAMMA_INV:
-                //TODO: Seguro????????? <= chequear. ¿¿9??
                 numOfTransCategories = ncat;
                 break;
             }

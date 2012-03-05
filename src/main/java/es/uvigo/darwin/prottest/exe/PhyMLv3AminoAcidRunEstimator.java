@@ -242,7 +242,9 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
                     str[24] = "--num_threads";
                     str[25] = String.valueOf(numberOfThreads);
                 }
-                str[26] = "--no_memory_check";
+                if (APPLICATION_PROPERTIES.getProperty("no-memory-check", "no").equalsIgnoreCase("yes")) {
+                    str[26] = "--no_memory_check";
+                }
                 
                 model.setCommandLine(str);
                 proc = runtime.exec(str);

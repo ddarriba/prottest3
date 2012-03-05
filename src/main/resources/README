@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------
-ProtTest3 Readme -	18/Oct/2010
+ProtTest3 Readme -	5/Mar/2012
 
 Diego Darriba (ddarriba@udc.es)
 Guillermo L. Taboada (taboada@udc.es)
@@ -25,6 +25,7 @@ TOC
     4.2.3. Cluster execution
     4.2.4. Cluster hybrid execution
   4.3. Graphical user interface execution
+5. Frequently Asked Questions
 
 -----------------------------------------------------------------------------
 0. Quick Start
@@ -32,21 +33,21 @@ TOC
 
 Console version
 
-$ tar zvxf prottest-3.0-yyyymmdd.tar.gz
+$ tar zvxf prottest-3.1-yyyymmdd.tar.gz
 (Linux/Unix/OS X)
-$ export PROTTEST_HOME=$PWD/prottest3.0
+$ export PROTTEST_HOME=$PWD/prottest3.1
 (Windows)
-$ set PROTTEST_HOME=$CWD\prottest3.0
+$ set PROTTEST_HOME=$CWD\prottest3.1
 $ cd $PROTTEST_HOME
-$ java -jar prottest-3.0.jar -i examples/COX2_PF0016/alignment -all-matrices -all-distributions -threads 2
+$ java -jar prottest-3.1.jar -i examples/COX2_PF0016/alignment -all-matrices -all-distributions -threads 2
 
 Graphical version
 
-$ tar zvxf prottest-3.0-yyyymmdd.tar.gz
+$ tar zvxf prottest-3.1-yyyymmdd.tar.gz
 (Linux/Unix/OS X)
-$ export PROTTEST_HOME=$PWD/prottest3.0
+$ export PROTTEST_HOME=$PWD/prottest3.1
 (Windows)
-$ set PROTTEST_HOME=$CWD\prottest3.0
+$ set PROTTEST_HOME=$CWD\prottest3.1
 $ cd $PROTTEST_HOME
 $ ./runXProtTest.sh
 
@@ -59,7 +60,7 @@ selection of best-fit models of protein evolution. It is currently under
 development so it could have some errors and the documentation is pending.
 
 Please, report bugs and enquiries about ProtTest3 to: ddarriba@udc.es,
-dposada@uvigo.es, fedeabascal@yahoo.es.
+dposada@uvigo.es.
 
 The main page of the ProtTest project is located at
 http://darwin.uvigo.es/software/prottesthpc
@@ -88,7 +89,7 @@ $PROTTEST_HOME/
   | filecluster8.conf.template  # machines file template for 8 node cluster
   | machines			# machines file for cluster execution
   | prottest.properties		# ProtTest3 configuration file (always required)
-  | prottest-3.0.jar		# ProtTest3 package
+  | prottest-3.1.jar		# ProtTest3 package
   | README			# this README file
   | COPYING                     # ProtTest3 licese
   | runProtTestHPC.sh		# basic script for ProtTest3 cluster execution
@@ -198,7 +199,7 @@ These are the parameters of the sequential execution:
 Basic execution example:
 
 	$ cd $PROTTEST_HOME
-	$ java -jar prottest-3.0.jar -i examples/COX2_PF0016/alignment -all-matrices -all-distributions
+	$ java -jar prottest-3.1.jar -i examples/COX2_PF0016/alignment -all-matrices -all-distributions
 
 
 -----------------------------------------------------------------------------
@@ -210,7 +211,7 @@ can use up to the number of cores in your machine and beyond. Following the basi
 execution example, a recommended multithread execution in a quad-core machine will be:
 
 	$ cd $PROTTEST_HOME
-	$ java -jar prottest-3.0.jar -i examples/COX2_PF0016/alignment -all-matrices -all-distributions -threads 4
+	$ java -jar prottest-3.1.jar -i examples/COX2_PF0016/alignment -all-matrices -all-distributions -threads 4
 
 It is remarkable that the substitution models will not be computed in a specific
 order, so the full output will be shown once all models have been computed. 
@@ -277,3 +278,23 @@ a local multicore machine.
 
 $ cd $PROTTEST_HOME
 $ ./runXProtTestHPC.sh
+
+-----------------------------------------------------------------------------
+5. Frequently Asked Questions
+-----------------------------------------------------------------------------
+
+ 5.1. I got this error when running ProtTest 3
+
+      ./phyml-prottest-linux: /lib/libc.so.6: version `GLIBC_2.7' not found 
+
+    ---
+
+    You can try to update GLIB to the required version (2.7). However, this is
+    not always possible, for example when running ProtTest on a cluster. If
+    you have an old version of PhyML you can try to use it just linking the
+    binary file to $PROTTEST_HOME/bin/phyml
+
+    If this does not work, it is possible that your "old" version of PhyML 
+    does not support the --no-memory-check argument, included in lattest PhyML
+    versions. In this case, edit the prottest.properties file and change the
+    "no-memory-check" property to "no".

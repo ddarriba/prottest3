@@ -569,7 +569,7 @@ public final class XProtTestView extends FrameView {
 
         this.getFrame().setLocation(new java.awt.Point(281, 80));
         this.getFrame().getContentPane().setLayout(new BorderLayout());
-        this.getFrame().setTitle("ProtTest-HPC 3.0");
+        this.getFrame().setTitle("ProtTest-HPC 3.1");
         this.getFrame().setSize(new java.awt.Dimension(630, 695));
         this.getFrame().setResizable(true);
         this.getFrame().setContentPane(mainPanel);

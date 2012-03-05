@@ -20,7 +20,6 @@ package es.uvigo.darwin.prottest.util;
 import java.net.URL;
 import java.util.StringTokenizer;
 
-//TODO: Auto-generated javadoc
 /**
  * The Class Utilities.
  */

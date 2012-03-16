@@ -35,7 +35,6 @@ import es.uvigo.darwin.prottest.util.exception.TreeFormatException;
 import es.uvigo.darwin.prottest.util.factory.ProtTestFactory;
 import es.uvigo.darwin.prottest.util.fileio.AlignmentReader;
 import es.uvigo.darwin.prottest.util.logging.ProtTestLogger;
-import es.uvigo.darwin.prottest.util.printer.ProtTestFormattedOutput;
 
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -93,7 +92,7 @@ public class ApplicationOptions {
     /** Write a log file. */
     public boolean writeLog = true;
     /** Criterion to sort the models. */
-    private char sortBy = DEFAULT_SORT_BY;
+    private boolean doAIC,doBIC,doAICc,doDT;
 
     /**
      * Sets the number of categories.
@@ -159,14 +158,40 @@ public class ApplicationOptions {
     }
 
     /**
-     * Gets the sorting criterion.
+     * Check if should compute the AIC criterion
      * 
-     * @return the sorting criterion
+     * @return true, if AIC should be computed
      */
-    public char getSortBy() {
-        return sortBy;
+    public boolean isAIC() {
+        return doAIC;
     }
-
+    
+    /**
+     * Check if should compute the BIC criterion
+     * 
+     * @return true, if BIC should be computed
+     */
+    public boolean isBIC() {
+        return doBIC;
+    }
+    
+    /**
+     * Check if should compute the AICc criterion
+     * 
+     * @return true, if AICc should be computed
+     */
+    public boolean isAICc() {
+        return doAICc;
+    }
+    
+    /**
+     * Check if should compute the DT criterion
+     * 
+     * @return true, if DT should be computed
+     */
+    public boolean isDT() {
+        return doDT;
+    }
     /**
      * Sets the alignment filename without checking
      * 
@@ -570,8 +595,17 @@ public class ApplicationOptions {
                 }
             }
         }
-        if (arguments.exists(ProtTestArgumentParser.PARAM_SORT_BY)) {
-            sortBy = arguments.getValue(ProtTestArgumentParser.PARAM_SORT_BY).charAt(0);
+        if (arguments.exists(ProtTestArgumentParser.PARAM_DO_AIC)) {
+            doAIC = arguments.isSet(ProtTestArgumentParser.PARAM_DO_AIC);
+        }
+        if (arguments.exists(ProtTestArgumentParser.PARAM_DO_BIC)) {
+            doBIC = arguments.isSet(ProtTestArgumentParser.PARAM_DO_BIC);
+        }
+        if (arguments.exists(ProtTestArgumentParser.PARAM_DO_AICC)) {
+            doAICc = arguments.isSet(ProtTestArgumentParser.PARAM_DO_AICC);
+        }
+        if (arguments.exists(ProtTestArgumentParser.PARAM_DO_DT)) {
+            doDT = arguments.isSet(ProtTestArgumentParser.PARAM_DO_DT);
         }
         if (arguments.exists(ProtTestArgumentParser.PARAM_SAMPLE_SIZE_MODE)) {
             sampleSizeMode = Integer.parseInt(arguments.getValue(ProtTestArgumentParser.PARAM_SAMPLE_SIZE_MODE));
@@ -651,8 +685,6 @@ public class ApplicationOptions {
         println("            Tree file       (optional) [default: NJ tree]");
         println(" -o output_filename");
         println("            Output file     (optional) [default: standard output]");
-        println(" -all-matrices");
-        println("            Compute all available matrices");
         println(" -[matrix]");
         print(  "            Include matrix (Amino-acid) = "  );
         int count = 0;
@@ -666,7 +698,8 @@ public class ApplicationOptions {
             count++;
         }
         println("");
-        println("                (requires at least one substitution matrix)");
+        println("                If you don't specify any matrix, all matrices displayed above will");
+        println("                be included.");
         println(" -I");
         println("            Include models with a proportion of invariable sites");
         println(" -G");
@@ -679,11 +712,14 @@ public class ApplicationOptions {
         println("            Define number of categories for +G and +I+G models [default: " + DEFAULT_NCAT + "]");
         println(" -F");
         println("            Include models with empirical frequency estimation ");
-        println(" -sort sot_by_value");
-        println("            Ordering field	(optional) [default: " + DEFAULT_SORT_BY + "]");
-        for (char value : SORTBY_VALUES) {
-            println("             		" + value + ": " + SORTBY_NAMES[value - 'A']);
-        }
+        println(" -AIC");
+        println("            Display models sorted by Akaike Information Criterion (AIC)");
+        println(" -BIC");
+        println("            Display models sorted by Bayesian Information Criterion (BIC)");
+        println(" -AICC");
+        println("            Display models sorted by Corrected Akaike Information Criterion (AICc)");
+        println(" -DT");
+        println("            Display models sorted by Decision Theory Criterion");
         println(" -all");
         println("            Displays a 7-framework comparison table");
         println(" -S optimization_strategy");
@@ -712,31 +748,9 @@ public class ApplicationOptions {
         println("-------------------------------------------------------------------------------------------------");
         println("Example: ");
         println("- Sequential version:");
-        println("    java -jar ModelTest-2.1.jar -i alignm_file -t tree_file -S 0 -sample 1 -all-matrices -all-distributions -F > output");
+        println("    java -jar ModelTest-2.1.jar -i alignm_file -t tree_file -S 0 -all-distributions -F -AIC -BIC -tc > output");
         println("- Parallel version:");
-        println("    mpjrun.sh -wdir $PWD/ -np 2 -jar ModelTest-2.1.jar -i alignm_file -t tree_file -S 0 -sample 1 -all-matrices -all-distributions -F");
-    }
-
-    /**
-     * Describe the framework used to sort the results.
-     * 
-     */
-    public void describeFramework() {
-        println("");
-        println("************************************************************");
-        if (sortBy == 'A') {
-            println("Akaike Information Chriterion (AIC) framework");
-        } else if (sortBy == 'C') {
-            println("Second-order AIC (AICc) framework");
-        } else if (sortBy == 'B') {
-            println("Bayesian Information Chriterion (BIC) framework");
-        } else if (sortBy == 'D') {
-            println("Maximum Likelihood (-lnL) framework");
-        }
-        if (sortBy != 'A' && sortBy != 'D') {
-            println("Sample size:  " + SIZE_MODE_NAMES[sampleSizeMode]);
-            println("           =  " + ProtTestFormattedOutput.getDecimalString(sampleSize, 2));
-        }
+        println("    mpjrun.sh -wdir $PWD/ -np 2 -jar ModelTest-2.1.jar -i alignm_file -t tree_file -S 0 -all-distributions -F -AIC -BIC -tc");
     }
 
     public void reportModelOptimization() {
@@ -777,7 +791,23 @@ public class ApplicationOptions {
         reportModelOptimization();
 
         println("  Statistical framework");
-        println("    Sort models according to....: " + SORTBY_NAMES[getSortBy() - 'A']);
+        println("    Sort models according to....: ");
+        StringBuilder sb = new StringBuilder();
+        if (doAIC) {
+            sb.append(" AIC ");
+        }
+        if (doBIC) {
+            sb.append(" BIC ");
+        }
+        if (doAICc) {
+            sb.append(" AICc ");
+        }
+        if (doDT) {
+            sb.append(" DT ");
+        }
+        if (!(doAIC|doBIC|doAICc|doDT))
+            sb.append(" lnL");
+        println("      " + sb.toString());
         if (sampleSizeMode == SIZEMODE_USERSIZE) {
             println("    Sample size.................: " + sampleSize);
         } else {

@@ -98,39 +98,12 @@ public interface ProtTestConstants {
         OPTIMIZE_ML,
         OPTIMIZE_USER
     };
-    // Information criterion
-    /** The value of AIC sorting. */
-    static final char SORTBY_AIC = 'A';
-    /** The value of BIC sorting. */
-    static final char SORTBY_BIC = 'B';
-    /** The value of AICc sorting. */
-    static final char SORTBY_AICC = 'C';
-    /** The value of DT sorting. */
-    static final char SORTBY_DT = 'D';
-    /** The value of likelihood sorting. */
-    static final char SORTBY_LNL = 'E';
-    /** Set of descriptions of sort modes. */
-    static final String[] SORTBY_NAMES = {
-        "AIC",
-        "BIC",
-        "AICc",
-        "DT",
-        "-lnL"
-    };
     static final String[] CRITERION_NAMES = {
         "AKAIKE INFORMATION CRITERION",
         "BAYESIAN INFORMATION CRITERION",
         "CORRECTED AKAIKE INFORMATION CRITERION",
         "DECISION THEORY CRITERION",
         "LOG-LIKELIHOOD"
-    };
-    /** Set of values of sort modes. */
-    static final char[] SORTBY_VALUES = {
-        SORTBY_AIC,
-        SORTBY_BIC,
-        SORTBY_AICC,
-        SORTBY_DT,
-        SORTBY_LNL
     };
     // default settings
     /** The default setting of property "Display Newick tree". */
@@ -151,8 +124,6 @@ public interface ProtTestConstants {
     static final boolean DEFAULT_DISTRIBUTIONS = false;
     /** The default setting of property "Number of categories". */
     static final int DEFAULT_NCAT = 4;
-    /** The default setting of property "Sort by". */
-    static final char DEFAULT_SORT_BY = SORTBY_AIC;
     /** The default setting of property "Optimization strategy mode". */
     static final int DEFAULT_STRATEGY_MODE = OPTIMIZE_FIXED_BIONJ;
     /** The default setting of property "Sample size mode". */

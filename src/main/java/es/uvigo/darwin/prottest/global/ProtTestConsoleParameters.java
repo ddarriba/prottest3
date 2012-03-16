@@ -39,7 +39,10 @@ public interface ProtTestConsoleParameters {
     /** Tree file parameter token. */
     public static final String PARAM_TREE_FILE = "t";		// tree file
     /** Sort by parameter token. */
-    public static final String PARAM_SORT_BY = "sort";          // sort field
+    public static final String PARAM_DO_AIC = "AIC";            // sort models by AIC
+    public static final String PARAM_DO_BIC = "BIC";            // sort models by BIC
+    public static final String PARAM_DO_AICC = "AICC";          // sort models by AICc
+    public static final String PARAM_DO_DT = "DT";              // sort models by DT
     /** Display all framework comparison parameter token. */
     public static final String PARAM_ALL_FRAMEWORK_COMPARISON = "all";	// display 7-framework comparison table
     /** Optimization strategy selection parameter token. */

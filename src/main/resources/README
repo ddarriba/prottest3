@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------
-ProtTest3 Readme -	5/Mar/2012
+ProtTest 3 Readme -	16/Mar/2012
 
 Diego Darriba (ddarriba@udc.es)
 Guillermo L. Taboada (taboada@udc.es)
@@ -8,6 +8,18 @@ David Posada (dposada@uvigo.es)
 
 (c) Universidad de Vigo, Vigo, Spain
 (c) Grupo de Arquitectura de Computadores, UDC, Spain
+
+Citation:
+
+    Darriba D, Taboada GL, Doallo R, Posada D. ProtTest 3: fast selection of
+    best-fit models of protein evolution. Bioinformatics, 27:1164-1165, 2011 
+
+  In addition, given that ProtTest uses Phyml intensively, we encourage users to 
+  cite this program as well when using ProtTest:
+
+    Guindon S, Gascuel O. 2003. A simple, fast, and accurate algorithm to 
+    estimate large phylogenies by maximum likelihood. Syst Biol. 52: 696-704. 
+    [Phyml]
 
 -----------------------------------------------------------------------------
 
@@ -33,21 +45,21 @@ TOC
 
 Console version
 
-$ tar zvxf prottest-3.1-yyyymmdd.tar.gz
+$ tar zvxf prottest-3.2-yyyymmdd.tar.gz
 (Linux/Unix/OS X)
-$ export PROTTEST_HOME=$PWD/prottest3.1
+$ export PROTTEST_HOME=$PWD/prottest3
 (Windows)
-$ set PROTTEST_HOME=$CWD\prottest3.1
+$ set PROTTEST_HOME=$CWD\prottest3
 $ cd $PROTTEST_HOME
-$ java -jar prottest-3.1.jar -i examples/COX2_PF0016/alignment -all-matrices -all-distributions -threads 2
+$ java -jar prottest-3.2.jar -i examples/COX2_PF0016/alignment -all-matrices -all-distributions -threads 2
 
 Graphical version
 
-$ tar zvxf prottest-3.1-yyyymmdd.tar.gz
+$ tar zvxf prottest-3.2-yyyymmdd.tar.gz
 (Linux/Unix/OS X)
-$ export PROTTEST_HOME=$PWD/prottest3.1
+$ export PROTTEST_HOME=$PWD/prottest3
 (Windows)
-$ set PROTTEST_HOME=$CWD\prottest3.1
+$ set PROTTEST_HOME=$CWD\prottest3
 $ cd $PROTTEST_HOME
 $ ./runXProtTest.sh
 
@@ -59,11 +71,11 @@ ProtTest3 is a High Performance Computing implementation of ProtTest, for
 selection of best-fit models of protein evolution. It is currently under
 development so it could have some errors and the documentation is pending.
 
-Please, report bugs and enquiries about ProtTest3 to: ddarriba@udc.es,
+Please, report bugs and enquiries about ProtTest 3 to: ddarriba@udc.es,
 dposada@uvigo.es.
 
 The main page of the ProtTest project is located at
-http://darwin.uvigo.es/software/prottesthpc
+https://bitbucket.org/diegodl/prottest3
 
 -----------------------------------------------------------------------------
 2. Installation
@@ -76,7 +88,7 @@ please refer to the 'How to run' section.
 3. Structure
 -----------------------------------------------------------------------------
 
-Inside the ProtTest3 directory you should find the following structure:
+Inside the ProtTest 3 directory you should find the following structure:
 
 $PROTTEST_HOME/
   |
@@ -89,7 +101,7 @@ $PROTTEST_HOME/
   | filecluster8.conf.template  # machines file template for 8 node cluster
   | machines			# machines file for cluster execution
   | prottest.properties		# ProtTest3 configuration file (always required)
-  | prottest-3.1.jar		# ProtTest3 package
+  | prottest-3.2.jar		# ProtTest3 package
   | README			# this README file
   | COPYING                     # ProtTest3 licese
   | runProtTestHPC.sh		# basic script for ProtTest3 cluster execution
@@ -144,20 +156,38 @@ These are the parameters of the sequential execution:
 		tree file      	(optional) [default: NJ tree]
 	 -o output_filename
 		output file    	(optional) [default: standard output]
-	 -sort sot_by_value
- 		Ordering field	(optional) [default: A]
-	     		A: AIC
-	     		B: BIC
-	     		C: AICc
-	     		D: LnL
-	 -all
-	 	Displays a 7-framework comparison table
 	 -S optimization_strategy
  		optimization strategy mode: [default: 0]
 	     		0: Fixed BIONJ JTT
 	     		1: BIONJ Tree
 	     		2: Maximum Likelihood tree
 	     		3: User defined topology
+	 -[matrix]
+ 		Include matrix (Amino-acid) = JTT LG DCMut MtREV MtMam MtArt Dayhoff WAG 
+                 		 	      RtREV CpREV Blosum62 VT HIVb HIVw FLU 
+                If you don't specify any matrix, all matrices displayed above will
+                be included.
+
+	 -I
+	 	include models with a proportion of invariable sites
+	 -G
+	 	include models with rate variation among sites and number of categories
+	 -IG
+	 	include models with both +I and +G properties
+	 -all-distributions
+ 		include models with rate variation among sites, number of categories and both
+	 -ncat number_of_categories
+ 		define number of categories for +G and +I+G models [default: 4]
+	 -F
+	 	include models with empirical frequency estimation
+	 -AIC
+	 	display models sorted by Akaike Information Criterion (AIC)
+	 -BIC
+	 	display models sorted by Bayesian Information Criterion (BIC)
+	 -AICC
+	 	display models sorted by Corrected Akaike Information Criterion (AICc)
+ 	 -DT
+	 	display models sorted by Decision Theory Criterion
 	 -sample sample_size_mode
  		sample size for AICc and BIC corrections [default: 2]
 	     		0: Shannon-entropy Sum
@@ -174,32 +204,17 @@ These are the parameters of the sequential execution:
 	 	display best-model's ASCII tree  [default: false]
 	 -tc consensus_threshold
  		display consensus tree with the specified threshold
+	 -all
+	 	Displays a 7-framework comparison table
 	 -verbose
 	 	verbose mode [default: false]
-	 -all-matrices
-	 	computes all available matrices
 	 -threads number_or_threads
  		number of threads to compute (only if MPJ is not used) [default: 1]
-	 -[model]
-		model (Amino-acid) = JTT LG DCMut MtREV MtMam MtArt Dayhoff WAG RtREV CpREV Blosum62 VT HIVb HIVw
-			(requires at least one substitution matrix)
-	 -I
-	 	include models with a proportion of invariable sites
-	 -G
-	 	include models with rate variation among sites and number of categories
-	 -IG
-	 	include models with both +I and +G properties
-	 -all-distributions
- 		include models with rate variation among sites, number of categories and both
-	 -ncat number_of_categories
- 		define number of categories for +G and +I+G models [default: 4]
-	 -F
-	 	include models with empirical frequency estimation
 
 Basic execution example:
 
 	$ cd $PROTTEST_HOME
-	$ java -jar prottest-3.1.jar -i examples/COX2_PF0016/alignment -all-matrices -all-distributions
+	$ java -jar prottest-3.2.jar -i examples/COX2_PF0016/alignment -all-distributions -F -AIC -BIC -tc
 
 
 -----------------------------------------------------------------------------
@@ -211,7 +226,7 @@ can use up to the number of cores in your machine and beyond. Following the basi
 execution example, a recommended multithread execution in a quad-core machine will be:
 
 	$ cd $PROTTEST_HOME
-	$ java -jar prottest-3.1.jar -i examples/COX2_PF0016/alignment -all-matrices -all-distributions -threads 4
+	$ java -jar prottest-3.2.jar -i examples/COX2_PF0016/alignment -all-distributions -F -AIC -BIC -tc -threads 4
 
 It is remarkable that the substitution models will not be computed in a specific
 order, so the full output will be shown once all models have been computed. 
@@ -254,7 +269,7 @@ bash script: 'runProtTestHPC.sh'
 The basic syntax is:
 	./runProtTestHPC.sh $NUMBER_OF_PROCESSORS $APPLICATION_PARAMETERS
 
-$ ./runProtTestHPC.sh 2 -i examples/COX2_PF0016/alignment -all-matrices -all-distributions
+$ ./runProtTestHPC.sh 2 -i examples/COX2_PF0016/alignment -all-distributions -F -AIC -BIC -tc
 
 -----------------------------------------------------------------------------
 	4.2.4 Cluster hybrid execution

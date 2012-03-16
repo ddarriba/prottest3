@@ -17,6 +17,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 package es.uvigo.darwin.xprottest;
 
+import es.uvigo.darwin.prottest.ProtTest;
 import java.awt.print.PrinterException;
 import java.io.FileNotFoundException;
 import es.uvigo.darwin.xprottest.compute.RunningFrame;
@@ -569,14 +570,14 @@ public final class XProtTestView extends FrameView {
 
         this.getFrame().setLocation(new java.awt.Point(281, 80));
         this.getFrame().getContentPane().setLayout(new BorderLayout());
-        this.getFrame().setTitle("ProtTest-HPC 3.1");
+        this.getFrame().setTitle("ProtTest " + ProtTest.versionNumber);
         this.getFrame().setSize(new java.awt.Dimension(630, 695));
         this.getFrame().setResizable(true);
         this.getFrame().setContentPane(mainPanel);
     }
 
     private void openDataFile(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openDataFile
-        FileDialog fc = new FileDialog(this.getFrame(), "Load DNA alignment", FileDialog.LOAD);
+        FileDialog fc = new FileDialog(this.getFrame(), "Load amino-acid alignment", FileDialog.LOAD);
         fc.setDirectory(System.getProperty("user.dir"));
         fc.setVisible(true);
 
@@ -612,7 +613,7 @@ public final class XProtTestView extends FrameView {
     private void saveConsole(java.awt.event.ActionEvent evt) {
         String text = mainTextArea.getText();
 
-        FileDialog fc = new FileDialog(this.getFrame(), "Load DNA alignment", FileDialog.SAVE);
+        FileDialog fc = new FileDialog(this.getFrame(), "Save ProtTest console", FileDialog.SAVE);
         fc.setDirectory(System.getProperty("user.dir"));
         fc.setVisible(true);
 

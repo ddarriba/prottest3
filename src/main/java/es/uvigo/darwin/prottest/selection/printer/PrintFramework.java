@@ -17,6 +17,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 package es.uvigo.darwin.prottest.selection.printer;
 
+import es.uvigo.darwin.prottest.global.options.ApplicationOptions;
 import static es.uvigo.darwin.prottest.global.ApplicationGlobals.*;
 
 import java.util.Collections;
@@ -118,6 +119,9 @@ public abstract class PrintFramework {
      */
     public static void printFrameworksComparison(ModelCollection models) {
 
+        boolean includeI, includeG, includeIG, includeF;
+        includeI = includeG = includeIG = includeF = false;
+        
         double[] aic = new double[models.size()];
         double[] aicc1 = new double[models.size()];
         double[] aicc2 = new double[models.size()];
@@ -142,6 +146,12 @@ public abstract class PrintFramework {
         Collections.sort(models, new LKComparator());
         for (int i = 0; i < models.size(); i++) {
             Model model = models.get(i);
+
+            includeI |= model.isInv();
+            includeG |= model.isGamma();
+            includeIG |= model.isInv() && model.isGamma();
+            includeF |= model.isPlusF();
+            
             modelNames[i] = model.getModelName();
 
             aicc1[i] = aiccS1.get(model).getValue();
@@ -190,140 +200,158 @@ public abstract class PrintFramework {
             print(ProtTestFormattedOutput.space(0 - tmp.length(), ' ') + tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
             println("");
         }
-        println(ProtTestFormattedOutput.space(100, '-'));
-        println("Relative importance of");
-        println("parameters     AIC         AICc-1      AICc-2      AICc-3      BIC-1       BIC-2       BIC-3");
-        print("+G" + ProtTestFormattedOutput.space(13, ' '));
-        tmp = ProtTestFormattedOutput.getDecimalString(aicF.getAlphaImp(), 2);
-        print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-        tmp = ProtTestFormattedOutput.getDecimalString(aicc1F.getAlphaImp(), 2);
-        print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-        tmp = ProtTestFormattedOutput.getDecimalString(aicc2F.getAlphaImp(), 2);
-        print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-        tmp = ProtTestFormattedOutput.getDecimalString(aicc3F.getAlphaImp(), 2);
-        print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-        tmp = ProtTestFormattedOutput.getDecimalString(bic1F.getAlphaImp(), 2);
-        print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-        tmp = ProtTestFormattedOutput.getDecimalString(bic2F.getAlphaImp(), 2);
-        print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-        tmp = ProtTestFormattedOutput.getDecimalString(bic3F.getAlphaImp(), 2);
-        print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-        println("");
-        print("+I" + ProtTestFormattedOutput.space(13, ' '));
-        tmp = ProtTestFormattedOutput.getDecimalString(aicF.getInvImp(), 2);
-        print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-        tmp = ProtTestFormattedOutput.getDecimalString(aicc1F.getInvImp(), 2);
-        print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-        tmp = ProtTestFormattedOutput.getDecimalString(aicc2F.getInvImp(), 2);
-        print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-        tmp = ProtTestFormattedOutput.getDecimalString(aicc3F.getInvImp(), 2);
-        print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-        tmp = ProtTestFormattedOutput.getDecimalString(bic1F.getInvImp(), 2);
-        print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-        tmp = ProtTestFormattedOutput.getDecimalString(bic2F.getInvImp(), 2);
-        print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-        tmp = ProtTestFormattedOutput.getDecimalString(bic3F.getInvImp(), 2);
-        print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-        println("");
-        print("+I+G" + ProtTestFormattedOutput.space(11, ' '));
-        tmp = ProtTestFormattedOutput.getDecimalString(aicF.getGIImp(), 2);
-        print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-        tmp = ProtTestFormattedOutput.getDecimalString(aicc1F.getGIImp(), 2);
-        print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-        tmp = ProtTestFormattedOutput.getDecimalString(aicc2F.getGIImp(), 2);
-        print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-        tmp = ProtTestFormattedOutput.getDecimalString(aicc3F.getGIImp(), 2);
-        print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-        tmp = ProtTestFormattedOutput.getDecimalString(bic1F.getGIImp(), 2);
-        print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-        tmp = ProtTestFormattedOutput.getDecimalString(bic2F.getGIImp(), 2);
-        print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-        tmp = ProtTestFormattedOutput.getDecimalString(bic3F.getGIImp(), 2);
-        print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-        println("");
-        print("+F" + ProtTestFormattedOutput.space(13, ' '));
-        tmp = ProtTestFormattedOutput.getDecimalString(aicF.getFImp(), 2);
-        print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-        tmp = ProtTestFormattedOutput.getDecimalString(aicc1F.getFImp(), 2);
-        print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-        tmp = ProtTestFormattedOutput.getDecimalString(aicc2F.getFImp(), 2);
-        print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-        tmp = ProtTestFormattedOutput.getDecimalString(aicc3F.getFImp(), 2);
-        print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-        tmp = ProtTestFormattedOutput.getDecimalString(bic1F.getFImp(), 2);
-        print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-        tmp = ProtTestFormattedOutput.getDecimalString(bic2F.getFImp(), 2);
-        print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-        tmp = ProtTestFormattedOutput.getDecimalString(bic3F.getFImp(), 2);
-        print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-        println("");
-        println(ProtTestFormattedOutput.space(100, '-'));
-        println("Model-averaged estimate of");
-        println("parameters     AIC         AICc-1      AICc-2      AICc-3      BIC-1       BIC-2       BIC-3");
-        print("alpha (+G)" + ProtTestFormattedOutput.space(5, ' '));
-        tmp = ProtTestFormattedOutput.getDecimalString(aicF.getOverallAlpha(), 2);
-        print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-        tmp = ProtTestFormattedOutput.getDecimalString(aicc1F.getOverallAlpha(), 2);
-        print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-        tmp = ProtTestFormattedOutput.getDecimalString(aicc2F.getOverallAlpha(), 2);
-        print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-        tmp = ProtTestFormattedOutput.getDecimalString(aicc3F.getOverallAlpha(), 2);
-        print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-        tmp = ProtTestFormattedOutput.getDecimalString(bic1F.getOverallAlpha(), 2);
-        print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-        tmp = ProtTestFormattedOutput.getDecimalString(bic2F.getOverallAlpha(), 2);
-        print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-        tmp = ProtTestFormattedOutput.getDecimalString(bic3F.getOverallAlpha(), 2);
-        print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-        println("");
-        print("p-inv (+I)" + ProtTestFormattedOutput.space(5, ' '));
-        tmp = ProtTestFormattedOutput.getDecimalString(aicF.getOverallInv(), 2);
-        print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-        tmp = ProtTestFormattedOutput.getDecimalString(aicc1F.getOverallInv(), 2);
-        print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-        tmp = ProtTestFormattedOutput.getDecimalString(aicc2F.getOverallInv(), 2);
-        print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-        tmp = ProtTestFormattedOutput.getDecimalString(aicc3F.getOverallInv(), 2);
-        print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-        tmp = ProtTestFormattedOutput.getDecimalString(bic1F.getOverallInv(), 2);
-        print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-        tmp = ProtTestFormattedOutput.getDecimalString(bic2F.getOverallInv(), 2);
-        print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-        tmp = ProtTestFormattedOutput.getDecimalString(bic3F.getOverallInv(), 2);
-        print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-        println("");
-        print("alpha (+I+G)" + ProtTestFormattedOutput.space(3, ' '));
-        tmp = ProtTestFormattedOutput.getDecimalString(aicF.getOverallAlphaGI(), 2);
-        print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-        tmp = ProtTestFormattedOutput.getDecimalString(aicc1F.getOverallAlphaGI(), 2);
-        print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-        tmp = ProtTestFormattedOutput.getDecimalString(aicc2F.getOverallAlphaGI(), 2);
-        print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-        tmp = ProtTestFormattedOutput.getDecimalString(aicc3F.getOverallAlphaGI(), 2);
-        print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-        tmp = ProtTestFormattedOutput.getDecimalString(bic1F.getOverallAlphaGI(), 2);
-        print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-        tmp = ProtTestFormattedOutput.getDecimalString(bic2F.getOverallAlphaGI(), 2);
-        print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-        tmp = ProtTestFormattedOutput.getDecimalString(bic3F.getOverallAlphaGI(), 2);
-        print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-        println("");
-        print("p-inv (+I+G)" + ProtTestFormattedOutput.space(3, ' '));
-        tmp = ProtTestFormattedOutput.getDecimalString(aicF.getOverallInvGI(), 2);
-        print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-        tmp = ProtTestFormattedOutput.getDecimalString(aicc1F.getOverallInvGI(), 2);
-        print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-        tmp = ProtTestFormattedOutput.getDecimalString(aicc2F.getOverallInvGI(), 2);
-        print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-        tmp = ProtTestFormattedOutput.getDecimalString(aicc3F.getOverallInvGI(), 2);
-        print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-        tmp = ProtTestFormattedOutput.getDecimalString(bic1F.getOverallInvGI(), 2);
-        print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-        tmp = ProtTestFormattedOutput.getDecimalString(bic2F.getOverallInvGI(), 2);
-        print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-        tmp = ProtTestFormattedOutput.getDecimalString(bic3F.getOverallInvGI(), 2);
-        print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-        println("");
+        if (includeG | includeI | includeIG | includeF) {
+            println(ProtTestFormattedOutput.space(100, '-'));
+            println("Relative importance of");
+            println("parameters     AIC         AICc-1      AICc-2      AICc-3      BIC-1       BIC-2       BIC-3");
+            if (includeG) {
+                print("+G" + ProtTestFormattedOutput.space(13, ' '));
+                tmp = ProtTestFormattedOutput.getDecimalString(aicF.getAlphaImp(), 2);
+                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+                tmp = ProtTestFormattedOutput.getDecimalString(aicc1F.getAlphaImp(), 2);
+                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+                tmp = ProtTestFormattedOutput.getDecimalString(aicc2F.getAlphaImp(), 2);
+                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+                tmp = ProtTestFormattedOutput.getDecimalString(aicc3F.getAlphaImp(), 2);
+                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+                tmp = ProtTestFormattedOutput.getDecimalString(bic1F.getAlphaImp(), 2);
+                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+                tmp = ProtTestFormattedOutput.getDecimalString(bic2F.getAlphaImp(), 2);
+                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+                tmp = ProtTestFormattedOutput.getDecimalString(bic3F.getAlphaImp(), 2);
+                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+                println("");
+            }
+            if (includeI) {
+                print("+I" + ProtTestFormattedOutput.space(13, ' '));
+                tmp = ProtTestFormattedOutput.getDecimalString(aicF.getInvImp(), 2);
+                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+                tmp = ProtTestFormattedOutput.getDecimalString(aicc1F.getInvImp(), 2);
+                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+                tmp = ProtTestFormattedOutput.getDecimalString(aicc2F.getInvImp(), 2);
+                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+                tmp = ProtTestFormattedOutput.getDecimalString(aicc3F.getInvImp(), 2);
+                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+                tmp = ProtTestFormattedOutput.getDecimalString(bic1F.getInvImp(), 2);
+                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+                tmp = ProtTestFormattedOutput.getDecimalString(bic2F.getInvImp(), 2);
+                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+                tmp = ProtTestFormattedOutput.getDecimalString(bic3F.getInvImp(), 2);
+                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+                println("");
+            }
+            if (includeIG) {
+                print("+I+G" + ProtTestFormattedOutput.space(11, ' '));
+                tmp = ProtTestFormattedOutput.getDecimalString(aicF.getGIImp(), 2);
+                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+                tmp = ProtTestFormattedOutput.getDecimalString(aicc1F.getGIImp(), 2);
+                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+                tmp = ProtTestFormattedOutput.getDecimalString(aicc2F.getGIImp(), 2);
+                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+                tmp = ProtTestFormattedOutput.getDecimalString(aicc3F.getGIImp(), 2);
+                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+                tmp = ProtTestFormattedOutput.getDecimalString(bic1F.getGIImp(), 2);
+                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+                tmp = ProtTestFormattedOutput.getDecimalString(bic2F.getGIImp(), 2);
+                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+                tmp = ProtTestFormattedOutput.getDecimalString(bic3F.getGIImp(), 2);
+                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+                println("");
+            }
+            if (includeF) {
+                print("+F" + ProtTestFormattedOutput.space(13, ' '));
+                tmp = ProtTestFormattedOutput.getDecimalString(aicF.getFImp(), 2);
+                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+                tmp = ProtTestFormattedOutput.getDecimalString(aicc1F.getFImp(), 2);
+                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+                tmp = ProtTestFormattedOutput.getDecimalString(aicc2F.getFImp(), 2);
+                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+                tmp = ProtTestFormattedOutput.getDecimalString(aicc3F.getFImp(), 2);
+                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+                tmp = ProtTestFormattedOutput.getDecimalString(bic1F.getFImp(), 2);
+                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+                tmp = ProtTestFormattedOutput.getDecimalString(bic2F.getFImp(), 2);
+                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+                tmp = ProtTestFormattedOutput.getDecimalString(bic3F.getFImp(), 2);
+                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+                println("");
+            }
+        }
+        if (includeG | includeI | includeIG) {
+            println(ProtTestFormattedOutput.space(100, '-'));
+            println("Model-averaged estimate of");
+            println("parameters     AIC         AICc-1      AICc-2      AICc-3      BIC-1       BIC-2       BIC-3");
+            if (includeG) {
+                print("alpha (+G)" + ProtTestFormattedOutput.space(5, ' '));
+                tmp = ProtTestFormattedOutput.getDecimalString(aicF.getOverallAlpha(), 2);
+                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+                tmp = ProtTestFormattedOutput.getDecimalString(aicc1F.getOverallAlpha(), 2);
+                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+                tmp = ProtTestFormattedOutput.getDecimalString(aicc2F.getOverallAlpha(), 2);
+                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+                tmp = ProtTestFormattedOutput.getDecimalString(aicc3F.getOverallAlpha(), 2);
+                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+                tmp = ProtTestFormattedOutput.getDecimalString(bic1F.getOverallAlpha(), 2);
+                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+                tmp = ProtTestFormattedOutput.getDecimalString(bic2F.getOverallAlpha(), 2);
+                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+                tmp = ProtTestFormattedOutput.getDecimalString(bic3F.getOverallAlpha(), 2);
+                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+                println("");
+            }
+            if (includeI) {
+                print("p-inv (+I)" + ProtTestFormattedOutput.space(5, ' '));
+                tmp = ProtTestFormattedOutput.getDecimalString(aicF.getOverallInv(), 2);
+                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+                tmp = ProtTestFormattedOutput.getDecimalString(aicc1F.getOverallInv(), 2);
+                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+                tmp = ProtTestFormattedOutput.getDecimalString(aicc2F.getOverallInv(), 2);
+                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+                tmp = ProtTestFormattedOutput.getDecimalString(aicc3F.getOverallInv(), 2);
+                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+                tmp = ProtTestFormattedOutput.getDecimalString(bic1F.getOverallInv(), 2);
+                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+                tmp = ProtTestFormattedOutput.getDecimalString(bic2F.getOverallInv(), 2);
+                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+                tmp = ProtTestFormattedOutput.getDecimalString(bic3F.getOverallInv(), 2);
+                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+                println("");
+            }
+            if (includeIG) {
+                print("alpha (+I+G)" + ProtTestFormattedOutput.space(3, ' '));
+                tmp = ProtTestFormattedOutput.getDecimalString(aicF.getOverallAlphaGI(), 2);
+                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+                tmp = ProtTestFormattedOutput.getDecimalString(aicc1F.getOverallAlphaGI(), 2);
+                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+                tmp = ProtTestFormattedOutput.getDecimalString(aicc2F.getOverallAlphaGI(), 2);
+                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+                tmp = ProtTestFormattedOutput.getDecimalString(aicc3F.getOverallAlphaGI(), 2);
+                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+                tmp = ProtTestFormattedOutput.getDecimalString(bic1F.getOverallAlphaGI(), 2);
+                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+                tmp = ProtTestFormattedOutput.getDecimalString(bic2F.getOverallAlphaGI(), 2);
+                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+                tmp = ProtTestFormattedOutput.getDecimalString(bic3F.getOverallAlphaGI(), 2);
+                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+                println("");
+                print("p-inv (+I+G)" + ProtTestFormattedOutput.space(3, ' '));
+                tmp = ProtTestFormattedOutput.getDecimalString(aicF.getOverallInvGI(), 2);
+                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+                tmp = ProtTestFormattedOutput.getDecimalString(aicc1F.getOverallInvGI(), 2);
+                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+                tmp = ProtTestFormattedOutput.getDecimalString(aicc2F.getOverallInvGI(), 2);
+                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+                tmp = ProtTestFormattedOutput.getDecimalString(aicc3F.getOverallInvGI(), 2);
+                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+                tmp = ProtTestFormattedOutput.getDecimalString(bic1F.getOverallInvGI(), 2);
+                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+                tmp = ProtTestFormattedOutput.getDecimalString(bic2F.getOverallInvGI(), 2);
+                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+                tmp = ProtTestFormattedOutput.getDecimalString(bic3F.getOverallInvGI(), 2);
+                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+                println("");
+            }
+        }
         println(ProtTestFormattedOutput.space(100, '-'));
         println("AIC   : Akaike Information Criterion framework.");
         println("AICc-x: Second-Order Akaike framework.");

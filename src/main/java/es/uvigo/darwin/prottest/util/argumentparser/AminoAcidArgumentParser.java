@@ -25,6 +25,7 @@ import java.util.Map;
 
 import es.uvigo.darwin.prottest.global.options.ApplicationOptions;
 import es.uvigo.darwin.prottest.util.factory.ProtTestFactory;
+import java.util.Properties;
 
 /**
  * The Class AminoAcidArgumentParser.
@@ -68,4 +69,30 @@ public class AminoAcidArgumentParser extends ProtTestArgumentParser {
 	public List<String> getMatrices() {
 		return PARAM_MATRICES;
 	}
+        
+        /* (non-Javadoc)
+	 * @see es.uvigo.darwin.prottest.util.argumentparser.ProtTestArgumentParser#getMatrices()
+	 */
+        protected Properties checkArgs(String[] args)
+            throws IllegalArgumentException {
+            
+            // set all-matrices as default
+            boolean existMatrix = false;
+            int index = 0;
+            String modArgs[] = new String[args.length + 1];
+            for (String arg : args) {
+                if (PARAM_MATRICES.contains(arg.substring(1))) {
+                    existMatrix = true;
+                }
+                modArgs[index] = arg;
+                index++;
+            }
+            if (!existMatrix) {
+                modArgs[index] = "-" + PARAM_ALL_MATRICES;
+            } else {
+                modArgs = args;
+            }
+            
+            return super.checkArgs(modArgs);
+        }
 }

@@ -64,9 +64,9 @@ import pal.tree.Tree;
 public class ProtTest {
 
     /** The Constant versionNumber. */
-    public static final String versionNumber = "3.1";
+    public static final String versionNumber = "3.2";
     /** The Constant versionDate. */
-    public static final String versionDate = "5th March 2012";
+    public static final String versionDate = "16th March 2012";
     /** The MPJ rank of the process. It is only useful if MPJ is running.*/
     public static int MPJ_ME;
     /** The MPJ size of the communicator. It is only useful if MPJ is running.*/
@@ -85,7 +85,12 @@ public class ProtTest {
      */
     public static void main(String[] args) {
 
-        args = ProtTestFactory.initialize(args);
+        try {
+            args = ProtTestFactory.initialize(args);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Illegal argument: " + e.getMessage());
+            finalize(1);
+        }
         factory = ProtTestFactory.getInstance();
 
         // initializing MPJ environment (if available)
@@ -125,7 +130,7 @@ public class ProtTest {
                     getValue(ProtTestArgumentParser.PARAM_NUM_THREADS));
         } catch (IllegalArgumentException e) {
             if (MPJ_ME == 0) {
-                System.err.println(e.getMessage());
+                System.err.println("\n" + e.getMessage() + "\n");
                 ApplicationOptions.usage();
             }
             finalize(1);
@@ -190,118 +195,36 @@ public class ProtTest {
                 ModelCollection allModelsList =
                         new SingleModelCollection(models, opts.getAlignment());
 
-                InformationCriterion ic;
-                switch (opts.getSortBy()) {
-                    case SORTBY_AIC:
-                        ic = new AIC(allModelsList, 1.0, opts.getSampleSize());
-                        break;
-                    case SORTBY_BIC:
-                        ic = new BIC(allModelsList, 1.0, opts.getSampleSize());
-                        break;
-                    case SORTBY_AICC:
-                        ic = new AICc(allModelsList, 1.0, opts.getSampleSize());
-                        break;
-                    case SORTBY_DT:
-                        ic = new DT(allModelsList, 1.0, opts.getSampleSize());
-                        break;
-                    case SORTBY_LNL:
-                        ic = new LNL(allModelsList, 1.0, opts.getSampleSize());
-                        break;
-                    default:
-                        throw new ProtTestInternalException(
-                                "Unrecognized information criterion");
+                InformationCriterion aic, aicc, bic, dt, lnc;
+                if (opts.isAIC()) {
+                    printCriterion(
+                            "AIC", new AIC(allModelsList, 1.0, opts.getSampleSize()),
+                            logger, opts, facade, treeFacade);
                 }
-
-                // let's print results:
-                facade.printModelsSorted(ic);
+                if (opts.isBIC()) {
+                    printCriterion(
+                            "BIC", new BIC(allModelsList, 1.0, opts.getSampleSize()),
+                            logger, opts, facade, treeFacade);
+                }
+                if (opts.isAICc()) {
+                    printCriterion(
+                            "AICc", new AICc(allModelsList, 1.0, opts.getSampleSize()),
+                            logger, opts, facade, treeFacade);
+                }
+                if (opts.isDT()) {
+                    printCriterion(
+                            "DT", new DT(allModelsList, 1.0, opts.getSampleSize()),
+                            logger, opts, facade, treeFacade);
+                }
+                if (!(opts.isAIC() | opts.isDT() | opts.isAICc() | opts.isDT())) {
+                    printCriterion(
+                            "lnL", new LNL(allModelsList, 1.0, opts.getSampleSize()),
+                            logger, opts, facade, treeFacade);
+                }
 
                 // display 7-framework comparison
                 if (opts.isAll()) {
-                    PrintFramework.printFrameworksComparison(ic.getModelCollection());
-                }
-
-                // display best model tree in ASCII
-                if (opts.isDisplayASCIITree()) {
-                    ProtTestPrinter.printTreeHeader(ic.getBestModel().getModelName());
-                    logger.infoln(treeFacade.toASCII(ic.getBestModel().getTree()));
-                }
-
-                // display best model tree in Newick
-                if (opts.isDisplayNewickTree()) {
-                    if (!opts.isDisplayASCIITree()) {
-                        ProtTestPrinter.printTreeHeader(ic.getBestModel().getModelName());
-                    }
-                    logger.infoln(treeFacade.toNewick(ic.getBestModel().getTree(), true, true, false));
-                }
-
-                // display consensus tree data
-                if (opts.isDisplayConsensusTree()) {
-
-                    ProtTestPrinter.printTreeHeader("MODEL AVERAGED PHYLOGENY");
-                    Consensus consensus = treeFacade.createConsensus(ic, opts.getConsensusThreshold());
-
-                    logger.infoln("----------------------------------------");
-                    logger.infoln("Selection criterion: . . . . " + SORTBY_NAMES[opts.getSortBy() - 'A']);
-                    logger.infoln("Confidence interval: . . . . " + ic.getConfidenceInterval());
-                    logger.infoln("Sample size: . . . . . . . . " + opts.getSampleSize());
-                    logger.infoln("Consensus support threshold: " + opts.getConsensusThreshold());
-                    logger.infoln("----------------------------------------");
-                    logger.infoln("");
-
-                    Set<FixedBitSet> keySet = consensus.getCladeSupport().keySet();
-                    List<FixedBitSet> splitsInConsensus = new ArrayList<FixedBitSet>();
-                    List<FixedBitSet> splitsOutFromConsensus = new ArrayList<FixedBitSet>();
-
-                    for (FixedBitSet fbs : keySet) {
-                        if (fbs.cardinality() > 1) {
-                            double psupport = (1.0 * consensus.getCladeSupport().get(fbs)) / 1.0;
-                            if (psupport < opts.getConsensusThreshold()) {
-                                splitsOutFromConsensus.add(fbs);
-                            } else {
-                                splitsInConsensus.add(fbs);
-                            }
-                        }
-                    }
-
-                    logger.infoln("# # # # # # # # # # # # # # # #");
-                    logger.infoln(" ");
-                    logger.infoln("Species in order:");
-                    logger.infoln(" ");
-
-                    for (int i = 0; i < consensus.getIdGroup().getIdCount(); i++) {
-                        Identifier id = consensus.getIdGroup().getIdentifier(i);
-                        logger.infoln("    " + (i + 1) + ". " + id.getName());
-                    }
-                    logger.infoln(" ");
-                    logger.infoln("# # # # # # # # # # # # # # # #");
-                    logger.infoln(" ");
-                    logger.infoln("Sets included in the consensus tree");
-                    logger.infoln(" ");
-
-                    int numTaxa = consensus.getIdGroup().getIdCount();
-                    logger.infoln(consensus.getSetsIncluded());
-
-                    logger.infoln(" ");
-                    logger.infoln("Sets NOT included in consensus tree");
-                    logger.infoln(" ");
-
-                    logger.infoln(consensus.getSetsNotIncluded());
-
-                    logger.infoln(" ");
-                    logger.infoln("# # # # # # # # # # # # # # # #");
-                    logger.infoln(" ");
-                    Tree consensusTree = consensus.getConsensusTree();
-                    String newickTree = treeFacade.toNewick(consensusTree, true, true, true);
-                    logger.infoln(newickTree);
-                    logger.infoln(" ");
-                    logger.infoln("# # # # # # # # # # # # # # # #");
-                    logger.infoln(" ");
-                    logger.infoln(treeFacade.toASCII(consensusTree));
-                    logger.infoln("");
-                    logger.infoln(treeFacade.branchInfo(consensusTree));
-                    logger.infoln("");
-                    logger.infoln(treeFacade.heightInfo(consensusTree));
-
+                    PrintFramework.printFrameworksComparison(allModelsList);
                 }
 
             }
@@ -320,6 +243,96 @@ public class ProtTest {
 
         if (MPJ_RUN) {
             MPI.Finalize();
+        }
+    }
+
+    private static void printCriterion(String name, InformationCriterion ic, ProtTestLogger logger, ApplicationOptions opts,
+            ProtTestFacade facade, TreeFacade treeFacade) {
+        // let's print results:
+        facade.printModelsSorted(ic);
+
+        // display best model tree in ASCII
+        if (opts.isDisplayASCIITree()) {
+            ProtTestPrinter.printTreeHeader(ic.getBestModel().getModelName());
+            logger.infoln(treeFacade.toASCII(ic.getBestModel().getTree()));
+        }
+
+        // display best model tree in Newick
+        if (opts.isDisplayNewickTree()) {
+            if (!opts.isDisplayASCIITree()) {
+                ProtTestPrinter.printTreeHeader(ic.getBestModel().getModelName());
+            }
+            logger.infoln(treeFacade.toNewick(ic.getBestModel().getTree(), true, true, false));
+        }
+
+        // display consensus tree data
+        if (opts.isDisplayConsensusTree()) {
+
+            ProtTestPrinter.printTreeHeader("MODEL AVERAGED PHYLOGENY");
+            Consensus consensus = treeFacade.createConsensus(ic, opts.getConsensusThreshold());
+
+            logger.infoln("----------------------------------------");
+            logger.infoln("Selection criterion: . . . . " + name);
+            logger.infoln("Confidence interval: . . . . " + ic.getConfidenceInterval());
+            logger.infoln("Sample size: . . . . . . . . " + opts.getSampleSize());
+            logger.infoln("Consensus support threshold: " + opts.getConsensusThreshold());
+            logger.infoln("----------------------------------------");
+            logger.infoln("");
+
+            Set<FixedBitSet> keySet = consensus.getCladeSupport().keySet();
+            List<FixedBitSet> splitsInConsensus = new ArrayList<FixedBitSet>();
+            List<FixedBitSet> splitsOutFromConsensus = new ArrayList<FixedBitSet>();
+
+            for (FixedBitSet fbs : keySet) {
+                if (fbs.cardinality() > 1) {
+                    double psupport = (1.0 * consensus.getCladeSupport().get(fbs)) / 1.0;
+                    if (psupport < opts.getConsensusThreshold()) {
+                        splitsOutFromConsensus.add(fbs);
+                    } else {
+                        splitsInConsensus.add(fbs);
+                    }
+                }
+            }
+
+            logger.infoln("# # # # # # # # # # # # # # # #");
+            logger.infoln(" ");
+            logger.infoln("Species in order:");
+            logger.infoln(" ");
+
+            for (int i = 0; i < consensus.getIdGroup().getIdCount(); i++) {
+                Identifier id = consensus.getIdGroup().getIdentifier(i);
+                logger.infoln("    " + (i + 1) + ". " + id.getName());
+            }
+            logger.infoln(" ");
+            logger.infoln("# # # # # # # # # # # # # # # #");
+            logger.infoln(" ");
+            logger.infoln("Sets included in the consensus tree");
+            logger.infoln(" ");
+
+            int numTaxa = consensus.getIdGroup().getIdCount();
+            logger.infoln(consensus.getSetsIncluded());
+
+            logger.infoln(" ");
+            logger.infoln("Sets NOT included in consensus tree");
+            logger.infoln(" ");
+
+            logger.infoln(consensus.getSetsNotIncluded());
+
+            logger.infoln(" ");
+            logger.infoln("# # # # # # # # # # # # # # # #");
+            logger.infoln(" ");
+            Tree consensusTree = consensus.getConsensusTree();
+            String newickTree = treeFacade.toNewick(consensusTree, true, true, true);
+            logger.infoln(newickTree);
+            logger.infoln(" ");
+            logger.infoln("# # # # # # # # # # # # # # # #");
+            logger.infoln(" ");
+            logger.infoln(treeFacade.toASCII(consensusTree));
+            logger.infoln("");
+            logger.infoln(treeFacade.branchInfo(consensusTree));
+            logger.infoln("");
+            logger.infoln(treeFacade.heightInfo(consensusTree));
+
         }
     }
 

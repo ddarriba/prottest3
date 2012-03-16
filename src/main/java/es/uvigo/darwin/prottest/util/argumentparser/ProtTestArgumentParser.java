@@ -56,9 +56,6 @@ public abstract class ProtTestArgumentParser
         valuesRequired.put(PARAM_ALIGNMENT_FILE, true);
         valuesRequired.put(PARAM_OUTPUT_FILE, true);
         valuesRequired.put(PARAM_TREE_FILE, true);
-        String[] sortByValues = String.valueOf(SORTBY_VALUES).split("");
-        valuesRequired.put(PARAM_SORT_BY, true);
-        argumentValues.put(PARAM_SORT_BY, sortByValues);
         String[] optimizationStrategies = new String[OPTIMIZE_VALUES.length];
         for (int index = 0; index < OPTIMIZE_VALUES.length; index++) {
             optimizationStrategies[index] = String.valueOf(OPTIMIZE_VALUES[index]);
@@ -88,6 +85,10 @@ public abstract class ProtTestArgumentParser
         valuesRequired.put(PARAM_NCAT, true);
         valuesRequired.put(PARAM_ALL_DISTRIBUTIONS, false);
         valuesRequired.put(PARAM_VERBOSE, false);
+        valuesRequired.put(PARAM_DO_AIC, false);
+        valuesRequired.put(PARAM_DO_BIC, false);
+        valuesRequired.put(PARAM_DO_AICC, false);
+        valuesRequired.put(PARAM_DO_DT, false);
         Map<String, String> distributionsMap = new HashMap<String, String>(3);
         distributionsMap.put(PARAM_PLUSG, "T");
         distributionsMap.put(PARAM_PLUSI, "T");
@@ -98,7 +99,6 @@ public abstract class ProtTestArgumentParser
 
         defaultProperties.setProperty(PARAM_NUM_THREADS, String.valueOf(DEFAULT_THREADS));
         defaultProperties.setProperty(PARAM_NCAT, String.valueOf(DEFAULT_NCAT));
-        defaultProperties.setProperty(PARAM_SORT_BY, String.valueOf(DEFAULT_SORT_BY));
         defaultProperties.setProperty(PARAM_OPTIMIZATION_STRATEGY, String.valueOf(DEFAULT_STRATEGY_MODE));
         defaultProperties.setProperty(PARAM_SAMPLE_SIZE_MODE, String.valueOf(DEFAULT_SAMPLE_SIZE_MODE));
         defaultProperties.setProperty(PARAM_DATA_TYPE, DATA_TYPE_AMINOACID);
@@ -129,7 +129,7 @@ public abstract class ProtTestArgumentParser
      * 
      * @throws IllegalArgumentException when exists some error in the command line argument
      */
-    private Properties checkArgs(String[] args)
+    protected Properties checkArgs(String[] args)
             throws IllegalArgumentException {
 
         Properties localArguments = new Properties(defaultProperties);
@@ -184,6 +184,10 @@ public abstract class ProtTestArgumentParser
                     }
                 }
             } else {
+                // Obsolete arguments checking...
+                if (arg.equals("-sort")) {
+                    System.err.println(" WARNING! \"sort\" argument is obsolete since 3.2 version. You should use one or more of the following instead: -AIC -AICC -BIC -DT");
+                }
                 throw new IllegalArgumentException("Invalid argument " + arg);
             }
             i++;

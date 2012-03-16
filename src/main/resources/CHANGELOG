@@ -1,0 +1,27 @@
+-----------------------------------------------------------------------------
+ProtTest 3 Change Log -	16/Mar/2012
+
+Diego Darriba (ddarriba@udc.es)
+Guillermo L. Taboada (taboada@udc.es)
+Ramón Doallo (doallo@udc.es)
+David Posada (dposada@uvigo.es)
+
+(c) Universidad de Vigo, Vigo, Spain
+(c) Grupo de Arquitectura de Computadores, UDC, Spain
+
+-----------------------------------------------------------------------------
+
+ProtTest 3.2 (16/Mar/2012)
+
+    * Enhancement: Enable the model selection and phylogenetic averaging
+        using more than one single Information Criterion:
+
+        "-sort" argument is replaced by -AIC, -BIC, -AICC and -DT arguments.
+
+    * Enhancement: By default, all model matrices are computed unless you
+        explicitly specify a subset.
+
+ProtTest 3.1 (5/Mar/2012)
+
+    * Enhancement: Added suport for old PhyML versions that does not support
+        the --no-memory-check option, through prottest.properties file.

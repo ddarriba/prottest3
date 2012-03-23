@@ -329,7 +329,7 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
                         //      where the HIVw matrix is shown as HIVb in the stats file
                         if (!model.getMatrix().equals("HIVw"))
                         if (!(model.getMatrix().equals(matrixName) || (modelFile.exists() &&
-                                matrixName.equals("Custom")))) {
+                                !Arrays.asList(IMPLEMENTED_MATRICES).contains(model.getMatrix())))) {
                             String errorMsg = "Matrix names doesn't match";
                             errorln("PHYML: " + line);
                             errorln("Last token: " + Utilities.lastToken(line));

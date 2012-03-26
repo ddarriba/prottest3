@@ -580,7 +580,14 @@ public class ApplicationOptions {
         displayConsensusTree = arguments.isSet(ProtTestArgumentParser.PARAM_DISPLAY_CONSENSUS_TREE);
         if (arguments.exists(ProtTestArgumentParser.PARAM_DISPLAY_CONSENSUS_TREE)) {
             displayConsensusTree = true;
-            consensusThreshold = Double.parseDouble(arguments.getValue(ProtTestArgumentParser.PARAM_DISPLAY_CONSENSUS_TREE));
+            try {
+                consensusThreshold = Double.parseDouble(arguments.getValue(ProtTestArgumentParser.PARAM_DISPLAY_CONSENSUS_TREE));
+            } catch  (NumberFormatException e) {
+                throw new IllegalArgumentException("Consensus threshold must be a number between 0.5 (majority rule) and 1 (strict). You used " + arguments.getValue(ProtTestArgumentParser.PARAM_DISPLAY_CONSENSUS_TREE));
+            }
+            if (consensusThreshold < 0.5 || consensusThreshold > 1.0) {
+                throw new IllegalArgumentException("Consensus threshold must be a number between 0.5 (majority rule) and 1 (strict). You used " + consensusThreshold);
+            }
         }
         setAll(arguments.isSet(ProtTestArgumentParser.PARAM_ALL_FRAMEWORK_COMPARISON));
         if (arguments.exists(ProtTestArgumentParser.PARAM_OPTIMIZATION_STRATEGY)) {
@@ -739,7 +746,8 @@ public class ApplicationOptions {
         println(" -t2      				");
         println("            Display best-model's ASCII tree  [default: " + DEFAULT_DISPLAY_ASCII_TREE + "]");
         println(" -tc consensus_threshold ");
-        println("            Display consensus tree with the specified threshold");
+        println("            Display consensus tree with the specified threshold, between 0.5 and 1.0");
+        println("            [0.5 = majority rule consensus ; 1.0 = strict consensus]");
         println(" -threads number_or_threads			");
         println("            Number of threads requested to compute (only if MPJ is not used) [default: " +
                 DEFAULT_THREADS + "]");
@@ -748,9 +756,9 @@ public class ApplicationOptions {
         println("-------------------------------------------------------------------------------------------------");
         println("Example: ");
         println("- Sequential version:");
-        println("    java -jar ModelTest-2.1.jar -i alignm_file -t tree_file -S 0 -all-distributions -F -AIC -BIC -tc > output");
+        println("    java -jar ModelTest-2.1.jar -i alignm_file -t tree_file -S 0 -all-distributions -F -AIC -BIC -tc 0.5 > output");
         println("- Parallel version:");
-        println("    mpjrun.sh -wdir $PWD/ -np 2 -jar ModelTest-2.1.jar -i alignm_file -t tree_file -S 0 -all-distributions -F -AIC -BIC -tc");
+        println("    mpjrun.sh -wdir $PWD/ -np 2 -jar ModelTest-2.1.jar -i alignm_file -t tree_file -S 0 -all-distributions -F -AIC -BIC -tc 0.5");
     }
 
     public void reportModelOptimization() {

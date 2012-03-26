@@ -373,6 +373,14 @@ public class Consensus {
         if (supportThreshold < 0.5 || supportThreshold > 1.0) {
             throw new ProtTestInternalException("Invalid threshold value: " + supportThreshold);
         }
+        
+        double effectiveThreshold = supportThreshold;
+        if (supportThreshold == 0.5) {
+            effectiveThreshold += 1.0/(numTaxa+1);
+        } else if (supportThreshold == 1.0) {
+            effectiveThreshold -= 1.0/(numTaxa+1);
+        }
+
         // establish support
         support = new HashMap<FixedBitSet, Support>();
         int k = 0;
@@ -452,7 +460,7 @@ public class Consensus {
             final Support s = e.getValue();
 
             final double psupport = (1.0 * s.treesWeightWithClade) / cumWeight;
-            if (psupport < supportThreshold) {
+            if (psupport < effectiveThreshold) {
                 break;
             }
 
@@ -542,7 +550,7 @@ public class Consensus {
         for (FixedBitSet fbs : keys) {
             if (fbs.cardinality() > 1) {
                 double psupport = (1.0 * getSupport().get(fbs).getTreesWeightWithClade()) / cumWeight;
-                if (psupport < supportThreshold) {
+                if (psupport < effectiveThreshold) {
                     splitsOutFromConsensus.add(fbs);
                 } else {
                     splitsInConsensus.add(fbs);

@@ -46,6 +46,8 @@ public interface ProtTestConsoleParameters {
     /** Display all framework comparison parameter token. */
     public static final String PARAM_ALL_FRAMEWORK_COMPARISON = "all";	// display 7-framework comparison table
     /** Optimization strategy selection parameter token. */
+    public static final String PARAM_TREE_SEARCH_OP = "s";	// tree search operation
+    /** Optimization strategy selection parameter token. */
     public static final String PARAM_OPTIMIZATION_STRATEGY = "S";	// optimization strategy
     /** Sample size mode parameter token. */
     public static final String PARAM_SAMPLE_SIZE_MODE = "sample";	// sample size for AICc and BIC corrections

@@ -62,6 +62,15 @@ public abstract class ProtTestArgumentParser
         }
         valuesRequired.put(PARAM_OPTIMIZATION_STRATEGY, true);
         argumentValues.put(PARAM_OPTIMIZATION_STRATEGY, optimizationStrategies);
+        
+        String[] treeSearchOps = {
+        		TREE_SEARCH_NNI,
+        		TREE_SEARCH_SPR,
+        		TREE_SEARCH_BEST
+        };
+        valuesRequired.put(PARAM_TREE_SEARCH_OP, true);
+        argumentValues.put(PARAM_TREE_SEARCH_OP, treeSearchOps);
+        
         String[] sampleSizeModes = {
             String.valueOf(SIZEMODE_SHANNON),
             String.valueOf(SIZEMODE_SHANNON_NxL),

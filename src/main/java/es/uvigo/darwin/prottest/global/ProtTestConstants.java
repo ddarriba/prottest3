@@ -57,6 +57,14 @@ public interface ProtTestConstants {
     /** User defined sample size mode. */
     static final int SIZEMODE_USERSIZE = 5;
     
+    // tree search operation
+    /** NNI moves */
+    static final String TREE_SEARCH_NNI = "NNI";
+    /** SPR moves */
+    static final String TREE_SEARCH_SPR = "SPR";
+    /** Best of NNI and SPR moves */
+    static final String TREE_SEARCH_BEST = "BEST";
+    
     /** Set of descriptions of size modes. */
     public static final String[] SIZE_MODE_NAMES = {
         "Shannon-entropy Sum",

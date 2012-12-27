@@ -93,6 +93,8 @@ public class ApplicationOptions {
     public boolean writeLog = true;
     /** Criterion to sort the models. */
     private boolean doAIC,doBIC,doAICc,doDT;
+    /** Tree search operation */
+    private String treeSearchOperation = TREE_SEARCH_NNI;
 
     /**
      * Sets the number of categories.
@@ -192,7 +194,15 @@ public class ApplicationOptions {
     public boolean isDT() {
         return doDT;
     }
-    /**
+    public String getTreeSearchOperation() {
+		return treeSearchOperation;
+	}
+
+	public void setTreeSearchOperation(String treeSearchOperation) {
+		this.treeSearchOperation = treeSearchOperation;
+	}
+
+	/**
      * Sets the alignment filename without checking
      * 
      * @param alignFile the alignment filename
@@ -574,6 +584,9 @@ public class ApplicationOptions {
                 throw new ProtTestInternalException(fnfe.getMessage());
             }
         }
+        if (arguments.exists(ProtTestArgumentParser.PARAM_TREE_SEARCH_OP)) {
+            setTreeSearchOperation(arguments.getValue(ProtTestArgumentParser.PARAM_TREE_SEARCH_OP));
+        }
         setDebug(arguments.isSet(ProtTestArgumentParser.PARAM_VERBOSE));
         displayASCIITree = arguments.isSet(ProtTestArgumentParser.PARAM_DISPLAY_ASCII_TREE);
         displayNewickTree = arguments.isSet(ProtTestArgumentParser.PARAM_DISPLAY_NEWICK_TREE);
@@ -734,6 +747,9 @@ public class ApplicationOptions {
         for (int i = 0; i < OPTIMIZE_NAMES.length; i++) {
             println("             		" + i + ": " + OPTIMIZE_NAMES[i]);
         }
+        println(" -s moves");
+        println("            Tree search operation for ML search: ");
+        println("            NNI (fastest), SPR (slowest), BEST (best of NNI and SPR) [default: NNI]");
         println(" -sample sample_size_mode");
         println("            Sample size for AICc and BIC corrections [default: " + DEFAULT_SAMPLE_SIZE_MODE + "]");
         for (int i = 0; i < SIZE_MODE_NAMES.length; i++) {

@@ -161,7 +161,7 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
         try {
             Runtime runtime = Runtime.getRuntime();
 
-            String str[] = new String[29];
+            String str[] = new String[31];
             for (int i = 0; i < str.length; i++) {
                 str[i] = "";
             }
@@ -246,6 +246,12 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
                     str[26] = "--no_memory_check";
                 }
                 
+                if (options.strategyMode == OPTIMIZE_ML) {
+                	str[29] = "-s";
+                	str[30] = options.getTreeSearchOperation();
+                } else {
+                	str[29] = str[30] = "";
+                }
                 model.setCommandLine(str);
                 proc = runtime.exec(str);
                 proc.getOutputStream().write(modelFile.getPath().getBytes());

@@ -134,9 +134,25 @@ public class AlignmentReader {
             throw new AlignmentParseException("There's some error in your data: " + ex.getMessage());
         }
 
-        PushbackReader pr = new PushbackReader(new StringReader(out));
-        alignment = readAlignment(output, pr, debug);
-
+        try {
+        	PushbackReader pr = new PushbackReader(new StringReader(out));
+        	alignment = readAlignment(output, pr, debug);
+        } catch (AlignmentParseException ex) {
+        	sequential = false;
+        	try {
+                converter = factory.getConverter(inO, inP, inF, autodetect,
+                        collapse, gaps, missing, limit,
+                        outO, outP, outF, lower, numbers, sequential, match, logger.getName());
+                out = converter.convert(in);
+            } catch (UnsupportedOperationException exUO) {
+                throw new AlignmentParseException("There's some error in your data: " + ex.getMessage());
+            } catch (ParseException exP) {
+                throw new AlignmentParseException("There's some error in your data: " + ex.getMessage());
+            }
+        	PushbackReader pr = new PushbackReader(new StringReader(out));
+        	alignment = readAlignment(output, pr, debug);
+        }
+        
         if (alignment == null) {
             throw new AlignmentParseException("There's some error in your data, exiting...");
         }

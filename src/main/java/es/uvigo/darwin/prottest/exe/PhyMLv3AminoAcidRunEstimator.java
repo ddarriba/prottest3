@@ -141,22 +141,22 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
         switch (options.strategyMode) {
             case OPTIMIZE_BIONJ:
                 tr = "BIONJ";
-                topo = "l";
+                topo = "lr";
                 break;
             case OPTIMIZE_FIXED_BIONJ:
                 if (TemporaryFileManager.getInstance().getTreeFilename(Thread.currentThread()) != null) {
                     tr = TemporaryFileManager.getInstance().getTreeFilename(Thread.currentThread());
-                    topo = "l";
+                    topo = "lr";
                 } else {
                     topo = "r";
                 }
                 break;
             case OPTIMIZE_ML:
-                topo = "tl";
+                topo = "tlr";
                 break;
             case OPTIMIZE_USER:
                 tr = TemporaryFileManager.getInstance().getTreeFilename(Thread.currentThread());
-                topo = "l";
+                topo = "lr";
         }
         try {
             Runtime runtime = Runtime.getRuntime();

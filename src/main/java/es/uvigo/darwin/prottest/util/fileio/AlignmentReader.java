@@ -104,7 +104,7 @@ public class AlignmentReader {
         } else if (os.startsWith("Win")) {
             outO = "Windows";
         }
-        String outP = "PhyML";
+        String outP = "ProtTest";
         String outF = "PHYLIP";
         boolean lower = false;
         boolean numbers = false;

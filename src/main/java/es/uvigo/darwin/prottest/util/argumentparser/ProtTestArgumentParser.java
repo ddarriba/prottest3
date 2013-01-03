@@ -125,6 +125,12 @@ public abstract class ProtTestArgumentParser
             throws IllegalArgumentException {
 
         arguments = checkArgs(args);
+        
+        if (!(exists(PARAM_DO_BIC) || exists(PARAM_DO_AIC)
+        		|| exists(PARAM_DO_AICC) || exists(PARAM_DO_DT))) {
+        	putArgument(PARAM_DO_BIC, "T", arguments);
+        }
+        
         options.fillIn(this);
     }
 
@@ -201,6 +207,7 @@ public abstract class ProtTestArgumentParser
             }
             i++;
         }
+        
         return localArguments;
 
     }

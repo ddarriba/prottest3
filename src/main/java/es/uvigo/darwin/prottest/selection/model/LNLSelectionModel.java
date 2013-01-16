@@ -32,6 +32,6 @@ public class LNLSelectionModel extends SelectionModel {
 	 */
 	public LNLSelectionModel(Model model) {
 		super(model, 0.0);
-		this.value = model.getLk(); 
+		this.value = -model.getLk(); 
 	}
 }

@@ -52,8 +52,6 @@ public class ApplicationOptions {
 
     /** Verbose mode on/off. */
     protected boolean debug = DEFAULT_DEBUG;
-    /** The sample size mode. */
-    protected int sampleSizeMode = DEFAULT_SAMPLE_SIZE_MODE;
     /** The sample size. It is only useful if the sample size mode is custom */
     protected double sampleSize = 0.0;
     /** The alignment filename. */
@@ -349,7 +347,6 @@ public class ApplicationOptions {
      * 
      * @return the model matrices
      */
-    @SuppressWarnings("unchecked")
     public List<String> getMatrices() {
         List<String> matricesClone = new ArrayList<String>(matrices);
         return matricesClone;
@@ -494,30 +491,12 @@ public class ApplicationOptions {
     }
 
     /**
-     * Gets the sample size mode.
-     * 
-     * @return the sample size mode
-     */
-    public int getSampleSizeMode() {
-        return sampleSizeMode;
-    }
-
-    /**
      * Gets the sample size.
      * 
      * @return the sample size
      */
     public double getSampleSize() {
-        return sampleSize;
-    }
-
-    /**
-     * Sets the sample size mode.
-     * 
-     * @param sampleSizeMode the new sample size mode
-     */
-    public void setSampleSizeMode(int sampleSizeMode) {
-        this.sampleSizeMode = sampleSizeMode;
+        return alignment.getSiteCount();
     }
 
     /**
@@ -627,13 +606,8 @@ public class ApplicationOptions {
         if (arguments.exists(ProtTestArgumentParser.PARAM_DO_DT)) {
             doDT = arguments.isSet(ProtTestArgumentParser.PARAM_DO_DT);
         }
-        if (arguments.exists(ProtTestArgumentParser.PARAM_SAMPLE_SIZE_MODE)) {
-            sampleSizeMode = Integer.parseInt(arguments.getValue(ProtTestArgumentParser.PARAM_SAMPLE_SIZE_MODE));
-        }
-        if (arguments.exists(ProtTestArgumentParser.PARAM_SPECIFIC_SAMPLE_SIZE)) {
-            sampleSize = Double.parseDouble(arguments.getValue(ProtTestArgumentParser.PARAM_SPECIFIC_SAMPLE_SIZE));
-        }
-        setSampleSize(ProtTestAlignment.calculateSampleSize(alignment, sampleSizeMode, sampleSize));
+
+        setSampleSize(ProtTestAlignment.calculateSampleSize(alignment));
 
         boolean existsMatrix = false;
         for (String matrix : arguments.getMatrices()) {
@@ -750,13 +724,6 @@ public class ApplicationOptions {
         println(" -s moves");
         println("            Tree search operation for ML search: ");
         println("            NNI (fastest), SPR (slowest), BEST (best of NNI and SPR) [default: NNI]");
-        println(" -sample sample_size_mode");
-        println("            Sample size for AICc and BIC corrections [default: " + DEFAULT_SAMPLE_SIZE_MODE + "]");
-        for (int i = 0; i < SIZE_MODE_NAMES.length; i++) {
-            println("             		" + i + ": " + SIZE_MODE_NAMES[i]);
-        }
-        println(" -size user_size  		");
-        println("            Specified sample size, only for \"-sample " + SIZEMODE_USERSIZE + "\"");
         println(" -t1      				");
         println("            Display best-model's newick tree [default: " + DEFAULT_DISPLAY_NEWICK_TREE + "]");
         println(" -t2      				");
@@ -832,13 +799,7 @@ public class ApplicationOptions {
         if (!(doAIC|doBIC|doAICc|doDT))
             sb.append(" lnL");
         println("      " + sb.toString());
-        if (sampleSizeMode == SIZEMODE_USERSIZE) {
-            println("    Sample size.................: " + sampleSize);
-        } else {
-            println("    Sample size.................: " + sampleSize + " (not calculated yet)");
-        }
-        println("      sampleSizeMode............: " + SIZE_MODE_NAMES[sampleSizeMode]);
-
+        println("    Sample size.................: " + sampleSize + " (not calculated yet)");
         println("  Other options:");
         println("    Display best tree in ASCII..: " + displayASCIITree);
         println("    Display best tree in Newick.: " + displayNewickTree);
@@ -857,14 +818,6 @@ public class ApplicationOptions {
 
     private static void println(String message) {
         infoln(message, ApplicationOptions.class);
-    }
-
-    private static void verbose(String message) {
-        fine(message, ApplicationOptions.class);
-    }
-
-    private static void verboseln(String message) {
-        fineln(message, ApplicationOptions.class);
     }
 }
 

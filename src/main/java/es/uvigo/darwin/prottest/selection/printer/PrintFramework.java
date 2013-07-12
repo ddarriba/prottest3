@@ -14,11 +14,10 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
 package es.uvigo.darwin.prottest.selection.printer;
 
-import es.uvigo.darwin.prottest.global.options.ApplicationOptions;
-import static es.uvigo.darwin.prottest.global.ApplicationGlobals.*;
+import static es.uvigo.darwin.prottest.global.ProtTestConstants.IMPORTANCE_PRECISSION;
 
 import java.util.Collections;
 
@@ -26,8 +25,8 @@ import es.uvigo.darwin.prottest.model.Model;
 import es.uvigo.darwin.prottest.selection.AIC;
 import es.uvigo.darwin.prottest.selection.AICc;
 import es.uvigo.darwin.prottest.selection.BIC;
+import es.uvigo.darwin.prottest.selection.DT;
 import es.uvigo.darwin.prottest.selection.InformationCriterion;
-import es.uvigo.darwin.prottest.util.ProtTestAlignment;
 import es.uvigo.darwin.prottest.util.StatFramework;
 import es.uvigo.darwin.prottest.util.collection.ModelCollection;
 import es.uvigo.darwin.prottest.util.comparator.LKComparator;
@@ -39,351 +38,370 @@ import es.uvigo.darwin.prottest.util.printer.ProtTestFormattedOutput;
  */
 public abstract class PrintFramework {
 
-    /** Constant sample size when it's not user defined. Just for visibility */
-    private static final double NO_SAMPLE_SIZE = 0.0;
+	/**
+	 * Prints the models sorted by a concrete information criterion.
+	 */
+	public final void printModelsSorted(
+			InformationCriterion informationCriterion) {
 
-    /**
-     * Prints the models sorted by a concrete information criterion.
-     */
-    public final void printModelsSorted(InformationCriterion informationCriterion) {
+		int fieldLength = 15;
+		int numberOfFields = 5;
+		int lineLength = fieldLength * numberOfFields;
 
-        int fieldLength = 15;
-        int numberOfFields = 5;
-        int lineLength = fieldLength * numberOfFields;
+		Model bestModel = informationCriterion.getBestModel();
+		ModelCollection models = informationCriterion.getModelCollection();
 
-        Model bestModel = informationCriterion.getBestModel();
-        ModelCollection models = informationCriterion.getModelCollection();
+		String columns[] = new String[5];
+		columns[0] = "Model";
+		columns[1] = "delta" + informationCriterion.getCriterionName();
+		columns[2] = informationCriterion.getCriterionName();
+		columns[3] = informationCriterion.getCriterionName() + "w";
+		columns[4] = "-lnL";
 
-        String columns[] = new String[5];
-        columns[0] = "Model";
-        columns[1] = "delta" + informationCriterion.getCriterionName();
-        columns[2] = informationCriterion.getCriterionName();
-        columns[3] = informationCriterion.getCriterionName() + "w";
-        columns[4] = "-lnL";
+		println("");
+		println(ProtTestFormattedOutput.space(lineLength, '*'));
+		println("Best model according to "
+				+ informationCriterion.getCriterionName() + ": "
+				+ bestModel.getModelName());
+		double confPercent = informationCriterion.getConfidenceInterval() * 100;
+		println("Confidence Interval: " + confPercent);
+		println(ProtTestFormattedOutput.space(lineLength, '*'));
+		for (int i = 0; i < numberOfFields; i++) {
+			print(columns[i]);
+			print(ProtTestFormattedOutput.space(
+					fieldLength - columns[i].length(), ' '));
+		}
+		println("");
+		println(ProtTestFormattedOutput.space(lineLength, '-'));
+		for (Model model : models) {
+			print(model.getModelName());
+			print(ProtTestFormattedOutput.space(fieldLength
+					- model.getModelName().length(), ' '));
 
-        println("");
-        println(ProtTestFormattedOutput.space(lineLength, '*'));
-        println("Best model according to " + informationCriterion.getCriterionName() + ": " + bestModel.getModelName());
-        println("Sample Size:         " + informationCriterion.getSampleSize());
-        double confPercent = informationCriterion.getConfidenceInterval() * 100;
-        println("Confidence Interval: " + confPercent);
-        println(ProtTestFormattedOutput.space(lineLength, '*'));
-        for (int i = 0; i < numberOfFields; i++) {
-            print(columns[i]);
-            print(ProtTestFormattedOutput.space(fieldLength - columns[i].length(), ' '));
-        }
-        println("");
-        println(ProtTestFormattedOutput.space(lineLength, '-'));
-        for (Model model : models) {
-            print(model.getModelName());
-            print(ProtTestFormattedOutput.space(fieldLength - model.getModelName().length(), ' '));
+			String decimal;
 
-            String decimal;
+			decimal = ProtTestFormattedOutput.getDecimalString(
+					informationCriterion.get(model).getDeltaValue(), 2);
+			print(decimal);
+			print(ProtTestFormattedOutput.space(fieldLength - decimal.length(),
+					' '));
+			decimal = ProtTestFormattedOutput.getDecimalString(
+					informationCriterion.get(model).getValue(), 2);
+			print(decimal);
+			print(ProtTestFormattedOutput.space(fieldLength - decimal.length(),
+					' '));
+			decimal = ProtTestFormattedOutput.getDecimalString(
+					informationCriterion.get(model).getWeightValue(), 2);
+			print(decimal);
+			print(ProtTestFormattedOutput.space(fieldLength - decimal.length(),
+					' '));
+			decimal = ProtTestFormattedOutput.getDecimalString(
+					-1 * model.getLk(), 2);
+			print(decimal);
+			print(ProtTestFormattedOutput.space(fieldLength - decimal.length(),
+					' '));
 
-            decimal = ProtTestFormattedOutput.getDecimalString(informationCriterion.get(model).getDeltaValue(), 2);
-            print(decimal);
-            print(ProtTestFormattedOutput.space(fieldLength - decimal.length(), ' '));
-            decimal = ProtTestFormattedOutput.getDecimalString(informationCriterion.get(model).getValue(), 2);
-            print(decimal);
-            print(ProtTestFormattedOutput.space(fieldLength - decimal.length(), ' '));
-            decimal = ProtTestFormattedOutput.getDecimalString(informationCriterion.get(model).getWeightValue(), 2);
-            print(decimal);
-            print(ProtTestFormattedOutput.space(fieldLength - decimal.length(), ' '));
-            decimal = ProtTestFormattedOutput.getDecimalString(model.getLk(), 2);
-            print(decimal);
-            print(ProtTestFormattedOutput.space(fieldLength - decimal.length(), ' '));
+			println("");
+		}
 
-            println("");
-        }
+		println(ProtTestFormattedOutput.space(lineLength, '-'));
 
-        println(ProtTestFormattedOutput.space(lineLength, '-'));
+		println(ProtTestFormattedOutput.space(lineLength, '-'));
 
-        println(ProtTestFormattedOutput.space(lineLength, '-'));
+		printRelativeImportance(informationCriterion);
 
-        printRelativeImportance(informationCriterion);
+		printModelAveragedEstimation(informationCriterion);
 
-        printModelAveragedEstimation(informationCriterion);
+	}
 
-    }
+	protected static void print(String text) {
+		ProtTestLogger.getDefaultLogger().info(text);
+	}
 
-    protected static void print(String text) {
-        ProtTestLogger.getDefaultLogger().info(text);
-    }
+	protected static void println(String text) {
+		ProtTestLogger.getDefaultLogger().infoln(text);
+	}
 
-    protected static void println(String text) {
-        ProtTestLogger.getDefaultLogger().infoln(text);
-    }
+	/**
+	 * Prints the comparison over the 7 frameworks.
+	 */
+	public static void printFrameworksComparison(ModelCollection models) {
 
-    /**
-     * Prints the comparison over the 7 frameworks.
-     */
-    public static void printFrameworksComparison(ModelCollection models) {
+		boolean includeI, includeG, includeIG, includeF;
+		includeI = includeG = includeIG = includeF = false;
 
-        boolean includeI, includeG, includeIG, includeF;
-        includeI = includeG = includeIG = includeF = false;
-        
-        double[] aic = new double[models.size()];
-        double[] aicc1 = new double[models.size()];
-        double[] aicc2 = new double[models.size()];
-        double[] aicc3 = new double[models.size()];
-        double[] bic1 = new double[models.size()];
-        double[] bic2 = new double[models.size()];
-        double[] bic3 = new double[models.size()];
-        String[] modelNames = new String[models.size()];
-        double sampleSize1, sampleSize2, sampleSize3;
+		double[] aic = new double[models.size()];
+		double[] aicc = new double[models.size()];
+		double[] bic = new double[models.size()];
+		double[] dt = new double[models.size()];
 
-        sampleSize1 = ProtTestAlignment.calculateSampleSize(models.getAlignment(), SIZEMODE_ALIGNMENT, NO_SAMPLE_SIZE);
-        sampleSize2 = ProtTestAlignment.calculateSampleSize(models.getAlignment(), SIZEMODE_SHANNON, NO_SAMPLE_SIZE);
-        sampleSize3 = ProtTestAlignment.calculateSampleSize(models.getAlignment(), SIZEMODE_SHANNON_NxL, NO_SAMPLE_SIZE);
+		String[] modelNames = new String[models.size()];
 
-        InformationCriterion aicS1 = new AIC(models, 1.0, sampleSize1);
-        InformationCriterion aiccS1 = new AICc(models, 1.0, sampleSize1);
-        InformationCriterion aiccS2 = new AICc(models, 1.0, sampleSize2);
-        InformationCriterion aiccS3 = new AICc(models, 1.0, sampleSize3);
-        InformationCriterion bicS1 = new BIC(models, 1.0, sampleSize1);
-        InformationCriterion bicS2 = new BIC(models, 1.0, sampleSize2);
-        InformationCriterion bicS3 = new BIC(models, 1.0, sampleSize3);
-        Collections.sort(models, new LKComparator());
-        for (int i = 0; i < models.size(); i++) {
-            Model model = models.get(i);
+		InformationCriterion aicS = new AIC(models, 1.0, 0);
+		InformationCriterion aiccS = new AICc(models, 1.0, models.getAlignment().getSiteCount());
+		InformationCriterion bicS = new BIC(models, 1.0, models.getAlignment().getSiteCount());
+		InformationCriterion dtS = new DT(models, 1.0, models.getAlignment().getSiteCount());
 
-            includeI |= model.isInv();
-            includeG |= model.isGamma();
-            includeIG |= model.isInv() && model.isGamma();
-            includeF |= model.isPlusF();
-            
-            modelNames[i] = model.getModelName();
+		Collections.sort(models, new LKComparator());
+		for (int i = 0; i < models.size(); i++) {
+			Model model = models.get(i);
 
-            aicc1[i] = aiccS1.get(model).getValue();
-            bic1[i] = bicS1.get(model).getValue();
-            aic[i] = aicS1.get(model).getValue();
+			includeI |= model.isInv();
+			includeG |= model.isGamma();
+			includeIG |= model.isInv() && model.isGamma();
+			includeF |= model.isPlusF();
 
-            aicc2[i] = aiccS2.get(model).getValue();
-            bic2[i] = bicS2.get(model).getValue();
+			modelNames[i] = model.getModelName();
 
-            aicc3[i] = aiccS3.get(model).getValue();
-            bic3[i] = bicS3.get(model).getValue();
+			aicc[i] = aiccS.get(model).getValue();
+			dt[i] = dtS.get(model).getValue();
+			bic[i] = bicS.get(model).getValue();
+			aic[i] = aicS.get(model).getValue();
 
-        }
+		}
 
-        StatFramework aicF, aicc1F, aicc2F, aicc3F, bic1F, bic2F, bic3F;
-        aicF = new StatFramework(aicS1, "AIC", "AIC");
-        aicc1F = new StatFramework(aiccS1, "AICc(1)", "second-order AIC (sample size: " + SIZE_MODE_NAMES[SIZEMODE_ALIGNMENT] + ")");
-        aicc2F = new StatFramework(aiccS2, "AICc(2)", "second-order AIC (sample size: " + SIZE_MODE_NAMES[SIZEMODE_SHANNON] + ")");
-        aicc3F = new StatFramework(aiccS3, "AICc(3)", "second-order AIC (sample size: " + SIZE_MODE_NAMES[SIZEMODE_SHANNON_NxL] + ")");
-        bic1F = new StatFramework(bicS1, "BIC(1)", "BIC (sample size: " + SIZE_MODE_NAMES[SIZEMODE_ALIGNMENT] + ")");
-        bic2F = new StatFramework(bicS2, "BIC(2)", "BIC (sample size: " + SIZE_MODE_NAMES[SIZEMODE_SHANNON] + ")");
-        bic3F = new StatFramework(bicS3, "BIC(3)", "BIC (sample size: " + SIZE_MODE_NAMES[SIZEMODE_SHANNON_NxL] + ")");
+		StatFramework aicF, aiccF, bicF, dtF;
+		aicF = new StatFramework(aicS, "AIC", "AIC");
+		aiccF = new StatFramework(aiccS, "AICc",
+				"second-order AIC");
+		bicF = new StatFramework(bicS, "BIC", "BIC");
+		dtF = new StatFramework(dtS, "DT", "DT");
+		
 
-        //Hala, ahora a imprimir:
-        println(ProtTestFormattedOutput.space(100, '-'));
-        println("Table: Weights(Ranking) of the candidate models under the different frameworks");
-        println(ProtTestFormattedOutput.space(100, '-'));
-        println("model          AIC         AICc-1      AICc-2      AICc-3      BIC-1       BIC-2       BIC-3");
-        String model__, tmp;
-        for (int i = 0; i < models.size(); i++) {
-            model__ = aicF.getModelName(i);
-            print(model__ + ProtTestFormattedOutput.space(15 - model__.length(), ' '));
-            tmp = ProtTestFormattedOutput.getDecimalString(aicF.getWeight(model__), 2) + "(" + aicF.getRanking(model__) + ")";
-            print(ProtTestFormattedOutput.space(0 - tmp.length(), ' ') + tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-            tmp = ProtTestFormattedOutput.getDecimalString(aicc1F.getWeight(model__), 2) + "(" + aicc1F.getRanking(model__) + ")";
-            print(ProtTestFormattedOutput.space(0 - tmp.length(), ' ') + tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-            tmp = ProtTestFormattedOutput.getDecimalString(aicc2F.getWeight(model__), 2) + "(" + aicc2F.getRanking(model__) + ")";
-            print(ProtTestFormattedOutput.space(0 - tmp.length(), ' ') + tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-            tmp = ProtTestFormattedOutput.getDecimalString(aicc3F.getWeight(model__), 2) + "(" + aicc3F.getRanking(model__) + ")";
-            print(ProtTestFormattedOutput.space(0 - tmp.length(), ' ') + tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-            tmp = ProtTestFormattedOutput.getDecimalString(bic1F.getWeight(model__), 2) + "(" + bic1F.getRanking(model__) + ")";
-            print(ProtTestFormattedOutput.space(0 - tmp.length(), ' ') + tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-            tmp = ProtTestFormattedOutput.getDecimalString(bic2F.getWeight(model__), 2) + "(" + bic2F.getRanking(model__) + ")";
-            print(ProtTestFormattedOutput.space(0 - tmp.length(), ' ') + tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-            tmp = ProtTestFormattedOutput.getDecimalString(bic3F.getWeight(model__), 2) + "(" + bic3F.getRanking(model__) + ")";
-            print(ProtTestFormattedOutput.space(0 - tmp.length(), ' ') + tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-            println("");
-        }
-        if (includeG | includeI | includeIG | includeF) {
-            println(ProtTestFormattedOutput.space(100, '-'));
-            println("Relative importance of");
-            println("parameters     AIC         AICc-1      AICc-2      AICc-3      BIC-1       BIC-2       BIC-3");
-            if (includeG) {
-                print("+G" + ProtTestFormattedOutput.space(13, ' '));
-                tmp = ProtTestFormattedOutput.getDecimalString(aicF.getAlphaImp(), 2);
-                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-                tmp = ProtTestFormattedOutput.getDecimalString(aicc1F.getAlphaImp(), 2);
-                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-                tmp = ProtTestFormattedOutput.getDecimalString(aicc2F.getAlphaImp(), 2);
-                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-                tmp = ProtTestFormattedOutput.getDecimalString(aicc3F.getAlphaImp(), 2);
-                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-                tmp = ProtTestFormattedOutput.getDecimalString(bic1F.getAlphaImp(), 2);
-                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-                tmp = ProtTestFormattedOutput.getDecimalString(bic2F.getAlphaImp(), 2);
-                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-                tmp = ProtTestFormattedOutput.getDecimalString(bic3F.getAlphaImp(), 2);
-                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-                println("");
-            }
-            if (includeI) {
-                print("+I" + ProtTestFormattedOutput.space(13, ' '));
-                tmp = ProtTestFormattedOutput.getDecimalString(aicF.getInvImp(), 2);
-                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-                tmp = ProtTestFormattedOutput.getDecimalString(aicc1F.getInvImp(), 2);
-                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-                tmp = ProtTestFormattedOutput.getDecimalString(aicc2F.getInvImp(), 2);
-                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-                tmp = ProtTestFormattedOutput.getDecimalString(aicc3F.getInvImp(), 2);
-                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-                tmp = ProtTestFormattedOutput.getDecimalString(bic1F.getInvImp(), 2);
-                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-                tmp = ProtTestFormattedOutput.getDecimalString(bic2F.getInvImp(), 2);
-                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-                tmp = ProtTestFormattedOutput.getDecimalString(bic3F.getInvImp(), 2);
-                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-                println("");
-            }
-            if (includeIG) {
-                print("+I+G" + ProtTestFormattedOutput.space(11, ' '));
-                tmp = ProtTestFormattedOutput.getDecimalString(aicF.getGIImp(), 2);
-                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-                tmp = ProtTestFormattedOutput.getDecimalString(aicc1F.getGIImp(), 2);
-                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-                tmp = ProtTestFormattedOutput.getDecimalString(aicc2F.getGIImp(), 2);
-                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-                tmp = ProtTestFormattedOutput.getDecimalString(aicc3F.getGIImp(), 2);
-                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-                tmp = ProtTestFormattedOutput.getDecimalString(bic1F.getGIImp(), 2);
-                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-                tmp = ProtTestFormattedOutput.getDecimalString(bic2F.getGIImp(), 2);
-                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-                tmp = ProtTestFormattedOutput.getDecimalString(bic3F.getGIImp(), 2);
-                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-                println("");
-            }
-            if (includeF) {
-                print("+F" + ProtTestFormattedOutput.space(13, ' '));
-                tmp = ProtTestFormattedOutput.getDecimalString(aicF.getFImp(), 2);
-                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-                tmp = ProtTestFormattedOutput.getDecimalString(aicc1F.getFImp(), 2);
-                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-                tmp = ProtTestFormattedOutput.getDecimalString(aicc2F.getFImp(), 2);
-                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-                tmp = ProtTestFormattedOutput.getDecimalString(aicc3F.getFImp(), 2);
-                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-                tmp = ProtTestFormattedOutput.getDecimalString(bic1F.getFImp(), 2);
-                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-                tmp = ProtTestFormattedOutput.getDecimalString(bic2F.getFImp(), 2);
-                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-                tmp = ProtTestFormattedOutput.getDecimalString(bic3F.getFImp(), 2);
-                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-                println("");
-            }
-        }
-        if (includeG | includeI | includeIG) {
-            println(ProtTestFormattedOutput.space(100, '-'));
-            println("Model-averaged estimate of");
-            println("parameters     AIC         AICc-1      AICc-2      AICc-3      BIC-1       BIC-2       BIC-3");
-            if (includeG) {
-                print("alpha (+G)" + ProtTestFormattedOutput.space(5, ' '));
-                tmp = ProtTestFormattedOutput.getDecimalString(aicF.getOverallAlpha(), 2);
-                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-                tmp = ProtTestFormattedOutput.getDecimalString(aicc1F.getOverallAlpha(), 2);
-                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-                tmp = ProtTestFormattedOutput.getDecimalString(aicc2F.getOverallAlpha(), 2);
-                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-                tmp = ProtTestFormattedOutput.getDecimalString(aicc3F.getOverallAlpha(), 2);
-                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-                tmp = ProtTestFormattedOutput.getDecimalString(bic1F.getOverallAlpha(), 2);
-                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-                tmp = ProtTestFormattedOutput.getDecimalString(bic2F.getOverallAlpha(), 2);
-                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-                tmp = ProtTestFormattedOutput.getDecimalString(bic3F.getOverallAlpha(), 2);
-                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-                println("");
-            }
-            if (includeI) {
-                print("p-inv (+I)" + ProtTestFormattedOutput.space(5, ' '));
-                tmp = ProtTestFormattedOutput.getDecimalString(aicF.getOverallInv(), 2);
-                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-                tmp = ProtTestFormattedOutput.getDecimalString(aicc1F.getOverallInv(), 2);
-                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-                tmp = ProtTestFormattedOutput.getDecimalString(aicc2F.getOverallInv(), 2);
-                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-                tmp = ProtTestFormattedOutput.getDecimalString(aicc3F.getOverallInv(), 2);
-                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-                tmp = ProtTestFormattedOutput.getDecimalString(bic1F.getOverallInv(), 2);
-                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-                tmp = ProtTestFormattedOutput.getDecimalString(bic2F.getOverallInv(), 2);
-                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-                tmp = ProtTestFormattedOutput.getDecimalString(bic3F.getOverallInv(), 2);
-                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-                println("");
-            }
-            if (includeIG) {
-                print("alpha (+I+G)" + ProtTestFormattedOutput.space(3, ' '));
-                tmp = ProtTestFormattedOutput.getDecimalString(aicF.getOverallAlphaGI(), 2);
-                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-                tmp = ProtTestFormattedOutput.getDecimalString(aicc1F.getOverallAlphaGI(), 2);
-                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-                tmp = ProtTestFormattedOutput.getDecimalString(aicc2F.getOverallAlphaGI(), 2);
-                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-                tmp = ProtTestFormattedOutput.getDecimalString(aicc3F.getOverallAlphaGI(), 2);
-                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-                tmp = ProtTestFormattedOutput.getDecimalString(bic1F.getOverallAlphaGI(), 2);
-                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-                tmp = ProtTestFormattedOutput.getDecimalString(bic2F.getOverallAlphaGI(), 2);
-                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-                tmp = ProtTestFormattedOutput.getDecimalString(bic3F.getOverallAlphaGI(), 2);
-                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-                println("");
-                print("p-inv (+I+G)" + ProtTestFormattedOutput.space(3, ' '));
-                tmp = ProtTestFormattedOutput.getDecimalString(aicF.getOverallInvGI(), 2);
-                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-                tmp = ProtTestFormattedOutput.getDecimalString(aicc1F.getOverallInvGI(), 2);
-                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-                tmp = ProtTestFormattedOutput.getDecimalString(aicc2F.getOverallInvGI(), 2);
-                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-                tmp = ProtTestFormattedOutput.getDecimalString(aicc3F.getOverallInvGI(), 2);
-                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-                tmp = ProtTestFormattedOutput.getDecimalString(bic1F.getOverallInvGI(), 2);
-                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-                tmp = ProtTestFormattedOutput.getDecimalString(bic2F.getOverallInvGI(), 2);
-                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-                tmp = ProtTestFormattedOutput.getDecimalString(bic3F.getOverallInvGI(), 2);
-                print(tmp + ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
-                println("");
-            }
-        }
-        println(ProtTestFormattedOutput.space(100, '-'));
-        println("AIC   : Akaike Information Criterion framework.");
-        println("AICc-x: Second-Order Akaike framework.");
-        println("BIC-x : Bayesian Information Criterion framework.");
-        println("AICc/BIC-1: sample size as: number of sites in the alignment                           (" + sampleSize1 + ")");
-        println("AICc/BIC-2: sample size as: Sum of position's Shannon Entropy over the whole alignment (" + ProtTestFormattedOutput.getDecimalString(sampleSize2, 1) + ")");
-        println("AICc/BIC-3: sample size as: align. length x num sequences x averaged (0-1)Sh. Entropy  (" + ProtTestFormattedOutput.getDecimalString(sampleSize3, 1) + ")");
-        println(ProtTestFormattedOutput.space(100, '-'));
-        println("");
-    }
+		// Hala, ahora a imprimir:
+		println(ProtTestFormattedOutput.space(100, '-'));
+		println("Table: Weights(Ranking) of the candidate models under the different frameworks");
+		println(ProtTestFormattedOutput.space(100, '-'));
+		println("model          AIC         AICc        BIC         DT");
+		String model__, tmp;
+		for (int i = 0; i < models.size(); i++) {
+			model__ = aicF.getModelName(i);
+			print(model__
+					+ ProtTestFormattedOutput.space(15 - model__.length(), ' '));
+			tmp = ProtTestFormattedOutput.getDecimalString(
+					aicF.getWeight(model__), 2)
+					+ "(" + aicF.getRanking(model__) + ")";
+			print(ProtTestFormattedOutput.space(0 - tmp.length(), ' ') + tmp
+					+ ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+			tmp = ProtTestFormattedOutput.getDecimalString(
+					aiccF.getWeight(model__), 2)
+					+ "(" + aiccF.getRanking(model__) + ")";
+			print(ProtTestFormattedOutput.space(0 - tmp.length(), ' ') + tmp
+					+ ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+			tmp = ProtTestFormattedOutput.getDecimalString(
+					bicF.getWeight(model__), 2)
+					+ "(" + bicF.getRanking(model__) + ")";
+			print(ProtTestFormattedOutput.space(0 - tmp.length(), ' ') + tmp
+					+ ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+			tmp = ProtTestFormattedOutput.getDecimalString(
+					dtF.getWeight(model__), 2)
+					+ "(" + dtF.getRanking(model__) + ")";
+			print(ProtTestFormattedOutput.space(0 - tmp.length(), ' ') + tmp
+					+ ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+			println("");
+		}
+		if (includeG | includeI | includeIG | includeF) {
+			println(ProtTestFormattedOutput.space(100, '-'));
+			println("Relative importance of");
+			println("parameters     AIC         AICc        BICc       DT");
+			if (includeG) {
+				print("+G" + ProtTestFormattedOutput.space(13, ' '));
+				tmp = ProtTestFormattedOutput.getDecimalString(
+						aicF.getAlphaImp(), 2);
+				print(tmp
+						+ ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+				tmp = ProtTestFormattedOutput.getDecimalString(
+						aiccF.getAlphaImp(), 2);
+				print(tmp
+						+ ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+				tmp = ProtTestFormattedOutput.getDecimalString(
+						bicF.getAlphaImp(), 2);
+				print(tmp
+						+ ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+				tmp = ProtTestFormattedOutput.getDecimalString(
+						dtF.getAlphaImp(), 2);
+				print(tmp
+						+ ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+				println("");
+			}
+			if (includeI) {
+				print("+I" + ProtTestFormattedOutput.space(13, ' '));
+				tmp = ProtTestFormattedOutput.getDecimalString(
+						aicF.getInvImp(), 2);
+				print(tmp
+						+ ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+				tmp = ProtTestFormattedOutput.getDecimalString(
+						aiccF.getInvImp(), 2);
+				print(tmp
+						+ ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+				tmp = ProtTestFormattedOutput.getDecimalString(
+						bicF.getInvImp(), 2);
+				print(tmp
+						+ ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+				tmp = ProtTestFormattedOutput.getDecimalString(
+						dtF.getInvImp(), 2);
+				print(tmp
+						+ ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+				println("");
+			}
+			if (includeIG) {
+				print("+I+G" + ProtTestFormattedOutput.space(11, ' '));
+				tmp = ProtTestFormattedOutput.getDecimalString(aicF.getGIImp(),
+						2);
+				print(tmp
+						+ ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+				tmp = ProtTestFormattedOutput.getDecimalString(
+						aiccF.getGIImp(), 2);
+				print(tmp
+						+ ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+				tmp = ProtTestFormattedOutput.getDecimalString(
+						bicF.getGIImp(), 2);
+				print(tmp
+						+ ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+				tmp = ProtTestFormattedOutput.getDecimalString(
+						dtF.getGIImp(), 2);
+				print(tmp
+						+ ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+				println("");
+			}
+			if (includeF) {
+				print("+F" + ProtTestFormattedOutput.space(13, ' '));
+				tmp = ProtTestFormattedOutput.getDecimalString(aicF.getFImp(),
+						2);
+				print(tmp
+						+ ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+				tmp = ProtTestFormattedOutput.getDecimalString(
+						aiccF.getFImp(), 2);
+				print(tmp
+						+ ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+				tmp = ProtTestFormattedOutput.getDecimalString(
+						bicF.getFImp(), 2);
+				print(tmp
+						+ ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+				tmp = ProtTestFormattedOutput.getDecimalString(
+						dtF.getFImp(), 2);
+				print(tmp
+						+ ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+				println("");
+			}
+		}
+		if (includeG | includeI | includeIG) {
+			println(ProtTestFormattedOutput.space(100, '-'));
+			println("Model-averaged estimate of");
+			println("parameters     AIC         AICc        BIC         DT");
+			if (includeG) {
+				print("alpha (+G)" + ProtTestFormattedOutput.space(5, ' '));
+				tmp = ProtTestFormattedOutput.getDecimalString(
+						aicF.getOverallAlpha(), 2);
+				print(tmp
+						+ ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+				tmp = ProtTestFormattedOutput.getDecimalString(
+						aiccF.getOverallAlpha(), 2);
+				print(tmp
+						+ ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+				tmp = ProtTestFormattedOutput.getDecimalString(
+						bicF.getOverallAlpha(), 2);
+				print(tmp
+						+ ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+				tmp = ProtTestFormattedOutput.getDecimalString(
+						dtF.getOverallAlpha(), 2);
+				print(tmp
+						+ ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+				println("");
+			}
+			if (includeI) {
+				print("p-inv (+I)" + ProtTestFormattedOutput.space(5, ' '));
+				tmp = ProtTestFormattedOutput.getDecimalString(
+						aicF.getOverallInv(), 2);
+				print(tmp
+						+ ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+				tmp = ProtTestFormattedOutput.getDecimalString(
+						aiccF.getOverallInv(), 2);
+				print(tmp
+						+ ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+				tmp = ProtTestFormattedOutput.getDecimalString(
+						bicF.getOverallInv(), 2);
+				print(tmp
+						+ ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+				tmp = ProtTestFormattedOutput.getDecimalString(
+						dtF.getOverallInv(), 2);
+				print(tmp
+						+ ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+				println("");
+			}
+			if (includeIG) {
+				print("alpha (+I+G)" + ProtTestFormattedOutput.space(3, ' '));
+				tmp = ProtTestFormattedOutput.getDecimalString(
+						aicF.getOverallAlphaGI(), 2);
+				print(tmp
+						+ ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+				tmp = ProtTestFormattedOutput.getDecimalString(
+						aiccF.getOverallAlphaGI(), 2);
+				print(tmp
+						+ ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+				tmp = ProtTestFormattedOutput.getDecimalString(
+						bicF.getOverallAlphaGI(), 2);
+				print(tmp
+						+ ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+				tmp = ProtTestFormattedOutput.getDecimalString(
+						dtF.getOverallAlphaGI(), 2);
+				print(tmp
+						+ ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+				println("");
+				print("p-inv (+I+G)" + ProtTestFormattedOutput.space(3, ' '));
+				tmp = ProtTestFormattedOutput.getDecimalString(
+						aicF.getOverallInvGI(), 2);
+				print(tmp
+						+ ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+				tmp = ProtTestFormattedOutput.getDecimalString(
+						aiccF.getOverallInvGI(), 2);
+				print(tmp
+						+ ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+				tmp = ProtTestFormattedOutput.getDecimalString(
+						bicF.getOverallInvGI(), 2);
+				print(tmp
+						+ ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+				tmp = ProtTestFormattedOutput.getDecimalString(
+						dtF.getOverallInvGI(), 2);
+				print(tmp
+						+ ProtTestFormattedOutput.space(12 - tmp.length(), ' '));
+				println("");
+			}
+		}
+		println(ProtTestFormattedOutput.space(100, '-'));
+		println("AIC   : Akaike Information Criterion framework.");
+		println("AICc  : Second-Order Akaike framework.");
+		println("BIC   : Bayesian Information Criterion framework.");
+		println("DT    : Decision Theory Criterion framework.");
+		println(ProtTestFormattedOutput.space(100, '-'));
+		println("");
+	}
 
-    public static String getDisplayValue(double value, String parameter, boolean existModels) {
-        String toDisplay;
-        if (existModels) {
-            toDisplay = ProtTestFormattedOutput.getDecimalString(value, IMPORTANCE_PRECISSION);
-        } else {
-            toDisplay = "No " + parameter + " models";
-        }
-        return toDisplay;
-    }
+	public static String getDisplayValue(double value, String parameter,
+			boolean existModels) {
+		String toDisplay;
+		if (existModels) {
+			toDisplay = ProtTestFormattedOutput.getDecimalString(value,
+					IMPORTANCE_PRECISSION);
+		} else {
+			toDisplay = "No " + parameter + " models";
+		}
+		return toDisplay;
+	}
 
-    /**
-     * Prints the relative importance.
-     * 
-     * @param ic the information criterion
-     */
-    abstract void printRelativeImportance(InformationCriterion ic);
+	/**
+	 * Prints the relative importance.
+	 * 
+	 * @param ic
+	 *            the information criterion
+	 */
+	abstract void printRelativeImportance(InformationCriterion ic);
 
-    /**
-     * Prints the model averaged estimation.
-     * 
-     * @param ic the information criterion
-     */
-    abstract void printModelAveragedEstimation(InformationCriterion ic);
+	/**
+	 * Prints the model averaged estimation.
+	 * 
+	 * @param ic
+	 *            the information criterion
+	 */
+	abstract void printModelAveragedEstimation(InformationCriterion ic);
 }

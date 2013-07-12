@@ -14,7 +14,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
 package es.uvigo.darwin.prottest.facade;
 
 import java.io.IOException;
@@ -43,88 +43,102 @@ import java.io.FileNotFoundException;
  */
 public interface ProtTestFacade extends ModelUpdaterObserver {
 
-//	**********************************************************
-//				   ALIGNMENT ANALYSIS SERVICES
-//	**********************************************************
-    /**
-     * Starts the analysis of the alignment having the application options
-     * given in the command line. It will also print results as given in the
-     * application options.
-     * 
-     * @param options the execution options 
-     * 
-     * @return set of optimized models
-     */
-    public Model[] startAnalysis(ApplicationOptions options);
+	// **********************************************************
+	// ALIGNMENT ANALYSIS SERVICES
+	// **********************************************************
+	/**
+	 * Starts the analysis of the alignment having the application options given
+	 * in the command line. It will also print results as given in the
+	 * application options.
+	 * 
+	 * @param options
+	 *            the execution options
+	 * 
+	 * @return set of optimized models
+	 */
+	public Model[] startAnalysis(ApplicationOptions options);
 
-//	**********************************************************
-//	    			RESULT ANALYSIS SERVICES
-//	**********************************************************
-    /**
-     * Prints the models sorted according to the selected information criterion.
-     * 
-     * @param informationCriterion the information criterion to sort the models
-     */
-    public void printModelsSorted(InformationCriterion informationCriterion);
+	// **********************************************************
+	// RESULT ANALYSIS SERVICES
+	// **********************************************************
+	/**
+	 * Prints the models sorted according to the selected information criterion.
+	 * 
+	 * @param informationCriterion
+	 *            the information criterion to sort the models
+	 */
+	public void printModelsSorted(InformationCriterion informationCriterion);
 
-    /**
-     * Calculates a Information Criterion wrapped into a Selection chunk object,
-     * which is a value-object
-     * 
-     * @param alignment the alignment.
-     * @param models the optimized models .
-     * @param criterion the Information Criterion Constant.
-     * @param sampleSizeMode the sample size mode.
-     * @param sampleSize the sample size (if custom).
-     * @param confidenceInterval the confidence interval.
-     */
-    public SelectionChunk computeInformationCriterion(Alignment alignment, Model[] models,
-            int criterion, int sampleSizeMode, double sampleSize,
-            double confidenceInterval);
+	/**
+	 * Calculates a Information Criterion wrapped into a Selection chunk object,
+	 * which is a value-object
+	 * 
+	 * @param alignment
+	 *            the alignment.
+	 * @param models
+	 *            the optimized models .
+	 * @param criterion
+	 *            the Information Criterion Constant.
+	 * @param confidenceInterval
+	 *            the confidence interval.
+	 */
+	public SelectionChunk computeInformationCriterion(Alignment alignment,
+			Model[] models, int criterion, double confidenceInterval);
 
-//	**********************************************************
-//	                   INPUT SERVICES
-//	**********************************************************
-    /**
-     * Read alignment.
-     * 
-     * @param filename the filename
-     * @param debug the debug
-     * 
-     * @return the alignment
-     * 
-     * @throws AlignmentParseException the alignment parse exception
-     * @throws IOException Signals that an I/O exception has occurred.
-     */
-    public Alignment readAlignment(String filename, boolean debug)
-            throws AlignmentParseException, FileNotFoundException, IOException;
+	// **********************************************************
+	// INPUT SERVICES
+	// **********************************************************
+	/**
+	 * Read alignment.
+	 * 
+	 * @param filename
+	 *            the filename
+	 * @param debug
+	 *            the debug
+	 * 
+	 * @return the alignment
+	 * 
+	 * @throws AlignmentParseException
+	 *             the alignment parse exception
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	public Alignment readAlignment(String filename, boolean debug)
+			throws AlignmentParseException, FileNotFoundException, IOException;
 
-    /**
-     * Read alignment.
-     * 
-     * @param out the out
-     * @param filename the filename
-     * @param debug the debug
-     * 
-     * @return the alignment
-     * 
-     * @throws AlignmentParseException the alignment parse exception
-     * @throws IOException Signals that an I/O exception has occurred.
-     */
-    public Tree readTree(PrintWriter out, String filename, boolean debug)
-            throws TreeFormatException, FileNotFoundException, IOException;
+	/**
+	 * Read alignment.
+	 * 
+	 * @param out
+	 *            the out
+	 * @param filename
+	 *            the filename
+	 * @param debug
+	 *            the debug
+	 * 
+	 * @return the alignment
+	 * 
+	 * @throws AlignmentParseException
+	 *             the alignment parse exception
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	public Tree readTree(PrintWriter out, String filename, boolean debug)
+			throws TreeFormatException, FileNotFoundException, IOException;
 
-//	**********************************************************
-//	   					 MISC SERVICES
-//	**********************************************************
-    public ApplicationOptions configure(ProtTestParameterVO parameters)
-            throws IOException, AlignmentParseException, ProtTestInternalException;
+	// **********************************************************
+	// MISC SERVICES
+	// **********************************************************
+	public ApplicationOptions configure(ProtTestParameterVO parameters)
+			throws IOException, AlignmentParseException,
+			ProtTestInternalException;
 
-    public void addObserver(ModelUpdaterObserver o);
+	public void addObserver(ModelUpdaterObserver o);
 
-    public void update(ObservableModelUpdater o, Model model, ApplicationOptions options);
+	public void update(ObservableModelUpdater o, Model model,
+			ApplicationOptions options);
 
-    public int getNumberOfThreads();
+	public int getNumberOfThreads();
 
-    public void setNumberOfThreads(int numThreads);
+	public void setNumberOfThreads(int numThreads);
 }

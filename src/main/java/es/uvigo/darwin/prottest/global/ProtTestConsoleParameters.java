@@ -49,10 +49,6 @@ public interface ProtTestConsoleParameters {
     public static final String PARAM_TREE_SEARCH_OP = "s";	// tree search operation
     /** Optimization strategy selection parameter token. */
     public static final String PARAM_OPTIMIZATION_STRATEGY = "S";	// optimization strategy
-    /** Sample size mode parameter token. */
-    public static final String PARAM_SAMPLE_SIZE_MODE = "sample";	// sample size for AICc and BIC corrections
-    /** Specific sample size parameter token. */
-    public static final String PARAM_SPECIFIC_SAMPLE_SIZE = "size";	// specific sample size
     /** Display Newick tree parameter token. */
     public static final String PARAM_DISPLAY_NEWICK_TREE = "t1";	// display newick tree
     /** Display ASCII tree parameter token. */

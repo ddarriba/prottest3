@@ -18,6 +18,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 package es.uvigo.darwin.prottest.facade;
 
 import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -28,8 +29,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-
-import static es.uvigo.darwin.prottest.global.ApplicationGlobals.*;
 
 import es.uvigo.darwin.prottest.exe.RunEstimator;
 import es.uvigo.darwin.prottest.global.options.ApplicationOptions;
@@ -45,8 +44,6 @@ import es.uvigo.darwin.prottest.util.comparator.AminoAcidModelNaturalComparator;
 import es.uvigo.darwin.prottest.util.comparator.ModelDistributionHeuristic;
 import es.uvigo.darwin.prottest.util.comparator.ModelWeightComparator;
 import es.uvigo.darwin.prottest.util.factory.ProtTestFactory;
-import es.uvigo.darwin.prottest.util.printer.ProtTestFormattedOutput;
-import java.io.StringWriter;
 
 /**
  * A parallel implementation of the ProtTest facade.
@@ -97,10 +94,6 @@ public class ProtTestFacadeThread
 
         println("**********************************************************");
         //this is only for doing output prettier
-        if (options.getSampleSizeMode() == SIZEMODE_SHANNON || options.getSampleSizeMode() == SIZEMODE_SHANNON_NxL) {
-            double tmpSampleSize = ProtTestAlignment.calculateShannonSampleSize(options.getAlignment(), options.getSampleSizeMode(), true);
-            errorln("Shannon entropy based sample size: " + ProtTestFormattedOutput.getDecimalString(tmpSampleSize, 2));
-        }
         println("Observed number of invariant sites: " + ProtTestAlignment.calculateInvariableSites(options.getAlignment(), false));
         StringWriter sw = new StringWriter();
         ProtTestAlignment.printFrequencies(ProtTestAlignment.getFrequencies(options.getAlignment()), new PrintWriter(sw));

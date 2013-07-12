@@ -43,20 +43,6 @@ public interface ProtTestConstants {
     /** The invariant sites and gamma distribution parameter. */
     static final String PARAMETER_IG = "+I+G";
 
-    // size modes
-    /** Shannon sample size mode. */
-    static final int SIZEMODE_SHANNON = 0;
-    /** Shannon NxL sample size mode. */
-    static final int SIZEMODE_SHANNON_NxL = 1;
-    /** Alignment length sample size mode. */
-    static final int SIZEMODE_ALIGNMENT = 2;
-    /** Alignment length variable sample size mode. */
-    static final int SIZEMODE_ALIGNMENT_VAR = 3;
-    /** NxL sample size mode. */
-    static final int SIZEMODE_NxL = 4;
-    /** User defined sample size mode. */
-    static final int SIZEMODE_USERSIZE = 5;
-    
     // tree search operation
     /** NNI moves */
     static final String TREE_SEARCH_NNI = "NNI";
@@ -64,26 +50,7 @@ public interface ProtTestConstants {
     static final String TREE_SEARCH_SPR = "SPR";
     /** Best of NNI and SPR moves */
     static final String TREE_SEARCH_BEST = "BEST";
-    
-    /** Set of descriptions of size modes. */
-    public static final String[] SIZE_MODE_NAMES = {
-        "Shannon-entropy Sum",
-        "Average (0-1)Shannon-entropy x NxL",
-        "Total number of characters (aligment length)",
-        "Number of variable characters",
-        "Alignment length x num taxa (NxL)",
-        "Specified by the user"
-    };
-    /** Set of values of size modes. */
-    public static final int[] SIZE_MODE_VALUES = {
-        SIZEMODE_SHANNON,
-        SIZEMODE_SHANNON_NxL,
-        SIZEMODE_ALIGNMENT,
-        SIZEMODE_ALIGNMENT_VAR,
-        SIZEMODE_NxL,
-        SIZEMODE_USERSIZE
-    };
-    // optimization strategies
+
     /** Fixed BIONJ topology for every model. */
     static final int OPTIMIZE_FIXED_BIONJ = 0;
     /** BIONJ topology for each model. */
@@ -134,8 +101,7 @@ public interface ProtTestConstants {
     static final int DEFAULT_NCAT = 4;
     /** The default setting of property "Optimization strategy mode". */
     static final int DEFAULT_STRATEGY_MODE = OPTIMIZE_FIXED_BIONJ;
-    /** The default setting of property "Sample size mode". */
-    static final int DEFAULT_SAMPLE_SIZE_MODE = SIZEMODE_ALIGNMENT;
+    
     // Tree properties
     /** Tree property for write branch length averaging */
     static final String PROP_BRANCH_LENGTH_AVERAGING = "branch_length_averaging";

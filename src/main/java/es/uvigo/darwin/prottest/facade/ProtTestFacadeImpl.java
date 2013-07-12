@@ -127,14 +127,14 @@ public abstract class ProtTestFacadeImpl
      * @see es.uvigo.darwin.prottest.facade.ProtTestFacade#computeInformationCriterion(pal.alignment.Alignment, es.uvigo.darwin.prottest.model.Model[], int, int, double)
      */
     public SelectionChunk computeInformationCriterion(Alignment alignment, Model[] models,
-            int criterion, int sampleSizeMode, double sampleSize,
+            int criterion,
             double confidenceInterval) {
 
         ModelCollection modelCollection = new SingleModelCollection(models, alignment);
 
         InformationCriterion informationCriterion;
 
-        double calculatedSampleSize = ProtTestAlignment.calculateSampleSize(alignment, sampleSizeMode, sampleSize);
+        double calculatedSampleSize = ProtTestAlignment.calculateSampleSize(alignment);
 
         switch (criterion) {
             case AIC:

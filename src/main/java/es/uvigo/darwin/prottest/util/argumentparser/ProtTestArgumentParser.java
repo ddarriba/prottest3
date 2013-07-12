@@ -71,18 +71,7 @@ public abstract class ProtTestArgumentParser
         valuesRequired.put(PARAM_TREE_SEARCH_OP, true);
         argumentValues.put(PARAM_TREE_SEARCH_OP, treeSearchOps);
         
-        String[] sampleSizeModes = {
-            String.valueOf(SIZEMODE_SHANNON),
-            String.valueOf(SIZEMODE_SHANNON_NxL),
-            String.valueOf(SIZEMODE_ALIGNMENT),
-            String.valueOf(SIZEMODE_ALIGNMENT_VAR),
-            String.valueOf(SIZEMODE_NxL),
-            String.valueOf(SIZEMODE_USERSIZE)
-        };
         valuesRequired.put(PARAM_NUM_THREADS, true);
-        valuesRequired.put(PARAM_SAMPLE_SIZE_MODE, true);
-        argumentValues.put(PARAM_SAMPLE_SIZE_MODE, sampleSizeModes);
-        valuesRequired.put(PARAM_SPECIFIC_SAMPLE_SIZE, true);
         valuesRequired.put(PARAM_ALL_FRAMEWORK_COMPARISON, false);
         valuesRequired.put(PARAM_DISPLAY_NEWICK_TREE, false);
         valuesRequired.put(PARAM_DISPLAY_ASCII_TREE, false);
@@ -109,7 +98,6 @@ public abstract class ProtTestArgumentParser
         defaultProperties.setProperty(PARAM_NUM_THREADS, String.valueOf(DEFAULT_THREADS));
         defaultProperties.setProperty(PARAM_NCAT, String.valueOf(DEFAULT_NCAT));
         defaultProperties.setProperty(PARAM_OPTIMIZATION_STRATEGY, String.valueOf(DEFAULT_STRATEGY_MODE));
-        defaultProperties.setProperty(PARAM_SAMPLE_SIZE_MODE, String.valueOf(DEFAULT_SAMPLE_SIZE_MODE));
         defaultProperties.setProperty(PARAM_DATA_TYPE, DATA_TYPE_AMINOACID);
     }
 

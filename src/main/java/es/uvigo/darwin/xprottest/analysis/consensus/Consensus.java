@@ -17,10 +17,21 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 package es.uvigo.darwin.xprottest.analysis.consensus;
 
-import es.uvigo.darwin.prottest.util.logging.ProtTestLogger;
-import es.uvigo.darwin.prottest.util.printer.ProtTestPrinter;
-import static es.uvigo.darwin.prottest.global.ApplicationGlobals.*;
+import static es.uvigo.darwin.prottest.util.logging.ProtTestLogger.getDefaultLogger;
+import static es.uvigo.darwin.prottest.util.logging.ProtTestLogger.infoln;
 
+import java.awt.Font;
+import java.io.PrintWriter;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+
+import org.jdesktop.application.Action;
+import org.jdesktop.application.Application;
+import org.jdesktop.application.ResourceMap;
+
+import pal.alignment.Alignment;
+import pal.misc.Identifier;
+import pal.tree.Tree;
 import es.uvigo.darwin.prottest.facade.TreeFacade;
 import es.uvigo.darwin.prottest.model.Model;
 import es.uvigo.darwin.prottest.selection.AIC;
@@ -29,24 +40,13 @@ import es.uvigo.darwin.prottest.selection.BIC;
 import es.uvigo.darwin.prottest.selection.DT;
 import es.uvigo.darwin.prottest.selection.InformationCriterion;
 import es.uvigo.darwin.prottest.selection.LNL;
-import es.uvigo.darwin.prottest.util.ProtTestAlignment;
 import es.uvigo.darwin.prottest.util.collection.ModelCollection;
 import es.uvigo.darwin.prottest.util.collection.SingleModelCollection;
 import es.uvigo.darwin.prottest.util.exception.ProtTestInternalException;
-import java.awt.Font;
-import pal.tree.Tree;
-import java.io.PrintWriter;
-import org.jdesktop.application.Action;
-import org.jdesktop.application.Application;
-import org.jdesktop.application.ResourceMap;
+import es.uvigo.darwin.prottest.util.logging.ProtTestLogger;
+import es.uvigo.darwin.prottest.util.printer.ProtTestPrinter;
 import es.uvigo.darwin.xprottest.XProtTestView;
 import es.uvigo.darwin.xprottest.util.TextAreaWriter;
-import java.util.logging.Handler;
-import java.util.logging.Level;
-import pal.alignment.Alignment;
-import pal.misc.Identifier;
-
-import static es.uvigo.darwin.prottest.util.logging.ProtTestLogger.*;
 
 /**
  *
@@ -54,7 +54,12 @@ import static es.uvigo.darwin.prottest.util.logging.ProtTestLogger.*;
  */
 public class Consensus extends javax.swing.JFrame {
 
-    private static final int AIC_SELECTION = 0;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 7857819028765401188L;
+	
+	private static final int AIC_SELECTION = 0;
     private static final int BIC_SELECTION = 1;
     private static final int AICC_SELECTION = 2;
     private static final int LNL_SELECTION = 3;
@@ -68,8 +73,6 @@ public class Consensus extends javax.swing.JFrame {
     private ModelCollection models;
     private Handler logHandler;
     private PrintWriter displayWriter;
-    private int sampleSizeMode = DEFAULT_SAMPLE_SIZE_MODE;
-    private double sampleSize = 1.0;
     private XProtTestView mainFrame;
 
     /** Creates new form Consensus */
@@ -85,7 +88,6 @@ public class Consensus extends javax.swing.JFrame {
 
         Font f = new Font(Font.MONOSPACED, Font.PLAIN, 12);
         displayArea.setFont(f);
-        lblSampleSize.setText(String.valueOf(ProtTestAlignment.calculateSampleSize(this.models.getAlignment(), sampleSizeMode, sampleSize)));
     }
 
     /** This method is called from within the constructor to
@@ -97,7 +99,6 @@ public class Consensus extends javax.swing.JFrame {
     private void initComponents() {
 
         btnGrpCriterion = new javax.swing.ButtonGroup();
-        btnGroupSampleSizeMode = new javax.swing.ButtonGroup();
         settingsPanel = new javax.swing.JPanel();
         lblTitle = new javax.swing.JLabel();
         lblCriterion = new javax.swing.JLabel();
@@ -116,15 +117,6 @@ public class Consensus extends javax.swing.JFrame {
         lblConfidenceInterval = new javax.swing.JLabel();
         lblConsensusType = new javax.swing.JLabel();
         lblPercent = new javax.swing.JLabel();
-        sizeModeAlignment3 = new javax.swing.JRadioButton();
-        sizeModeNL = new javax.swing.JRadioButton();
-        sizeModeCustom = new javax.swing.JRadioButton();
-        txtSampleSize = new javax.swing.JTextField();
-        sizeModeVar = new javax.swing.JRadioButton();
-        sizeModeShannon = new javax.swing.JRadioButton();
-        sizeModeShannonNL = new javax.swing.JRadioButton();
-        lblSampleSize = new javax.swing.JLabel();
-        lblSampleSizeMode = new javax.swing.JLabel();
         btnExport = new javax.swing.JButton();
         displayScroll = new javax.swing.JScrollPane();
         displayArea = new javax.swing.JTextArea();
@@ -152,28 +144,23 @@ public class Consensus extends javax.swing.JFrame {
         lblCriterion.setName("lblCriterion"); // NOI18N
 
         javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance().getContext().getActionMap(Consensus.class, this);
-        radioAIC.setAction(actionMap.get("disableSampleSize")); // NOI18N
         btnGrpCriterion.add(radioAIC);
         radioAIC.setText(resourceMap.getString("radioAIC.text")); // NOI18N
         radioAIC.setName("radioAIC"); // NOI18N
 
-        radioBIC.setAction(actionMap.get("enableSampleSize")); // NOI18N
         btnGrpCriterion.add(radioBIC);
         radioBIC.setText(resourceMap.getString("radioBIC.text")); // NOI18N
         radioBIC.setName("radioBIC"); // NOI18N
 
-        radioAICC.setAction(actionMap.get("enableSampleSize")); // NOI18N
         btnGrpCriterion.add(radioAICC);
         radioAICC.setText(resourceMap.getString("radioAICC.text")); // NOI18N
         radioAICC.setName("radioAICC"); // NOI18N
 
-        radioDT.setAction(actionMap.get("disableSampleSize")); // NOI18N
         btnGrpCriterion.add(radioDT);
         radioDT.setSelected(true);
         radioDT.setText(resourceMap.getString("radioDT.text")); // NOI18N
         radioDT.setName("radioDT"); // NOI18N
 
-        radioLK.setAction(actionMap.get("disableSampleSize")); // NOI18N
         btnGrpCriterion.add(radioLK);
         radioLK.setText(resourceMap.getString("radioLK.text")); // NOI18N
         radioLK.setName("radioLK"); // NOI18N
@@ -227,90 +214,6 @@ public class Consensus extends javax.swing.JFrame {
         lblPercent.setText(resourceMap.getString("percent-symbol")); // NOI18N
         lblPercent.setName("lblPercent"); // NOI18N
 
-        sizeModeAlignment3.setAction(actionMap.get("selectSampleSize")); // NOI18N
-        btnGroupSampleSizeMode.add(sizeModeAlignment3);
-        sizeModeAlignment3.setSelected(true);
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/resources/ResultsView"); // NOI18N
-        sizeModeAlignment3.setText(bundle.getString("btn-sizemode-alignment")); // NOI18N
-        sizeModeAlignment3.setToolTipText(resourceMap.getString("sizeModeAlignment3.toolTipText")); // NOI18N
-        sizeModeAlignment3.setName("sizeModeAlignment3"); // NOI18N
-        sizeModeAlignment3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sizeModePressed(evt);
-            }
-        });
-
-        sizeModeNL.setAction(actionMap.get("selectSampleSize")); // NOI18N
-        btnGroupSampleSizeMode.add(sizeModeNL);
-        sizeModeNL.setText(bundle.getString("btn-sizemode-nxl")); // NOI18N
-        sizeModeNL.setToolTipText(resourceMap.getString("sizeModeNL.toolTipText")); // NOI18N
-        sizeModeNL.setName("sizeModeNL"); // NOI18N
-        sizeModeNL.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sizeModePressed(evt);
-            }
-        });
-
-        sizeModeCustom.setAction(actionMap.get("selectSampleSize")); // NOI18N
-        btnGroupSampleSizeMode.add(sizeModeCustom);
-        sizeModeCustom.setText(bundle.getString("btn-sizemode-custom")); // NOI18N
-        sizeModeCustom.setToolTipText(resourceMap.getString("sizeModeCustom.toolTipText")); // NOI18N
-        sizeModeCustom.setName("sizeModeCustom"); // NOI18N
-        sizeModeCustom.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sizeModePressed(evt);
-            }
-        });
-
-        txtSampleSize.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        txtSampleSize.setText(resourceMap.getString("txtSampleSize.text")); // NOI18N
-        txtSampleSize.setEnabled(false);
-        txtSampleSize.setName("txtSampleSize"); // NOI18N
-        txtSampleSize.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtSampleSizeFocusLost(evt);
-            }
-        });
-
-        sizeModeVar.setAction(actionMap.get("selectSampleSize")); // NOI18N
-        btnGroupSampleSizeMode.add(sizeModeVar);
-        sizeModeVar.setText(bundle.getString("btn-sizemode-alignment-var")); // NOI18N
-        sizeModeVar.setToolTipText(resourceMap.getString("sizeModeVar.toolTipText")); // NOI18N
-        sizeModeVar.setName("sizeModeVar"); // NOI18N
-        sizeModeVar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sizeModePressed(evt);
-            }
-        });
-
-        sizeModeShannon.setAction(actionMap.get("selectSampleSize")); // NOI18N
-        btnGroupSampleSizeMode.add(sizeModeShannon);
-        sizeModeShannon.setText(bundle.getString("btn-sizemode-shannon")); // NOI18N
-        sizeModeShannon.setToolTipText(resourceMap.getString("sizeModeShannon.toolTipText")); // NOI18N
-        sizeModeShannon.setName("sizeModeShannon"); // NOI18N
-        sizeModeShannon.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sizeModePressed(evt);
-            }
-        });
-
-        sizeModeShannonNL.setAction(actionMap.get("selectSampleSize")); // NOI18N
-        btnGroupSampleSizeMode.add(sizeModeShannonNL);
-        sizeModeShannonNL.setText(bundle.getString("btn-sizemode-shannon-nxl")); // NOI18N
-        sizeModeShannonNL.setToolTipText(resourceMap.getString("sizeModeShannonNL.toolTipText")); // NOI18N
-        sizeModeShannonNL.setName("sizeModeShannonNL"); // NOI18N
-        sizeModeShannonNL.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sizeModePressed(evt);
-            }
-        });
-
-        lblSampleSize.setText(resourceMap.getString("lblSampleSize.text")); // NOI18N
-        lblSampleSize.setName("lblSampleSize"); // NOI18N
-
-        lblSampleSizeMode.setText(resourceMap.getString("lblSampleSizeMode.text")); // NOI18N
-        lblSampleSizeMode.setName("lblSampleSizeMode"); // NOI18N
-
         btnExport.setAction(actionMap.get("exportData")); // NOI18N
         btnExport.setText(resourceMap.getString("btnExport.text")); // NOI18N
         btnExport.setEnabled(false);
@@ -341,7 +244,7 @@ public class Consensus extends javax.swing.JFrame {
                             .addGroup(settingsPanelLayout.createSequentialGroup()
                                 .addComponent(lblConsType)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(lblConsensusType, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(lblConsensusType, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(lblPercent))
                             .addComponent(sliderConsType, javax.swing.GroupLayout.DEFAULT_SIZE, 636, Short.MAX_VALUE)
@@ -357,30 +260,7 @@ public class Consensus extends javax.swing.JFrame {
                             .addGroup(settingsPanelLayout.createSequentialGroup()
                                 .addComponent(lblConfInt)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(lblConfidenceInterval))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, settingsPanelLayout.createSequentialGroup()
-                        .addGap(28, 28, 28)
-                        .addGroup(settingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(settingsPanelLayout.createSequentialGroup()
-                                .addComponent(sizeModeAlignment3)
-                                .addGap(15, 15, 15))
-                            .addComponent(sizeModeNL, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(settingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, settingsPanelLayout.createSequentialGroup()
-                                .addComponent(sizeModeCustom, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtSampleSize, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, settingsPanelLayout.createSequentialGroup()
-                                .addComponent(sizeModeVar, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(sizeModeShannon, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(sizeModeShannonNL, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(lblSampleSize, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 504, Short.MAX_VALUE)))
-                    .addGroup(settingsPanelLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(lblSampleSizeMode, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(lblConfidenceInterval)))))
                 .addContainerGap())
         );
         settingsPanelLayout.setVerticalGroup(
@@ -398,21 +278,6 @@ public class Consensus extends javax.swing.JFrame {
                     .addComponent(radioDT)
                     .addComponent(radioLK))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(settingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblSampleSize)
-                    .addComponent(lblSampleSizeMode))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(settingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(sizeModeAlignment3)
-                    .addComponent(sizeModeShannonNL)
-                    .addComponent(sizeModeShannon)
-                    .addComponent(sizeModeVar))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(settingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(sizeModeNL)
-                    .addComponent(sizeModeCustom)
-                    .addComponent(txtSampleSize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 6, Short.MAX_VALUE)
                 .addGroup(settingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblConfInt)
                     .addComponent(lblConfidenceInterval))
@@ -501,49 +366,6 @@ public class Consensus extends javax.swing.JFrame {
         lblConsensusType.setText(String.valueOf(Double.valueOf(sliderConsType.getValue()) / 100));
     }//GEN-LAST:event_sliderConsTypeStateChanged
 
-    private void sizeModePressed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sizeModePressed
-
-        String btnName = evt.getActionCommand();
-
-        txtSampleSize.setEnabled(false);
-        if (btnName.equals(
-                java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/resources/ResultsView").getString("btn-sizemode-alignment"))) {
-            sampleSizeMode = SIZEMODE_ALIGNMENT;
-        } else if (btnName.equals(
-                java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/resources/ResultsView").getString("btn-sizemode-alignment-var"))) {
-            sampleSizeMode = SIZEMODE_ALIGNMENT_VAR;
-        } else if (btnName.equals(
-                java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/resources/ResultsView").getString("btn-sizemode-shannon"))) {
-            sampleSizeMode = SIZEMODE_SHANNON;
-        } else if (btnName.equals(
-                java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/resources/ResultsView").getString("btn-sizemode-shannon-nxl"))) {
-            sampleSizeMode = SIZEMODE_SHANNON_NxL;
-        } else if (btnName.equals(
-                java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/resources/ResultsView").getString("btn-sizemode-nxl"))) {
-            sampleSizeMode = SIZEMODE_NxL;
-        } else if (btnName.equals(
-                java.util.ResourceBundle.getBundle("es/uvigo/darwin/xprottest/results/resources/ResultsView").getString("btn-sizemode-custom"))) {
-            sampleSizeMode = SIZEMODE_USERSIZE;
-            try {
-                sampleSize = Double.parseDouble(txtSampleSize.getText());
-            } catch (NumberFormatException e) {
-                sampleSize = 0.0;
-            }
-            txtSampleSize.setEnabled(true);
-            txtSampleSize.grabFocus();
-        }
-        lblSampleSize.setText(String.valueOf(ProtTestAlignment.calculateSampleSize(models.getAlignment(), sampleSizeMode, sampleSize)));
-    }//GEN-LAST:event_sizeModePressed
-
-    private void txtSampleSizeFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSampleSizeFocusLost
-        try {
-            sampleSize = Double.parseDouble(txtSampleSize.getText());
-        } catch (NumberFormatException e) {
-            sampleSize = 0.0;
-        }
-        lblSampleSize.setText(String.valueOf(ProtTestAlignment.calculateSampleSize(models.getAlignment(), sampleSizeMode, sampleSize)));
-    }//GEN-LAST:event_txtSampleSizeFocusLost
-
     @Action
     public void buildConsensus() {
         displayArea.setText("");
@@ -551,26 +373,22 @@ public class Consensus extends javax.swing.JFrame {
         double confidenceInterval = Double.valueOf(sliderConfidence.getValue()) / 100;
         double supportThreshold = Double.valueOf(sliderConsType.getValue()) / 100;
         try {
-//            double sampleSize = 0.0;
-//            if (txtSampleSize.isEnabled()) {
-//                sampleSize = Double.valueOf(txtSampleSize.getText());
-//            }
             InformationCriterion ic;
             int selection;
             if (radioAIC.isSelected()) {
-                ic = new AIC(models, confidenceInterval, sampleSize);
+                ic = new AIC(models, confidenceInterval, models.getAlignment().getSiteCount());
                 selection = AIC_SELECTION;
             } else if (radioBIC.isSelected()) {
-                ic = new BIC(models, confidenceInterval, sampleSize);
+                ic = new BIC(models, confidenceInterval, models.getAlignment().getSiteCount());
                 selection = BIC_SELECTION;
             } else if (radioAICC.isSelected()) {
-                ic = new AICc(models, confidenceInterval, sampleSize);
+                ic = new AICc(models, confidenceInterval, models.getAlignment().getSiteCount());
                 selection = AICC_SELECTION;
             } else if (radioLK.isSelected()) {
-                ic = new LNL(models, confidenceInterval, sampleSize);
+                ic = new LNL(models, confidenceInterval, models.getAlignment().getSiteCount());
                 selection = LNL_SELECTION;
             } else if (radioDT.isSelected()) {
-                ic = new DT(models, confidenceInterval, sampleSize);
+                ic = new DT(models, confidenceInterval, models.getAlignment().getSiteCount());
                 selection = DT_SELECTION;
             } else {
                 ic = null;
@@ -594,7 +412,6 @@ public class Consensus extends javax.swing.JFrame {
                 println("----------------------------------------");
                 println("Selection criterion: . . . . " + SELECTION[selection]);
                 println("Confidence interval: . . . . " + confidenceInterval);
-                println("Sample size: . . . . . . . . " + sampleSize);
                 println("Consensus support threshold: " + supportThreshold);
                 println("----------------------------------------");
 
@@ -621,7 +438,6 @@ public class Consensus extends javax.swing.JFrame {
                 println("Sets included in the consensus tree");
                 println(" ");
 
-                int numTaxa = consensus.getIdGroup().getIdCount();
                 println(consensus.getSetsIncluded());
                 
                 println(" ");
@@ -660,16 +476,6 @@ public class Consensus extends javax.swing.JFrame {
     }
 
     @Action
-    public void disableSampleSize() {
-        txtSampleSize.setEnabled(false);
-    }
-
-    @Action
-    public void enableSampleSize() {
-        txtSampleSize.setEnabled(true);
-    }
-
-    @Action
     public void close() {
         getDefaultLogger().removeHandler(logHandler);
         this.setVisible(false);
@@ -683,14 +489,6 @@ public class Consensus extends javax.swing.JFrame {
     @Action
     public void editSelectAll() {
         displayArea.selectAll();
-    }
-
-    @Action
-    public void selectSampleSize() {
-    }
-
-    private void print(String message) {
-        info(message, this.getClass());
     }
 
     private void println(String message) {
@@ -707,7 +505,6 @@ public class Consensus extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuild;
     private javax.swing.JButton btnExport;
-    private javax.swing.ButtonGroup btnGroupSampleSizeMode;
     private javax.swing.ButtonGroup btnGrpCriterion;
     private javax.swing.JMenuItem closeMenuItem;
     private javax.swing.JTextArea displayArea;
@@ -722,8 +519,6 @@ public class Consensus extends javax.swing.JFrame {
     private javax.swing.JLabel lblCriterion;
     private javax.swing.JLabel lblMR;
     private javax.swing.JLabel lblPercent;
-    private javax.swing.JLabel lblSampleSize;
-    private javax.swing.JLabel lblSampleSizeMode;
     private javax.swing.JLabel lblStrict;
     private javax.swing.JLabel lblTitle;
     private javax.swing.JRadioButton radioAIC;
@@ -733,15 +528,8 @@ public class Consensus extends javax.swing.JFrame {
     private javax.swing.JRadioButton radioLK;
     private javax.swing.JMenuItem selectAllMenuItem;
     private javax.swing.JPanel settingsPanel;
-    private javax.swing.JRadioButton sizeModeAlignment3;
-    private javax.swing.JRadioButton sizeModeCustom;
-    private javax.swing.JRadioButton sizeModeNL;
-    private javax.swing.JRadioButton sizeModeShannon;
-    private javax.swing.JRadioButton sizeModeShannonNL;
-    private javax.swing.JRadioButton sizeModeVar;
     private javax.swing.JSlider sliderConfidence;
     private javax.swing.JSlider sliderConsType;
-    private javax.swing.JTextField txtSampleSize;
     private javax.swing.JMenu windowMenu;
     // End of variables declaration//GEN-END:variables
 }

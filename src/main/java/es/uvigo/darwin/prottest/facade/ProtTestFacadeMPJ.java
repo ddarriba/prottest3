@@ -17,18 +17,18 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 package es.uvigo.darwin.prottest.facade;
 
-import static es.uvigo.darwin.prottest.global.ApplicationGlobals.*;
+import static es.uvigo.darwin.prottest.global.ApplicationGlobals.APPLICATION_PROPERTIES;
 
-import es.uvigo.darwin.prottest.exe.util.TemporaryFileManager;
 import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
-import pal.tree.Tree;
-
 import mpi.MPI;
+import pal.tree.Tree;
+import es.uvigo.darwin.prottest.exe.util.TemporaryFileManager;
 import es.uvigo.darwin.prottest.facade.strategy.DistributionStrategy;
 import es.uvigo.darwin.prottest.facade.strategy.DynamicDistributionStrategy;
 import es.uvigo.darwin.prottest.facade.strategy.HybridDistributionStrategy;
@@ -44,8 +44,6 @@ import es.uvigo.darwin.prottest.util.collection.ModelCollection;
 import es.uvigo.darwin.prottest.util.collection.SingleModelCollection;
 import es.uvigo.darwin.prottest.util.comparator.AminoAcidModelNaturalComparator;
 import es.uvigo.darwin.prottest.util.comparator.ModelDistributionHeuristic;
-import es.uvigo.darwin.prottest.util.printer.ProtTestFormattedOutput;
-import java.io.StringWriter;
 
 /**
  * A parallel implementation of the ProtTest facade.
@@ -157,10 +155,6 @@ public class ProtTestFacadeMPJ extends ProtTestFacadeImpl {
         if (mpjMe == 0) {
             println("**********************************************************");
             //this is only for doing output prettier
-            if (options.getSampleSizeMode() == SIZEMODE_SHANNON || options.getSampleSizeMode() == SIZEMODE_SHANNON_NxL) {
-                double tmpSampleSize = ProtTestAlignment.calculateShannonSampleSize(options.getAlignment(), options.getSampleSizeMode(), true);
-                errorln("Shannon entropy based sample size: " + ProtTestFormattedOutput.getDecimalString(tmpSampleSize, 2));
-            }
             println("Observed number of invariant sites: " + ProtTestAlignment.calculateInvariableSites(options.getAlignment(), false));
             StringWriter sw = new StringWriter();
             ProtTestAlignment.printFrequencies(ProtTestAlignment.getFrequencies(options.getAlignment()), new PrintWriter(sw));

@@ -188,16 +188,6 @@ These are the parameters of the sequential execution:
 	 	display models sorted by Corrected Akaike Information Criterion (AICc)
  	 -DT
 	 	display models sorted by Decision Theory Criterion
-	 -sample sample_size_mode
- 		sample size for AICc and BIC corrections [default: 2]
-	     		0: Shannon-entropy Sum
-	     		1: Average (0-1)Shannon-entropy x NxL
-	     		2: Total number of characters (aligment length)
-	     		3: Number of variable characters
-	     		4: Alignment length x num taxa (NxL)
-	     		5: Specified by the user
-	 -size user_size
-	 	specified sample size, only for "-sample 5"
 	 -t1
 	 	display best-model's newick tree [default: false]
 	 -t2

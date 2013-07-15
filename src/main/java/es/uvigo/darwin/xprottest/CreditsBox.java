@@ -17,11 +17,16 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 package es.uvigo.darwin.xprottest;
 
+import javax.swing.GroupLayout;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.WindowConstants;
+
 /**
  *
  * @author Diego Darriba
  */
-public class CreditsBox extends javax.swing.JDialog {
+public class CreditsBox extends JDialog {
 
     /** Creates new form Credits */
     public CreditsBox(java.awt.Frame parent) {
@@ -38,30 +43,30 @@ public class CreditsBox extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
+        namesLabel = new JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Credits"); // NOI18N
         setAlwaysOnTop(true);
 
-        jLabel1.setText("Credits!!!"); // NOI18N
-        jLabel1.setName("jLabel1"); // NOI18N
+        namesLabel.setText("Diego Darriba, Guillermo L.Taboada, Ramon Doallo, David Posada"); // NOI18N
+        namesLabel.setName("jLabel1"); // NOI18N
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(namesLabel)
+                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(namesLabel)
+                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -69,7 +74,7 @@ public class CreditsBox extends javax.swing.JDialog {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
+    private JLabel namesLabel;
     // End of variables declaration//GEN-END:variables
 
 }

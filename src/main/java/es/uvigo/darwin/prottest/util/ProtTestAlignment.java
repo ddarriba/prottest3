@@ -39,12 +39,7 @@ public abstract class ProtTestAlignment {
 	 * 
 	 * @param alignment
 	 *            the alignment to calculate sample size
-	 * @param sampleSizeMode
-	 *            the sample size mode
-	 * @param customSampleSize
-	 *            the user sample size
-	 * 
-	 * @return the double
+	 * @return the sample size
 	 */
 	public static double calculateSampleSize(Alignment alignment) {
 		// For AICc and BIC frameworks

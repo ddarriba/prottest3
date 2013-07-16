@@ -51,6 +51,7 @@ public class PhymlStreamGobbler extends StreamGobbler {
             BufferedReader br = new BufferedReader(isr);
             String line = null;
             while ((line = br.readLine()) != null) {
+            	ProtTestLogger.lowLevelLog(line);
                if (printIt && line.startsWith(". Err")) {
                     ProtTestLogger.severeln(type + ">" + line, caller);
                } else {

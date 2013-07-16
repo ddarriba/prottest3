@@ -50,7 +50,7 @@ public class CreditsBox extends JDialog {
         setAlwaysOnTop(true);
 
         namesLabel.setText("Diego Darriba, Guillermo L.Taboada, Ramon Doallo, David Posada"); // NOI18N
-        namesLabel.setName("jLabel1"); // NOI18N
+        namesLabel.setName("namesLabel"); // NOI18N
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

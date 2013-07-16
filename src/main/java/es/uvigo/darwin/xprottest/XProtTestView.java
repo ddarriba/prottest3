@@ -106,9 +106,11 @@ public final class XProtTestView extends FrameView {
 	private boolean alignmentLoaded;
 	private File alignmentFile;
 	private boolean lnlCalculated;
-	private PrintWriter displayWriter;
 	private Model[] models;
+	private PrintWriter displayWriter;
 	private Handler mainHandler;
+	private PrintWriter lowLevelDisplayWriter;
+	private Handler lowLevelHandler;
 	/* WINDOWS */
 	private ResultsView resultsView;
 	private TreeView treeView;
@@ -196,9 +198,13 @@ public final class XProtTestView extends FrameView {
 		initComponents();
 
 		displayWriter = new PrintWriter(new TextAreaAppender(mainTextArea));
+		lowLevelDisplayWriter = new PrintWriter(new TextAreaAppender(
+				phymlTextArea));
 
 		mainHandler = ProtTestLogger.getDefaultLogger().addHandler(
 				displayWriter);
+		lowLevelHandler = ProtTestLogger.getDefaultLogger().addLowLevelHandler(
+				lowLevelDisplayWriter);
 		try {
 			Handler logHandler = ProtTestFactory.getInstance()
 					.createLogHandler();

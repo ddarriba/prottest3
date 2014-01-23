@@ -166,13 +166,24 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
                 str[i] = "";
             }
 
-            java.io.File currentDir = new java.io.File("");
-            File phymlBin = new File(currentDir.getAbsolutePath() + "/bin/phyml");
+            boolean phymlGlobal = APPLICATION_PROPERTIES.getProperty("global-phyml-exe", "false").equalsIgnoreCase("true");
+            		
+            File currentDir = new java.io.File("");
+            File exeFilesDir = new java.io.File(APPLICATION_PROPERTIES.getProperty("exe-dir", currentDir.getAbsolutePath()));
+            
+            File phymlBin;
+            
+           	phymlBin = new File(exeFilesDir.getAbsolutePath() + File.separator + "phyml");
+
             String phymlBinName;
-            if (phymlBin.exists() && phymlBin.canExecute()) {
-                phymlBinName = phymlBin.getAbsolutePath();
+            if (phymlGlobal) {
+            	phymlBinName = "phyml";
             } else {
-                phymlBinName = currentDir.getAbsolutePath() + "/bin/" + getPhymlVersion();
+	            if (phymlBin.exists() && phymlBin.canExecute()) {
+	                phymlBinName = phymlBin.getAbsolutePath();
+	            } else {
+	                phymlBinName = exeFilesDir.getAbsolutePath() + File.separator + getPhymlVersion();
+	            }
             }
 
             if (phymlBinName != null) {

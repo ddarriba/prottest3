@@ -67,6 +67,8 @@ public interface ProtTestConsoleParameters {
     public static final String PARAM_NCAT = "ncat";
     /** Include models with all distributions (like -I -G). */
     public static final String PARAM_ALL_DISTRIBUTIONS = "all-distributions";
+    /** Enable or Disable output logging files. */
+    public static final String PARAM_LOGGING = "log";
     /** Verbose mode parameter token. */
     public static final String PARAM_VERBOSE = "verbose";
 }

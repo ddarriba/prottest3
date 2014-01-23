@@ -68,6 +68,11 @@ public abstract class ProtTestArgumentParser
         		TREE_SEARCH_SPR,
         		TREE_SEARCH_BEST
         };
+        String[] enabling = {
+        		"enabled",
+        		"disabled"
+        };
+        
         valuesRequired.put(PARAM_TREE_SEARCH_OP, true);
         argumentValues.put(PARAM_TREE_SEARCH_OP, treeSearchOps);
         
@@ -87,6 +92,8 @@ public abstract class ProtTestArgumentParser
         valuesRequired.put(PARAM_DO_BIC, false);
         valuesRequired.put(PARAM_DO_AICC, false);
         valuesRequired.put(PARAM_DO_DT, false);
+        valuesRequired.put(PARAM_LOGGING, true);
+        argumentValues.put(PARAM_LOGGING, enabling);
         Map<String, String> distributionsMap = new HashMap<String, String>(3);
         distributionsMap.put(PARAM_PLUSG, "T");
         distributionsMap.put(PARAM_PLUSI, "T");
@@ -157,7 +164,7 @@ public abstract class ProtTestArgumentParser
                         String value = args[i];
                         if (argumentValues.containsKey(arg)) {
                             String[] values = argumentValues.get(arg);
-                            if (!Arrays.asList(values).contains(value)) {
+                            if (!Arrays.asList(values).contains(value.toLowerCase())) {
                                 throw new IllegalArgumentException("Invalid argument value " + value + " for parameter " + arg);
                             }
                         }

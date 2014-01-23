@@ -58,6 +58,8 @@ public class ApplicationOptions {
     protected String align_file = null;
     /** The tree filename. */
     protected String tree_file = null;
+    /** Logging Enabled/Disabled **/
+    protected boolean logEnabled = true;
     /** The log filename. */
     protected String log_file = null;
     /** The alignment, according to the alignment input file. */
@@ -139,6 +141,15 @@ public class ApplicationOptions {
         return displayASCIITree;
     }
 
+    /**
+     * Checks whether PhyML logging is enabled
+     * 
+     * @return true, if PhyML logging is enabled
+     */
+    public boolean isLogEnabled() {
+    	return logEnabled;
+    }
+    
     /**
      * Checks if is required to display consensus tree.
      * 
@@ -563,6 +574,11 @@ public class ApplicationOptions {
                 throw new ProtTestInternalException(fnfe.getMessage());
             }
         }
+
+        if (arguments.exists(ProtTestArgumentParser.PARAM_LOGGING)) {
+            logEnabled = arguments.getValue(ProtTestArgumentParser.PARAM_LOGGING).equalsIgnoreCase("enabled");
+        }
+            
         if (arguments.exists(ProtTestArgumentParser.PARAM_TREE_SEARCH_OP)) {
             setTreeSearchOperation(arguments.getValue(ProtTestArgumentParser.PARAM_TREE_SEARCH_OP));
         }
@@ -679,6 +695,8 @@ public class ApplicationOptions {
         println("            Tree file       (optional) [default: NJ tree]");
         println(" -o output_filename");
         println("            Output file     (optional) [default: standard output]");
+        println(" -log enabled/disabled");
+        println("            Enables / Disables PhyML logging into log directory (see prottest.properties)");
         println(" -[matrix]");
         print(  "            Include matrix (Amino-acid) = "  );
         int count = 0;

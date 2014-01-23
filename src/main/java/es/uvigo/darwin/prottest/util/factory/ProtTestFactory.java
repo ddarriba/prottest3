@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
+import java.util.Calendar;
+import java.text.SimpleDateFormat;
 
 import pal.alignment.Alignment;
 import pal.tree.Tree;
@@ -275,8 +277,12 @@ public class ProtTestFactory {
                 if (!logDir.exists()) {
                     logDir.mkdirs();
                 }
-                File logFile = File.createTempFile(
-                        "prottest3_", ".log", logDir);
+
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+                //File logFile = new File(logDir.getAbsolutePath() + File.separator + "prottest3_" +
+		//	sdf.format(Calendar.getInstance().getTime()));
+		File logFile = File.createTempFile("prottest3_"+sdf.format(Calendar.getInstance().getTime())+"_",
+			 ".log", logDir);
                 FileOutputStream fos = new FileOutputStream(logFile);
                 logHandler = new StreamHandler(fos, new ProtTestLogFormatter());
                 logHandler.setLevel(Level.parse(level));

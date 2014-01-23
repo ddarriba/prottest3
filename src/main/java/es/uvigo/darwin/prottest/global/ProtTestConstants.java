@@ -45,11 +45,11 @@ public interface ProtTestConstants {
 
     // tree search operation
     /** NNI moves */
-    static final String TREE_SEARCH_NNI = "NNI";
+    static final String TREE_SEARCH_NNI = "nni";
     /** SPR moves */
-    static final String TREE_SEARCH_SPR = "SPR";
+    static final String TREE_SEARCH_SPR = "spr";
     /** Best of NNI and SPR moves */
-    static final String TREE_SEARCH_BEST = "BEST";
+    static final String TREE_SEARCH_BEST = "best";
 
     /** Fixed BIONJ topology for every model. */
     static final int OPTIMIZE_FIXED_BIONJ = 0;

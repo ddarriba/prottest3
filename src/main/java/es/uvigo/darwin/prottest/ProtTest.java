@@ -108,17 +108,7 @@ public class ProtTest {
 
         ProtTestLogger logger = ProtTestLogger.getDefaultLogger();
         logger.setStdHandlerLevel(Level.INFO);
-        if (MPJ_ME == 0) {
-            try {
-                Handler logHandler = factory.createLogHandler();
-                if (logHandler != null) {
-                    logger.addHandler(logHandler);
-                }
-            } catch (IOException ex) {
-                logger.severeln(ex.getMessage());
-            }
-        }
-
+        
         // parse arguments
         ApplicationOptions opts = new ApplicationOptions();
 
@@ -146,6 +136,19 @@ public class ProtTest {
             finalize(1);
         }
 
+        if (MPJ_ME == 0) {
+            try {
+            	if (opts.isLogEnabled()) {
+	                Handler logHandler = factory.createLogHandler();
+	                if (logHandler != null) {
+	                    logger.addHandler(logHandler);
+	                }
+            	}
+            } catch (IOException ex) {
+                logger.severeln(ex.getMessage());
+            }
+        }
+        
         // get the facade instance
         TreeFacade treeFacade = new TreeFacadeImpl();
         ProtTestFacade facade;

@@ -17,28 +17,34 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 package es.uvigo.darwin.prottest.exe;
 
+import static es.uvigo.darwin.prottest.global.ApplicationGlobals.APPLICATION_PROPERTIES;
+import static es.uvigo.darwin.prottest.global.ProtTestConstants.OPTIMIZE_BIONJ;
+import static es.uvigo.darwin.prottest.global.ProtTestConstants.OPTIMIZE_FIXED_BIONJ;
+import static es.uvigo.darwin.prottest.global.ProtTestConstants.OPTIMIZE_ML;
+import static es.uvigo.darwin.prottest.global.ProtTestConstants.OPTIMIZE_USER;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 
 import pal.tree.ReadTree;
 import pal.tree.TreeParseException;
 import es.uvigo.darwin.prottest.exe.util.TemporaryFileManager;
-import static es.uvigo.darwin.prottest.global.AminoAcidApplicationGlobals.*;
+import es.uvigo.darwin.prottest.global.ApplicationGlobals;
 import es.uvigo.darwin.prottest.global.options.ApplicationOptions;
 import es.uvigo.darwin.prottest.model.AminoAcidModel;
 import es.uvigo.darwin.prottest.model.Model;
 import es.uvigo.darwin.prottest.util.Utilities;
 import es.uvigo.darwin.prottest.util.exception.ModelOptimizationException;
+import es.uvigo.darwin.prottest.util.exception.ModelOptimizationException.ModelNotFoundException;
 import es.uvigo.darwin.prottest.util.exception.ModelOptimizationException.OSNotSupportedException;
 import es.uvigo.darwin.prottest.util.exception.ModelOptimizationException.PhyMLExecutionException;
 import es.uvigo.darwin.prottest.util.exception.ModelOptimizationException.StatsFileFormatException;
-import es.uvigo.darwin.prottest.util.exception.ModelOptimizationException.ModelNotFoundException;
 import es.uvigo.darwin.prottest.util.exception.ProtTestInternalException;
 import es.uvigo.darwin.prottest.util.exception.TreeFormatException;
-import java.util.Arrays;
 
 /**
  * The Class PhyMLAminoAcidRunEstimator. It optimizes Amino-Acid
@@ -102,7 +108,7 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
         try {
             this.model = (AminoAcidModel) model;
             // check if there is any matrix file
-            modelFile = new File("models" + File.separator + model.getMatrix());
+            modelFile = new File(ApplicationGlobals.PATH + File.separator + "models" + File.separator + model.getMatrix());
 
         } catch (ClassCastException cce) {
             throw new ProtTestInternalException("Wrong model type");
@@ -168,13 +174,15 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
 
             boolean phymlGlobal = APPLICATION_PROPERTIES.getProperty("global-phyml-exe", "false").equalsIgnoreCase("true");
             		
-            File currentDir = new java.io.File("");
-            File exeFilesDir = new java.io.File(APPLICATION_PROPERTIES.getProperty("exe-dir", currentDir.getAbsolutePath()));
-            
+            File exeFilesDir = new File(APPLICATION_PROPERTIES.getProperty("exe-dir", ApplicationGlobals.PATH));
+            if (!exeFilesDir.isAbsolute()) {
+            	exeFilesDir = new File(ApplicationGlobals.PATH + File.separator + APPLICATION_PROPERTIES.getProperty("exe-dir", "bin"));	
+            }
+            		
             File phymlBin;
             
            	phymlBin = new File(exeFilesDir.getAbsolutePath() + File.separator + "phyml");
-
+           	
             String phymlBinName;
             if (phymlGlobal) {
             	phymlBinName = "phyml";

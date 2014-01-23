@@ -17,10 +17,13 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 package es.uvigo.darwin.prottest.global;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
+
+import es.uvigo.darwin.prottest.ProtTest;
 
 /**
  * The global application settings and parameter names.
@@ -29,11 +32,14 @@ public abstract class ApplicationGlobals implements ProtTestConstants {
 
     /** The application APPLICATION_PROPERTIES. */
     public static final Properties APPLICATION_PROPERTIES;
+    public static final String JAR_PATH = ProtTest.class.getProtectionDomain().getCodeSource().getLocation().getFile()
+    		.replace("%20", " ");
+    public static final String PATH = JAR_PATH.replaceFirst(new File(JAR_PATH).getName(),"");
     
     static {
         APPLICATION_PROPERTIES = new Properties();
         try {
-            FileInputStream prop = new FileInputStream("prottest.properties");
+            FileInputStream prop = new FileInputStream(PATH + "prottest.properties");
             APPLICATION_PROPERTIES.load(prop);
         } catch (IOException e) {
             System.err.println("Properties file (prottest.properties) cannot be resolved");

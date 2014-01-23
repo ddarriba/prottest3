@@ -274,6 +274,9 @@ public class ProtTestFactory {
 
             if (logDirName != null && supported) {
                 File logDir = new File(logDirName);
+                if (!logDir.isAbsolute()) {
+                	logDir = new File(ApplicationGlobals.PATH + File.separator + logDir);
+                }
                 if (!logDir.exists()) {
                     logDir.mkdirs();
                 }

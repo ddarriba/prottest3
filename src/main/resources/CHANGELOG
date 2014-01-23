@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------
-ProtTest 3 Change Log -	16/Mar/2012
+ProtTest 3 Change Log -	23/Jan/2014
 
 Diego Darriba (ddarriba@udc.es)
 Guillermo L. Taboada (taboada@udc.es)
@@ -10,6 +10,19 @@ David Posada (dposada@uvigo.es)
 (c) Grupo de Arquitectura de Computadores, UDC, Spain
 
 -----------------------------------------------------------------------------
+
+ProtTest 3.4 (23/Jan/2014)
+
+  * Fix : Fixed problem while trying to execute ProtTest from outside its home directory.
+
+  * Enhancement : Added configuration property for disable logging.
+		  Added configuration property for using a system-wide installed PhyML.
+
+ProtTest 3.3 (16/Jul/2013)
+
+  * Enhancement : Added real-time PhyML logging.
+
+  * Enhancement : Removed sample size selection. Fixed to alignment length.
 
 ProtTest 3.2 (16/Mar/2012)
 

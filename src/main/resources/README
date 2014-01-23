@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------
-ProtTest 3 Readme -	16/Mar/2012
+ProtTest 3 Readme -	23/Jan/2014
 
 Diego Darriba (ddarriba@udc.es)
 Guillermo L. Taboada (taboada@udc.es)
@@ -45,17 +45,17 @@ TOC
 
 Console version
 
-$ tar zvxf prottest-3.2-yyyymmdd.tar.gz
+$ tar zvxf prottest-3.4-yyyymmdd.tar.gz
 (Linux/Unix/OS X)
 $ export PROTTEST_HOME=$PWD/prottest3
 (Windows)
 $ set PROTTEST_HOME=$CWD\prottest3
 $ cd $PROTTEST_HOME
-$ java -jar prottest-3.2.jar -i examples/COX2_PF0016/alignment -all-matrices -all-distributions -threads 2
+$ java -jar prottest-3.4.jar -i examples/COX2_PF0016/alignment -all-matrices -all-distributions -threads 2
 
 Graphical version
 
-$ tar zvxf prottest-3.2-yyyymmdd.tar.gz
+$ tar zvxf prottest-3.4-yyyymmdd.tar.gz
 (Linux/Unix/OS X)
 $ export PROTTEST_HOME=$PWD/prottest3
 (Windows)
@@ -101,7 +101,7 @@ $PROTTEST_HOME/
   | filecluster8.conf.template  # machines file template for 8 node cluster
   | machines			# machines file for cluster execution
   | prottest.properties		# ProtTest3 configuration file (always required)
-  | prottest-3.2.jar		# ProtTest3 package
+  | prottest-3.4.jar		# ProtTest3 package
   | README			# this README file
   | COPYING                     # ProtTest3 licese
   | runProtTestHPC.sh		# basic script for ProtTest3 cluster execution
@@ -150,61 +150,67 @@ it is important to understand how to run the sequential execution.
 
 These are the parameters of the sequential execution:
 
-	 -i alignment_filename
-		alignment input file (required)
-	 -t tree_filename
-		tree file      	(optional) [default: NJ tree]
-	 -o output_filename
-		output file    	(optional) [default: standard output]
-	 -S optimization_strategy
- 		optimization strategy mode: [default: 0]
-	     		0: Fixed BIONJ JTT
-	     		1: BIONJ Tree
-	     		2: Maximum Likelihood tree
-	     		3: User defined topology
-	 -[matrix]
- 		Include matrix (Amino-acid) = JTT LG DCMut MtREV MtMam MtArt Dayhoff WAG 
-                 		 	      RtREV CpREV Blosum62 VT HIVb HIVw FLU 
+     -i alignment_filename
+            Alignment input file (required)
+     -t tree_filename
+            Tree file       (optional) [default: NJ tree]
+     -o output_filename
+            Output file     (optional) [default: standard output]
+     -log enabled/disabled
+            Enables / Disables PhyML logging into log directory (see prottest.properties)
+     -[matrix]
+            Include matrix (Amino-acid) = JTT LG DCMut MtREV MtMam MtArt Dayhoff WAG 
+	                                  RtREV CpREV Blosum62 VT HIVb HIVw FLU 
                 If you don't specify any matrix, all matrices displayed above will
                 be included.
+     -I
+            Include models with a proportion of invariable sites
+     -G
+            Include models with rate variation among sites and number of categories
+     -IG
+            include models with both +I and +G properties
+     -all-distributions
+            Include models with rate variation among sites, number of categories and both
+     -ncat number_of_categories
+            Define number of categories for +G and +I+G models [default: 4]
+     -F
+            Include models with empirical frequency estimation 
+     -AIC
+            Display models sorted by Akaike Information Criterion (AIC)
+     -BIC
+            Display models sorted by Bayesian Information Criterion (BIC)
+     -AICC
+            Display models sorted by Corrected Akaike Information Criterion (AICc)
+     -DT
+            Display models sorted by Decision Theory Criterion
+     -all
+            Displays a 7-framework comparison table
+     -S optimization_strategy
+            Optimization strategy mode: [default: 0]
+             		0: Fixed BIONJ JTT
+             		1: BIONJ Tree
+             		2: Maximum Likelihood tree
+             		3: User defined topology
+     -s moves
+            Tree search operation for ML search: 
+            NNI (fastest), SPR (slowest), BEST (best of NNI and SPR) [default: NNI]
+     -t1      				
+            Display best-model's newick tree [default: false]
+     -t2      				
+            Display best-model's ASCII tree  [default: false]
+     -tc consensus_threshold 
+            Display consensus tree with the specified threshold, between 0.5 and 1.0
+            [0.5 = majority rule consensus ; 1.0 = strict consensus]
+     -threads number_or_threads			
+            Number of threads requested to compute (only if MPJ is not used) [default: 1]
+     -verbose
+            Verbose mode [default: false]
 
-	 -I
-	 	include models with a proportion of invariable sites
-	 -G
-	 	include models with rate variation among sites and number of categories
-	 -IG
-	 	include models with both +I and +G properties
-	 -all-distributions
- 		include models with rate variation among sites, number of categories and both
-	 -ncat number_of_categories
- 		define number of categories for +G and +I+G models [default: 4]
-	 -F
-	 	include models with empirical frequency estimation
-	 -AIC
-	 	display models sorted by Akaike Information Criterion (AIC)
-	 -BIC
-	 	display models sorted by Bayesian Information Criterion (BIC)
-	 -AICC
-	 	display models sorted by Corrected Akaike Information Criterion (AICc)
- 	 -DT
-	 	display models sorted by Decision Theory Criterion
-	 -t1
-	 	display best-model's newick tree [default: false]
-	 -t2
-	 	display best-model's ASCII tree  [default: false]
-	 -tc consensus_threshold
- 		display consensus tree with the specified threshold
-	 -all
-	 	Displays a 7-framework comparison table
-	 -verbose
-	 	verbose mode [default: false]
-	 -threads number_or_threads
- 		number of threads to compute (only if MPJ is not used) [default: 1]
 
 Basic execution example:
 
 	$ cd $PROTTEST_HOME
-	$ java -jar prottest-3.2.jar -i examples/COX2_PF0016/alignment -all-distributions -F -AIC -BIC -tc
+	$ java -jar prottest-3.4.jar -i examples/COX2_PF0016/alignment -all-distributions -F -AIC -BIC -tc
 
 
 -----------------------------------------------------------------------------
@@ -216,7 +222,7 @@ can use up to the number of cores in your machine and beyond. Following the basi
 execution example, a recommended multithread execution in a quad-core machine will be:
 
 	$ cd $PROTTEST_HOME
-	$ java -jar prottest-3.2.jar -i examples/COX2_PF0016/alignment -all-distributions -F -AIC -BIC -tc -threads 4
+	$ java -jar prottest-3.4.jar -i examples/COX2_PF0016/alignment -all-distributions -F -AIC -BIC -tc -threads 4
 
 It is remarkable that the substitution models will not be computed in a specific
 order, so the full output will be shown once all models have been computed. 

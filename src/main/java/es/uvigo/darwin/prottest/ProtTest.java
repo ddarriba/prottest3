@@ -64,9 +64,9 @@ import pal.tree.Tree;
 public class ProtTest {
 
     /** The Constant versionNumber. */
-    public static final String versionNumber = "3.2";
+    public static final String versionNumber = "3.4";
     /** The Constant versionDate. */
-    public static final String versionDate = "16th March 2012";
+    public static final String versionDate = "23th January 2014";
     /** The MPJ rank of the process. It is only useful if MPJ is running.*/
     public static int MPJ_ME;
     /** The MPJ size of the communicator. It is only useful if MPJ is running.*/

@@ -22,7 +22,8 @@ For technical doubts, bug reports or comments, please use the ProtTest forum.
 Download
 --------
 
-Google Code downloads are now longer available. New distributions of ProtTest will be hosted in google drive: ProtTest3 Downloads
+New distributions of ProtTest will be hosted in google drive: ProtTest3 Downloads
+https://drive.google.com/drive/u/0/folders/0ByrkKOPtF_n_dVBBbDVBOEM5b1U
 
 --------
 News!

@@ -23,7 +23,7 @@ Download
 --------
 
 New distributions of ProtTest will be hosted in google drive: ProtTest3 Downloads
-https://drive.google.com/drive/u/0/folders/0ByrkKOPtF_n_dVBBbDVBOEM5b1U
+https://drive.google.com/folderview?id=0ByrkKOPtF_n_dVBBbDVBOEM5b1U
 
 --------
 News!

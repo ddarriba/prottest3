@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------
-ProtTest 3 Readme -	23/Jan/2014
+ProtTest 3 Readme -	26/Sep/2015
 
 Diego Darriba (ddarriba@udc.es)
 Guillermo L. Taboada (taboada@udc.es)
@@ -210,7 +210,7 @@ These are the parameters of the sequential execution:
 Basic execution example:
 
 	$ cd $PROTTEST_HOME
-	$ java -jar prottest-3.4.jar -i examples/COX2_PF0016/alignment -all-distributions -F -AIC -BIC -tc
+	$ java -jar prottest-3.4.jar -i examples/COX2_PF0016/alignment -all-distributions -F -AIC -BIC -tc 0.5
 
 
 -----------------------------------------------------------------------------
@@ -222,7 +222,7 @@ can use up to the number of cores in your machine and beyond. Following the basi
 execution example, a recommended multithread execution in a quad-core machine will be:
 
 	$ cd $PROTTEST_HOME
-	$ java -jar prottest-3.4.jar -i examples/COX2_PF0016/alignment -all-distributions -F -AIC -BIC -tc -threads 4
+	$ java -jar prottest-3.4.jar -i examples/COX2_PF0016/alignment -all-distributions -F -AIC -BIC -tc 0.5 -threads 4
 
 It is remarkable that the substitution models will not be computed in a specific
 order, so the full output will be shown once all models have been computed. 
@@ -265,7 +265,7 @@ bash script: 'runProtTestHPC.sh'
 The basic syntax is:
 	./runProtTestHPC.sh $NUMBER_OF_PROCESSORS $APPLICATION_PARAMETERS
 
-$ ./runProtTestHPC.sh 2 -i examples/COX2_PF0016/alignment -all-distributions -F -AIC -BIC -tc
+$ ./runProtTestHPC.sh 2 -i examples/COX2_PF0016/alignment -all-distributions -F -AIC -BIC -tc 0.5
 
 -----------------------------------------------------------------------------
 	4.2.4 Cluster hybrid execution

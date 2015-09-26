@@ -115,7 +115,7 @@ public class ProtTestFactory {
             instance = new ProtTestFactory(sort);
             return args;
         } else {
-            throw new ProtTestInternalException("ModelTestFactory was already initialized");
+            throw new ProtTestInternalException("ProtTestFactory was already initialized");
         }
     }
 
@@ -128,7 +128,7 @@ public class ProtTestFactory {
         if (instance == null) {
             initialize(new String[0]);
         }
-//			throw new ProtTestInternalException("ModelTestFactory should be initialized");
+//			throw new ProtTestInternalException("ProtTestFactory should be initialized");
 
         return instance;
     }

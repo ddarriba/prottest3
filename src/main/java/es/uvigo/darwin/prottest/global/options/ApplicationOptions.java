@@ -687,7 +687,7 @@ public class ApplicationOptions {
         println(" - Sequential version: ");
         println("        java -jar prottest-2.1.jar -i alignm_file [OPTIONS]");
         println(" - Parallel version: ");
-        println("        mpjrun.sh -wdir $PWD/ -np [NUM_PROCS] -jar ModelTest-2.1.jar -i alignm_file [OPTIONS]");
+        println("        mpjrun.sh -wdir $PWD/ -np [NUM_PROCS] -jar prottest-3.4.jar -i alignm_file [OPTIONS]");
         println("OPTIONS:");
         println(" -i alignment_filename");
         println("            Alignment input file (required)");
@@ -757,9 +757,9 @@ public class ApplicationOptions {
         println("-------------------------------------------------------------------------------------------------");
         println("Example: ");
         println("- Sequential version:");
-        println("    java -jar ModelTest-2.1.jar -i alignm_file -t tree_file -S 0 -all-distributions -F -AIC -BIC -tc 0.5 > output");
+        println("    java -jar prottest-3.4.jar -i alignm_file -t tree_file -S 0 -all-distributions -F -AIC -BIC -tc 0.5 > output");
         println("- Parallel version:");
-        println("    mpjrun.sh -wdir $PWD/ -np 2 -jar ModelTest-2.1.jar -i alignm_file -t tree_file -S 0 -all-distributions -F -AIC -BIC -tc 0.5");
+        println("    mpjrun.sh -wdir $PWD/ -np 2 -jar prottest-3.4.jar -i alignm_file -t tree_file -S 0 -all-distributions -F -AIC -BIC -tc 0.5");
     }
 
     public void reportModelOptimization() {

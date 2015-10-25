@@ -17,15 +17,33 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 package es.uvigo.darwin.prottest.global.options;
 
-import static es.uvigo.darwin.prottest.global.AminoAcidApplicationGlobals.*;
+import static es.uvigo.darwin.prottest.global.ProtTestConstants.DEFAULT_COMPARE_ALL;
+import static es.uvigo.darwin.prottest.global.ProtTestConstants.DEFAULT_DEBUG;
+import static es.uvigo.darwin.prottest.global.ProtTestConstants.DEFAULT_DISPLAY_ASCII_TREE;
+import static es.uvigo.darwin.prottest.global.ProtTestConstants.DEFAULT_DISPLAY_CONSENSUS_TREE;
+import static es.uvigo.darwin.prottest.global.ProtTestConstants.DEFAULT_DISPLAY_NEWICK_TREE;
+import static es.uvigo.darwin.prottest.global.ProtTestConstants.DEFAULT_NCAT;
+import static es.uvigo.darwin.prottest.global.ProtTestConstants.DEFAULT_STRATEGY_MODE;
+import static es.uvigo.darwin.prottest.global.ProtTestConstants.DEFAULT_THREADS;
+import static es.uvigo.darwin.prottest.global.ProtTestConstants.OPTIMIZE_NAMES;
+import static es.uvigo.darwin.prottest.global.ProtTestConstants.OPTIMIZE_USER;
+import static es.uvigo.darwin.prottest.global.ProtTestConstants.TREE_SEARCH_NNI;
+import static es.uvigo.darwin.prottest.util.logging.ProtTestLogger.info;
+import static es.uvigo.darwin.prottest.util.logging.ProtTestLogger.infoln;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.logging.Level;
 
 import pal.alignment.Alignment;
 import pal.tree.Tree;
+import es.uvigo.darwin.prottest.ProtTest;
 import es.uvigo.darwin.prottest.model.Model;
 import es.uvigo.darwin.prottest.util.ProtTestAlignment;
 import es.uvigo.darwin.prottest.util.argumentparser.ProtTestArgumentParser;
@@ -35,13 +53,6 @@ import es.uvigo.darwin.prottest.util.exception.TreeFormatException;
 import es.uvigo.darwin.prottest.util.factory.ProtTestFactory;
 import es.uvigo.darwin.prottest.util.fileio.AlignmentReader;
 import es.uvigo.darwin.prottest.util.logging.ProtTestLogger;
-
-import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.logging.Level;
-import static es.uvigo.darwin.prottest.util.logging.ProtTestLogger.*;
 
 /**
  * The ProtTest application options models the common global options for the
@@ -687,7 +698,7 @@ public class ApplicationOptions {
         println(" - Sequential version: ");
         println("        java -jar prottest-2.1.jar -i alignm_file [OPTIONS]");
         println(" - Parallel version: ");
-        println("        mpjrun.sh -wdir $PWD/ -np [NUM_PROCS] -jar prottest-3.4.jar -i alignm_file [OPTIONS]");
+        println("        mpjrun.sh -wdir $PWD/ -np [NUM_PROCS] -jar prottest-"+ProtTest.versionNumber+".jar -i alignm_file [OPTIONS]");
         println("OPTIONS:");
         println(" -i alignment_filename");
         println("            Alignment input file (required)");
@@ -757,9 +768,9 @@ public class ApplicationOptions {
         println("-------------------------------------------------------------------------------------------------");
         println("Example: ");
         println("- Sequential version:");
-        println("    java -jar prottest-3.4.jar -i alignm_file -t tree_file -S 0 -all-distributions -F -AIC -BIC -tc 0.5 > output");
+        println("    java -jar prottest-"+ProtTest.versionNumber+".jar -i alignm_file -t tree_file -S 0 -all-distributions -F -AIC -BIC -tc 0.5 > output");
         println("- Parallel version:");
-        println("    mpjrun.sh -wdir $PWD/ -np 2 -jar prottest-3.4.jar -i alignm_file -t tree_file -S 0 -all-distributions -F -AIC -BIC -tc 0.5");
+        println("    mpjrun.sh -wdir $PWD/ -np 2 -jar prottest-"+ProtTest.versionNumber+".jar -i alignm_file -t tree_file -S 0 -all-distributions -F -AIC -BIC -tc 0.5");
     }
 
     public void reportModelOptimization() {

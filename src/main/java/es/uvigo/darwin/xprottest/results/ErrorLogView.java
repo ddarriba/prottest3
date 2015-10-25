@@ -17,10 +17,15 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 package es.uvigo.darwin.xprottest.results;
 
-import es.uvigo.darwin.prottest.util.WriterOutputStream;
 import es.uvigo.darwin.prottest.util.logging.ProtTestLogFormatter;
+
+import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.io.Writer;
+
 import es.uvigo.darwin.xprottest.util.TextAreaAppender;
+
 import java.util.logging.Filter;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -33,7 +38,9 @@ import java.util.logging.StreamHandler;
  */
 public class ErrorLogView extends javax.swing.JFrame {
 
-    private PrintWriter errorWriter;
+	private static final long serialVersionUID = -2022588731545645833L;
+	
+	private PrintWriter errorWriter;
     private Handler logHandler;
     
     public Handler getLogHandler() {
@@ -44,7 +51,55 @@ public class ErrorLogView extends javax.swing.JFrame {
     public ErrorLogView() {
         initComponents();
         errorWriter = new PrintWriter(new TextAreaAppender(errorTextArea));
-        logHandler = new StreamHandler(new WriterOutputStream(errorWriter),
+        logHandler = new StreamHandler(new OutputStream()
+		  {
+			protected Writer _writer = errorWriter;
+		    protected String _encoding;
+		    private byte[] _buf=new byte[1];
+		    
+			@Override
+		    public void close()
+		        throws IOException
+		    {
+		        _writer.close();
+		        _writer=null;
+		        _encoding=null;
+		    }
+		    
+		    @Override
+		    public void flush()
+		        throws IOException
+		    {
+		        _writer.flush();
+		    }
+		    
+		    @Override
+		    public void write(byte[] b) 
+		        throws IOException
+		    {
+		        if (_encoding==null)
+		            _writer.write(new String(b));
+		        else
+		            _writer.write(new String(b,_encoding));
+		    }
+		    
+		    @Override
+		    public void write(byte[] b, int off, int len)
+		        throws IOException
+		    {
+		        if (_encoding==null)
+		            _writer.write(new String(b,off,len));
+		        else
+		            _writer.write(new String(b,off,len,_encoding));
+		    }
+		    
+		    public synchronized void write(int b)
+		        throws IOException
+		    {
+		        _buf[0]=(byte)b;
+		        write(_buf);
+		    }
+		},
                 new ProtTestLogFormatter());
         logHandler.setFilter(new Filter(){
 

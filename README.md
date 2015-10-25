@@ -29,6 +29,11 @@ https://drive.google.com/folderview?id=0ByrkKOPtF_n_dVBBbDVBOEM5b1U
 News!
 --------
 
+25/10/2015 - ProtTest 3.4.1 is out. It includes the following updates:
+
+    Fixed bug with number of categories which might induce an error with certain PhyML versions.
+    Removed dependency on WriterOutputStream class.
+
 23/01/2014 - ProtTest 3.4 is out. It includes the following updates:
 
     Fixed problem while trying to execute ProtTest from outside its home directory.

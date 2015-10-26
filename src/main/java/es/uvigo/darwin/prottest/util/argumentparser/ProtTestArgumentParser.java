@@ -29,7 +29,7 @@ import java.util.Properties;
 import es.uvigo.darwin.prottest.global.options.ApplicationOptions;
 
 /**
- * The Class ModelTestArgumentParser.
+ * The Class ProtTestArgumentParser.
  */
 public abstract class ProtTestArgumentParser 
         implements ProtTestConsoleParameters {

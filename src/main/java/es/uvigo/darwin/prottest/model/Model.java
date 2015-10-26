@@ -263,7 +263,7 @@ public abstract class Model implements Serializable {
                 numOfTransCategories = 1;
                 break;
             case DISTRIBUTION_INVARIABLE:
-                numOfTransCategories = 2;
+                numOfTransCategories = 1;
                 break;
             case DISTRIBUTION_GAMMA:
                 numOfTransCategories = ncat;

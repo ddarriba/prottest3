@@ -22,11 +22,17 @@ For technical doubts, bug reports or comments, please use the ProtTest forum.
 Download
 --------
 
-Google Code downloads are now longer available. New distributions of ProtTest will be hosted in google drive: ProtTest3 Downloads
+New distributions of ProtTest will be hosted in google drive: ProtTest3 Downloads
+https://drive.google.com/folderview?id=0ByrkKOPtF_n_dVBBbDVBOEM5b1U
 
 --------
 News!
 --------
+
+25/10/2015 - ProtTest 3.4.1 is out. It includes the following updates:
+
+    Fixed bug with number of categories which might induce an error with certain PhyML versions.
+    Removed dependency on WriterOutputStream class.
 
 23/01/2014 - ProtTest 3.4 is out. It includes the following updates:
 

@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------
-ProtTest 3 Change Log -	23/Jan/2014
+ProtTest 3 Change Log -	25/Oct/2015
 
 Diego Darriba (ddarriba@udc.es)
 Guillermo L. Taboada (taboada@udc.es)
@@ -11,12 +11,21 @@ David Posada (dposada@uvigo.es)
 
 -----------------------------------------------------------------------------
 
+ProtTest 3.4.1 (25/Oct/2015)
+
+  * Enhancement : Removed dependency on WriterOutputStream class.
+
+  * Fix : Fixed bug with number of categories which might induce an error with 
+          certain PhyML versions.
+
 ProtTest 3.4 (23/Jan/2014)
 
-  * Fix : Fixed problem while trying to execute ProtTest from outside its home directory.
+  * Fix : Fixed problem while trying to execute ProtTest from outside its home 
+          directory.
 
   * Enhancement : Added configuration property for disable logging.
-		  Added configuration property for using a system-wide installed PhyML.
+		  Added configuration property for using a system-wide installed
+                  PhyML.
 
 ProtTest 3.3 (16/Jul/2013)
 

@@ -17,8 +17,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 package es.uvigo.darwin.prottest.util.logging;
 
-import es.uvigo.darwin.prottest.util.WriterOutputStream;
 import es.uvigo.darwin.prottest.util.exception.ProtTestInternalException;
+
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.StreamHandler;
 
+@SuppressWarnings("rawtypes")
 public class ProtTestLogger {
 
 	public static final String DEFAULT_LOGGER_NAME = "default";
@@ -135,22 +137,119 @@ public class ProtTestLogger {
 		return addHandler(out, DEFAULT_LEVEL);
 	}
 
-	public Handler addHandler(Writer out, Level level) {
+	public Handler addHandler(final Writer out, Level level) {
 		if (out == null) {
 			throw new NullPointerException();
 		}
-		Handler handler = new StreamHandler(new WriterOutputStream(out),
+		Handler handler = new StreamHandler(
+		  new OutputStream()
+		  {
+			protected Writer _writer = out;
+		    protected String _encoding;
+		    private byte[] _buf=new byte[1];
+		    
+			@Override
+		    public void close()
+		        throws IOException
+		    {
+		        _writer.close();
+		        _writer=null;
+		        _encoding=null;
+		    }
+		    
+		    @Override
+		    public void flush()
+		        throws IOException
+		    {
+		        _writer.flush();
+		    }
+		    
+		    @Override
+		    public void write(byte[] b) 
+		        throws IOException
+		    {
+		        if (_encoding==null)
+		            _writer.write(new String(b));
+		        else
+		            _writer.write(new String(b,_encoding));
+		    }
+		    
+		    @Override
+		    public void write(byte[] b, int off, int len)
+		        throws IOException
+		    {
+		        if (_encoding==null)
+		            _writer.write(new String(b,off,len));
+		        else
+		            _writer.write(new String(b,off,len,_encoding));
+		    }
+		    
+		    public synchronized void write(int b)
+		        throws IOException
+		    {
+		        _buf[0]=(byte)b;
+		        write(_buf);
+		    }
+		},
 				new ProtTestLogFormatter());
 		handler.setLevel(level);
 		this.handlers.add(handler);
 		return handler;
 	}
 
-	public Handler addLowLevelHandler(Writer out) {
+	public Handler addLowLevelHandler(final Writer out) {
 		if (out == null) {
 			throw new NullPointerException();
 		}
-		Handler handler = new StreamHandler(new WriterOutputStream(out),
+		Handler handler = new StreamHandler(new OutputStream()
+		  {
+			protected Writer _writer = out;
+		    protected String _encoding;
+		    private byte[] _buf=new byte[1];
+		    
+			@Override
+		    public void close()
+		        throws IOException
+		    {
+		        _writer.close();
+		        _writer=null;
+		        _encoding=null;
+		    }
+		    
+		    @Override
+		    public void flush()
+		        throws IOException
+		    {
+		        _writer.flush();
+		    }
+		    
+		    @Override
+		    public void write(byte[] b) 
+		        throws IOException
+		    {
+		        if (_encoding==null)
+		            _writer.write(new String(b));
+		        else
+		            _writer.write(new String(b,_encoding));
+		    }
+		    
+		    @Override
+		    public void write(byte[] b, int off, int len)
+		        throws IOException
+		    {
+		        if (_encoding==null)
+		            _writer.write(new String(b,off,len));
+		        else
+		            _writer.write(new String(b,off,len,_encoding));
+		    }
+		    
+		    public synchronized void write(int b)
+		        throws IOException
+		    {
+		        _buf[0]=(byte)b;
+		        write(_buf);
+		    }
+		},
 				new ProtTestLogFormatter());
 		handler.setLevel(Level.ALL);
 		lowLevelHandler = handler;

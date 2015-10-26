@@ -1,1 +1,1 @@
-java -cp prottest-3.4.jar es.uvigo.darwin.xprottest.XProtTestApp
+java -cp prottest-3.4.1.jar es.uvigo.darwin.xprottest.XProtTestApp

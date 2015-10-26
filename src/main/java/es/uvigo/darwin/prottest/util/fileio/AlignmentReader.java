@@ -195,7 +195,7 @@ public class AlignmentReader {
         String currString;
         int size = alignment.getSequenceCount();
         for (int i = 0; i < size; i++) {
-            currString = (String) seqNames.get(i);
+            currString = seqNames.get(i);
             for (int j = i + 1; j < size; j++) {
                 if (seqNames.get(j).equals(currString)) {
                     throw new AlignmentParseException("ERROR: There are duplicated taxa names in the alignment: " + currString);

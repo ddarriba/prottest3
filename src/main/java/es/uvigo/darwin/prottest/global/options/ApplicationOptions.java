@@ -96,6 +96,28 @@ public class ApplicationOptions {
     /** Tree search operation */
     private String treeSearchOperation = TREE_SEARCH_NNI;
 
+    @Override
+    public boolean equals(Object obj) {
+System.out.println("Check equals");
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
+        ApplicationOptions other = (ApplicationOptions) obj;
+        if (align_file == null || other.align_file == null) {
+            return false;
+        } else if (!align_file.equals(other.align_file)) {
+            return false;
+        }
+        if (strategyMode != other.strategyMode) return false;
+        if (ncat != other.ncat) return false;
+        if (tree_file != other.tree_file &&
+              (tree_file == null || !tree_file.equals(other.tree_file)))
+            return false;
+        if (!alignment.equals(other.alignment)) return false;
+        if (!tree.equals(other.tree)) return false;
+        return true;
+    }
+
     /**
      * Sets the number of categories.
      * 

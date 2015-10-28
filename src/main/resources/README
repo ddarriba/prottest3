@@ -296,7 +296,7 @@ $ ./runXProtTestHPC.sh
 
  5.1. I got this error when running ProtTest 3
 
-      ./phyml-prottest-linux: /lib/libc.so.6: version `GLIBC_2.7' not found 
+      ./PhyML_3.0_linux32: /lib/libc.so.6: version `GLIBC_2.7' not found 
 
     ---
 

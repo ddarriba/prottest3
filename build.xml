@@ -1,36 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- You may freely edit this file. See commented blocks below for -->
-<!-- some examples of how to customize the build. -->
-<!-- (If you delete it and reopen the project it will be recreated.) -->
-<project name="ProtTest" default="default" basedir=".">
-    <description>Builds, tests, and runs the project ProtTest.</description>
-    <import file="buildconf/build-impl.xml"/>
+<project name="prottest-3.4.1" default="jar" basedir=".">
 
-    <property name="src.resources.dir" value="src/main/resources"/>
-    <property name="prottest.lib" value="lib"/>
+	<property name="src.dir" location="src/main/java" />
+	<property name="bin.dir" location="build/classes" />
+	<property name="lib.dir" location="lib" />
+	<property name="dist.dir" location="dist" />
+  <property name="exe.dir" location="${dist.dir}/bin" />
+	<property name="log.dir" location="${dist.dir}/log" />
+	<property name="src.resources.dir" location="src/main/resources" />
+	<property name="html.template.dir" location="${src.resources.dir}/resources" />
 
-    <target name="-post-jar">
-        <mkdir dir="${dist.dir}/bin"/>
-	<copy todir="${dist.dir}/bin">
-            <fileset dir="${dist.dir}/bin">
-	      	<include name="**/*"/>
-            </fileset>
-	</copy>
-	<copy todir="${dist.dir}">
-            <fileset dir="${src.resources.dir}">
-  	  	<include name="**/*"/>
-            </fileset>
-  	</copy>
-	<mkdir dir="${dist.dir}/lib"/>
-	<copy todir="${dist.dir}/lib">
-            <fileset dir="${prottest.lib}">
-  	  	<include name="**/*"/>
-            </fileset>
-  	</copy>
-	<chmod perm="755" dir="${dist.dir}/bin" includes="*"/>
-	<chmod perm="755" dir="${dist.dir}" includes="runProtTestHPC.sh"/>
-	<chmod perm="755" dir="${dist.dir}" includes="runXProtTestHPC.sh"/>
-                
-        <delete file="${dist.dir}/README.TXT"/>
-    </target>
+	<property name="jarfile" location="${dist.dir}/${ant.project.name}.jar" />
+	<property name="compile.debug" value="false" />
+
+	<fileset id="lib.jars" dir="${lib.dir}">
+		<include name="**/*.jar" />
+	</fileset>
+
+	<path id="lib.path">
+		<fileset refid="lib.jars" />
+	</path>
+
+	<!-- Stub install target.  Install should depend on the 'jar' target,
+         and copy the built objects to the 'dist' directory. -->
+	<target name="install" description="Install jar" depends="jar">
+	</target>
+
+	<target name="compile" description="Compile code">
+		<mkdir dir="${bin.dir}" />
+		<mkdir dir="${lib.dir}" />
+		<property environment="env" />
+		<property name="java6.boot.classpath" value="${env.JAVA6_BOOTCLASSES}" />
+		<javac srcdir="${src.dir}" destdir="${bin.dir}" includeAntRuntime="no" 
+			target="1.6" source="1.6" bootclasspath="${java5.boot.classpath}"
+			classpathref="lib.path" debug="${compile.debug}">
+    </javac>
+    <!--
+		<copy todir="${bin.dir}/models">
+			<fileset dir="${src.resources.dir}/models" includes="**/*.xml,**/*.properties,**/*.gif,**/*.ico" />
+		</copy>
+    -->
+	</target>
+
+	<target name="jar" depends="compile" description="Build jar">
+		<mkdir dir="${dist.dir}" />
+    <jar jarfile="${jarfile}" basedir="${bin.dir}" manifest="manifest.mf">
+	    <fileset id="jar.additional" dir="${src.dir}">
+		    <include name="**/*.properties" />
+		    <include name="**/*.png" />
+		    <include name="**/*.gif" />
+		    <include name="**/*.html" />
+    	</fileset>
+			<!-- Merge library jars into final jar file
+            <zipgroupfileset refid="lib.jars"/>-->
+		</jar>
+		<mkdir dir="${dist.dir}/lib" />
+		<copy todir="${dist.dir}/lib">
+			<fileset id="lib.jars" dir="${lib.dir}">
+				<include name="**/*.jar" />
+			</fileset>
+		</copy>
+		<copy todir="${dist.dir}">
+			<fileset dir="${src.resources.dir}">
+				<include name="**/*" />
+			</fileset>
+		</copy>
+		<mkdir dir="${log.dir}" />
+		<chmod perm="755" dir="${dist.dir}" includes="*.sh *.bat" />
+    <chmod perm="644" dir="${exe.dir}" includes="*" />
+	</target>
+
+	<target name="run" depends="jar" description="Run jar file">
+		<java jar="${jarfile}" fork="yes" failonerror="true" />
+	</target>
+
+	<target name="clean" description="Remove build and dist directories">
+		<delete dir="${bin.dir}" />
+		<delete dir="${dist.dir}" />
+	</target>
 </project>

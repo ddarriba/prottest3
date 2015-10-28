@@ -445,18 +445,18 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
         String oa = System.getProperty("os.arch");
         if (os.startsWith("Mac")) {
             if (oa.startsWith("ppc")) {
-                return "phyml-prottest-macppc";
+                return null;
             } else {
-                return "phyml-prottest-macintel";
+                return "PhyML_3.0_macOS_i386";
             }
         } else if (os.startsWith("Linux")) {
         	if (oa.contains("md64")) {
-        		return "phyml-prottest-linux64";
+        		return "PhyML_3.0_linux64";
         	} else {
-        		return "phyml-prottest-linux";
+        		return "PhyML_3.0_linux32";
         	}
         } else if (os.startsWith("Window")) {
-            return "phyml-prottest-windows.exe";
+            return "PhyML_3.0_win32.exe";
         } else {
             return null;
         }

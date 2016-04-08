@@ -14,7 +14,9 @@ In addition, given that ProtTest uses Phyml intensively, we encourage users to c
 
     Guindon S, Gascuel O. 2003. A simple, fast, and accurate algorithm to estimate large phylogenies by maximum likelihood. Syst Biol. 52: 696-704. Phyml 
 
+--------
 Discussion group
+--------
 
 For technical doubts, bug reports or comments, please use the ProtTest forum: http://groups.google.com/group/prottest
 

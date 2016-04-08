@@ -16,7 +16,7 @@ In addition, given that ProtTest uses Phyml intensively, we encourage users to c
 
 Discussion group
 
-For technical doubts, bug reports or comments, please use the ProtTest forum.
+For technical doubts, bug reports or comments, please use the ProtTest forum: http://groups.google.com/group/prottest
 
 --------
 Download

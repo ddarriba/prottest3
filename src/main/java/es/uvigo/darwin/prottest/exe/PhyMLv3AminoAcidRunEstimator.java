@@ -378,7 +378,7 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
         if (!(statsFile.exists() && statsFile.canRead()))
         {
         	/* try with txt suffix */
-        	statsFile = new File(workAlignment + STATS_FILE_SUFFIX + "txt");
+        	statsFile = new File(workAlignment + STATS_FILE_SUFFIX + ".txt");
         	if (!(statsFile.exists() && statsFile.canRead()))
         		throw new StatsFileFormatException("PhyML", 
         				"Stats file does not exist. Please check if PhyML is working.");
@@ -389,7 +389,7 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
         if (!(treeFile.exists() && treeFile.canRead()))
         {
         	/* try with txt suffix */
-        	treeFile = new File(workAlignment + TREE_FILE_SUFFIX + "txt");
+        	treeFile = new File(workAlignment + TREE_FILE_SUFFIX + ".txt");
         	if (!(treeFile.exists() && treeFile.canRead()))
         		throw new TreeFormatException(
         				"Tree file does not exist. Please check if PhyML is working correctly.");

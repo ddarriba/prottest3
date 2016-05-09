@@ -31,6 +31,12 @@ https://drive.google.com/folderview?id=0ByrkKOPtF_n_dVBBbDVBOEM5b1U
 News!
 --------
 
+08/05/2016 - ProtTest 3.4.2 is out. It includes the following updates:
+
+    Removed dependency on Netbeans libraries
+    Check for global binaries on PATH env variable
+    Added prottest3 script for running both GUI and console interfaces
+
 25/10/2015 - ProtTest 3.4.1 is out. It includes the following updates:
 
     Fixed bug with number of categories which might induce an error with certain PhyML versions.

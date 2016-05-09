@@ -19,7 +19,9 @@ package es.uvigo.darwin.xprottest;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.FileDialog;
+import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -29,12 +31,14 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URI;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.ActionMap;
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -81,7 +85,6 @@ import es.uvigo.darwin.xprottest.compute.OptionsView;
 import es.uvigo.darwin.xprottest.compute.RunningFrame;
 import es.uvigo.darwin.xprottest.results.ErrorLogView;
 import es.uvigo.darwin.xprottest.results.ResultsView;
-import es.uvigo.darwin.xprottest.util.BrowserLauncher;
 import es.uvigo.darwin.xprottest.util.TextAreaAppender;
 
 /**
@@ -197,6 +200,9 @@ public final class XProtTestView extends FrameView {
 
 		initComponents();
 
+		Image image = new ImageIcon("icon.png").getImage();
+	    getFrame().setIconImage(image);
+	      
 		displayWriter = new PrintWriter(new TextAreaAppender(mainTextArea));
 		lowLevelDisplayWriter = new PrintWriter(new TextAreaAppender(
 				phymlTextArea));
@@ -341,13 +347,15 @@ public final class XProtTestView extends FrameView {
 		errorMenuItem = new JMenuItem();
 		helpMenu = new JMenu();
 		manualMenuItem = new JMenuItem();
+		homepageMenuItem = new JMenuItem();
+		discgroupMenuItem = new JMenuItem();
 		aboutMenuItem = new JMenuItem();
 
 		org.jdesktop.application.ResourceMap appResourceMap = org.jdesktop.application.Application
 				.getInstance(es.uvigo.darwin.xprottest.XProtTestApp.class)
 				.getContext().getResourceMap(XProtTestView.class);
 
-		mainPanel.setSize(new java.awt.Dimension(500, 860));
+		mainPanel.setSize(new java.awt.Dimension(600, 860));
 		mainPanel.setBorder(new BorderUIResource.EmptyBorderUIResource(
 				new java.awt.Insets(20, 20, 20, 20)));
 		mainPanel.setLocation(new java.awt.Point(10, -10));
@@ -355,10 +363,7 @@ public final class XProtTestView extends FrameView {
 		mainPanel.setAutoscrolls(true);
 		mainPanel.setLayout(new BorderLayout());
 		mainPanel.setBackground(null);
-
-		// mainPanel.setBackground(resourceMap.getColor("mainPanel.background"));
 		mainPanel.setName("mainPanel");
-		// mainPanel.setPreferredSize(new java.awt.Dimension(500, 600));
 
 		mainScrollPane.setSize(590, 800);// new java.awt.Dimension(590, 600));
 		mainScrollPane.setLocation(new java.awt.Point(20, 20));
@@ -654,12 +659,24 @@ public final class XProtTestView extends FrameView {
 		helpMenu.setText(bundle.getString("item-help"));
 		helpMenu.setName("helpMenu");
 
+		homepageMenuItem.setAction(actionMap.get("openHomepage"));
+		homepageMenuItem.setMnemonic('p');
+		homepageMenuItem.setText(appResourceMap.getString("menu-homepage"));
+		homepageMenuItem.setName("homepageMenuItem");
+		helpMenu.add(homepageMenuItem);
+		
 		manualMenuItem.setAction(actionMap.get("showManual"));
 		manualMenuItem.setMnemonic('m');
 		manualMenuItem.setText(appResourceMap.getString("menu-manual"));
 		manualMenuItem.setName("manualMenuItem");
 		helpMenu.add(manualMenuItem);
-
+		
+		discgroupMenuItem.setAction(actionMap.get("openDiscussionGroup"));
+		discgroupMenuItem.setMnemonic('D');
+		discgroupMenuItem.setText(appResourceMap.getString("menu-discussiongroup"));
+		discgroupMenuItem.setName("discgroupMenuItem");
+		helpMenu.add(discgroupMenuItem);
+		
 		aboutMenuItem.setAction(actionMap.get("showAboutBox"));
 		aboutMenuItem.setText(bundle.getString("item-about-window"));
 		aboutMenuItem.setName("aboutMenuItem");
@@ -1082,14 +1099,50 @@ public final class XProtTestView extends FrameView {
 	}
 
 	@Action
+	public void openDiscussionGroup() {
+		try {
+			if (Desktop.isDesktopSupported()) {
+				Desktop desktop = Desktop.getDesktop();
+				URI prottestURI = new URI(ProtTest.URL_DISCUSSION_GROUP);
+				desktop.browse(prottestURI);
+			} else {
+				displayWriter.println("Cannot browse URL. Please open " + 
+						ProtTest.URL_DISCUSSION_GROUP + " manually.");
+			}
+		} catch (Exception e) {
+			displayWriter.println("Cannot open URL : " + e.getMessage());
+		}
+	}
+	
+	@Action
+	public void openHomepage() {
+		try {
+			if (Desktop.isDesktopSupported()) {
+				Desktop desktop = Desktop.getDesktop();
+				URI prottestURI = new URI(ProtTest.URL_HOMEPAGE);
+				desktop.browse(prottestURI);
+			} else {
+				displayWriter.println("Cannot browse URL. Please open " + 
+						ProtTest.URL_HOMEPAGE + " manually.");
+			}
+		} catch (Exception e) {
+			displayWriter.println("Cannot open URL : " + e.getMessage());
+		}
+	}
+	
+	@Action
 	public void showManual() {
 		try {
-			BrowserLauncher
-					.openURL("http://darwin.uvigo.es/download/prottest_manual.pdf");
-
-		} catch (IOException e) {
+			if (Desktop.isDesktopSupported()) {
+				Desktop desktop = Desktop.getDesktop();
+				URI prottestURI = new URI(ProtTest.URL_MANUAL);
+				desktop.browse(prottestURI);
+			} else {
+				displayWriter.println("Cannot browse URL. Please open " + 
+						ProtTest.URL_MANUAL + " manually.");
+			}
+		} catch (Exception e) {
 			displayWriter.println("Cannot open URL : " + e.getMessage());
-
 		}
 	}
 
@@ -1113,7 +1166,9 @@ public final class XProtTestView extends FrameView {
 	private JTextArea phymlTextArea;
 	private JScrollPane mainScrollPane;
 	private JTextArea mainTextArea;
+	private JMenuItem homepageMenuItem;
 	private JMenuItem manualMenuItem;
+	private JMenuItem discgroupMenuItem;
 	private JMenuBar menuBar;
 	private JMenuItem preferencesMenuItem;
 	private JMenu resultsMenu;

@@ -1,4 +1,5 @@
 export MPJ_HOME=$PWD/mpj
 export NP=$1
 shift
-$MPJ_HOME/bin/mpjrun.sh -dev niodev -wdir $PWD/ -np $NP -jar prottest-3.4.1.jar  $*
+jarfile=`find . -name "prottest-3.*.jar" | sort | tail -n 1`
+$MPJ_HOME/bin/mpjrun.sh -dev niodev -wdir $PWD/ -np $NP -jar $jarfile  $*

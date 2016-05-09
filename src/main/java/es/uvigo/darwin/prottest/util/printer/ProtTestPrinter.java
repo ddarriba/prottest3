@@ -21,8 +21,10 @@ import java.io.PrintWriter;
 import java.util.Date;
 
 import es.uvigo.darwin.prottest.ProtTest;
+import es.uvigo.darwin.prottest.exe.PhyMLv3AminoAcidRunEstimator;
 import es.uvigo.darwin.prottest.global.options.ApplicationOptions;
 import es.uvigo.darwin.prottest.util.logging.ProtTestLogger;
+
 import java.io.File;
 
 /**
@@ -55,19 +57,38 @@ public class ProtTestPrinter {
      */
     public static void printHeader() {
         println("");
-        println("");
+        println(ProtTestFormattedOutput.space(94, '-'));
         println("ProtTest " + ProtTest.versionNumber
                 + ProtTestFormattedOutput.space(27 - ProtTest.versionNumber.length(), ' ') +
                                                     "Fast selection of the best-fit models of protein evolution");
-        println("(c) 2009-2010   Diego Darriba (1,2), Guillermo Taboada (2), Ramón Doallo (2), David Posada (1)");
+        println("(c) 2009-2016   Diego Darriba (1,2), Guillermo Taboada (2), Ramón Doallo (2), David Posada (1)");
         println("(1)                               Facultad de Biologia, Universidad de Vigo, 36200 Vigo, Spain");
         println("(2)                    Facultade de Informática, Universidade da Coruña, 15071 A Coruña, Spain");
-        println("Contact:                                                     ddarriba@udc.es, dposada@uvigo.es");
-        println("----------------------------------------------------------------------------------------------");
+        println(ProtTestFormattedOutput.space(94, '-'));
+        println("Manual:" + 
+        		ProtTestFormattedOutput.space(87 - ProtTest.URL_MANUAL.length(), ' ') +
+        		ProtTest.URL_MANUAL);
+        println("Homepage:" + 
+        		ProtTestFormattedOutput.space(85 - ProtTest.URL_HOMEPAGE.length(), ' ') +
+        		ProtTest.URL_HOMEPAGE);
+        println("Discussion group:" + 
+        		ProtTestFormattedOutput.space(77 - ProtTest.URL_DISCUSSION_GROUP.length(), ' ') +
+        		ProtTest.URL_DISCUSSION_GROUP);
+        println("Contact:                                                  ddarriba@h-its.org, dposada@uvigo.es");
+        println(ProtTestFormattedOutput.space(94, '-'));
         println("");
-        println((new Date()).toString());
-        println("OS = " + System.getProperty("os.name") +
+        println("Version:  " + ProtTest.versionNumber + " : " + ProtTest.versionDate);
+        println("Date:     " + (new Date()).toString());
+        println("OS:       " + System.getProperty("os.name") +
                 " (" + System.getProperty("os.version") + ")");
+        println("Arch:     " + System.getProperty("os.arch"));
+        println("Java:     " + System.getProperty("java.version") +
+                " (" + System.getProperty("java.vendor") + ")");
+//        println("VM Mem.(MB)= " +
+//        		  Runtime.getRuntime().totalMemory()/(1024*1024) + " (total) " +
+//        		  Runtime.getRuntime().maxMemory()/(1024*1024) + " (max) " +
+//        		  Runtime.getRuntime().freeMemory()/(1024*1024) + " (free)");
+        println("PhyML:    " + PhyMLv3AminoAcidRunEstimator.phymlBinaryStr);
         println("");
         println("Citation: Darriba D, Taboada GL, Doallo R, Posada D. ProtTest 3: fast selection of best-fit ");
         println("          models of protein evolution. Bioinformatics, 27:1164-1165, 2011");

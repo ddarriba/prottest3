@@ -1,0 +1,9 @@
+#!/bin/sh
+if [ $# -eq 0 ]; then
+    # Run ProtTest GUI
+    ./runXProtTestHPC.sh
+else
+    # Run ProtTest console interface
+    jarfile=`find . -name "prottest-3.*.jar" | sort | tail -n 1`
+    java -jar $jarfile $*
+fi

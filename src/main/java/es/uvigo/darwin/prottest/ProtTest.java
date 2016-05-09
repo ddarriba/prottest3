@@ -17,10 +17,18 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 package es.uvigo.darwin.prottest;
 
-import static es.uvigo.darwin.prottest.global.ApplicationGlobals.*;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.logging.Handler;
+import java.util.logging.Level;
 
-import es.uvigo.darwin.prottest.consensus.Consensus;
 import mpi.MPI;
+import pal.misc.Identifier;
+import pal.tree.Tree;
+import es.uvigo.darwin.prottest.consensus.Consensus;
+import es.uvigo.darwin.prottest.exe.PhyMLv3AminoAcidRunEstimator;
 import es.uvigo.darwin.prottest.facade.ProtTestFacade;
 import es.uvigo.darwin.prottest.facade.ProtTestFacadeMPJ;
 import es.uvigo.darwin.prottest.facade.ProtTestFacadeSequential;
@@ -46,14 +54,6 @@ import es.uvigo.darwin.prottest.util.exception.ProtTestInternalException;
 import es.uvigo.darwin.prottest.util.factory.ProtTestFactory;
 import es.uvigo.darwin.prottest.util.logging.ProtTestLogger;
 import es.uvigo.darwin.prottest.util.printer.ProtTestPrinter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.logging.Handler;
-import java.util.logging.Level;
-import pal.misc.Identifier;
-import pal.tree.Tree;
 
 /**
  * This is the main class of ProtTest. It calls the methods in the
@@ -64,9 +64,9 @@ import pal.tree.Tree;
 public class ProtTest {
 
     /** The Constant versionNumber. */
-    public static final String versionNumber = "3.4.1";
+    public static final String versionNumber = "3.4.2";
     /** The Constant versionDate. */
-    public static final String versionDate = "23th January 2014";
+    public static final String versionDate = "8th May 2016";
     /** The MPJ rank of the process. It is only useful if MPJ is running.*/
     public static int MPJ_ME;
     /** The MPJ size of the communicator. It is only useful if MPJ is running.*/
@@ -75,6 +75,10 @@ public class ProtTest {
     public static boolean MPJ_RUN;
     /** The ProtTest factory. */
     private static ProtTestFactory factory;
+    
+    public static final String URL_MANUAL = "http://darwin.uvigo.es/download/prottest_manual.pdf";
+    public static final String URL_HOMEPAGE = "http://github.com/ddarriba/prottest3";
+    public static final String URL_DISCUSSION_GROUP = "https://groups.google.com/group/prottest";
 
     /**
      * The main method. It initializes the MPJ runtime environment, parses 
@@ -85,7 +89,7 @@ public class ProtTest {
      */
     public static void main(String[] args) {
 
-        try {
+    	try {
             args = ProtTestFactory.initialize(args);
         } catch (IllegalArgumentException e) {
             System.out.println("Illegal argument: " + e.getMessage());
@@ -93,6 +97,12 @@ public class ProtTest {
         }
         factory = ProtTestFactory.getInstance();
 
+        // Checking PhyML binary
+        if (!PhyMLv3AminoAcidRunEstimator.checkBinary())
+        {
+        	finalize(1);
+        }
+        
         // initializing MPJ environment (if available)
         try {
             String[] argsApp = MPI.Init(args);
@@ -120,8 +130,8 @@ public class ProtTest {
                     getValue(ProtTestArgumentParser.PARAM_NUM_THREADS));
         } catch (IllegalArgumentException e) {
             if (MPJ_ME == 0) {
-                System.err.println("\n" + e.getMessage() + "\n");
-                ApplicationOptions.usage();
+                System.err.println("\n" + e.getMessage());
+                System.err.println("Run with -h for help.\n");
             }
             finalize(1);
         } catch (ProtTestInternalException e) {

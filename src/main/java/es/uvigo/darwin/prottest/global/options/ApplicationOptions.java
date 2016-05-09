@@ -578,6 +578,12 @@ System.out.println("Check equals");
      */
     public void fillIn(ProtTestArgumentParser arguments) {
 
+    	if(arguments.exists(ProtTestArgumentParser.PARAM_HELP))
+        {
+        	usage();
+        	System.exit(0);
+        }
+    	
         if (arguments.exists(ProtTestArgumentParser.PARAM_ALIGNMENT_FILE)) {
             try {
                 setAlignment(arguments.getValue(ProtTestArgumentParser.PARAM_ALIGNMENT_FILE));
@@ -718,9 +724,10 @@ System.out.println("Check equals");
         println("-------------------------------------------------------------------------------------------------");
         println("Basic usage: ");
         println(" - Sequential version: ");
-        println("        java -jar prottest-2.1.jar -i alignm_file [OPTIONS]");
+        println("        java -jar prottest-"+ProtTest.versionNumber+".jar -i align_file [OPTIONS]");
+        println("        ./prottest3 -i align_file [OPTIONS]");
         println(" - Parallel version: ");
-        println("        mpjrun.sh -wdir $PWD/ -np [NUM_PROCS] -jar prottest-"+ProtTest.versionNumber+".jar -i alignm_file [OPTIONS]");
+        println("        mpjrun.sh -wdir $PWD/ -np [NUM_PROCS] -jar prottest-"+ProtTest.versionNumber+".jar -i align_file [OPTIONS]");
         println("OPTIONS:");
         println(" -i alignment_filename");
         println("            Alignment input file (required)");
@@ -790,9 +797,9 @@ System.out.println("Check equals");
         println("-------------------------------------------------------------------------------------------------");
         println("Example: ");
         println("- Sequential version:");
-        println("    java -jar prottest-"+ProtTest.versionNumber+".jar -i alignm_file -t tree_file -S 0 -all-distributions -F -AIC -BIC -tc 0.5 > output");
+        println("    java -jar prottest-"+ProtTest.versionNumber+".jar -i align_file -t tree_file -S 0 -all-distributions -F -AIC -BIC -tc 0.5 > output");
         println("- Parallel version:");
-        println("    mpjrun.sh -wdir $PWD/ -np 2 -jar prottest-"+ProtTest.versionNumber+".jar -i alignm_file -t tree_file -S 0 -all-distributions -F -AIC -BIC -tc 0.5");
+        println("    mpjrun.sh -wdir $PWD/ -np 2 -jar prottest-"+ProtTest.versionNumber+".jar -i align_file -t tree_file -S 0 -all-distributions -F -AIC -BIC -tc 0.5");
     }
 
     public void reportModelOptimization() {
@@ -850,7 +857,7 @@ System.out.println("Check equals");
         if (!(doAIC|doBIC|doAICc|doDT))
             sb.append(" lnL");
         println("      " + sb.toString());
-        println("    Sample size.................: " + sampleSize + " (not calculated yet)");
+        println("    Sample size.................: " + sampleSize);
         println("  Other options:");
         println("    Display best tree in ASCII..: " + displayASCIITree);
         println("    Display best tree in Newick.: " + displayNewickTree);

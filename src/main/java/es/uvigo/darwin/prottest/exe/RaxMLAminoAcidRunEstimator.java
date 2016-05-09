@@ -30,11 +30,13 @@ import es.uvigo.darwin.prottest.util.exception.ModelOptimizationException.PhyMLE
 import es.uvigo.darwin.prottest.util.exception.ModelOptimizationException.StatsFileFormatException;
 import es.uvigo.darwin.prottest.util.exception.ProtTestInternalException;
 import es.uvigo.darwin.prottest.util.exception.TreeFormatException;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+
 import pal.tree.ReadTree;
 import pal.tree.TreeParseException;
 
@@ -100,7 +102,8 @@ public class RaxMLAminoAcidRunEstimator extends AminoAcidRunEstimator {
     /* (non-Javadoc)
      * @see es.uvigo.darwin.prottest.exe.RunEstimator#optimizeModel(es.uvigo.darwin.prottest.global.options.ApplicationOptions)
      */
-    @Override
+    @SuppressWarnings("unused")
+	@Override
     public boolean runEstimator() throws ModelOptimizationException {
 
         //let's call Phyml with the proper command line
@@ -163,16 +166,7 @@ public class RaxMLAminoAcidRunEstimator extends AminoAcidRunEstimator {
 
                 // the model
                 str[3] = "-m";
-//                if (!Arrays.asList(RAXML_MATRICES).contains(model.getMatrix())) {
-//                    // check matrix file
-//                    if (!modelFile.exists()) {
-//                        throw new ModelNotFoundException(model.getMatrix());
-//                    }
-//                    str[9] = "custom";
-//                } else {
-                    str[4] =  modelName.toString();
-//                }
-
+                str[4] =  modelName.toString();
 //                if (APPLICATION_PROPERTIES.getProperty("phyml_thread_scheduling", "false").equalsIgnoreCase("true")) {
 //                    str[24] = "-t";
 //                    str[25] = String.valueOf(numberOfThreads);

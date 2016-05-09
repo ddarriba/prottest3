@@ -17,15 +17,21 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 package es.uvigo.darwin.prottest.util.argumentparser;
 
-import static es.uvigo.darwin.prottest.global.ApplicationGlobals.*;
+import static es.uvigo.darwin.prottest.global.ProtTestConstants.DEFAULT_NCAT;
+import static es.uvigo.darwin.prottest.global.ProtTestConstants.DEFAULT_STRATEGY_MODE;
+import static es.uvigo.darwin.prottest.global.ProtTestConstants.DEFAULT_THREADS;
+import static es.uvigo.darwin.prottest.global.ProtTestConstants.OPTIMIZE_VALUES;
+import static es.uvigo.darwin.prottest.global.ProtTestConstants.TREE_SEARCH_BEST;
+import static es.uvigo.darwin.prottest.global.ProtTestConstants.TREE_SEARCH_NNI;
+import static es.uvigo.darwin.prottest.global.ProtTestConstants.TREE_SEARCH_SPR;
 
-import es.uvigo.darwin.prottest.global.ProtTestConsoleParameters;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import es.uvigo.darwin.prottest.global.ProtTestConsoleParameters;
 import es.uvigo.darwin.prottest.global.options.ApplicationOptions;
 
 /**
@@ -53,6 +59,8 @@ public abstract class ProtTestArgumentParser
         valuesRequired = new HashMap<String, Boolean>();
         argumentValues = new HashMap<String, String[]>();
         specialArguments = new HashMap<String, Map<String, String>>();
+        
+        valuesRequired.put(PARAM_HELP, false);
         valuesRequired.put(PARAM_ALIGNMENT_FILE, true);
         valuesRequired.put(PARAM_OUTPUT_FILE, true);
         valuesRequired.put(PARAM_TREE_FILE, true);
@@ -75,7 +83,7 @@ public abstract class ProtTestArgumentParser
         
         valuesRequired.put(PARAM_TREE_SEARCH_OP, true);
         argumentValues.put(PARAM_TREE_SEARCH_OP, treeSearchOps);
-        
+
         valuesRequired.put(PARAM_NUM_THREADS, true);
         valuesRequired.put(PARAM_ALL_FRAMEWORK_COMPARISON, false);
         valuesRequired.put(PARAM_DISPLAY_NEWICK_TREE, false);
@@ -125,7 +133,7 @@ public abstract class ProtTestArgumentParser
         		|| exists(PARAM_DO_AICC) || exists(PARAM_DO_DT))) {
         	putArgument(PARAM_DO_BIC, "T", arguments);
         }
-        
+       	
         options.fillIn(this);
     }
 
@@ -159,7 +167,7 @@ public abstract class ProtTestArgumentParser
             arg = arg.substring(ARG_TOKEN.length());
             if (valuesRequired.containsKey(arg)) {
                 if (valuesRequired.get(arg)) {
-                    if (i + 1 < args.length) {
+                    if (i + 1 < args.length && !args[i+1].startsWith("-")) {
                         i++;
                         String value = args[i];
                         if (argumentValues.containsKey(arg)) {

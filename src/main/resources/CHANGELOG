@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------
-ProtTest 3 Change Log -	25/Oct/2015
+ProtTest 3 Change Log -	8/May/2016
 
 Diego Darriba (ddarriba@udc.es)
 Guillermo L. Taboada (taboada@udc.es)
@@ -10,6 +10,15 @@ David Posada (dposada@uvigo.es)
 (c) Grupo de Arquitectura de Computadores, UDC, Spain
 
 -----------------------------------------------------------------------------
+
+ProtTest 3.4.2 (8/May/2016)
+
+  * Enhancement : Removed dependency on Netbeans libraries
+
+  * Enhancement : Check for global binaries on PATH env variable
+
+  * Enhancement : Added 'prottest3' script for running both GUi and console
+                  interfaces (GUI if the script is called with no args)
 
 ProtTest 3.4.1 (25/Oct/2015)
 

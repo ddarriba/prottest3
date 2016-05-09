@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="prottest-3.4.1" default="jar" basedir=".">
+<project name="prottest-3.4.2" default="jar" basedir=".">
 
 	<property name="src.dir" location="src/main/java" />
 	<property name="build.base.dir" location="build" />
@@ -62,7 +62,7 @@
 			</fileset>
 		</copy>
 		<mkdir dir="${log.dir}" />
-		<chmod perm="755" dir="${dist.dir}" includes="*.sh *.bat" />
+		<chmod perm="755" dir="${dist.dir}" includes="*.sh *.bat prottest3" />
     <chmod perm="644" dir="${exe.dir}" includes="*" />
 	</target>
 

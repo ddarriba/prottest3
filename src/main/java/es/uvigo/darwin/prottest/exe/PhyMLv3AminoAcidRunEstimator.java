@@ -55,7 +55,7 @@ import es.uvigo.darwin.prottest.util.exception.TreeFormatException;
  * @since 3.0
  */
 public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
-
+	
     /** The PhyML implemented matrices. */
     public static String[] IMPLEMENTED_MATRICES = {
         "JTT",
@@ -74,14 +74,65 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
         "HIVw"
     };
     /** Suffix for temporary statistic files. */
-    private static final String STATS_FILE_SUFFIX = "_phyml_stats.txt";
+    private static final String STATS_FILE_SUFFIX = "_phyml_stats";
     /** Suffix for temporary tree files. */
-    private static final String TREE_FILE_SUFFIX = "_phyml_tree.txt";
+    private static final String TREE_FILE_SUFFIX = "_phyml_tree";
     /** Alignment filename. */
     private String workAlignment;
     /** Custom model substitution matrix file**/
     private File modelFile;
 
+    public static File phymlBinary;
+	public static String phymlBinaryStr;
+	
+	private File statsFile;
+	private File treeFile;
+	
+	public static boolean checkBinary() {
+		boolean canExecute = false;
+    	if (!PhyMLv3AminoAcidRunEstimator.phymlBinary.exists()) {
+			System.err.println("ERROR: PhyML binary not found: " + 
+					PhyMLv3AminoAcidRunEstimator.phymlBinary.getAbsolutePath() + "\n");
+		} else if (!PhyMLv3AminoAcidRunEstimator.phymlBinary.canExecute()) {
+			System.err.println("ERROR: PhyML binary exists, but it cannot be executed: " + 
+					PhyMLv3AminoAcidRunEstimator.phymlBinary.getAbsolutePath() + "\n");
+		} else {
+			canExecute = true;
+		}
+    	
+		return canExecute;
+	}
+	
+	static {
+		boolean phymlGlobal = APPLICATION_PROPERTIES.getProperty("global-phyml-exe", "false").equalsIgnoreCase("true");
+		
+        File exeFilesDir = new File(APPLICATION_PROPERTIES.getProperty("exe-dir", ApplicationGlobals.PATH));
+        if (!exeFilesDir.isAbsolute()) {
+        	exeFilesDir = new File(ApplicationGlobals.PATH + File.separator + APPLICATION_PROPERTIES.getProperty("exe-dir", "bin"));	
+        }
+        
+        phymlBinary = new File(exeFilesDir.getAbsolutePath() + File.separator + "phyml");
+       	
+        if (phymlGlobal) {
+        	String[] pathList = System.getenv("PATH").split(":");
+        	for (String path : pathList)
+        	{
+	        	phymlBinary = new File(path + "/phyml");
+	        	if (phymlBinary.exists() && phymlBinary.canExecute()) {
+	        		phymlBinaryStr = phymlBinary.getAbsolutePath();
+	        		break;
+	        	}
+        	}
+        } else {
+            if (phymlBinary.exists() && phymlBinary.canExecute()) {
+            	phymlBinaryStr = phymlBinary.getAbsolutePath();
+            } else {
+            	phymlBinaryStr = exeFilesDir.getAbsolutePath() + File.separator + getPhymlVersion();
+            }
+            phymlBinary = new File(phymlBinaryStr);
+        }
+	}
+	
     /**
      * Instantiates a new optimizer for amino-acid models
      * using PhyML.
@@ -164,6 +215,7 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
                 tr = TemporaryFileManager.getInstance().getTreeFilename(Thread.currentThread());
                 topo = "lr";
         }
+        
         try {
             Runtime runtime = Runtime.getRuntime();
 
@@ -322,6 +374,27 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
             throw new PhyMLExecutionException("I/O error: " + e.getMessage());
         }
 
+        statsFile = new File(workAlignment + STATS_FILE_SUFFIX);
+        if (!(statsFile.exists() && statsFile.canRead()))
+        {
+        	/* try with txt suffix */
+        	statsFile = new File(workAlignment + STATS_FILE_SUFFIX + "txt");
+        	if (!(statsFile.exists() && statsFile.canRead()))
+        		throw new StatsFileFormatException("PhyML", 
+        				"Stats file does not exist. Please check if PhyML is working.");
+        }
+        statsFile.deleteOnExit();
+        
+        treeFile = new File(workAlignment + TREE_FILE_SUFFIX);
+        if (!(treeFile.exists() && treeFile.canRead()))
+        {
+        	/* try with txt suffix */
+        	treeFile = new File(workAlignment + TREE_FILE_SUFFIX + "txt");
+        	if (!(treeFile.exists() && treeFile.canRead()))
+        		throw new TreeFormatException(
+        				"Tree file does not exist. Please check if PhyML is working correctly.");
+        }
+        treeFile.deleteOnExit();
 
         if (!(readStatsFile() && readTreeFile())) {
             return false;
@@ -341,7 +414,7 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
         String line;
 
         try {
-            FileReader input = new FileReader(workAlignment + STATS_FILE_SUFFIX);
+            FileReader input = new FileReader(statsFile.getAbsolutePath());
             BufferedReader br = new BufferedReader(input);
             while ((line = br.readLine()) != null) {
                 pfinerln("[DEBUG] PHYML: " + line);
@@ -405,9 +478,9 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
      */
     private boolean readTreeFile()
             throws TreeFormatException {
-
+        
         try {
-            model.setTree(new ReadTree(workAlignment + TREE_FILE_SUFFIX));
+            model.setTree(new ReadTree(treeFile.getAbsolutePath()));
         } catch (TreeParseException e) {
             String errorMsg = "ProtTest: wrong tree format, exiting...";
             throw new TreeFormatException(errorMsg);
@@ -415,6 +488,7 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
             String errorMsg = "Error: File not found (IO error), exiting...";
             throw new TreeFormatException(errorMsg);
         }
+        
         return true;
     }
 
@@ -425,14 +499,8 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
      */
     @Override
     protected boolean deleteTemporaryFiles() {
-        File f;
-        f = new File(workAlignment + STATS_FILE_SUFFIX);
-        f.delete();
-        f = new File(workAlignment + TREE_FILE_SUFFIX);
-        f.delete();
-        f = new File(TemporaryFileManager.getInstance().getLogFilename(Thread.currentThread()));
-        f.delete();
-        return true;
+        File f = new File(TemporaryFileManager.getInstance().getLogFilename(Thread.currentThread()));
+        return f.delete();
     }
 
     /**
@@ -440,7 +508,7 @@ public class PhyMLv3AminoAcidRunEstimator extends AminoAcidRunEstimator {
      * 
      * @return the PhyML executable name
      */
-    private String getPhymlVersion() {
+    private static String getPhymlVersion() {
         String os = System.getProperty("os.name");
         String oa = System.getProperty("os.arch");
         if (os.startsWith("Mac")) {

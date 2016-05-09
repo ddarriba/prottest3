@@ -1,1 +1,2 @@
-java -cp prottest-3.4.1.jar es.uvigo.darwin.xprottest.XProtTestApp
+jarfile=`find . -name "prottest-3.*.jar" | sort | tail -n 1`
+java -cp $jarfile es.uvigo.darwin.xprottest.XProtTestApp

@@ -71,4 +71,6 @@ public interface ProtTestConsoleParameters {
     public static final String PARAM_LOGGING = "log";
     /** Verbose mode parameter token. */
     public static final String PARAM_VERBOSE = "verbose";
+    /** Show usage help */
+    public static final String PARAM_HELP = "h";
 }

@@ -54,6 +54,7 @@ import es.uvigo.darwin.prottest.util.exception.ProtTestInternalException;
 import es.uvigo.darwin.prottest.util.factory.ProtTestFactory;
 import es.uvigo.darwin.prottest.util.logging.ProtTestLogger;
 import es.uvigo.darwin.prottest.util.printer.ProtTestPrinter;
+import es.uvigo.darwin.xprottest.XProtTestApp;
 
 /**
  * This is the main class of ProtTest. It calls the methods in the
@@ -89,6 +90,11 @@ public class ProtTest {
      */
     public static void main(String[] args) {
 
+    	if (args.length < 1) {
+    		XProtTestApp.launch(XProtTestApp.class, args);
+    		return;
+    	}
+    	
     	try {
             args = ProtTestFactory.initialize(args);
         } catch (IllegalArgumentException e) {

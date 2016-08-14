@@ -32,22 +32,36 @@ public abstract class ApplicationGlobals implements ProtTestConstants {
 
     /** The application APPLICATION_PROPERTIES. */
     public static final Properties APPLICATION_PROPERTIES;
-    public static final String JAR_PATH = ProtTest.class.getProtectionDomain().getCodeSource().getLocation().getFile()
-    		.replace("%20", " ");
-    public static final String PATH = JAR_PATH.replaceFirst(new File(JAR_PATH).getName(),"");
+    public static final String ENV_PATH;
+    public static final String JAR_PATH = ProtTest.class.getProtectionDomain()
+                                                  .getCodeSource()
+                                                  .getLocation()
+                                                  .getFile()
+                                                  .replace("%20", " ");
+    public static final String PATH;
+    public static final String DEFAULT_SNAPSHOT_DIR = "snapshot/";
     
     static {
-        APPLICATION_PROPERTIES = new Properties();
-        try {
-            FileInputStream prop = new FileInputStream(PATH + "prottest.properties");
-            APPLICATION_PROPERTIES.load(prop);
-        } catch (IOException e) {
-            System.err.println("Properties file (prottest.properties) cannot be resolved");
-            System.exit(EXIT_NO_PROPERTIES);
-        }
-
+      ENV_PATH = System.getenv("PROTTEST_PATH");
+      if (ENV_PATH != null)
+        PATH = ENV_PATH;
+      else {
+        if (ProtTest.MPJ_RUN)
+          PATH = System.getProperty("user.dir");
+        else
+          PATH = JAR_PATH.replaceFirst(new File(JAR_PATH).getName(), "");
+      }
+      APPLICATION_PROPERTIES = new Properties();
+      try {
+        FileInputStream prop = new FileInputStream(
+            PATH + File.separator + "prottest.properties");
+        APPLICATION_PROPERTIES.load(prop);
+      } catch (IOException e) {
+        System.err.println("Properties file (" + PATH + File.separator
+            + "prottest.properties) cannot be resolved");
+        System.exit(EXIT_NO_PROPERTIES);
+      }
     }
-    public static final String DEFAULT_SNAPSHOT_DIR = "snapshot/";
 
     /**
      * Gets the supported matrices.

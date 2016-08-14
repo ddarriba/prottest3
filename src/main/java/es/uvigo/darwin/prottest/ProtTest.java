@@ -24,6 +24,8 @@ import java.util.Set;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 
+import static es.uvigo.darwin.prottest.global.ApplicationGlobals.APPLICATION_PROPERTIES;
+
 import mpi.MPI;
 import pal.misc.Identifier;
 import pal.tree.Tree;
@@ -95,6 +97,26 @@ public class ProtTest {
     		return;
     	}
     	
+      // initializing MPJ environment (if available)
+      try {
+          String[] argsApp = MPI.Init(args);
+          MPJ_ME = MPI.COMM_WORLD.Rank();
+          MPJ_SIZE = MPI.COMM_WORLD.Size();
+          MPJ_RUN = true;
+          args = argsApp;
+      } catch (Exception e) {
+          MPJ_ME = 0;
+          MPJ_SIZE = 1;
+          MPJ_RUN = false;
+      }
+
+      // force static initialization
+      if (APPLICATION_PROPERTIES == null)
+      {
+        System.err.println("Error initialization ProtTest properties");
+        finalize(1);
+      }
+
     	try {
             args = ProtTestFactory.initialize(args);
         } catch (IllegalArgumentException e) {
@@ -107,19 +129,6 @@ public class ProtTest {
         if (!PhyMLv3AminoAcidRunEstimator.checkBinary())
         {
         	finalize(1);
-        }
-        
-        // initializing MPJ environment (if available)
-        try {
-            String[] argsApp = MPI.Init(args);
-            MPJ_ME = MPI.COMM_WORLD.Rank();
-            MPJ_SIZE = MPI.COMM_WORLD.Size();
-            MPJ_RUN = true;
-            args = argsApp;
-        } catch (Exception e) {
-            MPJ_ME = 0;
-            MPJ_SIZE = 1;
-            MPJ_RUN = false;
         }
 
         ProtTestLogger logger = ProtTestLogger.getDefaultLogger();

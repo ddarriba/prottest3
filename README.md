@@ -24,8 +24,8 @@ For technical doubts, bug reports or comments, please use the ProtTest forum: ht
 Download
 --------
 
-New distributions of ProtTest will be hosted in google drive: ProtTest3 Downloads
-https://drive.google.com/folderview?id=0ByrkKOPtF_n_dVBBbDVBOEM5b1U
+New releases of ProtTest 3 can be downloaded from the releases section:
+https://github.com/ddarriba/prottest3/releases
 
 --------
 News!
